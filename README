@@ -1,0 +1,122 @@
+# SPINAS
+
+SPINAS (Spinor Amplitudes) is a software package for calculating constructive scattering amplitudes.
+
+## Prerequisites
+
+SPINAS requires:
+* CMake (version 3.5 or higher)
+* C++ compiler
+* Boost (version 1.71 or higher)
+
+## Unix-like Systems (Linux, macOS, WSL, Cygwin, etc.)
+
+### Compilation
+
+To compile and install SPINAS, open a terminal and follow these steps:
+```
+mkdir build
+cd build
+cmake ..
+make -j10
+```
+
+### Running Tests
+
+After installation, you can run the provided tests:
+```
+./test_spinas
+./test_SM
+```
+
+### Installation
+
+If you would like to install the libraries, you can run:
+```
+sudo make install
+```
+
+You can specify a custom install location by setting the `CMAKE_INSTALL_PREFIX` option:
+
+```
+cmake -DCMAKE_INSTALL_PREFIX=/path/to/install/location ..
+make install
+```
+
+Replace `/path/to/install/location` with your desired installation directory.
+
+##Windows
+
+### Compilation
+
+For native Windows compilation, you need to have CMake and a compiler (like Visual Studio) installed.
+
+Open a Command Prompt or PowerShell window and navigate to your project directory, then follow these steps:
+```
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+```
+
+### Running Tests
+
+After installation, you can run the provided tests:
+```
+test_spinas.exe
+test_SM.exe
+```
+
+### Installation
+
+If you would like to install the libraries, you can run:
+```
+cmake --install .
+```
+
+You can specify a custom install location by setting the `CMAKE_INSTALL_PREFIX` option:
+```
+cmake -DCMAKE_INSTALL_PREFIX=C:\path\to\install\location ..
+cmake --install .
+```
+
+Replace `C:\path\to\install\location` with your desired installation directory.
+
+## Usage
+
+### Including SPINAS in your project
+
+To use SPINAS in your project, include the `spinas.h` header file in your source code:
+```
+#include <spinas/spinas.h>
+```
+
+Then, when compiling your project, link against the SPINAS library. The name of the library
+is libspinas.so on Unix-like systems and spinas.lib on Windows. If you installed SPINAS in
+a non-default location, make sure to tell your compiler where to find the headers and the
+library file. For example, if you're using GCC, you can do this:
+```
+g++ -I/path/to/spinas/include -L/path/to/spinas/lib -lspinas your_source_file.cpp
+```
+
+Replace /path/to/spinas with the location where you installed SPINAS. On Windows, you would
+modify the include and library directories in your project settings if you're using an IDE
+like Visual Studio.
+
+## Examples
+
+For examples of how to use this library, see the SM directory, where some SM processes are
+calculated using the library and don't forget to read the manual.
+
+## Contributing
+
+SPINAS is open source and we welcome contributions.  Please contact the author at nchris3@ilstu.edu.
+
+## Acknowledgements
+
+If you find this package useful, please cite:
+* arXiv...  (Add when published.)
+
+## License
+
+SPINAS is licensed under the GNU General Public License v3.0. See the LICENSE file for more details.
