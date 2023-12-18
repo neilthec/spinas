@@ -12,5 +12,11 @@ build/
 other/
 scans/
 SM/CH/aux/
+SM/CH/main_22
 SPINAS.tgz
 user-dir/test
+file_structure.txt
+._*
+.*~
+.vscode
+
