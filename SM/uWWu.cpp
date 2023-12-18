@@ -114,11 +114,11 @@ namespace spinas {
       propTP[j] = mom1[j]-mom3[j];
       propUP[j] = mom1[j]-mom4[j];
     }
-    pDenhU=proph.den(propUP);//std::cout<<"pDenS="<<pDenS<<"\n";
-    pDendT=propd.den(propTP);
-    pDendS=propd.den(propSP);
-    pDenZU=propZ.den(propUP);
-    pDenAU=propA.den(propUP);
+    pDenhU=proph.denominator(propUP);//std::cout<<"pDenS="<<pDenS<<"\n";
+    pDendT=propd.denominator(propTP);
+    pDendS=propd.denominator(propSP);
+    pDenZU=propZ.denominator(propUP);
+    pDenAU=propA.denominator(propUP);
   }
 
   

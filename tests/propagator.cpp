@@ -31,11 +31,11 @@ BOOST_AUTO_TEST_CASE(test_denominator) {
   for (int i=1;i<4;i++) expected -= p1[i]*p1[i];
   expected -= m*m;
   
-  BOOST_CHECK_SMALL(std::abs(prop.den(p1) - expected), epsilon);
+  BOOST_CHECK_SMALL(std::abs(prop.denominator(p1) - expected), epsilon);
   
   prop.set_width(width);
   expected -= cdouble(0, 1) * m * width;
-  BOOST_CHECK_SMALL(std::abs(prop.den(p1) - expected), epsilon);
+  BOOST_CHECK_SMALL(std::abs(prop.denominator(p1) - expected), epsilon);
   
   m = 9;
   prop.set_mass(m);
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(test_denominator) {
   expected = p1[0]*p1[0];
   for (int i=1;i<4;i++) expected -= p1[i]*p1[i];
   expected -= m*m;
-  BOOST_CHECK_SMALL(std::abs(prop.den(p1) - expected), epsilon);
+  BOOST_CHECK_SMALL(std::abs(prop.denominator(p1) - expected), epsilon);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

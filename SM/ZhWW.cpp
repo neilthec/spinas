@@ -109,9 +109,9 @@ namespace spinas {
       propTP[j] = mom1[j]-mom3[j];
       propUP[j] = mom1[j]-mom4[j];
     }
-    pDenS=propZ.den(propSP);
-    pDenT=propW.den(propTP);
-    pDenU=propW.den(propUP);
+    pDenS=propZ.denominator(propSP);
+    pDenT=propW.denominator(propTP);
+    pDenU=propW.denominator(propUP);
   }
 
   

@@ -87,8 +87,8 @@ namespace spinas {
       propPS[j] = mom1[j]+mom2[j];
       propPT[j] = mom1[j]-mom3[j];
     }
-    pDenSZ = propZ.den(propPS);
-    pDenTW = propW.den(propPT);
+    pDenSZ = propZ.denominator(propPS);
+    pDenTW = propW.denominator(propPT);
   }
 
   

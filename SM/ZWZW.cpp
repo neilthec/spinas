@@ -116,9 +116,9 @@ namespace spinas {
       propTP[j] = mom1[j]-mom3[j];
       propUP[j] = mom1[j]-mom4[j];
     }
-    pDenS=propW.den(propSP);//std::cout<<"pDenS="<<pDenS<<"\n";
-    pDenT=proph.den(propTP);
-    pDenU=propW.den(propUP);
+    pDenS=propW.denominator(propSP);//std::cout<<"pDenS="<<pDenS<<"\n";
+    pDenT=proph.denominator(propTP);
+    pDenU=propW.denominator(propUP);
     //Mandelstahms
     m13 = -2.*p1.dot(p3)+2.*MZ*MZ;//(p1-p3)^2
   }

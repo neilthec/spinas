@@ -129,12 +129,12 @@ namespace spinas {
       propTP[j] = mom1[j]-mom3[j];
       propUP[j] = mom1[j]-mom4[j];
     }
-    pDenTh=proph.den(propTP);
-    pDenSh=proph.den(propSP);
-    pDenTZ=propZ.den(propTP);
-    pDenSZ=propZ.den(propSP);
-    pDenTA=propA.den(propTP);
-    pDenSA=propA.den(propSP);
+    pDenTh=proph.denominator(propTP);
+    pDenSh=proph.denominator(propSP);
+    pDenTZ=propZ.denominator(propTP);
+    pDenSZ=propZ.denominator(propSP);
+    pDenTA=propA.denominator(propTP);
+    pDenSA=propA.denominator(propSP);
     //Mandelstahms
     m14 = -2.*p1.dot(p4)+2.*MW*MW;//(p1-p4)^2
   }

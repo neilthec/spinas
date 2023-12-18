@@ -74,9 +74,9 @@ namespace spinas {
       propPT[j] = mom1[j]-mom3[j];
       propPU[j] = mom1[j]-mom4[j];
     }
-    pDenSh = proph.den(propPS);
-    pDenTu = propu.den(propPT);
-    pDenUu = propu.den(propPU);
+    pDenSh = proph.denominator(propPS);
+    pDenTu = propu.denominator(propPT);
+    pDenUu = propu.denominator(propPU);
   }
 
   

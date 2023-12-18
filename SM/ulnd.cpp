@@ -71,7 +71,7 @@ namespace spinas {
     for(int j=0;j<4;j++){
       propP[j] = mom1[j]-mom4[j];
     }
-    pDenU = prop.den(propP);
+    pDenU = prop.denominator(propP);
   }
 
   

@@ -68,7 +68,7 @@ namespace spinas {
     ldouble propP[4];
     for(int j=0;j<4;j++)
       propP[j] = mom1[j]+mom2[j];
-    pDenS = prop.den(propP);
+    pDenS = prop.denominator(propP);
   }
 
   
@@ -107,7 +107,7 @@ namespace spinas {
     ldouble propP[4];
     for(int j=0;j<4;j++)
       propP[j] = mom1[j]+mom2[j];
-    ldouble propSD = std::real(prop.den(propP));
+    ldouble propSD = std::real(prop.denominator(propP));
     
 
     ldouble amp2 = 0;

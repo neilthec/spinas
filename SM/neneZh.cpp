@@ -66,7 +66,7 @@ namespace spinas {
     ldouble propSP[4];
     for(int j=0;j<4;j++)
       propSP[j] = mom1[j]+mom2[j];
-    pDenS=propZ.den(propSP);//std::cout<<"pDenS="<<pDenS<<"\n";
+    pDenS=propZ.denominator(propSP);//std::cout<<"pDenS="<<pDenS<<"\n";
   }
 
   

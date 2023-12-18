@@ -66,7 +66,7 @@ namespace spinas {
     ldouble propTP[4];
     for(int j=0;j<4;j++)
       propTP[j] = mom1[j]-mom3[j];
-    pDenT=propZ.den(propTP);
+    pDenT=propZ.denominator(propTP);
   }
 
   

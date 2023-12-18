@@ -85,9 +85,9 @@ namespace spinas {
       propTP[j] = mom1[j]-mom3[j];
       propUP[j] = mom1[j]-mom4[j];
     }
-    pDenT = std::real(propg.den(propTP));
-    pDenU = std::real(propu.den(propUP));
-    pDenS = std::real(propu.den(propSP));
+    pDenT = std::real(propg.denominator(propTP));
+    pDenU = std::real(propu.denominator(propUP));
+    pDenS = std::real(propu.denominator(propSP));
     
   }
 

@@ -39,7 +39,7 @@ namespace spinas {
     void set_width(const ldouble& width);
 
     //Denominator
-    cdouble den(const ldouble p[4]);
+    cdouble denominator(const ldouble p[4]);
 
   };
 

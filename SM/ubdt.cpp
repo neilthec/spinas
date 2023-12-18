@@ -73,7 +73,7 @@ namespace spinas {
     for(int j=0;j<4;j++){
       propPS[j] = mom1[j]-mom3[j];
     }
-    pDenT = prop.den(propPS);
+    pDenT = prop.denominator(propPS);
   }
 
   

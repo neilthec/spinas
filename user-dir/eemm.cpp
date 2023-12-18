@@ -77,7 +77,7 @@ void eemm::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldoub
   ldouble propP[4];
   for(int j=0;j<4;j++)
     propP[j] = mom1[j]+mom2[j];
-  pDenS = prop.den(propP);
+  pDenS = prop.denominator(propP);
 }
 
 

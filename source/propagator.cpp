@@ -42,7 +42,7 @@ namespace spinas {
 
 
   //Denominator
-  cdouble propagator::den(const ldouble p[4]){
+  cdouble propagator::denominator(const ldouble p[4]){
     return cdouble(p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3] - m*m, -m*w);
   }
 

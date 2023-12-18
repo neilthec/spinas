@@ -79,8 +79,8 @@ namespace spinas {
       propSP[j] = mom1[j]+mom2[j];
       propTP[j] = mom1[j]-mom3[j];
     }
-    pDenS=prop.den(propSP);
-    pDenT=prop.den(propTP);
+    pDenS=prop.denominator(propSP);
+    pDenT=prop.denominator(propTP);
   }
 
   
@@ -125,8 +125,8 @@ namespace spinas {
       propSP[j] = mom1[j]+mom2[j];
       propTP[j] = mom1[j]-mom3[j];
     }
-    pDenS=prop.den(propSP);
-    pDenT=prop.den(propTP);
+    pDenS=prop.denominator(propSP);
+    pDenT=prop.denominator(propTP);
     
 
     ldouble amp2 = 0;

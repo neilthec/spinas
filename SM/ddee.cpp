@@ -95,9 +95,9 @@ namespace spinas {
     ldouble propP[4];
     for(int j=0;j<4;j++)
       propP[j] = mom1[j]+mom2[j];
-    pDenSA = propA.den(propP);
-    pDenSh = proph.den(propP);
-    pDenSZ = propZ.den(propP);
+    pDenSA = propA.denominator(propP);
+    pDenSh = proph.denominator(propP);
+    pDenSZ = propZ.denominator(propP);
   }
 
   
