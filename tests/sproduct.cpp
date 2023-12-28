@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(s12sa21a_tests) {
 //[12][21]=-2m1m2
 //Not zero when m1=m2=0.  Don't test
 BOOST_AUTO_TEST_CASE(s12ss21s_tests) {
-  BOOST_TEST_MESSAGE("\t* [12][21]=-2m1m2");
+  BOOST_TEST_MESSAGE("\t* [12][21]=-2m1m2 and <12><21>=-2m1m2");
   ldouble m1,m2;
   ldouble mom1[4], mom2[4];
   int ni;
@@ -78,6 +78,7 @@ BOOST_AUTO_TEST_CASE(s12ss21s_tests) {
     sproduct a12a = sproduct(ANGLE,&p1,&p2);
     ldouble expected = -2.*m1*m2;
 test_sproduct(&s12s, &a12a, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12]<12>*", "-2m1m2",1000);//
+test_sproduct(&a12a, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "<12>[12]*", "-2m1m2",1000);//
   }
 }
 
@@ -465,10 +466,16 @@ BOOST_AUTO_TEST_CASE(s142a_m2s12s_m1a12a_s132a_tests) {
   ldouble m1, m2, m3, m4;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   for(int i=0;i<100;i++)
-  for(int o=0;o<4;o++){
-    m1 = choose_random_momentum(mom1,-50,50);
-    m2 = choose_random_momentum(mom2,-50,50);
-    m3 = choose_random_momentum(mom3,-50,50);
+  for(int o=0;o<8;o++){
+    m1 = 0;
+    if(o>3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = 0;
+    if(o==2||o==3||o==6||o==7) choose_random_massless_momentum(mom2,-50,50);
+    else m2 = choose_random_momentum(mom2,-50,50);
+    m3 = 0;
+    if(o==1||o==3||o==5||o==7) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
     for(int j=0;j<4;j++)
       mom4[j] = - mom1[j] - mom2[j] - mom3[j];
     m4 = mom4[0]*mom4[0];
@@ -483,9 +490,18 @@ BOOST_AUTO_TEST_CASE(s142a_m2s12s_m1a12a_s132a_tests) {
     sproduct s132a = sproduct(SQUARE,&p1,&p3,&p2);
     sproduct s12s = sproduct(SQUARE,&p1,&p2);
     sproduct a12a = sproduct(ANGLE,&p1,&p2);
-    for(int ds1=-1;ds1<=1;ds1+=2)
+    if(o==0||o==1)
+      for(int ds1=-1;ds1<=1;ds1+=2)
+	for(int ds2=-1;ds2<=1;ds2+=2)
+	  BOOST_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)-m2*s12s.v(ds1,ds2)+m1*a12a.v(ds1,ds2)+s132a.v(ds1,ds2)),epsilon);
+    else if(o==2||o==3)
+      for(int ds1=-1;ds1<=1;ds1+=2)
+	BOOST_CHECK_SMALL(std::abs(s142a.v(ds1)+m1*a12a.v(ds1)+s132a.v(ds1)),epsilon);
+    else if(o==4||o==5)
       for(int ds2=-1;ds2<=1;ds2+=2)
-	BOOST_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)-m2*s12s.v(ds1,ds2)+m1*a12a.v(ds1,ds2)+s132a.v(ds1,ds2)),epsilon);
+	BOOST_CHECK_SMALL(std::abs(s142a.v(ds2)-m2*s12s.v(ds2)+s132a.v(ds2)),epsilon);
+    else if(o==6||o==7)
+      BOOST_CHECK_SMALL(std::abs(s142a.v()+s132a.v()),epsilon);
   }
 }
 
@@ -499,10 +515,19 @@ BOOST_AUTO_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   for(int i=0;i<100;i++)
   for(int o=0;o<4;o++){
-    m12 = choose_random_momentum(mom1,-50,50);
-    choose_random_momentum(mom2,-50,50);
-    mom2[0] = std::sqrt(mom2[1]*mom2[1]+mom2[2]*mom2[2]+mom2[3]*mom2[3]+m12*m12);
-    m3 = choose_random_momentum(mom3,-50,50);
+    m12 = 0;
+    if(o==2||o==3) {
+      choose_random_massless_momentum(mom1,-50,50);
+      choose_random_massless_momentum(mom2,-50,50);
+    }
+    else{
+      m12 = choose_random_momentum(mom1,-50,50);
+      choose_random_momentum(mom2,-50,50);
+      mom2[0] = std::sqrt(mom2[1]*mom2[1]+mom2[2]*mom2[2]+mom2[3]*mom2[3]+m12*m12);
+    }
+    m3 = 0;
+    if(o==1||o==3)  choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
     for(int j=0;j<4;j++)
       mom4[j] = - mom1[j] - mom2[j] - mom3[j];
     m4 = mom4[0]*mom4[0];
@@ -519,9 +544,12 @@ BOOST_AUTO_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
     sproduct s231a = sproduct(SQUARE,&p2,&p3,&p1);
     sproduct s12s = sproduct(SQUARE,&p1,&p2);
     sproduct a12a = sproduct(ANGLE,&p1,&p2);
-    for(int ds1=-1;ds1<=1;ds1+=2)
-      for(int ds2=-1;ds2<=1;ds2+=2)
-	BOOST_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)+s241a.v(ds2,ds1)+s132a.v(ds1,ds2)+s231a.v(ds2,ds1)),epsilon);
+    if(o<2)
+      for(int ds1=-1;ds1<=1;ds1+=2)
+	for(int ds2=-1;ds2<=1;ds2+=2)
+	  BOOST_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)+s241a.v(ds2,ds1)+s132a.v(ds1,ds2)+s231a.v(ds2,ds1)),epsilon);
+    else
+      BOOST_CHECK_SMALL(std::abs(s142a.v()+s241a.v()+s132a.v()+s231a.v()),epsilon);
   }
 }
 
