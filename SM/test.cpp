@@ -135,6 +135,8 @@ using namespace std;
 #include "include/dggd.h"
 #include "include/enWh.h"
 #include "include/hnWe.h"
+#include "include/enAW.h"
+#include "include/AnWe.h"
 #include "include/hhhh.h"
 #include "include/hhZZ.h"
 #include "include/hZZh.h"
@@ -284,6 +286,8 @@ int main(){
   j = spinas::test_dggd(); if(j>0){message<<"    dggd   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_enWh(); if(j>0){message<<"    enWh   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hnWe(); if(j>0){message<<"    hnWe   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_enAW(); if(j>0){message<<"    enAW   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_AnWe(); if(j>0){message<<"    AnWe   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hhhh(); if(j>0){message<<"    hhhh   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hhZZ(); if(j>0){message<<"    hhZZ   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hZZh(); if(j>0){message<<"    hZZh   : "<<j<<" failed tests."<<endl;n++;}
