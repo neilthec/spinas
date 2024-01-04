@@ -141,6 +141,9 @@ using namespace std;
 #include "include/ZnWe.h"
 #include "include/udWh.h"
 #include "include/uhWd.h"
+#include "include/udAW.h"
+#include "include/AWud.h"
+#include "include/gWud.h"
 #include "include/hhhh.h"
 #include "include/hhZZ.h"
 #include "include/hZZh.h"
@@ -296,6 +299,9 @@ int main(){
   j = spinas::test_ZnWe(); if(j>0){message<<"    ZnWe   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_udWh(); if(j>0){message<<"    udWh   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_uhWd(); if(j>0){message<<"    uhWd   : "<<j<<" failed tests."<<endl;n++;}
+  //j = spinas::test_udAW(); if(j>0){message<<"    udAW   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_AWud(); if(j>0){message<<"    AWud   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_gWud(); if(j>0){message<<"    gWud   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hhhh(); if(j>0){message<<"    hhhh   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hhZZ(); if(j>0){message<<"    hhZZ   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hZZh(); if(j>0){message<<"    hZZh   : "<<j<<" failed tests."<<endl;n++;}
