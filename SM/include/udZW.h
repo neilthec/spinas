@@ -1,7 +1,7 @@
 
 /*
 SPINAS - Spinor Amplitudes
-Copyright (C) 2024 Neil Christensen
+Copyright (C) 2023 Neil Christensen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,27 +17,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//File:  SPINAS/SM/AWud.h
+//File:  SPINAS/SM/udZW.h
 
 namespace spinas {
 
-  class AWud : public process {
+  class udZW : public process {
   private:
-    ldouble e;//Electric Charge
-    ldouble mu, md, MW, SW, WW;//Mass of W, width of W and sin(theta_W)
-    ldouble pre;
+    ldouble e, Qu, Qd, gLu, gRu, gLd, gRd;//Electric Charge
+    ldouble mu, md, MW, SW, WW, MZ, CW;//Mass of W, width of W and sin(theta_W)
+    ldouble preW, preu, pred;
     particle p1,p2,p3,p4;
     propagator propW, propu, propd;
-    cdouble pDenS, pDenT, pDenU, prop, propAp, propAm;
-    //<24>,[23],[12],[13],[1341]
-    sproduct a24a,s23s,s12s,s13s,s1341s;
-    sproduct a1341a,a12a,a14a;
+    cdouble pDenS, pDenT, pDenU;
+    //Spinor Products
+    sproduct a12a, a13a, a23a, a24a, a34a, s12s, s13s, s14s, s23s, s34s, s132a, s314a, s413a;
     
 
     
   public:
-    //AWud();
-    AWud(const ldouble& echarge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW, const ldouble& widthW);
+    //udZW();
+    udZW(const ldouble& echarge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW, const ldouble& widthW);
 
     //Set Masses
     void set_masses(const ldouble& masse, const ldouble& massd, const ldouble& massW);
@@ -47,15 +46,12 @@ namespace spinas {
     //Amplitude
     cdouble amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4);//Double the spins
     ldouble amp2();
-    ldouble amp2_Aplus();
     
 
     
     
   };
   //Tests
-  int test_AWud();
-
-
+  int test_udZW();
 
 }
