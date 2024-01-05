@@ -113,7 +113,7 @@ namespace spinas {
       
 	//STU Diagram
 	//pre = sqrt(2)*e*e/(MW*SW);
-	//uDAW- all ingoing:
+	//AW+Ud all ingoing:
 	//S W: +    pre<24>[23][1341]/(s-MW^2)/(t-Mu^2)  +     pre[12][13]<24>/(s-MW^2)
 	//S W: -    pre<24>[23][1341]/(s-MW^2)/(u-Md^2)  +     pre[12][13]<24>/(s-MW^2)
 	//T u: +2/3*pre<24>[23][1341]/(t-Mu^2)/(s-MW^2)  + 2/3*pre[12][13]<24>/(t-Mu^2)
@@ -123,6 +123,8 @@ namespace spinas {
 	//S W: +    pre<24>[23][1341]/(s-MW^2)/(u-Md^2)  -     pre[12][13]<24>/(s-MW^2)
 	//T u: -2/3*pre<24>[23][1341]/(t-Mu^2)/(s-MW^2)  - 2/3*pre[12][13]<24>/(t-Mu^2)
 	//U d: +1/3*pre<24>[23][1341]/(u-Md^2)/(s-MW^2)
+	//  prop = (one/three/pDenS/pDenU-two/three/pDenS/pDenT);
+	//  propAp = (one/pDenS+two/three/pDenT);
 	amplitude += normFactor*pre*a24a.v(ds2a,ds4)*s23s.v(ds2b,ds3)*s1341s.v()*prop
 	  -normFactor*pre*s12s.v(ds2a)*s13s.v(ds3)*a24a.v(ds2b,ds4)*propAp;
 	
@@ -131,7 +133,7 @@ namespace spinas {
       else if(ds1<0){
 
 	//STU Diagram
-	//uDAW- all in:
+	//AW+Ud all in:
 	//S W: -    pre<24>[23]<1341>/(s-MW^2)(u-Md^2)  +     pre<12><14>[23]/(s-MW^2)
 	//S W: +    pre<24>[23]<1341>/(s-MW^2)(t-Mu^2)  +     pre<12><14>[23]/(s-MW^2)
 	//U d: -1/3*pre<24>[23]<1341>/(u-Md^2)(s-MW^2)  + 1/3*pre<12><14>[23]/(u-Md^2)
@@ -141,6 +143,8 @@ namespace spinas {
 	//S W: -    pre<24>[23]<1341>/(s-MW^2)(t-Mu^2)  -     pre<12><14>[23]/(s-MW^2)
 	//U d: +1/3*pre<24>[23]<1341>/(u-Md^2)(s-MW^2)  - 1/3*pre<12><14>[23]/(u-Md^2)
 	//T u: -2/3*pre<24>[23]<1341>/(t-Mu^2)(s-MW^2)
+	//  prop = (one/three/pDenS/pDenU-two/three/pDenS/pDenT);
+	//  propAm = (one/pDenS+one/three/pDenU);
 	amplitude += normFactor*pre*a24a.v(ds2a,ds4)*s23s.v(ds2b,ds3)*a1341a.v()*prop
 	  -normFactor*pre*a12a.v(ds2a)*a14a.v(ds4)*s23s.v(ds2b,ds3)*propAm;
 	

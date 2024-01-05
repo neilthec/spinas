@@ -17,27 +17,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//File:  SPINAS/SM/udAW.h
+//File:  SPINAS/SM/dWgu.h
 
 namespace spinas {
 
-  class udAW : public process {
+  class dWgu : public process {
   private:
-    ldouble e;//Electric Charge
-    ldouble mu, md, MW, SW, WW;//Mass of W, width of W and sin(theta_W)
+    ldouble e, gs;//Charges
+    ldouble mu, md, MW, SW;//Mass of W, width of W and sin(theta_W)
     ldouble pre;
     particle p1,p2,p3,p4;
-    propagator propW, propu, propd;
-    cdouble pDenS, pDenT, pDenU, prop, propAp, propAm;
-    //<42>,[41],[34],[31],[3123]
-    sproduct a42a,s41s,s34s,s31s,s3123s;
-    sproduct a3123a,a34a,a32a;
+    propagator propu, propd;
+    cdouble pDenS, pDenT, pDenU;
+    sproduct a21a,s24s,s32s,s34s,s3413s;
+    sproduct a32a,a31a,a3413a;
     
 
     
   public:
-    //udAW();
-    udAW(const ldouble& echarge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW, const ldouble& widthW);
+    //dWgu();
+    dWgu(const ldouble& echarge, const ldouble& gscharge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW);
 
     //Set Masses
     void set_masses(const ldouble& masse, const ldouble& massd, const ldouble& massW);
@@ -53,6 +52,8 @@ namespace spinas {
     
   };
   //Tests
-  int test_udAW();
+  int test_dWgu();
+
+  
 
 }
