@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//File:  SPINAS/SM/udZW.h
+//File:  SPINAS/SM/WdZu.h
 
 namespace spinas {
 
-  class udZW : public process {
+  class WdZu : public process {
   private:
     ldouble e, Qu, Qd, gLu, gRu, gLd, gRd;//Electric Charge
     ldouble mu, md, MW, SW, WW, MZ, CW;//Mass of W, width of W and sin(theta_W)
@@ -30,13 +30,13 @@ namespace spinas {
     propagator propW, propu, propd;
     cdouble pDenS, pDenT, pDenU;
     //Spinor Products
-    sproduct a12a, a13a, a23a, a24a, a34a, s12s, s13s, s14s, s23s, s34s, s132a, s314a, s413a;
+    sproduct a42a, a43a, a23a, a21a, a31a, s42s, s43s, s41s, s23s, s31s, s432a, s341a, s143a;
     
 
     
   public:
-    //udZW();
-    udZW(const ldouble& echarge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW, const ldouble& widthW);
+    //WdZu();
+    WdZu(const ldouble& echarge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW, const ldouble& widthW);
 
     //Set Masses
     void set_masses(const ldouble& masse, const ldouble& massd, const ldouble& massW);
@@ -52,6 +52,6 @@ namespace spinas {
     
   };
   //Tests
-  int test_udZW();
+  int test_WdZu();
 
 }

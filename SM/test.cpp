@@ -146,6 +146,7 @@ using namespace std;
 #include "include/gWud.h"
 #include "include/dWgu.h"
 #include "include/udZW.h"
+#include "include/WdZu.h"
 #include "include/hhhh.h"
 #include "include/hhZZ.h"
 #include "include/hZZh.h"
@@ -306,6 +307,7 @@ int main(){
   j = spinas::test_gWud(); if(j>0){message<<"    gWud   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_dWgu(); if(j>0){message<<"    dWgu   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_udZW(); if(j>0){message<<"    udZW   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_WdZu(); if(j>0){message<<"    WdZu   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hhhh(); if(j>0){message<<"    hhhh   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hhZZ(); if(j>0){message<<"    hhZZ   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_hZZh(); if(j>0){message<<"    hZZh   : "<<j<<" failed tests."<<endl;n++;}

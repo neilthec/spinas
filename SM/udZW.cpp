@@ -56,9 +56,8 @@ namespace spinas {
     s314a= sproduct(SQUARE,&p3,&p1,&p4);
     s413a= sproduct(SQUARE,&p4,&p1,&p3);
     //prefactor
-    preW = e*e/(sqrt2*MW*MW*MZ*MZ*SW*SW);
-    preu = e*e/(sqrt2*MW*MW*SW*SW);
-    pred = preu;
+    preud = e*e/(sqrt2*MW*MW*SW*SW);
+    preW = preud/(MZ*MZ);
     gLu=-2.0*Qu*SW*SW+1.0;
     gRu=-2.0*Qu*SW*SW;
     gLd=-2.0*Qd*SW*SW-1.0;
@@ -77,9 +76,8 @@ namespace spinas {
     propW.set_mass(MW);
     propu.set_mass(mu);
     propd.set_mass(md);
-    preW = e*e/(sqrt2*MW*MW*MZ*MZ*SW*SW);
-    preu = e*e/(sqrt2*MW*MW*SW*SW);
-    pred = preu;
+    preud = e*e/(sqrt2*MW*MW*SW*SW);
+    preW = preud/(MZ*MZ);
   }
   void udZW::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     constexpr ldouble one=1, two=2, three=3;
@@ -131,11 +129,11 @@ namespace spinas {
       
       
       //W Diagram
-      //preW = e*e/(2.0*MW*MW*MZ*MZ*SW*SW);
+      //preW = e*e/(sqrt2*MW*MW*MZ*MZ*SW*SW);
       //UdZW all ingoing:
       // - preW (2(MZ<34>+MW[34])MW^2 <23>[14]+2(MW<34>+MZ[34])MW^2 <24>[13]+<34>[34]((2MW^2 -MZ^2)(Mu<12>-Md[12])+2MW^2 [132>)))/(s-MW^2)
       amplitude += + normFactor*preW*(two*(MW*a34a.v(ds3a,ds4b)+MZ*s34s.v(ds3a,ds4b))*MW*MW*a24a.v(ds2,ds4a)*s13s.v(ds1,ds3b)
-				      +two*(MZ*a34a.v(ds3a,ds4a)*s14s.v(ds1,ds4b)+MW*s14s.v(ds1,ds4a)*s34s.v(ds3a,ds4b))*MW*MW*a23a.v(ds2,ds3b)
+				      +two*(MZ*a34a.v(ds3a,ds4b)+MW*s34s.v(ds3a,ds4b))*MW*MW*a23a.v(ds2,ds3b)*s14s.v(ds1,ds4a)
 				      +a34a.v(ds3a,ds4a)*s34s.v(ds3b,ds4b)*(
 									    (MZ*MZ-two*MW*MW)*mu*a12a.v(ds1,ds2)
 									    +(two*MW*MW-MZ*MZ)*md*s12s.v(ds1,ds2)
@@ -145,23 +143,23 @@ namespace spinas {
       
 
       //u Diagram
-      //preu = e*e/(2.0*MW*MW*SW*SW);
+      //preu = e*e/(sqrt2*MW*MW*SW*SW);
       //UdZW all in:
       // - preu<24>(gRu*mu<13>[34]+(MZ[34]+[413>)gLu[13]))/(t-mu^2)
       //34 out:
       // - preu<24>(gRu*mu<13>[34]-(MZ[34]-[413>)gLu[13]))/(t-mu^2)
-      amplitude += - normFactor*preu*a24a.v(ds2,ds4a)*(
+      amplitude += - normFactor*preud*a24a.v(ds2,ds4a)*(
 						       +gRu*mu*a13a.v(ds1,ds3b)*s34s.v(ds3a,ds4b)
 						       -gLu*s13s.v(ds1,ds3a)*(MZ*s34s.v(ds3b,ds4b)-s413a.v(ds4b,ds3b))
 						       )/pDenT;
       
       //d Diagram
-      //pred = e*e/(2.0*MW*MW*SW*SW);
+      //pred = e*e/(sqrt2*MW*MW*SW*SW);
       //UdZW all in:
       // + pred[14](gRd*md<34>[23]+(MW[34]-[314>)gLd<23>))/(u-md^2)
       //34 out:
       // + pred[14](gRd*md<34>[23]-(MW[34]+[314>)gLd<23>))/(u-md^2)
-      amplitude += + normFactor*pred*s14s.v(ds1,ds4a)*(
+      amplitude += + normFactor*preud*s14s.v(ds1,ds4a)*(
 						       +gRd*md*a34a.v(ds3a,ds4b)*s23s.v(ds2,ds3b)
 						       -gLd*a23a.v(ds2,ds3a)*(MW*s34s.v(ds3b,ds4b)+s314a.v(ds3b,ds4b))
 						       )/pDenU;
