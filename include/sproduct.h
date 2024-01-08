@@ -34,7 +34,7 @@ namespace spinas {
   class sproduct{
   private:
     particle *pL, *pR;//Particles in the left and right spinors.
-    particle *p[5];//Particles in the middle.
+    particle *p[6];//Particles in the middle.
     cmatrix pMat;//Product of all momenta in between the spinors
     int N;//Number of particles/momenta in product
 
@@ -90,6 +90,12 @@ namespace spinas {
     sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR);
     sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU);
     sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU);
+
+    //6 Internal Momenta
+    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR);
+    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR);
+    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU);
+    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU);
 
     //Update
     //Must be run after masses or momenta of particles is updated.

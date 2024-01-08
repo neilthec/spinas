@@ -81,12 +81,12 @@ using namespace std;
 #include "include/eZZe.h"
 #include "include/eeWW.h"
 #include "include/eWWe.h"
-#include "include/neneZh.h"
-#include "include/neZneh.h"
-#include "include/neneZZ.h"
-#include "include/neZZne.h"
-#include "include/neneWW.h"
-#include "include/neWWne.h"
+#include "include/nnZh.h"
+#include "include/nZnh.h"
+#include "include/nnZZ.h"
+#include "include/nZZn.h"
+#include "include/nnWW.h"
+#include "include/nWWn.h"
 #include "include/uuhh.h"
 #include "include/uhuh.h"
 #include "include/uuAh.h"
@@ -242,12 +242,12 @@ int main(){
   j = spinas::test_eZZe(); if(j>0){message<<"    eZZe   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_eeWW(); if(j>0){message<<"    eeWW   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_eWWe(); if(j>0){message<<"    eWWe   : "<<j<<" failed tests."<<endl;n++;}
-  j = spinas::test_neneZh(); if(j>0){message<<"    neneZh   : "<<j<<" failed tests."<<endl;n++;}
-  j = spinas::test_neZneh(); if(j>0){message<<"    neZneh   : "<<j<<" failed tests."<<endl;n++;}
-  j = spinas::test_neneZZ(); if(j>0){message<<"    neneZZ   : "<<j<<" failed tests."<<endl;n++;}
-  j = spinas::test_neZZne(); if(j>0){message<<"    neZZne   : "<<j<<" failed tests."<<endl;n++;}
-  j = spinas::test_neneWW(); if(j>0){message<<"    neneWW   : "<<j<<" failed tests."<<endl;n++;}
-  j = spinas::test_neWWne(); if(j>0){message<<"    neWWne   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_nnZh(); if(j>0){message<<"    nnZh   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_nZnh(); if(j>0){message<<"    nZnh   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_nnZZ(); if(j>0){message<<"    nnZZ   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_nZZn(); if(j>0){message<<"    nZZn   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_nnWW(); if(j>0){message<<"    nnWW   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_nWWn(); if(j>0){message<<"    nWWn   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_uuhh(); if(j>0){message<<"    uuhh   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_uhuh(); if(j>0){message<<"    uhuh   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_uuAh(); if(j>0){message<<"    uuAh   : "<<j<<" failed tests."<<endl;n++;}

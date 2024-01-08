@@ -62,6 +62,14 @@ namespace spinas {
     int dsList[4] = {dsA,dsB,dsC,dsD};
     return get_num_spin_loops(dsList,4);
   }
+  int process::get_num_spin_loops(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE){
+    int dsList[5] = {dsA,dsB,dsC,dsD,dsE};
+    return get_num_spin_loops(dsList,5);
+  }
+  int process::get_num_spin_loops(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE, const int& dsF){
+    int dsList[6] = {dsA,dsB,dsC,dsD,dsE,dsF};
+    return get_num_spin_loops(dsList,6);
+  }
   int process::get_num_spin_loops(const int* dsList, const int length){
     int nLoops = 1;
     for(int i=0;i<length;i++)
@@ -84,6 +92,14 @@ namespace spinas {
   ldouble process::get_spin_normalization(const int& dsA, const int& dsB, const int& dsC, const int& dsD){
     int dsList[4] = {dsA,dsB,dsC,dsD};
     return get_spin_normalization(dsList,4);
+  }
+  ldouble process::get_spin_normalization(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE){
+    int dsList[5] = {dsA,dsB,dsC,dsD,dsE};
+    return get_spin_normalization(dsList,5);
+  }
+  ldouble process::get_spin_normalization(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE, const int& dsF){
+    int dsList[6] = {dsA,dsB,dsC,dsD,dsE,dsF};
+    return get_spin_normalization(dsList,6);
   }
   ldouble process::get_spin_normalization(const int* dsList, const int length){
     ldouble normFactor = 1;
@@ -116,6 +132,18 @@ namespace spinas {
     int* dsLista[4] = {&dsAa, &dsBa, &dsCa, &dsDa};
     int* dsListb[4] = {&dsAb, &dsBb, &dsCb, &dsDb};
     return get_spinor_spins(dsList, dsLista, dsListb, 4, iterator);
+  }
+  void process::get_spinor_spins(const int& dsA, int& dsAa, int& dsAb, const int& dsB, int& dsBa, int& dsBb, const int& dsC, int& dsCa, int& dsCb, const int& dsD, int& dsDa, int& dsDb, const int& dsE, int& dsEa, int& dsEb, const int& iterator){
+    const int* dsList[5] = {&dsA, &dsB, &dsC, &dsD, &dsE};
+    int* dsLista[5] = {&dsAa, &dsBa, &dsCa, &dsDa, &dsEa};
+    int* dsListb[5] = {&dsAb, &dsBb, &dsCb, &dsDb, &dsEb};
+    return get_spinor_spins(dsList, dsLista, dsListb, 5, iterator);
+  }
+  void process::get_spinor_spins(const int& dsA, int& dsAa, int& dsAb, const int& dsB, int& dsBa, int& dsBb, const int& dsC, int& dsCa, int& dsCb, const int& dsD, int& dsDa, int& dsDb, const int& dsE, int& dsEa, int& dsEb, const int& dsF, int& dsFa, int& dsFb, const int& iterator){
+    const int* dsList[6] = {&dsA, &dsB, &dsC, &dsD, &dsE, &dsF};
+    int* dsLista[6] = {&dsAa, &dsBa, &dsCa, &dsDa, &dsEa, &dsFa};
+    int* dsListb[6] = {&dsAb, &dsBb, &dsCb, &dsDb, &dsEb, &dsFb};
+    return get_spinor_spins(dsList, dsLista, dsListb, 6, iterator);
   }
   void process::get_spinor_spins(const int* dsList[], int* dsLista[], int* dsListb[], int length, const int& iterator){
   // First map iterator into an array of local loop counters

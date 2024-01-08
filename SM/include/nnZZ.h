@@ -17,34 +17,36 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//File:  SPINAS/SM/neZneh.h
+//File:  SPINAS/SM/nnZZ.h
 
 namespace spinas {
 
-  class neZneh : public process {
+  class nnZZ : public process {
   private:
     ldouble e;//Electric Charge
-    ldouble mh, MW, SW, CW, MZ, WZ;//Mass of h and W, width of h and Z and sin(theta_W)
+    ldouble MW, SW, CW, MZ, WZ;//Mass of e and h and W, width of h and Z and sin(theta_W)
     particle p1,p2,p3,p4;
-    propagator propZ;
-    cdouble pDenT;
-    //[23], <13>
-    sproduct s23s, a12a;
+    propagator propne;
+    cdouble pDenT, pDenU;
+    //[23], [24], <13>, <14>, <34>
+    sproduct s23s, s24s, a13a, a14a, a34a;
+    //[314>, [413>
+    sproduct s314a, s413a;
     ldouble sqrt2;
-    ldouble preZ;
+    ldouble preTU;
 
     
   public:
-    //neZneh();
-    neZneh(const ldouble& echarge, const ldouble& massh, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ);
+    //nnZZ();
+    nnZZ(const ldouble& echarge, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ);
 
     //Set Masses
-    void set_masses(const ldouble& massh, const ldouble& massW);
+    void set_masses(const ldouble& massW);
     //Set Momenta
     void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]);
 
     //Amplitude
-    cdouble amp(const int& ds3);//Double the spins
+    cdouble amp(const int& ds3, const int& ds4);//Double the spins
     ldouble amp2();
     ldouble amp2(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]);
     
@@ -53,5 +55,5 @@ namespace spinas {
     
   };
   //Tests
-  int test_neZneh();
+  int test_nnZZ();
 }

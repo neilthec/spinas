@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//File:  SPINAS/SM/neZZne.cpp
+//File:  SPINAS/SM/nZZn.cpp
 
 #include <iostream>
 #include <sstream>
@@ -25,11 +25,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <complex>
 
 #include "spinas.h"
-#include "include/neZZne.h"
+#include "include/nZZn.h"
 
 namespace spinas {
 
-  neZZne::neZZne(const ldouble& echarge, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ):
+  nZZn::nZZn(const ldouble& echarge, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ):
     e(echarge), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ), propne(0,0) {
     constexpr ldouble two = 2;
     sqrt2 = std::sqrt(two);
@@ -50,7 +50,7 @@ namespace spinas {
     //Couplings
     preTU = e*e/(2.0*MW*MW*SW*SW);
   }
-  void neZZne::set_masses(const ldouble& massW){
+  void nZZn::set_masses(const ldouble& massW){
     MW=massW;
     MZ=MW/CW;//std::cout<<"set_masses: MZ="<<MZ<<"\n";
     p2.set_mass(MZ);
@@ -58,7 +58,7 @@ namespace spinas {
     //Couplings
     preTU = e*e/(2.0*MW*MW*SW*SW);
   }
-  void neZZne::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
+  void nZZn::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles
     p1.set_momentum(mom1);
     p2.set_momentum(mom2);
@@ -86,7 +86,7 @@ namespace spinas {
   
   //Amplitude
   //set_momenta(...) must be called before amp(...).
-  cdouble neZZne::amp(const int& ds2, const int& ds3){//Double Spin
+  cdouble nZZn::amp(const int& ds2, const int& ds3){//Double Spin
     cdouble amplitude(0,0);
     int ds2a, ds2b, ds3a, ds3b;
 
@@ -123,7 +123,7 @@ namespace spinas {
   }
   
   //set_momenta(...) must be called before amp2().
-  ldouble neZZne::amp2(){
+  ldouble nZZn::amp2(){
     ldouble amp2 = 0;
     cdouble M;
 
@@ -141,7 +141,7 @@ namespace spinas {
 
 
   //  Tests
-  int test_neZZne(){
+  int test_nZZn(){
     int n=0;//Number of fails
     std::cout<<"\t* ne, Z  -> Z , ne      :";
     {//amp^2
@@ -150,37 +150,37 @@ namespace spinas {
       ldouble EE=0.31333,MW=80.385, SW=0.474;
       ldouble CW=std::sqrt(1-SW*SW);
       ldouble MZ=MW/CW;//std::cout<<"MZ="<<MZ<<"\n";
-      neZZne neZZneAmp = neZZne(EE,MW,SW,0);
+      nZZn nZZnAmp = nZZn(EE,MW,SW,0);
       ldouble pspatial=250;
       ldouble dataCH[20] = {1.094461419151703E+00,3.472077700279796E-01,2.091913086041192E-01,1.517583625031387E-01,1.206605890070925E-01,1.014177925884506E-01,8.852113409645064E-02,7.941714150148020E-02,7.276023548775576E-02,6.777403917338271E-02,6.397918728135561E-02,6.106369346642204E-02,5.881576144609052E-02,5.708655573495644E-02,5.576842463338999E-02,5.478157711851412E-02,5.406561751369150E-02,5.357398990895435E-02,5.327022870954217E-02,5.312536548573234E-02};
-      i += neZZneAmp.test_2to2_amp2([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
-      i += neZZneAmp.test_2to2_amp2_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
-      i += neZZneAmp.test_2to2_amp2_boosts([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
-      i += neZZneAmp.test_2to2_amp2_boosts_and_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
+      i += nZZnAmp.test_2to2_amp2([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
+      i += nZZnAmp.test_2to2_amp2_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
+      i += nZZnAmp.test_2to2_amp2_boosts([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
+      i += nZZnAmp.test_2to2_amp2_boosts_and_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH);
       //std::cout<<"\n# MW=80.385, pspatial=125.1\n";
       pspatial = 125.1;
       ldouble dataCH2[20] = {6.034465206784677E+00,5.018888867307031E-01,2.509646168386984E-01,1.701472681000258E-01,1.311214308073457E-01,1.084788397214498E-01,9.390196125158647E-02,8.387986530575652E-02,7.667833951482834E-02,7.134336332197493E-02,6.730712227757267E-02,6.421069824614506E-02,6.181616554132763E-02,5.995960315492051E-02,5.852441442940950E-02,5.742540741632385E-02,5.659889360608122E-02,5.599630894208470E-02,5.557997759648878E-02,5.532022356277697E-02};
-      i += neZZneAmp.test_2to2_amp2([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
-      i += neZZneAmp.test_2to2_amp2_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
-      i += neZZneAmp.test_2to2_amp2_boosts([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
-      i += neZZneAmp.test_2to2_amp2_boosts_and_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
+      i += nZZnAmp.test_2to2_amp2([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
+      i += nZZnAmp.test_2to2_amp2_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
+      i += nZZnAmp.test_2to2_amp2_boosts([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
+      i += nZZnAmp.test_2to2_amp2_boosts_and_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH2);
       //std::cout<<"\n# MW=80.385, pspatial=95\n";
       pspatial = 95;
       ldouble dataCH4[20] = {7.456798714137383E+00,1.581221827536240E+00,4.452740563750762E-01,2.489067218942878E-01,1.743583610950463E-01,1.364220981311065E-01,1.139144844349525E-01,9.925546888889708E-02,8.910210672601479E-02,8.176301573807961E-02,7.629466672937971E-02,7.213079171579097E-02,6.891165745496576E-02,6.639809884625641E-02,6.442507661265942E-02,6.287511224151682E-02,6.166235575189644E-02,6.072264124559407E-02,6.000706441321789E-02,5.947771043468283E-02};
-      i += neZZneAmp.test_2to2_amp2([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
-      i += neZZneAmp.test_2to2_amp2_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
-      i += neZZneAmp.test_2to2_amp2_boosts([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
-      i += neZZneAmp.test_2to2_amp2_boosts_and_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
+      i += nZZnAmp.test_2to2_amp2([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
+      i += nZZnAmp.test_2to2_amp2_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
+      i += nZZnAmp.test_2to2_amp2_boosts([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
+      i += nZZnAmp.test_2to2_amp2_boosts_and_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH4);
       //std::cout<<"\n# MW=8.0, pspatial=125.1\n";
       pspatial = 125.1;
       MW=8;
       MZ=MW/CW;
-      neZZneAmp.set_masses(MW);
+      nZZnAmp.set_masses(MW);
       ldouble dataCH3[20] = {1.056949431485677E+00,3.541366604687709E-01,2.146457769190266E-01,1.556198540533428E-01,1.234147556566583E-01,1.034007561099862E-01,8.995113419990319E-02,8.044011452158384E-02,7.347759079573257E-02,6.825876893471727E-02,6.428544510510059E-02,6.123270481243348E-02,5.887960677879667E-02,5.707067414447375E-02,5.569332042551545E-02,5.466401384505959E-02,5.391947283650067E-02,5.341088025197682E-02,5.309997404159650E-02,5.295634080669820E-02};
-      i += neZZneAmp.test_2to2_amp2([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
-      i += neZZneAmp.test_2to2_amp2_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
-      i += neZZneAmp.test_2to2_amp2_boosts([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
-      i += neZZneAmp.test_2to2_amp2_boosts_and_rotations([&]() { return neZZneAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
+      i += nZZnAmp.test_2to2_amp2([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
+      i += nZZnAmp.test_2to2_amp2_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
+      i += nZZnAmp.test_2to2_amp2_boosts([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
+      i += nZZnAmp.test_2to2_amp2_boosts_and_rotations([&]() { return nZZnAmp.amp2(); }, 0,MZ,MZ,0,pspatial,dataCH3);
       // Done
       if(i==0) std::cout<<"                                         Pass"<<std::endl;
       else std::cout<<"                                         Fail!"<<std::endl;

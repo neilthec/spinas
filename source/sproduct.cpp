@@ -203,6 +203,49 @@ namespace spinas {
   }
 
 
+  //6 Internal Momenta
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(6) {
+    p[0] = p0;
+    p[1] = p1;
+    p[2] = p2;
+    p[3] = p3;
+    p[4] = p4;
+    p[5] = p5;
+    update();
+  }
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(6) {
+    p[0] = p0;
+    p[1] = p1;
+    p[2] = p2;
+    p[3] = p3;
+    p[4] = p4;
+    p[5] = p5;
+    update();
+  }
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(6) {
+    p[0] = p0;
+    p[1] = p1;
+    p[2] = p2;
+    p[3] = p3;
+    p[4] = p4;
+    p[5] = p5;
+    update();
+  }
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(6) {
+    p[0] = p0;
+    p[1] = p1;
+    p[2] = p2;
+    p[3] = p3;
+    p[4] = p4;
+    p[5] = p5;
+    update();
+  }
+
+
 
   //If masses or momenta change, this function must be run.
   void sproduct::update(){

@@ -44,6 +44,8 @@ namespace spinas {
     int get_num_spin_loops(const int& dsA, const int& dsB);
     int get_num_spin_loops(const int& dsA, const int& dsB, const int& dsC);
     int get_num_spin_loops(const int& dsA, const int& dsB, const int& dsC, const int& dsD);
+    int get_num_spin_loops(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE);
+    int get_num_spin_loops(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE, const int& dsF);
     int get_num_spin_loops(const int* dsList, const int length);
     
   //Normalization Factor
@@ -51,6 +53,8 @@ namespace spinas {
     ldouble get_spin_normalization(const int& dsA, const int& dsB);
     ldouble get_spin_normalization(const int& dsA, const int& dsB, const int& dsC);
     ldouble get_spin_normalization(const int& dsA, const int& dsB, const int& dsC, const int& dsD);
+    ldouble get_spin_normalization(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE);
+    ldouble get_spin_normalization(const int& dsA, const int& dsB, const int& dsC, const int& dsD, const int& dsE, const int& dsF);
     ldouble get_spin_normalization(const int* dsList, const int length);
 
     //Spinor Spins
@@ -58,6 +62,8 @@ namespace spinas {
     void get_spinor_spins(const int& dsA, int& dsAa, int& dsAb, const int& dsB, int& dsBa, int& dsBb, const int& iterator);
     void get_spinor_spins(const int& dsA, int& dsAa, int& dsAb, const int& dsB, int& dsBa, int& dsBb, const int& dsC, int& dsCa, int& dsCb, const int& iterator);
     void get_spinor_spins(const int& dsA, int& dsAa, int& dsAb, const int& dsB, int& dsBa, int& dsBb, const int& dsC, int& dsCa, int& dsCb, const int& dsD, int& dsDa, int& dsDb, const int& iterator);
+    void get_spinor_spins(const int& dsA, int& dsAa, int& dsAb, const int& dsB, int& dsBa, int& dsBb, const int& dsC, int& dsCa, int& dsCb, const int& dsD, int& dsDa, int& dsDb, const int& dsE, int& dsEa, int& dsEb, const int& iterator);
+    void get_spinor_spins(const int& dsA, int& dsAa, int& dsAb, const int& dsB, int& dsBa, int& dsBb, const int& dsC, int& dsCa, int& dsCb, const int& dsD, int& dsDa, int& dsDb, const int& dsE, int& dsEa, int& dsEb, const int& dsF, int& dsFa, int& dsFb, const int& iterator);
     void get_spinor_spins(const int* dsList[], int* dsLista[], int* dsListb[], int length, const int& iterator);
 
     
