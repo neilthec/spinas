@@ -47,7 +47,7 @@ namespace spinas {
     s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s413a = sproduct(SQUARE,&p4,&p1,&p3);
     //Couplings
-    pre = 2.0*e*e/(4.0*MW*MW*SW*SW);
+    pre = e*e/(2.0*MW*MW*SW*SW);
     preS = 3.0*pre*mh*mh;
   }
   void hhWW::set_masses(const ldouble& massh, const ldouble& massW){
@@ -60,7 +60,7 @@ namespace spinas {
     propW.set_mass(MW);
     proph.set_mass(mh);
     //Couplings
-    pre = 2.0*e*e/(4.0*MW*MW*SW*SW);
+    pre = e*e/(2.0*MW*MW*SW*SW);
     preS = 3.0*pre*mh*mh;
   }
   void hhWW::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
@@ -103,7 +103,7 @@ namespace spinas {
       get_spinor_spins(ds3,ds3a,ds3b, ds4,ds4a,ds4b, i);
 
 
-      //pre = sqrt2*e*e/(4.0*MW*MW*SW*SW);
+      //pre = e*e/(2.0*MW*MW*SW*SW);
       
       //4-Point      
       amplitude += - normFactor*pre*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b);

@@ -147,9 +147,9 @@ namespace spinas {
       //T-Channel u
       //pred = e*e/(2.0*MW*MW*SW*SW);
       //all ingoing:
-      // pred [24] <13> ([314>+MW <34>))/t
+      // - pred [24] <13> ([314>+MW <34>))/(t-mu^2)
       //34 outgoing:
-      // pred [24] <13> (-MW <34> + [314>)/t
+      // - pred [24] <13> (-MW <34> + [314>)/(t-mu^2)
       amplitude += - normFactor*pred*s24s.v(ds2,ds4a)*a13a.v(ds1,ds3a)*(-MW*a34a.v(ds3b,ds4b)+s314a.v(ds3b,ds4b))/pDendT;
 
       //S-Channel A
@@ -169,14 +169,14 @@ namespace spinas {
       //S-Channel Z
       //preZ = e*e/(2.0*MW*MW*SW*SW); //=pred
       //all ingoing
-      //+ preZ gLe ( MSwitchD[34]<34>( [12]-<12>) + 2[34]<34>[231> + 2MW([23]<14>+[24]<13>)([34]+<34>) )/(s-MZ^2)
-      //+ preZ gRe ( MSwitchD[34]<34>(-[12]+<12>) + 2[34]<34>[132> + 2MW([13]<24>+[14]<23>)([34]+<34>) )/(s-MZ^2)
-      // = preZ ( (gL-gR)MSwitchD[34]<34>([12]-<12>)
+      //+ preZ gLe ( md[34]<34>( [12]-<12>) + 2[34]<34>[231> + 2MW([23]<14>+[24]<13>)([34]+<34>) )/(s-MZ^2)
+      //+ preZ gRe ( md[34]<34>(-[12]+<12>) + 2[34]<34>[132> + 2MW([13]<24>+[14]<23>)([34]+<34>) )/(s-MZ^2)
+      // = preZ ( (gL-gR)md[34]<34>([12]-<12>)
       //          + 2[34]<34>(gL[231>+gR[132>)
       //          + 2MW([34]+<34>)( gL([23]<14>+[24]<13>) + gR([13]<24>+[14]<23>) )
       //        )/(s-MZ^2)
       //34 outgoing
-      //preZ ( (gL-gR)MSwitchD[34]<34>([12]-<12>)
+      //preZ ( (gL-gR)md[34]<34>([12]-<12>)
       //        - 2[34]<34>(gL[231>+gR[132>)
       //        - 2MW([34]+<34>)( gL([23]<14>+[24]<13>) + gR([13]<24>+[14]<23>) )
       //      )/(s-MZ^2)

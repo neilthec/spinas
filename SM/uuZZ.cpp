@@ -125,7 +125,7 @@ namespace spinas {
       get_spinor_spins(ds3,ds3a,ds3b, ds4,ds4a,ds4b, i);
       
       //S-Channel h
-      //preh = e*e*mf/(4.0*MW*MW*SW*SW);
+      //preh = e*e*mf/(2.0*MW*MW*SW*SW);
       //all ingoing: 
       //preh [34] <34> ([12]+<12>)/(s-Mh^2)
       //34 outgoing:
@@ -133,7 +133,7 @@ namespace spinas {
       amplitude += normFactor*preh*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2))/pDenS;
       
       //T-Channel e
-      //preTU = e*e/(4.0*MW*MW*SW*SW);
+      //preTU = e*e/(2.0*MW*MW*SW*SW);
       //all ingoing:
       //+preTU gLe^2 [24] <13> (MZ <34>+[314>))/(Mf^2-t)
       //+preTU gRe^2 [13] <24> (MZ [34]+[413>))/(Mf^2-t)
@@ -146,8 +146,8 @@ namespace spinas {
       	+          normFactor*preTU*gR*gR*a24a.v(ds2,ds4a)*s13s.v(ds1,ds3a)*(MZ*s34s.v(ds3b,ds4b)-s413a.v(ds4b,ds3b))/pDenT
       	-          normFactor*preTU*gL*gR*mf*(s13s.v(ds1,ds3a)*s24s.v(ds2,ds4a)*a34a.v(ds3b,ds4b)+a13a.v(ds1,ds3a)*a24a.v(ds2,ds4a)*s34s.v(ds3b,ds4b))/pDenT;
 
-      //U-Channel e
-      //preTU = e*e/(4.0*MW*MW*SW*SW);
+      //U-Channel u
+      //preTU = e*e/(2.0*MW*MW*SW*SW);
       //all ingoing:
       //+preTU gLe^2 [23] <14> (MZ <34>-[413>)/(u-Mf^2)
       //+preTU gRe^2 [14] <23> (MZ [34]-[314>)/(u-Mf^2)

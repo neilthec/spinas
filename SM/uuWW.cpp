@@ -59,8 +59,8 @@ namespace spinas {
     s231a = sproduct(SQUARE,&p2,&p3,&p1);
     s132a = sproduct(SQUARE,&p1,&p3,&p2);
     //Couplings
-    pred = 2.0*e*e/(2.0*MW*MW*SW*SW);
-    preh = 2.0*e*e*mu/(4.0*MW*MW*SW*SW);
+    pred = e*e/(MW*MW*SW*SW);
+    preh = e*e*mu/(2.0*MW*MW*SW*SW);
     preZ = e*e/(2.0*MW*MW*SW*SW);
     gL=-2.0*Qf*SW*SW+1.0;
     gR=-2.0*Qf*SW*SW;
@@ -79,8 +79,8 @@ namespace spinas {
     proph.set_mass(mh);
     propZ.set_mass(MZ);
     //Couplings
-    pred = 2.0*e*e/(2.0*MW*MW*SW*SW);
-    preh = 2.0*e*e*mu/(4.0*MW*MW*SW*SW);
+    pred = e*e/(MW*MW*SW*SW);
+    preh = e*e*mu/(2.0*MW*MW*SW*SW);
     preZ = e*e/(2.0*MW*MW*SW*SW);
   }
   void uuWW::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
@@ -137,7 +137,7 @@ namespace spinas {
       get_spinor_spins(ds3,ds3a,ds3b, ds4,ds4a,ds4b, i);
       
       //S-Channel h
-      //preh = e*e*mu/(4.0*MW*MW*SW*SW);
+      //preh = e*e*mu/(2.0*MW*MW*SW*SW);
       //all ingoing: 
       //preh [34] <34> ([12]+<12>)/(s-Mh^2)
       //34 outgoing:
@@ -145,11 +145,11 @@ namespace spinas {
       amplitude += normFactor*preh*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2))/pDenhS;
       
       //T-Channel d
-      //pred = e*e/(2.0*MW*MW*SW*SW);
+      //pred = e*e/(MW*MW*SW*SW);
       //all ingoing:
-      // pred [24] <13> ([314>+MW <34>))/t
+      // - pred [24] <13> ([314>+MW <34>))/(t-md^2)
       //34 outgoing:
-      // pred [24] <13> (-MW <34> + [314>)/t
+      // - pred [24] <13> (-MW <34> + [314>)/(t-md^2)
       amplitude += - normFactor*pred*s24s.v(ds2,ds4a)*a13a.v(ds1,ds3a)*(-MW*a34a.v(ds3b,ds4b)+s314a.v(ds3b,ds4b))/pDendT;
 
       //S-Channel A

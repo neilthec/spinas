@@ -118,28 +118,15 @@ namespace spinas {
 
 	//TU Diagram
 	//all ingoing:
-	//Since the denominator only has two propagator denominators in it and since we have 8 spinors in the numerator,
-	//there cannot be any extra momentum dependence in the numerator, whatsoever.  It's presence would violate
-	//perturbative unitarity.  This also means, there cannot be any MW left.
-	//So, let us enumerate all possible spinor structures with no momenta.
-	//[13]^2<24>^2 , [14]^2<23>^2 , [13][14]<23><24>
-	//After a quick scan, we find:
-	//34 outgoing:
-	// 2e^2*( [13]^2<24>^2 + [14]^2<23>^2 + 2[13][14]<23><24> )/(t-MW^2)(u-MW^2)
-	amplitude += normFactor*2.0*e*e*(
-				     s13s.v(ds3a)*s13s.v(ds3b)*a24a.v(ds4a)*a24a.v(ds4b)
-				     +s14s.v(ds4a)*s14s.v(ds4b)*a23a.v(ds3a)*a23a.v(ds3b)
-				     +two*s13s.v(ds3a)*s14s.v(ds4a)*a23a.v(ds3b)*a24a.v(ds4b)				     
-				     )/pDenT/pDenU;
+	//-e^2 (<24>[13]+<23>[14])^2 /(t-MW^2)(u-MW^2)
+	//34 out:
+	//-e^2 (<24>[13]+<23>[14])^2 /(t-MW^2)(u-MW^2)
+	amplitude += - normFactor*2.0*e*e*(a24a.v(ds4a)*s13s.v(ds3a)+a23a.v(ds3a)*s14s.v(ds4a))*(a24a.v(ds4b)*s13s.v(ds3b)+a23a.v(ds3b)*s14s.v(ds4b))/pDenT/pDenU;
 
 	
       }
       else if(ds1<0 && ds2>0){
-	amplitude += normFactor*2.0*e*e*(
-				     a13a.v(ds3a)*a13a.v(ds3b)*s24s.v(ds4a)*s24s.v(ds4b)
-				     +a14a.v(ds4a)*a14a.v(ds4b)*s23s.v(ds3a)*s23s.v(ds3b)
-				     +two*a13a.v(ds3a)*a14a.v(ds4a)*s23s.v(ds3b)*s24s.v(ds4b)				     
-				     )/pDenT/pDenU;
+	amplitude += - normFactor*2.0*e*e*(s24s.v(ds4a)*a13a.v(ds3a)+s23s.v(ds3a)*a14a.v(ds4a))*(s24s.v(ds4b)*a13a.v(ds3b)+s23s.v(ds3b)*a14a.v(ds4b))/pDenT/pDenU;
       }
       else if(ds1<0 && ds2<0){
 	amplitude += - normFactor*2.0*e*e*a12a.v()*a12a.v()*s34s.v(ds3a,ds4a)*s34s.v(ds3b,ds4b)/pDenT/pDenU;

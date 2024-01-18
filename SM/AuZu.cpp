@@ -53,7 +53,7 @@ namespace spinas {
     s1421s = sproduct(SQUARE,&p1,&p4,&p2,&p1);
     a1421a = sproduct(ANGLE,&p1,&p4,&p2,&p1);
     //Couplings
-    preTU = 2.0*e*e*Qu/(2.0*MW*SW);
+    preTU = e*e*Qu/(MW*SW);
     gL=-2.0*Qu*SW*SW+1.0;
     gR=-2.0*Qu*SW*SW;
   }
@@ -67,7 +67,7 @@ namespace spinas {
     p4.set_mass(mu);
     prope.set_mass(mu);
     //Couplings
-    preTU = 2.0*e*e*Qu/(2.0*MW*SW);
+    preTU = e*e*Qu/(MW*SW);
   }
   void AuZu::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles
@@ -114,7 +114,7 @@ namespace spinas {
       get_spinor_spins(ds3,ds3a,ds3b, i);
       
       if(ds1>0){
-	//preTU = 2.0*e*e/(2.0*MW*SW);
+	//preTU = e*e*Qu/(MW*SW);
 	//AZUu all in:
 	//- preTU [1341] (gRe [24] <23> + gLe <24> [23])/((t-mu^2) (u-mu^2))
 	//- preTU [12] ( gRe [14]<23>/(u-mu^2) - gLe [13]<24>/(t-mu^2) )
@@ -131,7 +131,7 @@ namespace spinas {
 	
       }
       else if(ds1<0){
-	//preTU = 2.0*e*e/(2.0*MW*SW);
+	//preTU = e*e*Qu/(MW*SW);
 	//AZUu all in:
 	//- preTU <1341> (gRe [24] <23> + gLe <24> [23])/((t-mu^2) (u-mu^2))
 	//- preTU <12> ( gLe <14>[23]/(u-mu^2) - gRe <13>[24]/(t-mu^2) )

@@ -18,11 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 //File:  SPINAS/user-dir/test.cpp
 
-				    //#include <cstdlib>
-				    //#include<iostream>
-				    //#include <sstream>
-				    //#include <complex>
-
+				    
 #include "spinas.h"
 #include "include/eemm.h"
 
