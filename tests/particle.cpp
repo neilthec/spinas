@@ -91,36 +91,73 @@ BOOST_AUTO_TEST_CASE(helicity_spinors_test) {
   BOOST_TEST_MESSAGE("\t* Helicity Spinors");
   ldouble mom1[4] = {std::sqrt(16 + 49 + 81), -4, 7, -9};
   particle p1 = particle(mom1, 0);
-  
-  //|1> == [1|*
-  BOOST_CHECK_EQUAL(p1.rangle(), p1.lsquare().get_conjugate());
-  
-  //<1| == |1]*
-  BOOST_CHECK_EQUAL(p1.langle(), p1.rsquare().get_conjugate());
-  
-  // p1|1> == 0
-  BOOST_CHECK(p1.umat() * p1.rangle() == cvector(cdouble(0, 0), cdouble(0, 0)));
-  
-  // [1|p1 == 0
-  BOOST_CHECK(p1.lsquare() * p1.umat() == cvector(cdouble(0, 0), cdouble(0, 0)));
-  
-  // <11> == 0
-  BOOST_CHECK(p1.langle() * p1.rangle() == cdouble(0, 0));
-  
-  // [11] == 0
-  BOOST_CHECK(p1.lsquare() * p1.rsquare() == cdouble(0, 0));
-  
-  // |1>[1| = p1
-  BOOST_CHECK(outer(p1.rangle(), p1.lsquare()) == p1.lmat());
-  
-  // |1]<1| = p1
-  BOOST_CHECK(outer(p1.rsquare(), p1.langle()) == p1.umat());
-  
-  // p1|1] == 0
-  BOOST_CHECK(p1.lmat() * p1.rsquare() == cvector(cdouble(0, 0), cdouble(0, 0)));
-  
-  // <1|p1 == 0
-  BOOST_CHECK(p1.langle() * p1.lmat() == cvector(cdouble(0, 0), cdouble(0, 0)));
+
+  for(int i=0;i<100;i++){
+    
+    choose_random_massless_momentum(mom1,-50,50);
+    p1.set_momentum(mom1);
+    
+    //|1> == [1|*
+    BOOST_CHECK_EQUAL(p1.rangle(), p1.lsquare().get_conjugate());
+    
+    //<1| == |1]*
+    BOOST_CHECK_EQUAL(p1.langle(), p1.rsquare().get_conjugate());
+    
+    // p1|1> == 0
+    BOOST_CHECK(p1.umat() * p1.rangle() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    
+    // [1|p1 == 0
+    BOOST_CHECK(p1.lsquare() * p1.umat() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    
+    // <11> == 0
+    BOOST_CHECK(p1.langle() * p1.rangle() == cdouble(0, 0));
+    
+    // [11] == 0
+    BOOST_CHECK(p1.lsquare() * p1.rsquare() == cdouble(0, 0));
+    
+    // |1>[1| = p1
+    BOOST_CHECK(outer(p1.rangle(), p1.lsquare()) == p1.lmat());
+    
+    // |1]<1| = p1
+    BOOST_CHECK(outer(p1.rsquare(), p1.langle()) == p1.umat());
+    
+    // p1|1] == 0
+    BOOST_CHECK(p1.lmat() * p1.rsquare() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    
+    // <1|p1 == 0
+    BOOST_CHECK(p1.langle() * p1.lmat() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    
+    //Lorentz and Helicity Algebra
+    constexpr ldouble half=0.5;
+    cvector zero_vector=cvector(0,0);
+    
+    // LJ3 |1> == -1/2 |1>
+    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle() == -half*p1.rangle());
+    // LJ+ |1> == 0
+    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle() == zero_vector);
+    // LJ- |1> == 0
+    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle() == zero_vector);
+    // LJ3 <1| == -1/2 <1|
+    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle() == -half*p1.langle());
+    // LJ+ <1| == 0
+    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle() == zero_vector);
+    // LJ- <1| == 0
+    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle() == zero_vector);
+    
+    // LJ3 [1| == 1/2 [1|
+    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare() == half*p1.lsquare());
+    // LJ+ [1| == 0
+    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare() == zero_vector);
+    // LJ- [1| == 0
+    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare() == zero_vector);
+    // LJ3 |1] == 1/2 |1]
+    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare() == half*p1.rsquare());
+    // LJ+ |1] == 0
+    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare() == zero_vector);
+    // LJ- |1] == 0
+    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare() == zero_vector);
+    
+  }
 }
 
 
@@ -129,110 +166,177 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
   ldouble mom1[4] = {std::sqrt(100 + 16 + 49 + 81), -4, 7, -9};
   particle p1 = particle(mom1, 10);
-  ldouble ten = 10;
+  ldouble mass = 10;
   cmatrix epsU = cmatrix(cdouble(0, 0), cdouble(1, 0), cdouble(-1, 0), cdouble(0, 0));
   cmatrix epsL = cmatrix(cdouble(0,0),cdouble(-1,0),cdouble(1,0),cdouble(0,0));
   cmatrix delta = cmatrix(cdouble(1, 0), cdouble(0, 0), cdouble(0, 0), cdouble(1, 0));
-  
-  // Conjugation
-  for (int j = -1; j < 2; j = j + 2){
-    //|1>^I == ([1|_I)*
-    BOOST_CHECK_EQUAL(p1.rangle(j), p1.lsquare(j, false).get_conjugate());
 
-    //<1|^I == (|1]_I)*
-    BOOST_CHECK_EQUAL(p1.langle(j), p1.rsquare(j, false).get_conjugate());
-
-    //|1>_I == -([1|^I)*
-    BOOST_CHECK_EQUAL(p1.rangle(j, false), -p1.lsquare(j).get_conjugate());
-
-    //<1|_I == -(|1]^I)*
-    BOOST_CHECK_EQUAL(p1.langle(j, false), -p1.rsquare(j).get_conjugate());
-  }
-  
-  
-
-  // Spinor Products
-  for(int i=-1;i<2;i=i+2)
-    for(int j=-1;j<2;j=j+2){
-      int epsi = 0, epsj=0;
-      if(i==1) epsi=1;
-      if(j==1) epsj=1;
-
-      //<11>^{IJ} == -m eps^{IJ}
-      BOOST_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j) - (-ten*epsU.get(epsi,epsj))), epsilon);
+  for(int i=0;i<100;i++){
+    
+    mass = choose_random_momentum(mom1,-50,50);
+    p1.set_mass(mass);
+    p1.set_momentum(mom1);
+    
+    // Conjugation
+    for (int j = -1; j < 2; j = j + 2){
+      //|1>^I == ([1|_I)*
+      BOOST_CHECK_EQUAL(p1.rangle(j), p1.lsquare(j, false).get_conjugate());
       
-      //<11>^I_J == -m delta^I_J
-      BOOST_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j,false) - (-ten*delta.get(epsi,epsj))), epsilon);
-
-      //<11>_I^J == m delta_I^J
-      BOOST_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j) - ten*delta.get(epsi,epsj)), epsilon);
-
-      //<11>_{IJ} == m eps_{IJ}
-      BOOST_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j,false) - ten*epsL.get(epsi,epsj)), epsilon);
-
-      //[11]_{IJ} == -m eps_{IJ}
-      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j,false) - (-ten*epsL.get(epsi,epsj))), epsilon);
-
-      //[11]_I^J == -m delta_I^J
-      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j) - (-ten*delta.get(epsi,epsj))), epsilon);
-
-      //[11]^I_J == m delta^I_J
-      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j,false) - ten*delta.get(epsi,epsj)), epsilon);
-
-      //[11]^{IJ} == m eps^{IJ}
-      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j) - ten*epsU.get(epsi,epsj)), epsilon);
+      //<1|^I == (|1]_I)*
+      BOOST_CHECK_EQUAL(p1.langle(j), p1.rsquare(j, false).get_conjugate());
       
+      //|1>_I == -([1|^I)*
+      BOOST_CHECK_EQUAL(p1.rangle(j, false), -p1.lsquare(j).get_conjugate());
+      
+      //<1|_I == -(|1]^I)*
+      BOOST_CHECK_EQUAL(p1.langle(j, false), -p1.rsquare(j).get_conjugate());
     }
-
-  
-  //Outer Products
-  //|1>^I[1|_I = p1
-  cmatrix outerProd = outer(p1.rangle(-1), p1.lsquare(-1, false)) +
-    outer(p1.rangle(1), p1.lsquare(1, false));
-  BOOST_CHECK(outerProd == p1.lmat());
-  
-  //|1>_I[1|^I = -p1
-  outerProd = outer(p1.rangle(-1, false), p1.lsquare(-1)) +
-    outer(p1.rangle(1, false), p1.lsquare(1));
-  BOOST_CHECK(outerProd == -p1.lmat());
-  
-  //|1]_I<1|^I = p1
-  outerProd = outer(p1.rsquare(-1, false), p1.langle(-1)) +
-    outer(p1.rsquare(1, false), p1.langle(1));
-  BOOST_CHECK(outerProd == p1.umat());
-  
-  //|1]^I<1|_I = -p1
-  outerProd = outer(p1.rsquare(-1), p1.langle(-1, false)) +
-    outer(p1.rsquare(1), p1.langle(1, false));
-  BOOST_CHECK(outerProd == -p1.umat());
-
-  // Momentum times Spinor Gives Mass times Spinor
-  for(int j=-1;j<2;j=j+2){
-    //p1|1>^I=-m|1]^I
-    BOOST_CHECK_EQUAL(p1.umat()*p1.rangle(j), -ten*p1.rsquare(j));
-
-    //<1|^I*p1=[1|^I*m
-    BOOST_CHECK_EQUAL(p1.langle(j)*p1.lmat(), ten*p1.lsquare(j));
-
-    //p1|1>_I=-m|1]_I
-    BOOST_CHECK_EQUAL(p1.umat()*p1.rangle(j,false), -ten*p1.rsquare(j,false));
-
-    //<1|_I*p1=[1|_I*m
-    BOOST_CHECK_EQUAL(p1.langle(j,false)*p1.lmat(), ten*p1.lsquare(j,false));
-
-    //p1|1]^I=-m|1>^I
-    BOOST_CHECK_EQUAL(p1.lmat()*p1.rsquare(j), -ten*p1.rangle(j));
-
-    //[1|^I*p1=<1|^I*m
-    BOOST_CHECK_EQUAL(p1.lsquare(j)*p1.umat(), ten*p1.langle(j));
-
-    //p1|1]_I=-m|1>_I
-    BOOST_CHECK_EQUAL(p1.lmat()*p1.rsquare(j,false), -ten*p1.rangle(j,false));
-
-    //[1|_I*p1=<1|_I*m
-    BOOST_CHECK_EQUAL(p1.lsquare(j,false)*p1.umat(), ten*p1.langle(j,false));
+    
+    
+    
+    // Spinor Products
+    for(int i=-1;i<2;i=i+2)
+      for(int j=-1;j<2;j=j+2){
+	int epsi = 0, epsj=0;
+	if(i==1) epsi=1;
+	if(j==1) epsj=1;
+	
+	//<11>^{IJ} == -m eps^{IJ}
+	BOOST_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j) - (-mass*epsU.get(epsi,epsj))), epsilon);
+	
+	//<11>^I_J == -m delta^I_J
+	BOOST_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j,false) - (-mass*delta.get(epsi,epsj))), epsilon);
+	
+	//<11>_I^J == m delta_I^J
+	BOOST_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j) - mass*delta.get(epsi,epsj)), epsilon);
+	
+	//<11>_{IJ} == m eps_{IJ}
+	BOOST_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j,false) - mass*epsL.get(epsi,epsj)), epsilon);
+	
+	//[11]_{IJ} == -m eps_{IJ}
+	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j,false) - (-mass*epsL.get(epsi,epsj))), epsilon);
+	
+	//[11]_I^J == -m delta_I^J
+	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j) - (-mass*delta.get(epsi,epsj))), epsilon);
+	
+	//[11]^I_J == m delta^I_J
+	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j,false) - mass*delta.get(epsi,epsj)), epsilon);
+	
+	//[11]^{IJ} == m eps^{IJ}
+	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j) - mass*epsU.get(epsi,epsj)), epsilon);
+	
+      }
+    
+    
+    //Outer Products
+    //|1>^I[1|_I = p1
+    cmatrix outerProd = outer(p1.rangle(-1), p1.lsquare(-1, false)) +
+      outer(p1.rangle(1), p1.lsquare(1, false));
+    BOOST_CHECK(outerProd == p1.lmat());
+    
+    //|1>_I[1|^I = -p1
+    outerProd = outer(p1.rangle(-1, false), p1.lsquare(-1)) +
+      outer(p1.rangle(1, false), p1.lsquare(1));
+    BOOST_CHECK(outerProd == -p1.lmat());
+    
+    //|1]_I<1|^I = p1
+    outerProd = outer(p1.rsquare(-1, false), p1.langle(-1)) +
+      outer(p1.rsquare(1, false), p1.langle(1));
+    BOOST_CHECK(outerProd == p1.umat());
+    
+    //|1]^I<1|_I = -p1
+    outerProd = outer(p1.rsquare(-1), p1.langle(-1, false)) +
+      outer(p1.rsquare(1), p1.langle(1, false));
+    BOOST_CHECK(outerProd == -p1.umat());
+    
+    // Momentum times Spinor Gives Mass times Spinor
+    for(int j=-1;j<2;j=j+2){
+      //p1|1>^I=-m|1]^I
+      BOOST_CHECK_EQUAL(p1.umat()*p1.rangle(j), -mass*p1.rsquare(j));
+      
+      //<1|^I*p1=[1|^I*m
+      BOOST_CHECK_EQUAL(p1.langle(j)*p1.lmat(), mass*p1.lsquare(j));
+      
+      //p1|1>_I=-m|1]_I
+      BOOST_CHECK_EQUAL(p1.umat()*p1.rangle(j,false), -mass*p1.rsquare(j,false));
+      
+      //<1|_I*p1=[1|_I*m
+      BOOST_CHECK_EQUAL(p1.langle(j,false)*p1.lmat(), mass*p1.lsquare(j,false));
+      
+      //p1|1]^I=-m|1>^I
+      BOOST_CHECK_EQUAL(p1.lmat()*p1.rsquare(j), -mass*p1.rangle(j));
+      
+      //[1|^I*p1=<1|^I*m
+      BOOST_CHECK_EQUAL(p1.lsquare(j)*p1.umat(), mass*p1.langle(j));
+      
+      //p1|1]_I=-m|1>_I
+      BOOST_CHECK_EQUAL(p1.lmat()*p1.rsquare(j,false), -mass*p1.rangle(j,false));
+      
+      //[1|_I*p1=<1|_I*m
+      BOOST_CHECK_EQUAL(p1.lsquare(j,false)*p1.umat(), mass*p1.langle(j,false));
+    }
+    
+    
+    
+    //Lorentz and Spin Algebra
+    
+    // LJ3 |1>^I == |1>^J SJ3_J^I
+    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_j3_lu());
+    // LJ+ |1>^I == |1>^J SJ+_J^I
+    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jp_lu());
+    // LJ- |1>^I == |1>^J SJ-_J^I
+    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jm_lu());
+    
+    // LJ3 <1|^I == <1|^J SJ3_J^I
+    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_j3_lu());
+    // LJ+ <1|^I == <1|^J SJ+_J^I
+    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jp_lu());
+    // LJ- <1|^I == <1|^J SJ-_J^I
+    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jm_lu());
+    
+    // LJ3 |1>_I == |1>_J SJ3^J_I
+    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_j3_ul());
+    // LJ+ |1>_I == |1>_J SJ+^J_I
+    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jp_ul());
+    // LJ- |1>_I == |1>_J SJ-^J_I
+    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jm_ul());
+    
+    // LJ3 <1|_I == <1|_J SJ3^J_I
+    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_j3_ul());
+    // LJ+ <1|_I == <1|_J SJ+^J_I
+    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jp_ul());
+    // LJ- <1|_I == <1|_J SJ-^J_I
+    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jm_ul());
+    
+    // LJ3 [1|^I == [1|^J SJ3_J^I
+    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_j3_lu());
+    // LJ+ [1|^I == [1|^J SJ+_J^I
+    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jp_lu());
+    // LJ- [1|^I == [1|^J SJ-_J^I
+    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jm_lu());
+    
+    // LJ3 |1]^I == |1]^J SJ3_J^I
+    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_j3_lu());
+    // LJ+ |1]^I == |1]^J SJ+_J^I
+    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jp_lu());
+    // LJ- |1]^I == |1]^J SJ-_J^I
+    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jm_lu());
+    
+    // LJ3 [1|_I == [1|_J SJ3^J_I
+    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_j3_ul());
+    // LJ+ [1|_I == [1|_J SJ+^J_I
+    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jp_ul());
+    // LJ- [1|_I == [1|_J SJ-^J_I
+    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jm_ul());
+    
+    // LJ3 |1]_I == |1]_J SJ3^J_I
+    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_j3_ul());
+    // LJ+ |1]_I == |1]_J SJ+^J_I
+    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jp_ul());
+    // LJ- |1]_I == |1]_J SJ-^J_I
+    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jm_ul());
+    
   }
-
   
   
 }

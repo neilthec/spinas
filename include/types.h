@@ -33,4 +33,10 @@ typedef double ldouble;
 typedef std::complex<ldouble> cdouble;
 
 
+constexpr bool ANGLE = true;
+constexpr bool SQUARE = false;
+constexpr bool UPPER = true;
+constexpr bool LOWER = false;
+
+
 

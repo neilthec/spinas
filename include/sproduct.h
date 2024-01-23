@@ -23,11 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "types.h"
 
-constexpr bool ANGLE = true;
-constexpr bool SQUARE = false;
-constexpr bool UPPER = true;
-constexpr bool LOWER = false;
-
 
 namespace spinas {
   

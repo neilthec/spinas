@@ -414,6 +414,45 @@ namespace spinas {
     return rsquareLowerP1;
   }
 
+  
+
+  //Massive cmatrix form with both spins
+  cmatrix particle::rangle_matrix(){
+    return rangle_matrix(UPPER);
+  }
+  cmatrix particle::rangle_matrix(const bool& upper){
+    cvector ram=rangle(-1,upper), rap=rangle(+1,upper);
+    return cmatrix(ram.get(0), rap.get(0),
+		   ram.get(1), rap.get(1));
+  }
+  cmatrix particle::langle_matrix(){
+    return langle_matrix(UPPER);
+  }
+  cmatrix particle::langle_matrix(const bool& upper){
+    cvector lam=langle(-1,upper), lap=langle(+1,upper);
+    return cmatrix(lam.get(0), lap.get(0),
+		   lam.get(1), lap.get(1)
+		   );
+  }
+  
+  cmatrix particle::lsquare_matrix(){
+    return lsquare_matrix(UPPER);
+  }
+  cmatrix particle::lsquare_matrix(const bool& upper){
+    cvector lsm=lsquare(-1,upper), lsp=lsquare(+1,upper);
+    return cmatrix(lsm.get(0), lsp.get(0),
+		   lsm.get(1), lsp.get(1)
+		   );
+  }
+  cmatrix particle::rsquare_matrix(){
+    return rsquare_matrix(UPPER);
+  }
+  cmatrix particle::rsquare_matrix(const bool& upper){
+    cvector rsm=rsquare(-1,upper), rsp=rsquare(+1,upper);
+    return cmatrix(rsm.get(0), rsp.get(0),
+		   rsm.get(1), rsp.get(1)
+		   );
+  }
 
 
 
@@ -432,5 +471,155 @@ namespace spinas {
 
 
 
+  
+
+  //Generators of Lorentz Rotations with no dot (acting on left chiral angle brackets)
+  //LU acts on |j> (from the left)
+  cmatrix particle::lorentz_j3_lu() const{
+    constexpr ldouble half=0.5;
+    constexpr cdouble one=cdouble(1,0);
+    
+    return -half*cmatrix(std::cos(theta)*one,std::polar(std::sin(theta),-phi),
+		      std::polar(std::sin(theta),phi),-std::cos(theta)*one);
+  }
+  cmatrix particle::lorentz_jp_lu() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=0;
+    if(m!=0) pre = half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+
+    return pre*cmatrix(
+		       std::sin(theta), -std::polar(-one+std::cos(theta),-phi) ,
+		       -std::polar(one+std::cos(theta),phi), -std::sin(theta));
+  }
+  cmatrix particle::lorentz_jm_lu() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=1;
+    if(m!=0) pre=half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+    return pre*cmatrix(
+		       std::sin(theta), -std::polar(one+std::cos(theta),-phi) ,
+		       -std::polar(-one+std::cos(theta),phi), -std::sin(theta));
+  }
+  //UL acts on <j| (from the left)
+  cmatrix particle::lorentz_j3_ul() const{
+    constexpr ldouble half=0.5;
+    constexpr cdouble one=cdouble(1,0);
+    
+    return half*cmatrix(std::cos(theta)*one,std::polar(std::sin(theta),phi),
+			std::polar(std::sin(theta),-phi),-std::cos(theta)*one);
+  }
+  cmatrix particle::lorentz_jp_ul() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=0;
+    if(m!=0) pre = half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+
+    return pre*cmatrix(
+		       -std::sin(theta), std::polar(one+std::cos(theta),phi) ,
+		       std::polar(-one+std::cos(theta),-phi), std::sin(theta));
+  }
+  cmatrix particle::lorentz_jm_ul() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=1;
+    if(m!=0) pre=half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+    return pre*cmatrix(
+		       -std::sin(theta), std::polar(-one+std::cos(theta),phi) ,
+		       std::polar(one+std::cos(theta),-phi), std::sin(theta));
+  }
+
+  
+  //Generators of Lorentz Rotations with a dot (acting on right chiral square brackets)
+  //LU acts on [j| (from the left)
+  cmatrix particle::lorentz_j3_lu_dot() const{
+    constexpr ldouble half=0.5;
+    constexpr cdouble one=cdouble(1,0);
+    
+    return half*cmatrix(std::cos(theta)*one,std::polar(std::sin(theta),phi),
+			std::polar(std::sin(theta),-phi),-std::cos(theta)*one);
+  }
+  cmatrix particle::lorentz_jp_lu_dot() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=1;
+    if(m!=0) pre = half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+
+    return pre*cmatrix(
+		       -std::sin(theta), std::polar(one+std::cos(theta),phi) ,
+		       std::polar(-one+std::cos(theta),-phi), std::sin(theta));
+  }
+  cmatrix particle::lorentz_jm_lu_dot() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=0;
+    if(m!=0) pre=half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+    return pre*cmatrix(
+		       -std::sin(theta), std::polar(-one+std::cos(theta),phi) ,
+		       std::polar(one+std::cos(theta),-phi), std::sin(theta));
+  }
+  //UL acts on |j] (from the right)
+  cmatrix particle::lorentz_j3_ul_dot() const{
+    constexpr ldouble half=0.5;
+    constexpr cdouble one=cdouble(1,0);
+    
+    return half*cmatrix(-std::cos(theta)*one,-std::polar(std::sin(theta),-phi),
+			-std::polar(std::sin(theta),phi),std::cos(theta)*one);
+  }
+  cmatrix particle::lorentz_jp_ul_dot() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=1;
+    if(m!=0) pre=half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+
+    return pre*cmatrix(
+		       std::sin(theta), -std::polar(-one+std::cos(theta),-phi) ,
+		       -std::polar(one+std::cos(theta),phi), -std::sin(theta));
+  }
+  cmatrix particle::lorentz_jm_ul_dot() const{
+    constexpr ldouble half=0.5, one=1;
+    ldouble pre=0;
+    if(m!=0) pre = half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+    
+    return pre*cmatrix(
+		       std::sin(theta), -std::polar(one+std::cos(theta),-phi) ,
+		       -std::polar(-one+std::cos(theta),phi), -std::sin(theta));
+  }
+  
+  
+  //Generators of spin
+  //Acts on spinors with upper indices (the default) from the right
+  cmatrix particle::spin_j3_lu() const{
+    constexpr ldouble half=0.5;
+    constexpr cdouble one=cdouble(1,0), zero=cdouble(0,0);
+    return half*cmatrix(-one,zero,
+		       zero,one);
+  }
+  cmatrix particle::spin_jp_lu() const{
+    constexpr cdouble zero=cdouble(0,0);
+    constexpr ldouble one=1;
+    return cmatrix(zero,zero,
+		   -std::polar(one,phi),zero);
+  }
+  cmatrix particle::spin_jm_lu() const{
+    constexpr cdouble zero=cdouble(0,0);
+    constexpr ldouble one=1;
+    return cmatrix(zero,-std::polar(one,-phi),
+		   zero,zero);
+  }
+
+  
+  //Acts on spinors with lower indices (not the default) from the right
+  cmatrix particle::spin_j3_ul() const{
+    constexpr ldouble half=0.5;
+    constexpr cdouble one=cdouble(1,0), zero=cdouble(0,0);
+    return half*cmatrix(one,zero,
+		       zero,-one);
+  }
+  cmatrix particle::spin_jp_ul() const{
+    constexpr cdouble zero=cdouble(0,0);
+    constexpr ldouble one=1;
+    return cmatrix(zero,std::polar(one,phi),
+		   zero,zero);
+  }
+  cmatrix particle::spin_jm_ul() const{
+    constexpr cdouble zero=cdouble(0,0);
+    constexpr ldouble one=1;
+    return cmatrix(zero,zero,
+		   std::polar(one,-phi),zero);
+  }
 
 }

@@ -114,7 +114,7 @@ namespace spinas {
     for(int i=0;i<nCombs;i++){
       get_spinor_spins(ds1,ds1a,ds1b, ds2,ds2a,ds2b, ds3,ds3a,ds3b, ds4,ds4a,ds4b, i);
 
-      //pre = e*e/(4.0*MW*MW*SW*SW);
+      //pre = e*e/(MW*MW*SW*SW);
 
       //all ingoing = 34 outgoing:
       //S-Channel h

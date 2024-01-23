@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "types.h"
 
+
 namespace spinas{
   
   class cmatrix{
@@ -33,7 +34,7 @@ namespace spinas{
     cmatrix();
     cmatrix(const ldouble p[4], const bool& upp);
     cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11);
-
+    
     //Get Elements
     cdouble get(const int& i, const int& j) const;
     
