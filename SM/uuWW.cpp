@@ -165,7 +165,7 @@ namespace spinas {
 	+ normFactor*e*e*Qf*two/MW/MW*(
 				s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s231a.v(ds2,ds1)+s132a.v(ds1,ds2))
 				)/pDenAS;
-
+      
       //S-Channel Z
       //preZ = e*e/(2.0*MW*MW*SW*SW); //=pred
       //all ingoing
