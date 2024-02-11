@@ -43,7 +43,7 @@ namespace spinas {
     s23s = sproduct(SQUARE,&p2,&p3);
     a13a = sproduct(ANGLE,&p1,&p3);
     //Couplings
-    preZ = sqrt2*two*e*e/(4.0*CW*CW*SW*SW);
+    preZ = e*e/(sqrt2*CW*CW*SW*SW);
   }
   void nnZh::set_masses(const ldouble& massh, const ldouble& massW){
     mh=massh;

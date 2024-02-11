@@ -89,6 +89,7 @@ namespace spinas {
   
   //set_momenta(...) must be called before amp2().
   ldouble udtb::amp2(){
+    constexpr ldouble nine=9;
     ldouble amp2 = 0;
     cdouble M;
 
@@ -98,12 +99,11 @@ namespace spinas {
 	for(int j3=-1;j3<=1;j3+=2)
 	  for(int j4=-1;j4<=1;j4+=2){
 	    M = amp(j1,j2,j3,j4);
-	    amp2 += std::pow(std::abs(M),2);
+	    amp2 += nine*std::pow(std::abs(M),2);//Color factor 9
 	  }
     //Average over initial spins 1/2*1/2 = 1/4
-    //Average over initial colors (which must be the same) 1/3
-    //Sum over final colors (which must be the same) 3
-    return amp2/4.0;
+    //Average over initial colors 1/3^2=1/9
+    return amp2/36.0;
   }
   
 

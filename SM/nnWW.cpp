@@ -50,8 +50,8 @@ namespace spinas {
     s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s231a = sproduct(SQUARE,&p2,&p3,&p1);
     //Couplings
-    pree = 2.0*e*e/(2.0*MW*MW*SW*SW);
-    preZ = 2.0*e*e/(2.0*MW*MW*SW*SW);
+    pree = e*e/(MW*MW*SW*SW);
+    preZ = e*e/(MW*MW*SW*SW);
   }
   void nnWW::set_masses(const ldouble& masse, const ldouble& massW){
     me=masse;
@@ -62,8 +62,8 @@ namespace spinas {
     p4.set_mass(MW);
     propZ.set_mass(MZ);
     //Couplings
-    pree = 2.0*e*e/(2.0*MW*MW*SW*SW);
-    preZ = 2.0*e*e/(2.0*MW*MW*SW*SW);
+    pree = e*e/(MW*MW*SW*SW);
+    preZ = e*e/(MW*MW*SW*SW);
   }
   void nnWW::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles
@@ -107,16 +107,16 @@ namespace spinas {
       get_spinor_spins(ds3,ds3a,ds3b, ds4,ds4a,ds4b, i);
            
       //T-Channel e
-      //pree = e*e/(2.0*MW*MW*SW*SW);
+      //pree = e*e/(MW*MW*SW*SW);
       //all ingoing:
-      // pree [24] <13> ([314>+MW <34>))/t
+      // pree [24] <13> ([314>+MW <34>))/(t-me^2)
       //34 outgoing:
-      // pree [24] <13> (MW <34> - [314>)/t
+      // pree [24] <13> (MW <34> - [314>)/(t-me^2)
       amplitude += - normFactor*pree*s24s.v(ds4a)*a13a.v(ds3a)*(MW*a34a.v(ds3b,ds4b)-s314a.v(ds3b,ds4b))/pDeneT;
 
       
       //S-Channel Z
-      //preZ = e*e/(2.0*MW*MW*SW*SW); //=pree
+      //preZ = e*e/(MW*MW*SW*SW); //=pree
       //all ingoing
       //+ preZ ( [34]<34>[231> + MW([23]<14>+[24]<13>)([34]+<34>) )/(s-MZ^2)
       //34 outgoing

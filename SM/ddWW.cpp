@@ -79,8 +79,8 @@ namespace spinas {
     proph.set_mass(mh);
     propZ.set_mass(MZ);
     //Couplings
-    pred = 2.0*e*e/(2.0*MW*MW*SW*SW);
-    preh = 2.0*e*e*md/(4.0*MW*MW*SW*SW);
+    pred = e*e/(MW*MW*SW*SW);
+    preh = e*e*md/(2.0*MW*MW*SW*SW);
     preZ = e*e/(2.0*MW*MW*SW*SW);
   }
   void ddWW::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
@@ -115,8 +115,8 @@ namespace spinas {
       propUP[j] = mom1[j]-mom4[j];
     }
     pDenhS=proph.denominator(propSP);//std::cout<<"pDenS="<<pDenS<<"\n";
-    pDendT=propu.denominator(propTP);
-    pDendU=propu.denominator(propUP);
+    pDenuT=propu.denominator(propTP);
+    pDenuU=propu.denominator(propUP);
     pDenZS=propZ.denominator(propSP);
     pDenAS=propA.denominator(propSP);
   }
@@ -145,46 +145,42 @@ namespace spinas {
       amplitude += normFactor*preh*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2))/pDenhS;
       
       //T-Channel u
-      //pred = e*e/(2.0*MW*MW*SW*SW);
-      //all ingoing:
-      // - pred [24] <13> ([314>+MW <34>))/(t-mu^2)
-      //34 outgoing:
-      // - pred [24] <13> (-MW <34> + [314>)/(t-mu^2)
-      amplitude += - normFactor*pred*s24s.v(ds2,ds4a)*a13a.v(ds1,ds3a)*(-MW*a34a.v(ds3b,ds4b)+s314a.v(ds3b,ds4b))/pDendT;
+      //pred = e*e/(MW*MW*SW*SW);
+      //all in:
+      // - pred <24>[13]( MW[34]+[413>)/(u-mu^2)
+      // 34 out:
+      // - pred <24>[13](-MW[34]+[413>)/(u-mu^2)
+      amplitude += - normFactor*pred*a24a.v(ds2,ds4a)*s13s.v(ds1,ds3a)*(-MW*s34s.v(ds3b,ds4b)+s413a.v(ds4b,ds3b))/pDenuT;
 
       //S-Channel A
-      //Guess based on ee->mm (and agreed with Z Diagram):
-      //2e^2/MW*( <13>[24] + [13]<24> + <14>[23] + [14]<23> )( <34> + [34] )/s
-      //Added based on Z Diagram
-      //2e^2/MW/MW*[34]<34>([231>+[132>)/s
+      //all in:
+      //((2(<24>[13]+<23>[14]+<14>[23]+<13>[24])(<34>+[34])EE^2 )/(3MWs12) +(2([132>+[231>)EE^2 <34>[34])/(3MW^2 s12) )
       amplitude +=
 	- normFactor*e*e*Qf*two/MW*(
-				a13a.v(ds1,ds3a)*s24s.v(ds2,ds4a) + s13s.v(ds1,ds3a)*a24a.v(ds2,ds4a)
-				+ a14a.v(ds1,ds4a)*s23s.v(ds2,ds3a) + s14s.v(ds1,ds4a)*a23a.v(ds2,ds3a)
-				)*(s34s.v(ds3b,ds4b)+a34a.v(ds3b,ds4b))/pDenAS
+				    a13a.v(ds1,ds3a)*s24s.v(ds2,ds4a) + s13s.v(ds1,ds3a)*a24a.v(ds2,ds4a)
+				    + a14a.v(ds1,ds4a)*s23s.v(ds2,ds3a) + s14s.v(ds1,ds4a)*a23a.v(ds2,ds3a)
+				    )*(s34s.v(ds3b,ds4b)+a34a.v(ds3b,ds4b))/pDenAS
 	- normFactor*e*e*Qf*two/MW/MW*(
-				s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s231a.v(ds2,ds1)+s132a.v(ds1,ds2))
-				)/pDenAS;
+				       s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s231a.v(ds2,ds1)+s132a.v(ds1,ds2))
+				       )/pDenAS;
       
       //S-Channel Z
       //preZ = e*e/(2.0*MW*MW*SW*SW); //=pred
       //all ingoing
-      //+ preZ gLe ( md[34]<34>( [12]-<12>) + 2[34]<34>[231> + 2MW([23]<14>+[24]<13>)([34]+<34>) )/(s-MZ^2)
-      //+ preZ gRe ( md[34]<34>(-[12]+<12>) + 2[34]<34>[132> + 2MW([13]<24>+[14]<23>)([34]+<34>) )/(s-MZ^2)
-      // = preZ ( (gL-gR)md[34]<34>([12]-<12>)
-      //          + 2[34]<34>(gL[231>+gR[132>)
-      //          + 2MW([34]+<34>)( gL([23]<14>+[24]<13>) + gR([13]<24>+[14]<23>) )
+      // = preZ ( (gR-gL)md[34]<34>([12]-<12>)
+      //          + 2[34]<34>(gR[231>+gL[132>)
+      //          + 2MW([34]+<34>)( gR([23]<14>+[24]<13>) + gL([13]<24>+[14]<23>) )
       //        )/(s-MZ^2)
       //34 outgoing
-      //preZ ( (gL-gR)md[34]<34>([12]-<12>)
-      //        - 2[34]<34>(gL[231>+gR[132>)
-      //        - 2MW([34]+<34>)( gL([23]<14>+[24]<13>) + gR([13]<24>+[14]<23>) )
+      //preZ ( (gR-gL)md[34]<34>([12]-<12>)
+      //        - 2[34]<34>(gR[231>+gL[132>)
+      //        - 2MW([34]+<34>)( gR([23]<14>+[24]<13>) + gL([13]<24>+[14]<23>) )
       //      )/(s-MZ^2)
-      amplitude += normFactor*preZ*( (gL-gR)*md*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s12s.v(ds1,ds2)-a12a.v(ds1,ds2))
-				       -two*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(gL*s231a.v(ds2,ds1)+gR*s132a.v(ds1,ds2))
-				       -two*MW*(s34s.v(ds3a,ds4a)+a34a.v(ds3a,ds4a))*( gL*(s23s.v(ds2,ds3b)*a14a.v(ds1,ds4b)+s24s.v(ds2,ds4b)*a13a.v(ds1,ds3b))
-										       + gR*(s13s.v(ds1,ds3b)*a24a.v(ds2,ds4b)+s14s.v(ds1,ds4b)*a23a.v(ds2,ds3b)) )
-				       )/pDenZS;
+      amplitude += normFactor*preZ*( (gR-gL)*md*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(s12s.v(ds1,ds2)-a12a.v(ds1,ds2))
+				       -two*s34s.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)*(gR*s231a.v(ds2,ds1)+gL*s132a.v(ds1,ds2))
+				       -two*MW*(s34s.v(ds3a,ds4a)+a34a.v(ds3a,ds4a))*( gR*(s23s.v(ds2,ds3b)*a14a.v(ds1,ds4b)+s24s.v(ds2,ds4b)*a13a.v(ds1,ds3b))
+										       + gL*(s13s.v(ds1,ds3b)*a24a.v(ds2,ds4b)+s14s.v(ds1,ds4b)*a23a.v(ds2,ds3b)) )
+										       )/pDenZS;
       
     }
     
@@ -225,7 +221,6 @@ namespace spinas {
       ldouble MZ=MW/CW;//std::cout<<"MZ="<<MZ<<"\n";
       ddWW ddWWAmp = ddWW(EE,md,mu,mh,0,MW,SW,0);
       ldouble pspatial=250;
-      //2ND ROW: h only
       ldouble dataCH[20] = {6.247097351524106E-01,1.885450765693643E-01,9.958530248122271E-02,6.251856021462568E-02,4.285684978731518E-02,3.106473119831614E-02,2.344913178986098E-02,1.827918007480336E-02,1.463582012949063E-02,1.198581450749802E-02,9.998516633628227E-03,8.458004628637380E-03,7.217295321824076E-03,6.172864907320081E-03,5.249692192739634E-03,4.392080985800483E-03,3.557814071160806E-03,2.714308297361198E-03,1.836014755615100E-03,9.026177431286505E-04};
       i += ddWWAmp.test_2to2_amp2([&]() { return ddWWAmp.amp2(); }, md,md,MW,MW,pspatial,dataCH);
       i += ddWWAmp.test_2to2_amp2_rotations([&]() { return ddWWAmp.amp2(); }, md,md,MW,MW,pspatial,dataCH);

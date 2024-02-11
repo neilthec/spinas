@@ -132,11 +132,11 @@ namespace spinas {
     //
     //+(EE^2 Mu Me (gLu-gRu)(gLe-gRe) (<12>-[12]) (<34>-[34]))/(8 CW^2 MZ^2 SW^2 (s-MZ^2))
     //+(EE^2 ( gLu gLe [23] <14> + gLe gRu [13] <24> + gLu gRe [24] <13> + gRu gRe [14] <23>)/(4 CW^2 SW^2 (s-MZ^2))
-    //= + preZ0 (<12>-[12]) (<34>-[34]) / (s-MZ^2)
-    //  + preZ ( gLu gLe [23] <14> + gLe gRu [13] <24> + gLu gRe [24] <13> + gRu gRe [14] <23> )/(s-MZ^2)
+    //= - preZ0 (<12>-[12]) (<34>-[34]) / (s-MZ^2)
+    //  - preZ 2( gLu gLe [23] <14> + gLe gRu [13] <24> + gLu gRe [24] <13> + gRu gRe [14] <23> )/(s-MZ^2)
     //34 out:
-    //+ preZ0 (<12>-[12]) (<34>-[34]) / (s-MZ^2)
-    //- preZ ( gLu gLe [23] <14> + gLe gRu [13] <24> + gLu gRe [24] <13> + gRu gRe [14] <23> )/(s-MZ^2)
+    //- preZ0 (<12>-[12]) (<34>-[34]) / (s-MZ^2)
+    //+ preZ 2( gLu gLe [23] <14> + gLe gRu [13] <24> + gLu gRe [24] <13> + gRu gRe [14] <23> )/(s-MZ^2)
     amplitude += 
       - preZ0*(a12a.v(ds1,ds2)-s12s.v(ds1,ds2))*(a34a.v(ds3,ds4)-s34s.v(ds3,ds4))/pDenSZ
       + two*preZ*(

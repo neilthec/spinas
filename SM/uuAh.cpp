@@ -50,7 +50,7 @@ namespace spinas {
     s3243s = sproduct(SQUARE,&p3,&p2,&p4,&p3);
     a3243a = sproduct(ANGLE,&p3,&p2,&p4,&p3);
     //2.*MW*SW/EE
-    pre = sqrt2*e*e*Qu*mu/(2.0*MW*SW);
+    pre = e*e*Qu*mu/(sqrt2*MW*SW);
   }
   void uuAh::set_masses(const ldouble& massu, const ldouble& massh, const ldouble& massW){
     mu=massu;
@@ -97,7 +97,7 @@ namespace spinas {
     /*- mh^2[13][23] - mu[13][342> - mu[23][341> - <12>[3243]
       - mh^2<13><23> - mu<13><342] - mu<23><341] - [12]<3243>
       Becomes after a sign change due to p3 and p4 being outgoing:*/
-    //pre = sqrt2*e*e*Qu*mu/(2.0*MW*SW);
+    //pre = e*e*Qu*mu/(sqrt2*MW*SW);
     if(ds3>0){
       //- mh^2[13][23] + mu[13][342> + mu[23][341> + <12>[3243]
       return pre*(- mh*mh*s13s.v(ds1)*s23s.v(ds2) + mu*s13s.v(ds1)*s342a.v(ds2) + mu*s23s.v(ds2)*s341a.v(ds1) + a12a.v(ds1,ds2)*s3243s.v())/pDenT/pDenU;

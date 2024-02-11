@@ -104,9 +104,9 @@ namespace spinas {
     //gRn=0;
     //preZ = e*e/(4.0*CW*CW*SW*SW);
     //all in:
-    //- preZ ( gLu gLe [23] <14> + gLe gRu [13] <24> )/(s-MZ^2)
+    //- preZ 2( gLu gLe [23] <14> + gLe gRu [13] <24> )/(s-MZ^2)
     //34 out:
-    //+ preZ ( gLu gLe [23] <14> + gLe gRu [13] <24> )/(s-MZ^2)
+    //+ preZ 2( gLu gLe [23] <14> + gLe gRu [13] <24> )/(s-MZ^2)
     amplitude += 
       + two*preZ*(
 	        gLu*gLn*s23s.v(ds2)*a14a.v(ds1)

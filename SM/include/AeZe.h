@@ -28,12 +28,10 @@ namespace spinas {
     particle p1,p2,p3,p4;
     propagator prope;
     cdouble pDenU, pDenS;
-    //<12>,[12],<23>,[23],<13>,[13],<34>,[34],<14>,[14]
-    sproduct s12s, a12a, s23s, a23a, s13s, a13a, s34s, a34a, s14s, a14a;
-    //[1341], <1341>
-    sproduct s1421s, a1421a;
+    //Spinor Products
+    sproduct s12s, a12a, s13s, a13a, s14s, a14a, a23a, s23s, a34a, s34s, s123a, a123s, s132a, a132s, s134a, a134s, s143a, a143s;
     ldouble sqrt2;
-    ldouble preTU, preh, gL, gR;
+    ldouble preSU, preh, gL, gR;
 
     
   public:

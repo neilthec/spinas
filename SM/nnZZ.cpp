@@ -97,20 +97,20 @@ namespace spinas {
     for(int i=0;i<nCombs;i++){
       get_spinor_spins(ds3,ds3a,ds3b, ds4,ds4a,ds4b, i);
       
-      //T-Channel e
+      //T-Channel ne
       //preTU = e*e/(2.0*MW*MW*SW*SW);
       //all ingoing:
-      //+preTU [24] <13> (MZ <34>+[314>))/(Me^2-t)
+      //-preTU [24] <13> (MZ <34>+[314>))/t
       //34 outgoing:
-      //+preTU [24] <13> (MZ <34>-[314>))/(t-Me^2)
+      //+preTU [24] <13> (MZ <34>-[314>))/t
       amplitude += normFactor*preTU*s24s.v(ds4a)*a13a.v(ds3a)*(MZ*a34a.v(ds3b,ds4b)-s314a.v(ds3b,ds4b))/pDenT;
 
-      //U-Channel e
+      //U-Channel ne
       //preTU = e*e/(2.0*MW*MW*SW*SW);
       //all ingoing:
-      //+preTU [23] <14> (MZ <34>-[413>)/(u-Me^2)
+      //+preTU [23] <14> (MZ <34>-[413>)/u
       //34 outgoing:
-      //-preTU [23] <14> (MZ <34>+[413>)/(u-Me^2)
+      //-preTU [23] <14> (MZ <34>+[413>)/u
       amplitude += -normFactor*preTU*s23s.v(ds3a)*a14a.v(ds4a)*(MZ*a34a.v(ds3b,ds4b)+s413a.v(ds4b,ds3b))/pDenU;
       
     }

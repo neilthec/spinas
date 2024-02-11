@@ -74,11 +74,11 @@ namespace spinas {
     //gR=0;
     //preZ = e*e/(4.0*CW*CW*SW*SW);
     //all in:
-    //+ EE^2 [23] <14> /(4 CW^2 SW^2 (s-MZ^2))
+    //- EE^2 [23] <14> /(4 CW^2 SW^2 (s-MZ^2))
     //34 out:
-    //- EE^2 [23] <14>/(4 CW^2 SW^2 (s-MZ^2))
-    //=-preZ [23] <14> /(s-MZ^2)
-    return - two*preZ*s23s.v()*a14a.v()/pDenSZ;
+    //+ EE^2 [23] <14>/(4 CW^2 SW^2 (s-MZ^2))
+    //=+preZ [23] <14> /(s-MZ^2)
+    return + two*preZ*s23s.v()*a14a.v()/pDenSZ;
   }
   
   //set_momenta(...) must be called before amp2().

@@ -27,7 +27,7 @@ namespace spinas {
     ldouble mu, md, mh, wh, MW, SW, CW, MZ, WZ;//Mass of e and h and W, width of h and Z and sin(theta_W)
     particle p1,p2,p3,p4;
     propagator proph, propu, propZ, propA;
-    cdouble pDenhS, pDendT, pDendU, pDenZS, pDenAS;
+    cdouble pDenhS, pDenuT, pDenuU, pDenZS, pDenAS;
     //<12>,[12],<23>,[23],<13>,[13],<34>,[34],<24>,[24],<14>,[14]
     sproduct s12s, a12a, s23s, a23a, s13s, a13a, s34s, a34a, s24s, a24a, s14s, a14a;
     //[413>,[314>,[231>,[132>

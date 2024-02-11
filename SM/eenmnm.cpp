@@ -99,10 +99,10 @@ namespace spinas {
     //gR=2.0*SW*SW;
     //preZ = e*e/(4.0*CW*CW*SW*SW);
     //all in:
-    //+(EE^2 (gL [23] <14> + gR [13] <24>)/(4 CW^2 SW^2 (s-MZ^2))
+    //+2(EE^2 (gL [23] <14> + gR [13] <24>)/(4 CW^2 SW^2 (s-MZ^2))
     //34 out:
-    //-(EE^2 (gL [23] <14> + gR [13] <24>)/(4 CW^2 SW^2 (s-MZ^2))
-    //=-preZ (gL [23] <14> + gR [13] <24>)/(s-MZ^2)
+    //-2(EE^2 (gL [23] <14> + gR [13] <24>)/(4 CW^2 SW^2 (s-MZ^2))
+    //=-preZ 2(gL [23] <14> + gR [13] <24>)/(s-MZ^2)
     return - two*preZ*( gL*s23s.v(ds2)*a14a.v(ds1) + gR*s13s.v(ds1)*a24a.v(ds2) )/pDenSZ;
   }
   

@@ -98,7 +98,7 @@ namespace spinas {
   //  Tests
   int test_menn(){
     int n=0;//Number of fails
-    std::cout<<"\t* m , E  -> Ne, nm      :";
+    std::cout<<"\t* M , e  -> ne, Nm      :";
     {//amp^2
       int i=0;
       // me=0.0005, mmu=0.106, pspatial=250
