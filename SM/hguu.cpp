@@ -49,7 +49,7 @@ namespace spinas {
     a214s = sproduct(ANGLE,&p2,&p1,&p4);
     s2312s = sproduct(SQUARE,&p2,&p3,&p1,&p2);
     a2312a = sproduct(ANGLE,&p2,&p3,&p1,&p2);
-    pre = sqrt2*e*gs*mu/(2.0*MW*SW);
+    pre = e*gs*mu/(sqrt2*MW*SW);
   }
   void hguu::set_masses(const ldouble& massu, const ldouble& massh, const ldouble& massW){
     mu=massu;
@@ -58,7 +58,7 @@ namespace spinas {
     p3.set_mass(mu);
     p4.set_mass(mu);
     prop.set_mass(mu);
-    pre = sqrt2*e*gs*mu/(2.0*MW*SW);
+    pre = e*gs*mu/(sqrt2*MW*SW);
   }
   void hguu::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles
@@ -92,18 +92,16 @@ namespace spinas {
   //Amplitude
   //set_momenta(...) must be called before amp(...).
   cdouble hguu::amp(const int& ds2, const int& ds3, const int& ds4){//Double Spin
+    constexpr ldouble two=2;
+    
     //pre = sqrt2*e*gs*mu/(2.0*MW*SW);
     if(ds2>0){
-      //ugUh all in: + mh^2[12][23] - mu[12][243> + mu[23][241> - <13>[2342]
-      //hgUu: 1<->4: - mh^2[24][23] + mu[24][213> + mu[23][214> + <34>[2312]
-      //34 out:      - mh^2[24][23] - mu[24][213> - mu[23][214> - <34>[2312]
-      return - pre*(mh*mh*s24s.v(ds4)*s23s.v(ds3) + mu*s24s.v(ds4)*s213a.v(ds3) + mu*s23s.v(ds3)*s214a.v(ds4) + a34a.v(ds3,ds4)*s2312s.v())/pDenT/pDenU;
+      //hgUu: all in: Mh^2 [23][24]-[213>[214>+2<34>[2132]
+      //34 out:     Mh^2 [23][24]-[213>[214>-2<34>[2132]
+      return pre*(mh*mh*s23s.v(ds3)*s24s.v(ds4)-s213a.v(ds3)*s214a.v(ds4)+two*a34a.v(ds3,ds4)*s2312s.v())/pDenT/pDenU;
     }
     else if(ds2<0){
-      //ugUh all in: + mh^2<12><23> - mu<12><243] + mu<23><241] - [13]<2342>
-      //hgUu: 1<->4: - mh^2<24><23> + mu<24><213] + mu<23><214] + [34]<2312>
-      //34 out:      - mh^2<24><23> - mu<24><213] - mu<23><214] - [34]<2312>
-      return - pre*(mh*mh*a24a.v(ds4)*a23a.v(ds3) + mu*a24a.v(ds4)*a213s.v(ds3) + mu*a23a.v(ds3)*a214s.v(ds4) + s34s.v(ds3,ds4)*a2312a.v())/pDenT/pDenU;
+      return pre*(mh*mh*a23a.v(ds3)*a24a.v(ds4)-a213s.v(ds3)*a214s.v(ds4)+two*s34s.v(ds3,ds4)*a2312a.v())/pDenT/pDenU;
     }
     return cdouble(0,0);    
   }
