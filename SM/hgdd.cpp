@@ -49,7 +49,7 @@ namespace spinas {
     a214s = sproduct(ANGLE,&p2,&p1,&p4);
     s2312s = sproduct(SQUARE,&p2,&p3,&p1,&p2);
     a2312a = sproduct(ANGLE,&p2,&p3,&p1,&p2);
-    pre = sqrt2*e*gs*md/(2.0*MW*SW);
+    pre = e*gs*md/(sqrt2*MW*SW);
   }
   void hgdd::set_masses(const ldouble& massd, const ldouble& massh, const ldouble& massW){
     md=massd;
@@ -58,7 +58,7 @@ namespace spinas {
     p3.set_mass(md);
     p4.set_mass(md);
     prop.set_mass(md);
-    pre = sqrt2*e*gs*md/(2.0*MW*SW);
+    pre = e*gs*md/(sqrt2*MW*SW);
   }
   void hgdd::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles
@@ -92,7 +92,7 @@ namespace spinas {
   //Amplitude
   //set_momenta(...) must be called before amp(...).
   cdouble hgdd::amp(const int& ds2, const int& ds3, const int& ds4){//Double Spin
-    //pre = sqrt2*e*gs*md/(2.0*MW*SW);
+    //pre = e*gs*md/(sqrt2*MW*SW);
     if(ds2>0){
       //dgDh all in:
       //( + mh^2[12][23] - md[12][243> + md[23][241> - <13>[2342] )/su

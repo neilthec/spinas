@@ -96,9 +96,9 @@ namespace spinas {
   //set_momenta(...) must be called before amp(...).
   cdouble guAu::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4){
     if(ds1>0&&ds3>0){
-      //gAUu all in:      + mu[12]^2<34>/tu
-      //guAU: 4->2->3->4: - mu[13]^2<24>/us
-      //34 out:           + mu[13]^2<24>/us
+      //gAUu all in:      + mu[12]^2<34>
+      //guAU: 4->2->3->4: - mu[13]^2<24>
+      //34 out:           + mu[13]^2<24>
       return + 2.0*e*Qu*gs*mu*s13s.v()*s13s.v()*a24a.v(ds2,ds4)/pDenU/pDenS;
     }
     else if(ds1<0&&ds3<0){

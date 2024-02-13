@@ -28,10 +28,10 @@ namespace spinas {
     ldouble pre;
     particle p1,p2,p3,p4;
     propagator propW, propu, propd;
-    cdouble pDenS, pDenT, pDenU, prop, propAp, propAm;
-    //<24>,[23],[12],[13],[1341]
-    sproduct a24a,s23s,s12s,s13s,s1341s;
-    sproduct a1341a,a12a,a14a;
+    cdouble pDenS, pDenT, pDenU, prop;
+    //Spinor Products
+    sproduct s12s, s13s, a24a, s142a, s143a;
+    sproduct a12a, a14a, s23s, s231a, s431a;
     
 
     

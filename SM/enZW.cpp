@@ -155,9 +155,9 @@ namespace spinas {
       //U ne Diagram
       //pren = e*e/(sqrt(2)*MW*MW*SW*SW);//=pree
       //EnZW- all in:
-      // + <23>[14](MW[34]-[314>)/u
+      // - <23>[14](MW[34]-[314>)/u
       //34 out:
-      // - <23>[14](MW[34]+[314>)/u
+      // + <23>[14](MW[34]+[314>)/u
       amplitude += normFactor*pren*a23a.v(ds3a)*s14s.v(ds1,ds4a)*(MW*s34s.v(ds3b,ds4b)+s314a.v(ds3b,ds4b))/pDenU;
 
       
