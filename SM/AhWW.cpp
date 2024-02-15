@@ -107,7 +107,7 @@ namespace spinas {
     for(int i=0;i<nCombs;i++){
       get_spinor_spins(ds3,ds3a,ds3b, ds4,ds4a,ds4b, i);
 
-      //pre = sqrt2*e*e/(2.0*MW*SW);
+      //pre = sqrt2*e*e/(MW*SW);
 
       if(ds1>0){
       

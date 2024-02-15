@@ -107,9 +107,9 @@ namespace spinas {
       
 	//TU Diagram
 	//all ingoing:
-	// - e^2 [12]^2 <34>^2 /(t-MW^2)(u-MW^2)
+	// - 2e^2 [12]^2 <34>^2 /(t-MW^2)(u-MW^2)
 	//34 outgoing:
-	// - e^2 [12]^2 <34>^2 /(t-MW^2)(u-MW^2)
+	// - 2e^2 [12]^2 <34>^2 /(t-MW^2)(u-MW^2)
 	amplitude += - normFactor*2.0*e*e*s12s.v()*s12s.v()*a34a.v(ds3a,ds4a)*a34a.v(ds3b,ds4b)/pDenT/pDenU;
 	
 	
@@ -118,9 +118,9 @@ namespace spinas {
 
 	//TU Diagram
 	//all ingoing:
-	//-e^2 (<24>[13]+<23>[14])^2 /(t-MW^2)(u-MW^2)
+	//-2e^2 (<24>[13]+<23>[14])^2 /(t-MW^2)(u-MW^2)
 	//34 out:
-	//-e^2 (<24>[13]+<23>[14])^2 /(t-MW^2)(u-MW^2)
+	//-2e^2 (<24>[13]+<23>[14])^2 /(t-MW^2)(u-MW^2)
 	amplitude += - normFactor*2.0*e*e*(a24a.v(ds4a)*s13s.v(ds3a)+a23a.v(ds3a)*s14s.v(ds4a))*(a24a.v(ds4b)*s13s.v(ds3b)+a23a.v(ds3b)*s14s.v(ds4b))/pDenT/pDenU;
 
 	

@@ -60,7 +60,7 @@ namespace spinas {
     s321a = sproduct(SQUARE,&p3,&p2,&p1);
     s421a = sproduct(SQUARE,&p4,&p2,&p1);
     //Couplings
-    pre = sqrt2*e*e/(2.0*MW*MW*SW*SW);
+    pre = e*e/(sqrt2*MW*MW*SW*SW);
     preS = pre;
     preTU = pre/(MZ*MZ);
   }
@@ -74,7 +74,7 @@ namespace spinas {
     p4.set_mass(MW);
     propW.set_mass(MW);
     //Couplings
-    pre = sqrt2*e*e/(2.0*MW*MW*SW*SW);
+    pre = e*e/(sqrt2*MW*MW*SW*SW);
     preS = pre;
     preTU = pre/(MZ*MZ);
   }

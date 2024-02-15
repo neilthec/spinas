@@ -38,16 +38,18 @@ namespace spinas {
     p2=particle(MW);
     p3=particle(mu);
     p4=particle(md);
-    //<24>,[23],[12],[13],[1341]
-    a24a = sproduct(ANGLE,&p2,&p4);
-    s23s = sproduct(SQUARE,&p2,&p3);
-    s12s = sproduct(SQUARE,&p1,&p2);
-    s13s = sproduct(SQUARE,&p1,&p3);
-    s1341s = sproduct(SQUARE,&p1,&p3,&p4,&p1);
-    //<24>,[23],<12>,<14>,[23],<1341>
-    a12a = sproduct(ANGLE,&p1,&p2);
-    a14a = sproduct(ANGLE,&p1,&p4);
-    a1341a = sproduct(ANGLE,&p1,&p3,&p4,&p1);
+    //Spinor Products
+    s12s= sproduct(SQUARE,&p1,&p2);
+    s13s= sproduct(SQUARE,&p1,&p3);
+    a24a= sproduct(ANGLE,&p2,&p4);
+    s142a= sproduct(SQUARE,&p1,&p4,&p2);
+    s143a= sproduct(SQUARE,&p1,&p4,&p3);
+    //Spinor Products
+    a12a= sproduct(ANGLE,&p1,&p2);
+    a14a= sproduct(ANGLE,&p1,&p4);
+    s23s= sproduct(SQUARE,&p2,&p3);
+    s231a= sproduct(SQUARE,&p2,&p3,&p1);
+    s431a= sproduct(SQUARE,&p4,&p3,&p1);
     //prefactor
     pre = sqrt2*e*gs/(MW*SW);
   }
@@ -70,16 +72,18 @@ namespace spinas {
     p2.set_momentum(mom2);
     p3.set_momentum(mom3);
     p4.set_momentum(mom4);
-    //<24>,[23],[12],[13],[1341]
-    a24a.update();
-    s23s.update();
+    //Spinor Products
     s12s.update();
     s13s.update();
-    s1341s.update();
-    //<24>,[23],<12>,<14>,[23],<1341>
+    a24a.update();
+    s142a.update();
+    s143a.update();
+    //Spinor Products
     a12a.update();
     a14a.update();
-    a1341a.update();
+    s23s.update();
+    s231a.update();
+    s431a.update();
     //Propagator Momentum
     ldouble propSP[4], propTP[4], propUP[4];
     for(int j=0;j<4;j++){
@@ -110,22 +114,14 @@ namespace spinas {
       
 	//TU Diagram
 	//pre = sqrt(2)*e*gs/(MW*SW);
-	//gW+Ud all ingoing:
-	//T u: +pre<24>[23][1341]/(t-Mu^2)/(u-Md^2)  - pre[12][13]<24>/(t-Mu^2)
-	//U d: +pre<24>[23][1341]/(u-Md^2)/(t-Mu^2)
-	//34 out:
-	//T u: -pre<24>[23][1341]/(t-Mu^2)/(u-Md^2)  + pre[12][13]<24>/(t-Mu^2)
-	//U d: -pre<24>[23][1341]/(u-Md^2)/(t-Mu^2)
-	amplitude += -normFactor*pre*a24a.v(ds2a,ds4)*s23s.v(ds2b,ds3)*s1341s.v()/pDenT/pDenU
-	  +normFactor*pre*s12s.v(ds2a)*s13s.v(ds3)*a24a.v(ds2b,ds4)/pDenT;
-	
+	//all in: - pre <24>(-MW[13][142>+[12](Md^2 [13]-Mu[143>))/(t-Mu^2)/(u-Md^2)
+	amplitude += normFactor*pre*a24a.v(ds2a,ds4)*(MW*s13s.v(ds3)*s142a.v(ds2b)+s12s.v(ds2b)*(md*md*s13s.v(ds3)-mu*s143a.v(ds3)))/pDenT/pDenU;
 	
       }
       else if(ds1<0){
 
 	//TU Diagram
-	amplitude += -normFactor*pre*a24a.v(ds2a,ds4)*s23s.v(ds2b,ds3)*a1341a.v()/pDenT/pDenU
-	  -normFactor*pre*a12a.v(ds2a)*a14a.v(ds4)*s23s.v(ds2b,ds3)/pDenU;
+	amplitude += normFactor*pre*s23s.v(ds2a,ds3)*(-MW*a14a.v(ds4)*s231a.v(ds2b)+a12a.v(ds2b)*(-mu*mu*a14a.v(ds4)+md*s431a.v(ds4)))/pDenT/pDenU;
 	
       }
       
