@@ -96,11 +96,12 @@ namespace spinas {
     pDenS=propW.denominator(propSP);
     pDenT=propu.denominator(propTP);
     pDenU=propd.denominator(propUP);
-    prop = (
+    /*prop = (
 	     +one/pDenS*(one/pDenU-one/pDenT)
 	     + two/three/pDenT*(one/pDenU-one/pDenS)
 	     - one/three/pDenU*(one/pDenT-one/pDenS)
-	     )/three;
+	     )/three;*/
+    prop = -one/pDenS*(two/three/pDenT-one/three/pDenU);
   }
 
   

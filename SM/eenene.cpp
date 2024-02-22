@@ -111,10 +111,8 @@ namespace spinas {
     amplitude = two*preZ*( gL*s23s.v(ds2)*a14a.v(ds1) + gR*s13s.v(ds1)*a24a.v(ds2) )/pDenSZ;
 
     //W Boson
-    //All ingoing:  e^2  ( 2 MW^2 [23] <14> + (Md <13>-Mu [13]) (Md [24]-Mu <24>) )/(4 MW^2 SW^2 (t-MW^2))
-    //34 outgoing: -e^2  ( 2 MW^2 [23] <14> + (Md <13>+Mu [13]) (Md [24]+Mu <24>) )/(4 MW^2 SW^2 (t-MW^2))
-    //All ingoing:  e^2  ( 2 MW^2 [23] <14> + Me^2 [13] <24>)/(4 MW^2 SW^2 (t-MW^2))
-    //34 outgoing: -e^2  ( 2 MW^2 [23] <14> + Me^2 [13] <24>)/(4 MW^2 SW^2 (t-MW^2))
+    //All ingoing: -e^2  ( 2 MW^2 [23] <14> + Me^2 [13] <24>)/(4 MW^2 SW^2 (t-MW^2))
+    //34 outgoing:  e^2  ( 2 MW^2 [23] <14> + Me^2 [13] <24>)/(4 MW^2 SW^2 (t-MW^2))
     amplitude +=  e*e/SW/SW*(   2.0*MW*MW*a14a.v(ds1)*s23s.v(ds2)
 				+ me*me*s13s.v(ds1)*a24a.v(ds2)
 				)/(2.0*MW*MW*pDenTW);

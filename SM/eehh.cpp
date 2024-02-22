@@ -87,20 +87,20 @@ namespace spinas {
     //Higgs
     //prehS = 3*e*e*me*mh*mh/(4*MW*MW*SW*SW);
     //S Channel
-    //all ingoing: prehS*([12]+<12>)/(s-mh^2)
-    amplitude += prehS*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2))/pDenSh;
+    //all ingoing: - prehS*([12]+<12>)/(s-mh^2)
+    amplitude += - prehS*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2))/pDenSh;
 
     //T Channel
     //prehTU = e*e*me*me/(4*MW*MW*SW*SW);
-    //all ingoing:  prehTU * ( 2me([12]+<12>) + [132> + [231> )/(t-me^2)
-    //34 outgoing:  prehTU * ( 2me([12]+<12>) - [132> - [231> )/(t-me^2)
-    amplitude += prehTU*( two*me*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2)) - s132a.v(ds1,ds2) - s231a.v(ds2,ds1) )/pDenTe;
+    //all ingoing:  - prehTU * ( 2me([12]+<12>) + [132> + [231> )/(t-me^2)
+    //34 outgoing:  - prehTU * ( 2me([12]+<12>) - [132> - [231> )/(t-me^2)
+    amplitude += - prehTU*( two*me*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2)) - s132a.v(ds1,ds2) - s231a.v(ds2,ds1) )/pDenTe;
 
     //U Channel
-    //all ingoing:  prehTU * ( 2me([12]+<12>) + [142> + [241> )/(u-me^2)
-    //all ingoing:  prehTU * ( 2me([12]+<12>) - [132> - [231> )/(u-me^2)
-    //34 outgoing:  prehTU * ( 2me([12]+<12>) + [132> + [231> )/(u-me^2)
-    amplitude += prehTU*( two*me*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2)) + s132a.v(ds1,ds2) + s231a.v(ds2,ds1) )/pDenUe;
+    //all ingoing:  - prehTU * ( 2me([12]+<12>) + [142> + [241> )/(u-me^2)
+    //all ingoing:  - prehTU * ( 2me([12]+<12>) - [132> - [231> )/(u-me^2)
+    //34 outgoing:  - prehTU * ( 2me([12]+<12>) + [132> + [231> )/(u-me^2)
+    amplitude += -prehTU*( two*me*(s12s.v(ds1,ds2)+a12a.v(ds1,ds2)) + s132a.v(ds1,ds2) + s231a.v(ds2,ds1) )/pDenUe;
 
     return amplitude;
   }

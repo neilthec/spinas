@@ -180,8 +180,8 @@ namespace spinas {
     //All ingoing uUDd: 2MW^2 [32]⟨14⟩ − mu^2[13]⟨24⟩ + mdmu( ⟨13⟩⟨24⟩ + [13][24] ) − md^2⟨13⟩[24]
     //Sign changes due to p3 and p4 being outgoing.
     // + 2MW^2 [23]⟨14⟩ + mu^2[13]⟨24⟩ + mdmu( ⟨13⟩⟨24⟩ + [13][24] ) + md^2⟨13⟩[24]
-    //All ingoing:  e^2  ( 2 MW^2 [23] <14> + (Md <13>-Mu [13]) (Md [24]-Mu <24>) )/(4 MW^2 SW^2 (t-MW^2))
-    //34 outgoing: -e^2  ( 2 MW^2 [23] <14> + (Md <13>+Mu [13]) (Md [24]+Mu <24>) )/(4 MW^2 SW^2 (t-MW^2))
+    //All ingoing: -e^2  ( 2 MW^2 [23] <14> + (Md <13>-Mu [13]) (Md [24]-Mu <24>) )/(4 MW^2 SW^2 (t-MW^2))
+    //34 outgoing: +e^2  ( 2 MW^2 [23] <14> + (Md <13>+Mu [13]) (Md [24]+Mu <24>) )/(4 MW^2 SW^2 (t-MW^2))
     return + e*e/SW/SW*(   2.0*MW*MW*a14a.v(ds1,ds4)*s23s.v(ds2,ds3)
 			   + (mu*s13s.v(ds1,ds3)+md*a13a.v(ds1,ds3))*(mu*a24a.v(ds2,ds4)+md*s24s.v(ds2,ds4))
 			   )/(2.0*MW*MW*pDenTW);
