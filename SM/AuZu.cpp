@@ -129,6 +129,8 @@ namespace spinas {
 	//preTU = e*e*Qu/(MW*SW);
 	//AuZu all in:
 	// preTU ( gLu<23>(-MZ[14][123>+Mu[13][134>) + gRu<34>(Mu[13][132>-MZ[12][143>) )/((u-mu^2)(s-mu^2))
+	//34 out:
+	//-preTU ( gLu<23>(+MZ[14][123>+Mu[13][134>) + gRu<34>(Mu[13][132>+MZ[12][143>) )/((u-mu^2)(s-mu^2))
 	amplitude += normFactor*preTU*(
 				       -gLu*a23a.v(ds2,ds3a)*(MZ*s14s.v(ds4)*s123a.v(ds3b)+mu*s13s.v(ds3b)*s134a.v(ds4))
 				       -gRu*a34a.v(ds3a,ds4)*(mu*s13s.v(ds3b)*s132a.v(ds2)+MZ*s12s.v(ds2)*s143a.v(ds3b))

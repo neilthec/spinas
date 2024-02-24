@@ -38,22 +38,27 @@ namespace spinas {
     p2=particle(MZ);
     p3=particle(mu);
     p4=particle(mu);
-    //<12>,[12],<23>,[23],<13>,[13],<24>,[24],<14>,[14]
-    s12s = sproduct(SQUARE,&p1,&p2);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    s23s = sproduct(SQUARE,&p2,&p3);
-    a23a = sproduct(ANGLE,&p2,&p3);
-    s13s = sproduct(SQUARE,&p1,&p3);
-    a13a = sproduct(ANGLE,&p1,&p3);
-    s24s = sproduct(SQUARE,&p2,&p4);
-    a24a = sproduct(ANGLE,&p2,&p4);
-    s14s = sproduct(SQUARE,&p1,&p4);
-    a14a = sproduct(ANGLE,&p1,&p4);
-    //[1341], <1341>
-    s1341s = sproduct(SQUARE,&p1,&p3,&p4,&p1);
-    a1341a = sproduct(ANGLE,&p1,&p3,&p4,&p1);
+    //Spinor Products
+    a12a= sproduct(ANGLE,&p1,&p2);
+    a13a= sproduct(ANGLE,&p1,&p3);
+    a14a= sproduct(ANGLE,&p1,&p4);
+    s12s= sproduct(SQUARE,&p1,&p2);
+    s13s= sproduct(SQUARE,&p1,&p3);
+    s14s= sproduct(SQUARE,&p1,&p4);
+    a23a= sproduct(ANGLE,&p2,&p3);
+    a24a= sproduct(ANGLE,&p2,&p4);
+    s23s= sproduct(SQUARE,&p2,&p3);
+    s24s= sproduct(SQUARE,&p2,&p4);
+    s123a= sproduct(SQUARE,&p1,&p2,&p3);
+    s124a= sproduct(SQUARE,&p1,&p2,&p4);
+    s132a= sproduct(SQUARE,&p1,&p3,&p2);
+    s142a= sproduct(SQUARE,&p1,&p4,&p2);
+    s231a= sproduct(SQUARE,&p2,&p3,&p1);
+    s241a= sproduct(SQUARE,&p2,&p4,&p1);
+    s321a= sproduct(SQUARE,&p3,&p2,&p1);
+    s421a= sproduct(SQUARE,&p4,&p2,&p1);
     //Couplings
-    preTU = 2.0*e*e*Qu/(2.0*MW*SW);
+    preTU = e*e*Qu/(MW*SW);
     gL=-2.0*Qu*SW*SW+1.0;
     gR=-2.0*Qu*SW*SW;
   }
@@ -67,7 +72,7 @@ namespace spinas {
     p4.set_mass(mu);
     prope.set_mass(mu);
     //Couplings
-    preTU = 2.0*e*e*Qu/(2.0*MW*SW);
+    preTU = e*e*Qu/(MW*SW);
   }
   void AZuu::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles
@@ -75,20 +80,25 @@ namespace spinas {
     p2.set_momentum(mom2);
     p3.set_momentum(mom3);
     p4.set_momentum(mom4);
-    //<12>,[12],<23>,[23],<13>,[13],<24>,[24],<14>,[14]
-    s12s.update();
+    //Spinor Products
     a12a.update();
-    s23s.update();
-    a23a.update();
-    s13s.update();
     a13a.update();
-    s24s.update();
-    a24a.update();
-    s14s.update();
     a14a.update();
-    //[1341], <1341>
-    s1341s.update();
-    a1341a.update();
+    s12s.update();
+    s13s.update();
+    s14s.update();
+    a23a.update();
+    a24a.update();
+    s23s.update();
+    s24s.update();
+    s123a.update();
+    s124a.update();
+    s132a.update();
+    s142a.update();
+    s231a.update();
+    s241a.update();
+    s321a.update();
+    s421a.update();
     //Propagator Momentum
     ldouble propTP[4], propUP[4];
     for(int j=0;j<4;j++){
@@ -114,30 +124,20 @@ namespace spinas {
       get_spinor_spins(ds2,ds2a,ds2b, i);
       
       if(ds1>0){
-	//all ingoing:
-	//preTU = 2.0*e*e/(2.0*MW*SW);
-	//- preTU [1341] (gRe [24] <23> + gLe <24> [23])/((t-mu^2) (u-mu^2))
-	//- preTU [12] ( gRe [14]<23>/(u-mu^2) - gLe [13]<24>/(t-mu^2) )
-	//34 outgoing:
-	//+ preTU [1341] (gRe [24] <23> + gLe <24> [23])/((t-mu^2) (u-mu^2))
-	//+ preTU [12] ( gRe [14]<23>/(u-mu^2) - gLe [13]<24>/(t-mu^2) )
-	
-	amplitude += normFactor*preTU*s1341s.v()*(gR*s24s.v(ds2a,ds4)*a23a.v(ds2b,ds3) + gL*s23s.v(ds2a,ds3)*a24a.v(ds2b,ds4))/pDenT/pDenU;
-	amplitude += normFactor*preTU*s12s.v(ds2a)*(gR*s14s.v(ds4)*a23a.v(ds2b,ds3)/pDenU - gL*s13s.v(ds3)*a24a.v(ds2b,ds4)/pDenT);
-
+	//preTU = e*e*Qu/(MW*SW);
+	//AuZU all in: 
+	// preTU ( gLu<23>(-MZ[14][123>+Mu[13][134>) + gRu<34>(Mu[13][132>-MZ[12][143>) )/((u-mu^2)(s-mu^2))
+	//AZUu all in: 2->4->3->2
+	// preTU ( gLu<42>(-MZ[13][142>+Mu[12][123>) + gRu<23>(Mu[12][124>-MZ[14][132>) )/((t-mu^2)(u-mu^2))
+	//34 out:
+	// preTU ( gLu<42>(-MZ[13][142>+Mu[12][123>) + gRu<23>(Mu[12][124>-MZ[14][132>) )/((t-mu^2)(u-mu^2))
+	amplitude += normFactor*preTU*gL*(+mu*s12s.v(ds2a)*a24a.v(ds2b,ds4)*s123a.v(ds3)-MZ*s13s.v(ds3)*a24a.v(ds2a,ds4)*s142a.v(ds2b))/pDenT/pDenU;
+	amplitude += normFactor*preTU*gR*(-mu*s12s.v(ds2a)*a23a.v(ds2b,ds3)*s124a.v(ds4)+MZ*s14s.v(ds4)*a23a.v(ds2a,ds3)*s132a.v(ds2b))/pDenT/pDenU;
 	
       }
       else if(ds1<0){
-	//all ingoing:
-	//preTU = 2.0*e*e/(2.0*MW*SW);
-	//- preTU <1341> (gRe [24] <23> + gLe <24> [23])/((t-mu^2) (u-mu^2))
-	//- preTU <12> ( gLe <14>[23]/(u-mu^2) - gRe <13>[24]/(t-mu^2) )
-	//34 outgoing:
-	//+ preTU <1341> (gRe [24] <23> + gLe <24> [23])/((t-mu^2) (u-mu^2))
-	//+ preTU <12> ( gLe <14>[23]/(u-mu^2) - gRe <13>[24]/(t-mu^2) )
-	
-	amplitude += normFactor*preTU*a1341a.v()*(gR*s24s.v(ds2a,ds4)*a23a.v(ds2b,ds3) + gL*s23s.v(ds2a,ds3)*a24a.v(ds2b,ds4))/pDenT/pDenU;
-	amplitude += normFactor*preTU*a12a.v(ds2a)*(gL*a14a.v(ds4)*s23s.v(ds2b,ds3)/pDenU - gR*a13a.v(ds3)*s24s.v(ds2b,ds4)/pDenT);
+	amplitude += normFactor*preTU*gR*s24s.v(ds2a,ds4)*(-MZ*a13a.v(ds3)*s241a.v(ds2b)+mu*a12a.v(ds2b)*s321a.v(ds3))/pDenT/pDenU;
+	amplitude += normFactor*preTU*gL*s23s.v(ds2a,ds3)*(+MZ*a14a.v(ds4)*s231a.v(ds2b)-mu*a12a.v(ds2b)*s421a.v(ds4))/pDenT/pDenU;
 
       }
 
@@ -200,7 +200,7 @@ namespace spinas {
   //  Tests
   int test_AZuu(){
     int n=0;//Number of fails
-    std::cout<<"\t* A , Z  -> U , u       :";
+    std::cout<<"\t* A , Z  -> u , U       :";
     {//amp^2
       int i=0;
       //std::cout<<"\n# mu=0.0042, MW=80.385, pspatial=250\n";
