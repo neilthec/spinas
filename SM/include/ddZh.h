@@ -31,7 +31,7 @@ namespace spinas {
     //<12>,[12],<23>,[23],<13>,[13]
     sproduct s12s, a12a, s23s, a23a, s13s, a13a;    
     //[312>,[213>,[343>,[143>,[341>
-    sproduct s312a, s213a, s343a, s143a, s341a;
+    sproduct s312a, s213a, s343a, s143a, s341a, s243a, s342a;
     ldouble sqrt2;
     ldouble preTU, preZ, gL, gR;
 

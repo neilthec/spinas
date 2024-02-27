@@ -52,6 +52,8 @@ namespace spinas {
     s343a = sproduct(SQUARE,&p3,&p4,&p3);
     s143a = sproduct(SQUARE,&p1,&p4,&p3);
     s341a = sproduct(SQUARE,&p3,&p4,&p1);
+    s243a = sproduct(SQUARE,&p2,&p4,&p3);
+    s342a = sproduct(SQUARE,&p3,&p4,&p2);
     //Couplings
     preTU = sqrt2*e*e*md/(4.0*MW*MW*SW*SW);
     gL=2.0/3.0*SW*SW-1.0;
@@ -92,6 +94,8 @@ namespace spinas {
     s343a.update();
     s143a.update();
     s341a.update();
+    s243a.update();
+    s342a.update();
     //Propagator Momentum
     ldouble propSP[4], propTP[4], propUP[4];
     for(int j=0;j<4;j++){
@@ -133,7 +137,11 @@ namespace spinas {
       //preh*(gLe <13> (Md [23]-[312>+MZ <23>)+gRe [13] (MZ [23]-[213>+Md <23>)))/(t-Md^2)
       //34 outgoing:
       //- preh*( gLe <13> (Md [23]-[312>-MZ <23>) + gRe [13] (Md <23>-[213>-MZ [23])) )/(t-Md^2)
-      amplitude += -normFactor*preTU*( gL*a13a.v(ds1,ds3a)*(md*s23s.v(ds2,ds3b)-s312a.v(ds3b,ds2)-MZ*a23a.v(ds2,ds3b)) + gR*s13s.v(ds1,ds3a)*(md*a23a.v(ds2,ds3b)-s213a.v(ds2,ds3b)-MZ*s23s.v(ds2,ds3b)) )/pDenT;
+      //amplitude += -normFactor*preTU*( gL*a13a.v(ds1,ds3a)*(md*s23s.v(ds2,ds3b)-s312a.v(ds3b,ds2)-MZ*a23a.v(ds2,ds3b)) + gR*s13s.v(ds1,ds3a)*(md*a23a.v(ds2,ds3b)-s213a.v(ds2,ds3b)-MZ*s23s.v(ds2,ds3b)) )/pDenT;
+      amplitude += normFactor*preTU*(
+				     gR*s13s.v(ds1,ds3a)*(-2.0*md*a23a.v(ds2,ds3b)+s243a.v(ds2,ds3b))
+				     +gL*a13a.v(ds1,ds3a)*(-2.0*md*s23s.v(ds2,ds3b)+s342a.v(ds3b,ds2))
+				     )/pDenT;
 
       //U-Channel e
       //preTU = e*e*md/(4.0*MW*MW*SW*SW);
@@ -141,7 +149,10 @@ namespace spinas {
       //preh (gLe [23] ([143>+2 Md <13>)+gRe <23> (2 Md [13]+[341>) )/(u-Md^2)
       //34 outgoing:
       //preh (gLe [23] ([143>-2 Md <13>)+gRe <23> ([341> - 2 Md [13]) )/(u-Md^2)
-      amplitude += normFactor*preTU*( gL*s23s.v(ds2,ds3a)*(s143a.v(ds1,ds3b)-2.0*md*a13a.v(ds1,ds3b)) + gR*a23a.v(ds2,ds3a)*(s341a.v(ds3b,ds1)-2.0*md*s13s.v(ds1,ds3b)) )/pDenU;
+      amplitude += normFactor*preTU*(
+				     gL*s23s.v(ds2,ds3a)*(s143a.v(ds1,ds3b)-2.0*md*a13a.v(ds1,ds3b))
+				     + gR*a23a.v(ds2,ds3a)*(s341a.v(ds3b,ds1)-2.0*md*s13s.v(ds1,ds3b))
+				     )/pDenU;
     }
 
     return amplitude;
