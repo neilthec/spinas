@@ -38,20 +38,26 @@ namespace spinas {
     p2=particle(md);
     p3=particle(MZ);
     p4=particle(md);
-    //<12>,[12],<23>,[23],<13>,[13],<24>,[24],<14>,[14]
-    s12s = sproduct(SQUARE,&p1,&p2);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    s23s = sproduct(SQUARE,&p2,&p3);
-    a23a = sproduct(ANGLE,&p2,&p3);
-    s13s = sproduct(SQUARE,&p1,&p3);
-    a13a = sproduct(ANGLE,&p1,&p3);
-    s34s = sproduct(SQUARE,&p3,&p4);
-    a34a = sproduct(ANGLE,&p3,&p4);
-    s14s = sproduct(SQUARE,&p1,&p4);
-    a14a = sproduct(ANGLE,&p1,&p4);
-    //[1421], <1421>
-    s1421s = sproduct(SQUARE,&p1,&p4,&p2,&p1);
-    a1421a = sproduct(ANGLE,&p1,&p4,&p2,&p1);
+    //Spinor Products
+    s12s= sproduct(SQUARE,&p1,&p2);
+    s13s= sproduct(SQUARE,&p1,&p3);
+    s14s= sproduct(SQUARE,&p1,&p4);
+    a23a= sproduct(ANGLE,&p2,&p3);
+    a34a= sproduct(ANGLE,&p3,&p4);
+    s123a= sproduct(SQUARE,&p1,&p2,&p3);
+    s132a= sproduct(SQUARE,&p1,&p3,&p2);
+    s134a= sproduct(SQUARE,&p1,&p3,&p4);
+    s143a= sproduct(SQUARE,&p1,&p4,&p3);
+    //Spinor Products
+    a12a= sproduct(ANGLE,&p1,&p2);
+    a13a= sproduct(ANGLE,&p1,&p3);
+    a14a= sproduct(ANGLE,&p1,&p4);
+    s23s= sproduct(SQUARE,&p2,&p3);
+    s34s= sproduct(SQUARE,&p3,&p4);
+    a123s= sproduct(ANGLE,&p1,&p2,&p3);
+    a132s= sproduct(ANGLE,&p1,&p3,&p2);
+    a134s= sproduct(ANGLE,&p1,&p3,&p4);
+    a143s= sproduct(ANGLE,&p1,&p4,&p3);
     //Couplings
     preTU = 2.0*e*gs/(2.0*MW*SW);
     gL=-2.0*Qd*SW*SW-1.0;
@@ -74,20 +80,26 @@ namespace spinas {
     p2.set_momentum(mom2);
     p3.set_momentum(mom3);
     p4.set_momentum(mom4);
-    //<12>,[12],<23>,[23],<13>,[13],<24>,[24],<14>,[14]
+    //Spinor Products
     s12s.update();
-    a12a.update();
-    s23s.update();
-    a23a.update();
     s13s.update();
-    a13a.update();
-    s34s.update();
-    a34a.update();
     s14s.update();
+    a23a.update();
+    a34a.update();
+    s123a.update();
+    s132a.update();
+    s134a.update();
+    s143a.update();
+    //Spinor Products
+    a12a.update();
+    a13a.update();
     a14a.update();
-    //[1421], <1421>
-    s1421s.update();
-    a1421a.update();
+    s23s.update();
+    s34s.update();
+    a123s.update();
+    a132s.update();
+    a134s.update();
+    a143s.update();
     //Propagator Momentum
     ldouble propSP[4], propUP[4];
     for(int j=0;j<4;j++){
@@ -115,32 +127,18 @@ namespace spinas {
       //preTU = 2.0*e*gs/(2.0*MW*SW);
       
       if(ds1>0){
-	//gZDd all ingoing:
-	//- preTU [1341] (gRe [24] <23> + gLe <24> [23])/((t-md^2) (u-md^2))
-	//- preTU [12] ( gRe [14]<23>/(u-md^2) - gLe [13]<24>/(t-md^2) )
-	//gdZD: 4->2->3->4	
-	//+ preTU [1421] (gRe [23] <34> + gLe <23> [34])/((u-md^2) (s-md^2))
-	//- preTU [13] ( gRe [12]<34>/(s-md^2) + gLe [14]<23>/(u-md^2) )
-	//34 out:
-	//- preTU [1421] (gRe [23] <34> - gLe <23> [34])/((u-md^2) (s-md^2))
-	//- preTU [13] ( gRe [12]<34>/(s-md^2) - gLe [14]<23>/(u-md^2) )
-	amplitude += - normFactor*preTU*s1421s.v()*(gR*s23s.v(ds2,ds3a)*a34a.v(ds3b,ds4) - gL*s34s.v(ds3a,ds4)*a23a.v(ds2,ds3b))/pDenU/pDenS;
-	amplitude += - normFactor*preTU*s13s.v(ds3a)*(gR*s12s.v(ds2)*a34a.v(ds3b,ds4)/pDenS - gL*s14s.v(ds4)*a23a.v(ds2,ds3b)/pDenU);
-
+	//Same as photon
+	amplitude += normFactor*preTU*(
+				       +gL*a23a.v(ds2,ds3a)*(MZ*s14s.v(ds4)*s123a.v(ds3b)+md*s13s.v(ds3b)*s134a.v(ds4))
+				       +gR*a34a.v(ds3a,ds4)*(md*s13s.v(ds3b)*s132a.v(ds2)+MZ*s12s.v(ds2)*s143a.v(ds3b))
+				       )/pDenU/pDenS;
 	
       }
       else if(ds1<0){
-	//gZDd all ingoing:
-	//- preTU <1341> (gRe [24] <23> + gLe <24> [23])/((t-md^2) (u-md^2))
-	//- preTU <12> ( gLe <14>[23]/(u-md^2) - gRe <13>[24]/(t-md^2) )
-	//gdZD: 4->2->3->4	
-	//+ preTU <1421> (gRe [23] <34> + gLe <23> [34])/((u-md^2) (s-md^2))
-	//- preTU <13> ( gLe <12>[34]/(s-md^2) + gRe <14>[23]/(u-md^2) )
-	//34 out:
-	//- preTU <1421> (gRe [23] <34> - gLe <23> [34])/((u-md^2) (s-md^2))
-	//+ preTU <13> ( gLe <12>[34]/(s-md^2) - gRe <14>[23]/(u-md^2) )
-	amplitude += - normFactor*preTU*a1421a.v()*(gR*s23s.v(ds2,ds3a)*a34a.v(ds3b,ds4) - gL*s34s.v(ds3a,ds4)*a23a.v(ds2,ds3b))/pDenU/pDenS;
-	amplitude += + normFactor*preTU*a13a.v(ds3a)*(gL*a12a.v(ds2)*s34s.v(ds3b,ds4)/pDenS - gR*a14a.v(ds4)*s23s.v(ds2,ds3b)/pDenU);
+	amplitude += normFactor*preTU*(
+				       +gR*s23s.v(ds2,ds3a)*(MZ*a14a.v(ds4)*a123s.v(ds3b)+md*a13a.v(ds3b)*a134s.v(ds4))
+				       +gL*s34s.v(ds3a,ds4)*(md*a13a.v(ds3b)*a132s.v(ds2)+MZ*a12a.v(ds2)*a143s.v(ds3b))
+				       )/pDenU/pDenS;
 
       }
 

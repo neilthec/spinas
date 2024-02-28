@@ -125,19 +125,7 @@ namespace spinas {
       get_spinor_spins(ds3,ds3a,ds3b, i);
       
       if(ds1>0){
-	//preTU = 2.0*e*e/(2.0*MW*SW);
-	//AZDd all in:
-	//- preTU [1341] (gRe [24] <23> + gLe <24> [23])/((t-md^2) (u-md^2))
-	//- preTU [12] ( gRe [14]<23>/(u-md^2) - gLe [13]<24>/(t-md^2) )
-	//AdZD: 4->2->3->4: 
-	//+ preTU [1421] (gRe [23] <34> + gLe <23> [34])/((u-md^2) (s-md^2))
-	//- preTU [13] ( gRe [12]<34>/(s-md^2) + gLe [14]<23>/(u-md^2) )
-	//34 out:
-	//- preTU [1421] (gRe [23] <34> - gLe <23> [34])/((u-md^2) (s-md^2))
-	//- preTU [13] ( gRe [12]<34>/(s-md^2) - gLe [14]<23>/(u-md^2) )
-	//amplitude += - normFactor*preTU*s1421s.v()*(gR*s23s.v(ds2,ds3a)*a34a.v(ds3b,ds4) - gL*s34s.v(ds3a,ds4)*a23a.v(ds2,ds3b))/pDenU/pDenS;
-	//amplitude += - normFactor*preTU*s13s.v(ds3a)*(gR*s12s.v(ds2)*a34a.v(ds3b,ds4)/pDenS - gL*s14s.v(ds4)*a23a.v(ds2,ds3b)/pDenU);
-
+	//preTU = e*e/(MW*SW);
 	//AdZD: all in:
 	// preTU (gLd<23>(MZ[14][123>-md[13][134>)+gRd<34>(-md[13][132>+MZ[12][143>))/((t-md^2)(u-md^2))
 	amplitude += normFactor*preTU*(
@@ -148,18 +136,7 @@ namespace spinas {
 	
       }
       else if(ds1<0){
-	//preTU = 2.0*e*e/(2.0*MW*SW);
-	//AZDd all in:
-	//- preTU <1341> (gRe [24] <23> + gLe <24> [23])/((t-md^2) (u-md^2))
-	//- preTU <12> ( gLe <14>[23]/(u-md^2) - gRe <13>[24]/(t-md^2) )
-	//AdZD: 4->2->3->4:
-	//+ preTU <1421> (gRe [23] <34> + gLe <23> [34])/((u-md^2) (s-md^2))
-	//- preTU <13> ( gLe <12>[34]/(s-md^2) + gRe <14>[23]/(u-md^2) )
-	//34 out:
-	//- preTU <1421> (gRe [23] <34> - gLe <23> [34])/((u-md^2) (s-md^2))
-	//+ preTU <13> ( gLe <12>[34]/(s-md^2) - gRe <14>[23]/(u-md^2) )
-	//amplitude += - normFactor*preTU*a1421a.v()*(gR*s23s.v(ds2,ds3a)*a34a.v(ds3b,ds4) - gL*s34s.v(ds3a,ds4)*a23a.v(ds2,ds3b))/pDenU/pDenS;
-	//amplitude += + normFactor*preTU*a13a.v(ds3a)*(gL*a12a.v(ds2)*s34s.v(ds3b,ds4)/pDenS - gR*a14a.v(ds4)*s23s.v(ds2,ds3b)/pDenU);
+	//preTU = e*e/(MW*SW);
 	
 	amplitude += normFactor*preTU*(
 				       +gRd*s23s.v(ds2,ds3a)*(MZ*a14a.v(ds4)*a123s.v(ds3b)+md*a13a.v(ds3b)*a134s.v(ds4))
