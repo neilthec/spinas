@@ -67,6 +67,10 @@ namespace spinas {
     s214a = sproduct(SQUARE,&p2,&p1,&p4);
     s312a = sproduct(SQUARE,&p3,&p1,&p2);
     s213a = sproduct(SQUARE,&p2,&p1,&p3);
+    s43s = sproduct(SQUARE,&p4,&p3);
+    a43a = sproduct(ANGLE,&p4,&p3);
+    s131a = sproduct(SQUARE,&p1,&p3,&p1);
+    s141a = sproduct(SQUARE,&p1,&p4,&p1);
     //Couplings
     preh = e*e/(MW*MW*SW*SW);
     preA = e*e/(2.0*MW*MW*MW*MW);
@@ -122,6 +126,10 @@ namespace spinas {
     s214a.update();
     s312a.update();
     s213a.update();
+    s43s.update();
+    a43a.update();
+    s131a.update();
+    s141a.update();
     //Propagator Momentum
     ldouble propSP[4], propTP[4], propUP[4];
     for(int j=0;j<4;j++){
@@ -144,7 +152,7 @@ namespace spinas {
   //set_momenta(...) must be called before amp(...).
   cdouble WWWW::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4){//Double Spin
     cdouble amplitude(0,0);
-    constexpr ldouble one=1, two=2, three=3, four=4, six=6;
+    constexpr ldouble one=1, two=2, three=3, four=4, five=5, six=6, eight=8, nine=9, eleven=11;
     int ds1a, ds1b, ds2a, ds2b, ds3a, ds3b, ds4a, ds4b;
 
     //Symmetrize the Z-Boson Spin indices for the spin-0 cases
@@ -179,12 +187,77 @@ namespace spinas {
       //((3(<34>[12]-<23>[14]-<14>[23]+<12>[34])MW[13]+((<34>[12]-4<23>[14]-(<14>+3[14])[23]+4<12>[34])MW+3[23][124>-3[13][432>)<13>)MW[24]+(4MW^2 <34>[12][13]-((4<23>[14]+(<14>+3[14])[23]-<12>[34])MW-3[24][123>+3[23][431>)MW[13]+(-3MW^2 <23>[14]+3MW^2 <14>[23]-6MW^2 [14][23]+4MW^2 [13][24]-2s12[13][24]+3MW[24][123>+3MW[23][124>-3MW[23][431>-3MW[13][432>)<13>)<24>)
       //34 out:
       //((3(<34>[12]+<23>[14]+<14>[23]+<12>[34])MW[13]-((<34>[12]+4<23>[14]+(<14>-3[14])[23]+4<12>[34])MW-3[23][124>+3[13][432>)<13>)MW[24]-(4MW^2 <34>[12][13]+((4<23>[14]+(<14>-3[14])[23]+<12>[34])MW-3[24][123>+3[23][431>)MW[13]+(-3MW^2 <23>[14]+3MW^2 <14>[23]+6MW^2 [14][23]-4MW^2 [13][24]+2s12[13][24]+3MW[24][123>+3MW[23][124>-3MW[23][431>-3MW[13][432>)<13>)<24>)
-      amplitude += normFactor*preA*((((-a13a.v(ds1a,ds3b)*s12s.v(ds1b,ds2b)+three*s12s.v(ds1a,ds2b)*s13s.v(ds1b,ds3b))*a34a.v(ds3a,ds4a)*s24s.v(ds2a,ds4b)+(-four*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)+three*s14s.v(ds1b,ds4a)*s24s.v(ds2b,ds4b))*a23a.v(ds2a,ds3a)*s13s.v(ds1a,ds3b)+(-a24a.v(ds2a,ds4b)*s23s.v(ds2b,ds3b)+three*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b))*a14a.v(ds1a,ds4a)*s13s.v(ds1b,ds3a)-four*a12a.v(ds1a,ds2b)*a13a.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*s34s.v(ds3a,ds4b)+three*a12a.v(ds1a,ds2b)*s13s.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*s34s.v(ds3a,ds4b))*MW+((three*a23a.v(ds2a,ds3b)*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)-three*a14a.v(ds1b,ds4a)*a24a.v(ds2a,ds4b)*s23s.v(ds2b,ds3b)-(four*a23a.v(ds2a,ds3b)*s14s.v(ds1b,ds4a)+(a14a.v(ds1b,ds4a)-three*s14s.v(ds1b,ds4a))*s23s.v(ds2a,ds3b))*s24s.v(ds2b,ds4b))*MW+three*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4a)*s124a.v(ds1b,ds4b)-three*s13s.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*s432a.v(ds4b,ds2b))*a13a.v(ds1a,ds3a))*MW-(four*MW*MW*a34a.v(ds3a,ds4b)*s12s.v(ds1a,ds2b)*s13s.v(ds1b,ds3b)+(MW*a12a.v(ds1a,ds2b)*s13s.v(ds1b,ds3b)*s34s.v(ds3a,ds4b)-three*(s24s.v(ds2b,ds4b)*s123a.v(ds1b,ds3b)+(MW*s14s.v(ds1b,ds4b)-s431a.v(ds4b,ds1b))*s23s.v(ds2b,ds3b))*s13s.v(ds1a,ds3a))*MW+(6*MW*MW*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)+three*(s24s.v(ds2b,ds4b)*s123a.v(ds1b,ds3b)+(s124a.v(ds1b,ds4b)-s431a.v(ds4b,ds1b))*s23s.v(ds2b,ds3b))*MW+(two*(-two*MW*MW+m12)*s24s.v(ds2b,ds4b)-three*MW*s432a.v(ds4b,ds2b))*s13s.v(ds1b,ds3b))*a13a.v(ds1a,ds3a))*a24a.v(ds2a,ds4a))/pDenTA;
+      //amplitude += normFactor*preA*((((-a13a.v(ds1a,ds3b)*s12s.v(ds1b,ds2b)+three*s12s.v(ds1a,ds2b)*s13s.v(ds1b,ds3b))*a34a.v(ds3a,ds4a)*s24s.v(ds2a,ds4b)+(-four*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)+three*s14s.v(ds1b,ds4a)*s24s.v(ds2b,ds4b))*a23a.v(ds2a,ds3a)*s13s.v(ds1a,ds3b)+(-a24a.v(ds2a,ds4b)*s23s.v(ds2b,ds3b)+three*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b))*a14a.v(ds1a,ds4a)*s13s.v(ds1b,ds3a)-four*a12a.v(ds1a,ds2b)*a13a.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*s34s.v(ds3a,ds4b)+three*a12a.v(ds1a,ds2b)*s13s.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*s34s.v(ds3a,ds4b))*MW+((three*a23a.v(ds2a,ds3b)*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)-three*a14a.v(ds1b,ds4a)*a24a.v(ds2a,ds4b)*s23s.v(ds2b,ds3b)-(four*a23a.v(ds2a,ds3b)*s14s.v(ds1b,ds4a)+(a14a.v(ds1b,ds4a)-three*s14s.v(ds1b,ds4a))*s23s.v(ds2a,ds3b))*s24s.v(ds2b,ds4b))*MW+three*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4a)*s124a.v(ds1b,ds4b)-three*s13s.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*s432a.v(ds4b,ds2b))*a13a.v(ds1a,ds3a))*MW-(four*MW*MW*a34a.v(ds3a,ds4b)*s12s.v(ds1a,ds2b)*s13s.v(ds1b,ds3b)+(MW*a12a.v(ds1a,ds2b)*s13s.v(ds1b,ds3b)*s34s.v(ds3a,ds4b)-three*(s24s.v(ds2b,ds4b)*s123a.v(ds1b,ds3b)+(MW*s14s.v(ds1b,ds4b)-s431a.v(ds4b,ds1b))*s23s.v(ds2b,ds3b))*s13s.v(ds1a,ds3a))*MW+(6*MW*MW*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)+three*(s24s.v(ds2b,ds4b)*s123a.v(ds1b,ds3b)+(s124a.v(ds1b,ds4b)-s431a.v(ds4b,ds1b))*s23s.v(ds2b,ds3b))*MW+(two*(-two*MW*MW+m12)*s24s.v(ds2b,ds4b)-three*MW*s432a.v(ds4b,ds2b))*s13s.v(ds1b,ds3b))*a13a.v(ds1a,ds3a))*a24a.v(ds2a,ds4a))/pDenTA;
+
 
       //U-Channel A
       //preA = e*e/(2*MW*MW*MW*MW);
-      amplitude += normFactor*preA*((-MW*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s13s.v(ds1a,ds3b)*s14s.v(ds1b,ds4b)-three*MW*a24a.v(ds2a,ds4a)*s13s.v(ds1a,ds3a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)+(three*(a14a.v(ds1b,ds4a)*a24a.v(ds2a,ds4b)-two*a24a.v(ds2a,ds4a)*s14s.v(ds1b,ds4b))*s23s.v(ds2b,ds3b)+(-four*a14a.v(ds1b,ds4a)+three*s14s.v(ds1b,ds4a))*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)+(three*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)+(three*a14a.v(ds1b,ds4a)-four*s14s.v(ds1b,ds4a))*s24s.v(ds2b,ds4b))*a23a.v(ds2a,ds3b))*MW*a13a.v(ds1a,ds3a)+four*MW*a12a.v(ds1a,ds2b)*a14a.v(ds1b,ds4a)*s23s.v(ds2a,ds3b)*s34s.v(ds3a,ds4b)+(four*a34a.v(ds3a,ds4a)*s12s.v(ds1a,ds2b)*s14s.v(ds1b,ds4b)+(-three*a14a.v(ds1b,ds4a)+s14s.v(ds1b,ds4a))*a12a.v(ds1a,ds2b)*s34s.v(ds3a,ds4b))*MW*a23a.v(ds2a,ds3b)+three*a24a.v(ds2a,ds4a)*s14s.v(ds1a,ds4b)*s23s.v(ds2b,ds3a)*s143a.v(ds1b,ds3b)+three*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s14s.v(ds1a,ds4b)*s321a.v(ds3b,ds1b)-three*a24a.v(ds2a,ds4a)*s14s.v(ds1a,ds4b)*s23s.v(ds2b,ds3a)*s321a.v(ds3b,ds1b)-three*a23a.v(ds2a,ds3a)*s14s.v(ds1a,ds4a)*s23s.v(ds2b,ds3b)*s421a.v(ds4b,ds1b))*MW+(-three*MW*MW*a23a.v(ds2a,ds3b)*a34a.v(ds3a,ds4b)*s12s.v(ds1b,ds2b)+(MW*a34a.v(ds3a,ds4b)*s12s.v(ds1b,ds2b)*s23s.v(ds2a,ds3b)-(MW*s13s.v(ds1b,ds3a)*s23s.v(ds2b,ds3b)+three*s23s.v(ds2b,ds3a)*s143a.v(ds1b,ds3b))*a24a.v(ds2a,ds4b)+three*s14s.v(ds1b,ds4b)*s23s.v(ds2a,ds3a)*s243a.v(ds2b,ds3b))*MW+(three*MW*MW*a24a.v(ds2b,ds4b)*s13s.v(ds1b,ds3b)+((four*MW*MW-two*m12)*s23s.v(ds2b,ds3b)-three*MW*s243a.v(ds2b,ds3b))*s14s.v(ds1b,ds4b)+three*MW*s23s.v(ds2b,ds3b)*s421a.v(ds4b,ds1b))*a23a.v(ds2a,ds3a))*a14a.v(ds1a,ds4a))/pDenUA;
+      //amplitude += normFactor*preA*((-MW*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s13s.v(ds1a,ds3b)*s14s.v(ds1b,ds4b)-three*MW*a24a.v(ds2a,ds4a)*s13s.v(ds1a,ds3a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)+(three*(a14a.v(ds1b,ds4a)*a24a.v(ds2a,ds4b)-two*a24a.v(ds2a,ds4a)*s14s.v(ds1b,ds4b))*s23s.v(ds2b,ds3b)+(-four*a14a.v(ds1b,ds4a)+three*s14s.v(ds1b,ds4a))*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)+(three*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)+(three*a14a.v(ds1b,ds4a)-four*s14s.v(ds1b,ds4a))*s24s.v(ds2b,ds4b))*a23a.v(ds2a,ds3b))*MW*a13a.v(ds1a,ds3a)+four*MW*a12a.v(ds1a,ds2b)*a14a.v(ds1b,ds4a)*s23s.v(ds2a,ds3b)*s34s.v(ds3a,ds4b)+(four*a34a.v(ds3a,ds4a)*s12s.v(ds1a,ds2b)*s14s.v(ds1b,ds4b)+(-three*a14a.v(ds1b,ds4a)+s14s.v(ds1b,ds4a))*a12a.v(ds1a,ds2b)*s34s.v(ds3a,ds4b))*MW*a23a.v(ds2a,ds3b)+three*a24a.v(ds2a,ds4a)*s14s.v(ds1a,ds4b)*s23s.v(ds2b,ds3a)*s143a.v(ds1b,ds3b)+three*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s14s.v(ds1a,ds4b)*s321a.v(ds3b,ds1b)-three*a24a.v(ds2a,ds4a)*s14s.v(ds1a,ds4b)*s23s.v(ds2b,ds3a)*s321a.v(ds3b,ds1b)-three*a23a.v(ds2a,ds3a)*s14s.v(ds1a,ds4a)*s23s.v(ds2b,ds3b)*s421a.v(ds4b,ds1b))*MW+(-three*MW*MW*a23a.v(ds2a,ds3b)*a34a.v(ds3a,ds4b)*s12s.v(ds1b,ds2b)+(MW*a34a.v(ds3a,ds4b)*s12s.v(ds1b,ds2b)*s23s.v(ds2a,ds3b)-(MW*s13s.v(ds1b,ds3a)*s23s.v(ds2b,ds3b)+three*s23s.v(ds2b,ds3a)*s143a.v(ds1b,ds3b))*a24a.v(ds2a,ds4b)+three*s14s.v(ds1b,ds4b)*s23s.v(ds2a,ds3a)*s243a.v(ds2b,ds3b))*MW+(three*MW*MW*a24a.v(ds2b,ds4b)*s13s.v(ds1b,ds3b)+((four*MW*MW-two*m12)*s23s.v(ds2b,ds3b)-three*MW*s243a.v(ds2b,ds3b))*s14s.v(ds1b,ds4b)+three*MW*s23s.v(ds2b,ds3b)*s421a.v(ds4b,ds1b))*a23a.v(ds2a,ds3a))*a14a.v(ds1a,ds4a))/pDenUA;
       
+
+      //Alternative form of the A diagrams with simplified momentum insertion terms.
+      //T-Channel A
+      amplitude += -normFactor*preA*(
+        two*m12*a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s13s.v(ds1b,ds3b)*s24s.v(ds2b,ds4b)
+        +(-three*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4b)*s13s.v(ds1b,ds3b)
+        +four*a24a.v(ds2a,ds4a)*a34a.v(ds3a,ds4b)*s12s.v(ds1a,ds2b)*s13s.v(ds1b,ds3b)
+        -three*a13a.v(ds1a,ds3a)*a23a.v(ds2a,ds3b)*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)
+        +a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s13s.v(ds1a,ds3b)*s14s.v(ds1b,ds4b)
+        -two*a13a.v(ds1a,ds3b)*a34a.v(ds3a,ds4a)*s12s.v(ds1b,ds2b)*s24s.v(ds2a,ds4b)
+        +five/two*a12a.v(ds1a,ds2b)*a34a.v(ds3a,ds4a)*s13s.v(ds1b,ds3b)*s24s.v(ds2a,ds4b)
+        +four*a14a.v(ds1a,ds4a)*a24a.v(ds2a,ds4b)*s13s.v(ds1b,ds3a)*s23s.v(ds2b,ds3b)
+        +eleven/two*a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)
+        +eleven/two*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s13s.v(ds1b,ds3b)*s24s.v(ds2b,ds4b)
+        -nine*a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s13s.v(ds1b,ds3b)*s24s.v(ds2b,ds4b)
+        +four*a13a.v(ds1a,ds3a)*a23a.v(ds2a,ds3b)*s14s.v(ds1b,ds4a)*s24s.v(ds2b,ds4b)
+        +a13a.v(ds1a,ds3a)*a14a.v(ds1b,ds4a)*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)
+        -three*a14a.v(ds1a,ds4a)*s13s.v(ds1b,ds3a)*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)
+        -three*a13a.v(ds1a,ds3a)*s14s.v(ds1b,ds4a)*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)
+        +five/two*a13a.v(ds1a,ds3b)*a24a.v(ds2a,ds4a)*s12s.v(ds1b,ds2b)*s34s.v(ds3a,ds4b)
+        -two*a12a.v(ds1a,ds2b)*a24a.v(ds2a,ds4a)*s13s.v(ds1b,ds3b)*s34s.v(ds3a,ds4b)
+        +four*a12a.v(ds1a,ds2b)*a13a.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*s34s.v(ds3a,ds4b))*MW*MW
+        +(three*a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s23s.v(ds2b,ds3b)*s124a.v(ds1b,ds4b)
+        +three*a13a.v(ds1a,ds3a)*a23a.v(ds2a,ds3b)*s24s.v(ds2b,ds4a)*s124a.v(ds1b,ds4b)
+        -three*a23a.v(ds2a,ds3a)*s13s.v(ds1a,ds3b)*s24s.v(ds2b,ds4a)*s124a.v(ds1b,ds4b)
+        -three*a13a.v(ds1a,ds3a)*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4a)*s124a.v(ds1b,ds4b)
+        -three*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s13s.v(ds1a,ds3b)*s421a.v(ds4b,ds1b)
+        -three*a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s23s.v(ds2b,ds3b)*s421a.v(ds4b,ds1b)
+        +three*a24a.v(ds2a,ds4a)*s13s.v(ds1a,ds3a)*s23s.v(ds2b,ds3b)*s421a.v(ds4b,ds1b)
+        +three*a23a.v(ds2a,ds3a)*s13s.v(ds1a,ds3b)*s24s.v(ds2b,ds4a)*s421a.v(ds4b,ds1b))*MW
+        )/pDenTA;
+
+      //U-Channel A
+      amplitude += -normFactor*preA*(
+        two*m12*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)
+        +(-three*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4b)*s13s.v(ds1b,ds3b)
+        -three*a13a.v(ds1a,ds3a)*a23a.v(ds2a,ds3b)*a24a.v(ds2b,ds4a)*s14s.v(ds1b,ds4b)
+        -four*a23a.v(ds2a,ds3b)*a34a.v(ds3a,ds4a)*s12s.v(ds1a,ds2b)*s14s.v(ds1b,ds4b)
+        +a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s13s.v(ds1a,ds3b)*s14s.v(ds1b,ds4b)
+        +two*a14a.v(ds1a,ds4a)*a34a.v(ds3a,ds4b)*s12s.v(ds1b,ds2b)*s23s.v(ds2a,ds3b)
+        -five/two*a12a.v(ds1a,ds2b)*a34a.v(ds3a,ds4a)*s14s.v(ds1b,ds4b)*s23s.v(ds2a,ds3b)
+        +four*a14a.v(ds1a,ds4a)*a24a.v(ds2a,ds4b)*s13s.v(ds1b,ds3a)*s23s.v(ds2b,ds3b)
+        -nine*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)
+        +eleven/two*a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)
+        +eleven/two*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s13s.v(ds1b,ds3b)*s24s.v(ds2b,ds4b)
+        +four*a13a.v(ds1a,ds3a)*a23a.v(ds2a,ds3b)*s14s.v(ds1b,ds4a)*s24s.v(ds2b,ds4b)
+        +a13a.v(ds1a,ds3a)*a14a.v(ds1b,ds4a)*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)
+        -three*a14a.v(ds1a,ds4a)*s13s.v(ds1b,ds3a)*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)
+        -three*a13a.v(ds1a,ds3a)*s14s.v(ds1b,ds4a)*s23s.v(ds2a,ds3b)*s24s.v(ds2b,ds4b)
+        -five/two*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3b)*s12s.v(ds1b,ds2b)*s34s.v(ds3a,ds4b)
+        +two*a12a.v(ds1a,ds2b)*a23a.v(ds2a,ds3b)*s14s.v(ds1b,ds4a)*s34s.v(ds3a,ds4b)
+        -four*a12a.v(ds1a,ds2b)*a14a.v(ds1b,ds4a)*s23s.v(ds2a,ds3b)*s34s.v(ds3a,ds4b))*MW*MW
+        +(three*a14a.v(ds1a,ds4a)*a24a.v(ds2a,ds4b)*s23s.v(ds2b,ds3a)*s123a.v(ds1b,ds3b)
+        -three*a24a.v(ds2a,ds4a)*s14s.v(ds1a,ds4b)*s23s.v(ds2b,ds3a)*s123a.v(ds1b,ds3b)
+        +three*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s24s.v(ds2b,ds4b)*s123a.v(ds1b,ds3b)
+        -three*a14a.v(ds1a,ds4a)*s23s.v(ds2a,ds3a)*s24s.v(ds2b,ds4b)*s123a.v(ds1b,ds3b)
+        -three*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s14s.v(ds1a,ds4b)*s321a.v(ds3b,ds1b)
+        +three*a24a.v(ds2a,ds4a)*s14s.v(ds1a,ds4b)*s23s.v(ds2b,ds3a)*s321a.v(ds3b,ds1b)
+        -three*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s24s.v(ds2b,ds4b)*s321a.v(ds3b,ds1b)
+        +three*a23a.v(ds2a,ds3a)*s14s.v(ds1a,ds4a)*s24s.v(ds2b,ds4b)*s321a.v(ds3b,ds1b))*MW
+        )/pDenUA;
+
+
+
       //T-Channel Z
       //preZ = e*e/(2.0*MW*MW*MZ*MZ*SW*SW);
       //all in:
