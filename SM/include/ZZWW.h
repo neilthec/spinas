@@ -30,10 +30,9 @@ namespace spinas {
     cdouble pDenS, pDenT, pDenU;
     //<12>,[12],<23>,[23],<24>,[24],<34>,[34],<14>,[14],<13>,[13]
     sproduct s12s, a12a, a34a, s34s, s24s, a24a, s23s, a23a, a14a, s14s, a13a, s13s;
-    sproduct s431a, s123a, s321a, s143a, s124a, s421a, s243a, s432a;
+    sproduct s431a, s134a, s341a, s143a;
     ldouble m12;//m12=(p1+p2)^2, m13=(p1-p3)^2,...
-    ldouble preh, preW, pre4;
-    ldouble NN[39];
+    ldouble preh, preW;
 
     
   public:
