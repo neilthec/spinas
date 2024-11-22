@@ -30,8 +30,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   udud::udud(const ldouble& echarge, const ldouble& gscharge, const ldouble& massu, const ldouble& massd, const ldouble& massh, const ldouble& widthh, const ldouble& massW, const ldouble& widthW, const ldouble& sinW, const ldouble& widthZ):
-    e(echarge), gs(gscharge), mu(massu), md(massd), mh(massh), wh(widthh), MW(massW), WW(widthW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ),
-    propAG(0,0), proph(mh,wh), propZ(MZ,WZ), propW(MW,WW),
+    e(echarge), gs(gscharge), mu(massu), md(massd), mh(massh), wh(widthh), MW(massW), WW(widthW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
+    propAG(0,0), proph(mh,wh), propW(MW,WW),
     p1(particle(mu)), p2(particle(md)),
     p3(particle(mu)), p4(particle(md)),
     a13a(sproduct(ANGLE,&p1,&p3)),
@@ -191,7 +191,7 @@ namespace spinas {
   
   
   cdouble udud::amp_W(const int& ds1, const int& ds2, const int& ds3, const int& ds4){
-    constexpr ldouble sqrt2=std::sqrt(2.0);
+    //constexpr ldouble sqrt2=std::sqrt(2.0);
     //W Boson
     //preW = e*e/(2.0*MW*MW*SW*SW);
     //uUDd:

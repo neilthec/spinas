@@ -35,12 +35,12 @@ namespace spinas {
     p1(particle(mh)), p2(particle(mh)),
     p3(particle(mh)), p4(particle(mh))
   {
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     preh = 3*e*e*mh*mh/(4*MW*MW*SW*SW);
     prehSTU = 3*mh*mh*preh;
   }
   void hhhh::set_masses(const ldouble& massh, const ldouble& massW){
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     mh=massh;
     proph.set_mass(mh);
     MW=massW;

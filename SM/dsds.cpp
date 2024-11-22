@@ -30,8 +30,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   dsds::dsds(const ldouble& echarge, const ldouble& gscharge, const ldouble& massd, const ldouble& masss, const ldouble& massh, const ldouble& widthh, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ):
-    e(echarge), gs(gscharge), md(massd), ms(masss), mh(massh), wh(widthh), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ),
-    propAG(0,0), proph(mh,wh), propZ(MZ,WZ),
+    e(echarge), gs(gscharge), md(massd), ms(masss), mh(massh), wh(widthh), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
+    propAG(0,0), proph(mh,wh), 
     p1(particle(md)), p2(particle(ms)),
     p3(particle(md)), p4(particle(ms)),
     a13a(sproduct(ANGLE,&p1,&p3)),

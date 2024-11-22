@@ -31,7 +31,7 @@ namespace spinas {
 
   ZnWe::ZnWe(const ldouble& echarge, const ldouble& masse, const ldouble& massW, const ldouble& sinW, const ldouble& widthW):
     e(echarge), me(masse), MW(massW), SW(sinW), WW(widthW) {
-    constexpr ldouble one=1, two=2, sqrt2=std::sqrt(2);
+    constexpr ldouble one=1, two=2;//, sqrt2=std::sqrt(2);
     CW=std::sqrt(1-SW*SW);
     MZ=MW/CW;
     propW = propagator(MW,WW);
@@ -56,15 +56,15 @@ namespace spinas {
     //[143>
     s143a=sproduct(SQUARE,&p1,&p4,&p3);
     //prefactor
-    preW = e*e/(sqrt2*MW*MW*MZ*MZ*SW*SW);
-    pree = e*e/(sqrt2*MW*MW*SW*SW);
-    pren = e*e/(sqrt2*MW*MW*SW*SW);
+    preW = e*e/(std::sqrt(2.0)*MW*MW*MZ*MZ*SW*SW);
+    pree = e*e/(std::sqrt(2.0)*MW*MW*SW*SW);
+    pren = e*e/(std::sqrt(2.0)*MW*MW*SW*SW);
     
     gL=two*SW*SW-one;
     gR=two*SW*SW;
   }
   void ZnWe::set_masses(const ldouble& masse, const ldouble& massW){
-    constexpr ldouble two=2, sqrt2=std::sqrt(2);
+    constexpr ldouble two=2;//, sqrt2=std::sqrt(2);
     me=masse;
     MW=massW;
     MZ=MW/CW;
@@ -74,9 +74,9 @@ namespace spinas {
     propW.set_mass(MW);
     prope.set_mass(me);
     //prefactors
-    preW = e*e/(sqrt2*MW*MW*MZ*MZ*SW*SW);
-    pree = e*e/(sqrt2*MW*MW*SW*SW);
-    pren = e*e/(sqrt2*MW*MW*SW*SW);
+    preW = e*e/(std::sqrt(2.0)*MW*MW*MZ*MZ*SW*SW);
+    pree = e*e/(std::sqrt(2.0)*MW*MW*SW*SW);
+    pren = e*e/(std::sqrt(2.0)*MW*MW*SW*SW);
   }
   void ZnWe::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles

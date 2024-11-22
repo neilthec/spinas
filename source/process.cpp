@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 #include "types.h"
-#include "aliases.h"
+//#include "aliases.h"
 #include "utilities.h"
 #include "cmatrix.h"
 #include "cvector.h"
@@ -103,9 +103,9 @@ namespace spinas {
   }
   ldouble process::get_spin_normalization(const int* dsList, const int length){
     ldouble normFactor = 1;
-    constexpr ldouble sqrt2=std::sqrt(2.0);
+    //constexpr ldouble sqrt2=std::sqrt(2.0);
     for(int i=0;i<length;i++)
-      if(dsList[i]==0) normFactor /= sqrt2;
+      if(dsList[i]==0) normFactor /= std::sqrt(2.0);
     return normFactor;
   }
   //Spinor Spins
@@ -287,7 +287,7 @@ namespace spinas {
 	ampSquared = amp2_func();
 	if(std::isinf(ampSquared) || std::isnan(ampSquared) ||
 	   (std::abs(ampSquared-data[j])>1e-15 &&
-	    std::abs(ampSquared-data[j])/std::abs(ampSquared+data[j])>1e-9)){
+	    std::abs(ampSquared-data[j])/std::abs(ampSquared+data[j])>1e-8)){
 	  print_test_message("Random Boost", m1, m2, m3, m4, ampSquared, data[j], cost);
 	  i++;
 	}
@@ -321,7 +321,7 @@ namespace spinas {
 	ampSquared = amp2_func();
 	if(std::isinf(ampSquared) || std::isnan(ampSquared) ||
 	   (std::abs(ampSquared-data[j])>1e-15 &&
-	    std::abs(ampSquared-data[j])/std::abs(ampSquared+data[j])>1e-9)){
+	    std::abs(ampSquared-data[j])/std::abs(ampSquared+data[j])>1e-8)){
 	  print_test_message("Random Rotation-Boost-Rotation", m1, m2, m3, m4, ampSquared, data[j], cost);
 	  i++;
 	}

@@ -25,7 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 
 #include "types.h"
-#include "aliases.h"
+//#include "aliases.h"
 #include "cmatrix.h"
 #include "cvector.h"
 #include "particle.h"

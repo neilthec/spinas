@@ -30,8 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   enmenm::enmenm(const ldouble& echarge, const ldouble& masse, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ):
-    e(echarge), me(masse), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ),
-    propZ(MZ,WZ),
+    e(echarge), me(masse), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
     p1(particle(me)), p2(particle(0)),
     p3(particle(me)), p4(particle(0)),
     a13a(sproduct(ANGLE,&p1,&p3)),

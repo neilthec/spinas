@@ -39,12 +39,12 @@ namespace spinas {
     s123a(sproduct(SQUARE,&p1,&p2,&p3)),
     s321a(sproduct(SQUARE,&p3,&p2,&p1))
   {
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     prehS = 3.0*e*e*mu*mh*mh/(4.0*MW*MW*SW*SW);
     prehTU = e*e*mu*mu/(4.0*MW*MW*SW*SW);
   }
   void uhuh::set_masses(const ldouble& massu, const ldouble& massh, const ldouble& massW){
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     mu=massu;
     propu.set_mass(mu);
     mh=massh;

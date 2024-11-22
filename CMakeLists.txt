@@ -5,7 +5,7 @@
 # clear;make -j64  && ./test_spinas --log_level=message && ./test_SM
 
 # Minimum required version of CMake
-cmake_minimum_required(VERSION 3.5) 
+cmake_minimum_required(VERSION 3.10) 
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 11)
@@ -45,8 +45,8 @@ set_target_properties(spinas_static PROPERTIES OUTPUT_NAME spinas)
 ####################################################
 #                      Boost Tests
 ####################################################
-find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-enable_testing()
+#find_package(Boost REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost REQUIRED COMPONENTS unit_test_framework CONFIG)
 
 # Collect all source files in the tests directory
 file(GLOB TEST_SRCS tests/*.cpp)
@@ -56,6 +56,9 @@ add_executable(test_spinas ${TEST_SRCS})
 
 # Link test executables to Boost Unit Test Framework
 target_link_libraries(test_spinas spinas_static Boost::unit_test_framework)
+
+# Enable testing
+enable_testing()
 
 # Add tests
 add_test(NAME test_spinas COMMAND test_spinas)

@@ -30,8 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   ddnn::ddnn(const ldouble& echarge, const ldouble& massd, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ):
-    e(echarge), md(massd), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ),
-    propZ(MZ,WZ),
+    e(echarge), md(massd), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
     p1(particle(md)), p2(particle(md)),
     p3(particle(0)), p4(particle(0)),
     s23s(sproduct(SQUARE,&p2,&p3)),

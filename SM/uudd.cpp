@@ -30,8 +30,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   uudd::uudd(const ldouble& echarge, const ldouble& gscharge, const ldouble& massu, const ldouble& massd, const ldouble& massh, const ldouble& widthh, const ldouble& massW, const ldouble& widthW, const ldouble& sinW, const ldouble& widthZ):
-    e(echarge), gs(gscharge), mu(massu), md(massd), mh(massh), wh(widthh), MW(massW), WW(widthW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ),
-    propAG(0,0), proph(mh,wh), propZ(MZ,WZ), propW(MW,WW),
+    e(echarge), gs(gscharge), mu(massu), md(massd), mh(massh), wh(widthh), MW(massW), WW(widthW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
+    propAG(0,0), proph(mh,wh), propW(MW,WW),
     p1(particle(mu)), p2(particle(mu)),
     p3(particle(md)), p4(particle(md)),
     a13a(sproduct(ANGLE,&p1,&p3)),
@@ -172,7 +172,7 @@ namespace spinas {
   
   
   cdouble uudd::amp_W(const int& ds1, const int& ds2, const int& ds3, const int& ds4){
-    constexpr ldouble sqrt2=std::sqrt(2.0);
+    //constexpr ldouble sqrt2=std::sqrt(2.0);
     //W Boson
     //All ingoing uDTb: 2MW^2 [23]⟨14⟩ + mdmt⟨12⟩⟨34⟩ − mtmu[12]⟨34⟩ − mbmd⟨12⟩[34] + mumb[12][34]
     //All ingoing uTDb: 2MW^2 [32]⟨14⟩ + mdmt⟨13⟩⟨24⟩ − mtmu[13]⟨24⟩ − mbmd⟨13⟩[24] + mumb[13][24]

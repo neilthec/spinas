@@ -30,8 +30,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   eenene::eenene(const ldouble& echarge, const ldouble& masse, const ldouble& massW, const ldouble& widthW, const ldouble& sinW, const ldouble& widthZ):
-    e(echarge), me(masse), MW(massW), WW(widthW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ),
-    propZ(MZ,WZ),propW(MW,WW),
+    e(echarge), me(masse), MW(massW), WW(widthW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
+    propW(MW,WW),
     p1(particle(me)), p2(particle(me)),
     p3(particle(0)), p4(particle(0)),
     a13a(sproduct(ANGLE,&p1,&p3)),

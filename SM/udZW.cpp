@@ -31,7 +31,7 @@ namespace spinas {
 
   udZW::udZW(const ldouble& echarge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW, const ldouble& widthW):
     e(echarge), Qu(2.0/3.0), Qd(-1.0/3.0), mu(massu), md(massd), MW(massW), SW(sinW), WW(widthW) {
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     CW=std::sqrt(1.0-SW*SW);
     MZ=MW/CW;
     propW = propagator(MW,WW);
@@ -56,7 +56,7 @@ namespace spinas {
     s314a= sproduct(SQUARE,&p3,&p1,&p4);
     s413a= sproduct(SQUARE,&p4,&p1,&p3);
     //prefactor
-    preud = e*e/(sqrt2*MW*MW*SW*SW);
+    preud = e*e/(std::sqrt(2.0)*MW*MW*SW*SW);
     preW = preud/(MZ*MZ);
     gLu=-2.0*Qu*SW*SW+1.0;
     gRu=-2.0*Qu*SW*SW;
@@ -64,7 +64,7 @@ namespace spinas {
     gRd=-2.0*Qd*SW*SW;
   }
   void udZW::set_masses(const ldouble& massu, const ldouble& massd, const ldouble& massW){
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     mu=massu;
     md=massd;
     MW=massW;
@@ -76,7 +76,7 @@ namespace spinas {
     propW.set_mass(MW);
     propu.set_mass(mu);
     propd.set_mass(md);
-    preud = e*e/(sqrt2*MW*MW*SW*SW);
+    preud = e*e/(std::sqrt(2.0)*MW*MW*SW*SW);
     preW = preud/(MZ*MZ);
   }
   void udZW::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){

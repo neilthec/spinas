@@ -30,8 +30,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   uuee::uuee(const ldouble& echarge, const ldouble& massu, const ldouble& masse, const ldouble& massh, const ldouble& widthh, const ldouble& massW, const ldouble& sinW, const ldouble& widthZ):
-    e(echarge), mu(massu), me(masse), mh(massh), wh(widthh), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW), WZ(widthZ),
-    propA(0,0), proph(mh,wh), propZ(MZ,WZ),
+    e(echarge), mu(massu), me(masse), mh(massh), wh(widthh), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
+    propA(0,0), proph(mh,wh),
     p1(particle(mu)), p2(particle(mu)),
     p3(particle(me)), p4(particle(me)),
     a13a(sproduct(ANGLE,&p1,&p3)),

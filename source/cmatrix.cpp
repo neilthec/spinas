@@ -27,13 +27,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string> 
 
 #include "types.h"
-#include "aliases.h"
+//#include "aliases.h"
 #include "cmatrix.h"
 
 namespace spinas {
   //Constructors
   cmatrix::cmatrix():
-    mat({{cdouble(),cdouble()},{cdouble(),cdouble()}}){}
+    mat{{cdouble(),cdouble()},{cdouble(),cdouble()}}{}
   
   cmatrix::cmatrix(const ldouble p[4], const bool& upp)
   {
@@ -52,7 +52,7 @@ namespace spinas {
   }
   
   cmatrix::cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11):
-    mat({{m00,m01},{m10,m11}}){}
+    mat{{m00,m01},{m10,m11}}{}
 
 
   //Get Elements

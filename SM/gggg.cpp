@@ -103,7 +103,7 @@ namespace spinas {
   cdouble gggg::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4){
     constexpr cdouble zero = cdouble(0,0), one = cdouble(1,0);
     constexpr ldouble two=2, oneHalf = 1.0/2.0;
-    constexpr ldouble sqrt2 = std::sqrt(two);
+    //constexpr ldouble sqrt2 = std::sqrt(two);
 
     //++++
     if(ds1>0&&ds2>0&&ds3>0&&ds4>0)

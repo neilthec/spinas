@@ -43,7 +43,7 @@ namespace spinas {
     prehTU = e*e*md*md/(4.0*MW*MW*SW*SW);
   }
   void ddhh::set_masses(const ldouble& massd, const ldouble& massh, const ldouble& massW){
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     md=massd;
     propd.set_mass(md);
     mh=massh;

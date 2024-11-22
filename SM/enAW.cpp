@@ -31,7 +31,7 @@ namespace spinas {
 
   enAW::enAW(const ldouble& echarge, const ldouble& masse, const ldouble& massW, const ldouble& sinW, const ldouble& widthW):
     e(echarge), me(masse), MW(massW), SW(sinW), WW(widthW) {
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     propW = propagator(MW,WW);
     prope = propagator(me,0);
     p1=particle(me);
@@ -50,17 +50,17 @@ namespace spinas {
     a34a = sproduct(ANGLE,&p3,&p4);
     s413a = sproduct(SQUARE,&p4,&p1,&p3);
     //prefactor
-    pre = sqrt2*e*e/(MW*SW);
+    pre = std::sqrt(2.0)*e*e/(MW*SW);
   }
   void enAW::set_masses(const ldouble& masse, const ldouble& massW){
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     me=masse;
     MW=massW;
     p1.set_mass(me);
     p4.set_mass(MW);
     propW.set_mass(MW);
     prope.set_mass(me);
-    pre = sqrt2*e*e/(MW*SW);
+    pre = std::sqrt(2.0)*e*e/(MW*SW);
   }
   void enAW::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles

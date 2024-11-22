@@ -31,7 +31,7 @@ namespace spinas {
 
   dWgu::dWgu(const ldouble& echarge, const ldouble& gscharge, const ldouble& massu, const ldouble& massd, const ldouble& massW, const ldouble& sinW):
     e(echarge), gs(gscharge), mu(massu), md(massd), MW(massW), SW(sinW) {
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     propu = propagator(mu,0);
     propd = propagator(md,0);
     p1=particle(md);
@@ -47,10 +47,10 @@ namespace spinas {
     a31a = sproduct(ANGLE,&p3,&p1);
     a3413a = sproduct(ANGLE,&p3,&p4,&p1,&p3);
     //prefactor
-    pre = sqrt2*e*gs/(MW*SW);
+    pre = std::sqrt(2.0)*e*gs/(MW*SW);
   }
   void dWgu::set_masses(const ldouble& massu, const ldouble& massd, const ldouble& massW){
-    constexpr ldouble sqrt2 = std::sqrt(2);
+    //constexpr ldouble sqrt2 = std::sqrt(2);
     mu=massu;
     md=massd;
     MW=massW;
@@ -59,7 +59,7 @@ namespace spinas {
     p4.set_mass(mu);
     propu.set_mass(mu);
     propd.set_mass(md);
-    pre = sqrt2*e*gs/(MW*SW);
+    pre = std::sqrt(2.0)*e*gs/(MW*SW);
   }
   void dWgu::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     constexpr ldouble one=1;
