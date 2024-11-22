@@ -33,9 +33,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   cmatrix::cmatrix():
-    mat{{cdouble(),cdouble()},{cdouble(),cdouble()}}{}
+    mat{{cdouble(),cdouble()},{cdouble(),cdouble()}},
+    sizeN(2){}
   
-  cmatrix::cmatrix(const ldouble p[4], const bool& upp)
+  cmatrix::cmatrix(const ldouble p[4], const bool& upp):
+  sizeN(2)
   {
     if(upp){//Upper Lorentz indices
       mat[0][0] = cdouble(p[0]-p[3],0);
@@ -52,12 +54,13 @@ namespace spinas {
   }
   
   cmatrix::cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11):
+    sizeN(2),
     mat{{m00,m01},{m10,m11}}{}
 
 
   //Get Elements
   cdouble cmatrix::get(const int& i, const int& j) const{
-    if (i < 0 || i >= 2 || j < 0 || j >= 2) 
+    if (i < 0 || i >= sizeN || j < 0 || j >= sizeN) 
       throw std::out_of_range("cmatrix index out of bounds");
     return mat[i][j];
   }
@@ -83,8 +86,8 @@ namespace spinas {
     return cmatrix(*this) += m;
   }
   cmatrix & cmatrix::operator+=(const cmatrix& m){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]+=m.mat[i][j];
     return *this;		 
   }
@@ -93,8 +96,8 @@ namespace spinas {
     return cmatrix(*this) -= m;
   }
   cmatrix & cmatrix::operator-=(const cmatrix& m){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]-=m.mat[i][j];
     return *this;		 
   }
@@ -106,18 +109,18 @@ namespace spinas {
     return cmatrix(*this) *= m;
   }
   cmatrix & cmatrix::operator*=(const cmatrix& m){
-    cdouble mnew[2][2];
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    cdouble mnew[3][3];
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mnew[i][j] = mat[i][0]*m.mat[0][j]+mat[i][1]*m.mat[1][j];
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]=mnew[i][j];
     return *this;		 
   }
   cmatrix & cmatrix::operator*=(const cdouble& d){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]=mat[i][j]*d;
     return *this;
   }
@@ -128,8 +131,8 @@ namespace spinas {
     return m*d;
   }
   cmatrix & cmatrix::operator*=(const ldouble& d){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]=mat[i][j]*d;
     return *this;
   }
@@ -140,8 +143,8 @@ namespace spinas {
     return m*d;
   }
   cmatrix & cmatrix::operator*=(const int& d){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]=mat[i][j] * static_cast<ldouble>(d);
     return *this;
   }
@@ -154,8 +157,8 @@ namespace spinas {
   
   // /
   cmatrix & cmatrix::operator/=(const cdouble &d){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]=mat[i][j]/d;
     return *this;
   }
@@ -163,8 +166,8 @@ namespace spinas {
     return cmatrix(*this) /= d;
   }
   cmatrix & cmatrix::operator/=(const ldouble &d){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]=mat[i][j]/d;
     return *this;
   }
@@ -172,8 +175,8 @@ namespace spinas {
     return cmatrix(*this) /= d;
   }
   cmatrix & cmatrix::operator/=(const int &d){
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	mat[i][j]=mat[i][j]/static_cast<ldouble>(d);
     return *this;
   }
@@ -185,8 +188,8 @@ namespace spinas {
   //==
   bool cmatrix::operator==(const cmatrix &m) const{
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	if(std::abs(mat[i][j]-m.mat[i][j]) > epsilon) return false;
     return true;
   }

@@ -27,7 +27,8 @@ namespace spinas{
   
   class cvector{
   private:
-    cdouble vec[2];
+    cdouble vec[3];
+    int sizeN;
     
   public:
     cvector();

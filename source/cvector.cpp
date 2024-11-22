@@ -32,15 +32,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   cvector::cvector():
-    vec{cdouble(),cdouble()}{}
+    vec{cdouble(),cdouble()},
+    sizeN(2){}
 
   cvector::cvector(const cdouble& v0, const cdouble& v1):
-    vec{v0,v1}{}
+    vec{v0,v1},
+    sizeN(2){}
 
 
   //Get Element
   cdouble cvector::get(const int& i) const{
-    if (i < 0 || i >= 2) 
+    if (i < 0 || i >= sizeN) 
       throw std::out_of_range("cvector index out of bounds");
     return vec[i];
   }
@@ -58,17 +60,17 @@ namespace spinas {
   }
   const cvector cvector::operator*(const cmatrix& m) const {
     constexpr ldouble zero = 0;
-    cdouble vnew[2] = {zero, zero};
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    cdouble vnew[3] = {zero, zero, zero};
+    for(int i=0;i<sizeN;i++)
+      for(int j=0;j<sizeN;j++)
 	vnew[i] += vec[j]*m.get(j,i);
     return cvector(vnew[0],vnew[1]);
   }
   cvector operator*(const cmatrix &m, const cvector& v2){
     constexpr ldouble zero = 0;
-    cdouble vnew[2] = {zero, zero};
-    for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
+    cdouble vnew[3] = {zero, zero, zero};
+    for(int i=0;i<v2.sizeN;i++)
+      for(int j=0;j<v2.sizeN;j++)
 	vnew[i] += m.get(i,j)*v2.vec[j];
     return cvector(vnew[0],vnew[1]);
   }
@@ -108,7 +110,7 @@ namespace spinas {
   // ==
   bool cvector::operator==(const cvector &v2) const {
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 10000000;
-    for(int i=0;i<2;i++)
+    for(int i=0;i<sizeN;i++)
       if(std::abs(vec[i]-v2.vec[i]) > epsilon) return false;
     return true;
   }

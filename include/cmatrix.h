@@ -28,7 +28,8 @@ namespace spinas{
   
   class cmatrix{
   private:
-    cdouble mat[2][2];
+    cdouble mat[3][3];
+    int sizeN;
     
   public:
     cmatrix();
