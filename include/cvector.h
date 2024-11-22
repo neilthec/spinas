@@ -32,8 +32,7 @@ namespace spinas{
   public:
     cvector();
     cvector(const cdouble& v0, const cdouble& v1);
-    cvector(const cdouble vnew[2]);
-
+    
     //Get Element
     cdouble get(const int& i) const;
     

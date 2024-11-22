@@ -37,9 +37,6 @@ namespace spinas {
   cvector::cvector(const cdouble& v0, const cdouble& v1):
     vec{v0,v1}{}
 
-  cvector::cvector(const cdouble vnew[2]):
-    vec{vnew[0],vnew[1]}{}
-
 
   //Get Element
   cdouble cvector::get(const int& i) const{
@@ -65,7 +62,7 @@ namespace spinas {
     for(int i=0;i<2;i++)
       for(int j=0;j<2;j++)
 	vnew[i] += vec[j]*m.get(j,i);
-    return cvector(vnew);
+    return cvector(vnew[0],vnew[1]);
   }
   cvector operator*(const cmatrix &m, const cvector& v2){
     constexpr ldouble zero = 0;
@@ -73,7 +70,7 @@ namespace spinas {
     for(int i=0;i<2;i++)
       for(int j=0;j<2;j++)
 	vnew[i] += m.get(i,j)*v2.vec[j];
-    return cvector(vnew);
+    return cvector(vnew[0],vnew[1]);
   }
   const cvector cvector::operator*(const cdouble& d) const {
     return cvector(d*vec[0],d*vec[1]);
