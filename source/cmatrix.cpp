@@ -83,7 +83,19 @@ namespace spinas {
   //Determinant
   ldouble cmatrix::get_det() const{
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
-    cdouble det = mat[0][0]*mat[1][1]-mat[0][1]*mat[1][0];
+    cdouble det = 0;
+    if(dimension==2)
+      det = mat[0][0]*mat[1][1]-mat[0][1]*mat[1][0];
+    else if (dimension==3)
+    {
+      det = mat[0][0]*mat[1][1]*mat[2][2]
+          + mat[0][1]*mat[1][2]*mat[2][0]
+          + mat[0][2]*mat[1][0]*mat[2][1]
+          - mat[0][2]*mat[1][1]*mat[2][0]
+          - mat[0][1]*mat[1][0]*mat[2][2]
+          - mat[0][0]*mat[1][2]*mat[2][1];
+    }
+    
     if (std::abs(std::imag(det)) > epsilon)
       throw std::domain_error("Determinant has a non-zero imaginary part.");
     return std::real(det);
@@ -99,6 +111,8 @@ namespace spinas {
     return cmatrix(*this) += m;
   }
   cmatrix & cmatrix::operator+=(const cmatrix& m){
+    if(dimension != m.dimension)
+      throw std::invalid_argument("cmatrix dimensions do not match");
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
 	mat[i][j]+=m.mat[i][j];
@@ -109,32 +123,40 @@ namespace spinas {
     return cmatrix(*this) -= m;
   }
   cmatrix & cmatrix::operator-=(const cmatrix& m){
+    if(dimension != m.dimension)
+      throw std::invalid_argument("cmatrix dimensions do not match");
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
 	mat[i][j]-=m.mat[i][j];
     return *this;		 
   }
   cmatrix operator-(const cmatrix& m){
-    return cmatrix(-m.mat[0][0],-m.mat[0][1],-m.mat[1][0],-m.mat[1][1]);
+    cmatrix mnew(m.dimension);
+    for(int i=0;i<m.dimension;i++)
+      for(int j=0;j<m.dimension;j++)
+        mnew.set(i,j,-m.mat[i][j]);
+    return mnew;
   }
   // *
   cmatrix cmatrix::operator*(const cmatrix& m){
     return cmatrix(*this) *= m;
   }
   cmatrix & cmatrix::operator*=(const cmatrix& m){
+    if(dimension != m.dimension)
+      throw std::invalid_argument("cmatrix dimensions do not match");
     cdouble mnew[3][3];
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	mnew[i][j] = mat[i][0]*m.mat[0][j]+mat[i][1]*m.mat[1][j];
+	      mnew[i][j] = mat[i][0]*m.mat[0][j]+mat[i][1]*m.mat[1][j];
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	mat[i][j]=mnew[i][j];
+	      mat[i][j]=mnew[i][j];
     return *this;		 
   }
   cmatrix & cmatrix::operator*=(const cdouble& d){
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	mat[i][j]=mat[i][j]*d;
+	      mat[i][j]=mat[i][j]*d;
     return *this;
   }
   const cmatrix cmatrix::operator*(const cdouble& d) const {
@@ -150,11 +172,6 @@ namespace spinas {
     return *this;
   }
   const cmatrix cmatrix::operator*(const ldouble& d) const {
-    /*cmatrix mnew;
-    for(int i=0;i<dimension;i++)
-      for(int j=0;j<dimension;j++)
-        mnew.mat[i][j]=mat[i][j]*d;
-    return mnew;*/
     return cmatrix(*this) *= d;
   }
   cmatrix operator*(const ldouble &d, const cmatrix &m){
@@ -163,7 +180,7 @@ namespace spinas {
   cmatrix & cmatrix::operator*=(const int& d){
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	mat[i][j]=mat[i][j] * static_cast<ldouble>(d);
+	      mat[i][j]=mat[i][j] * static_cast<ldouble>(d);
     return *this;
   }
   const cmatrix cmatrix::operator*(const int& d) const {
@@ -177,7 +194,7 @@ namespace spinas {
   cmatrix & cmatrix::operator/=(const cdouble &d){
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	mat[i][j]=mat[i][j]/d;
+	      mat[i][j]=mat[i][j]/d;
     return *this;
   }
   const cmatrix cmatrix::operator/(const cdouble &d) const{
@@ -186,7 +203,7 @@ namespace spinas {
   cmatrix & cmatrix::operator/=(const ldouble &d){
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	mat[i][j]=mat[i][j]/d;
+	      mat[i][j]=mat[i][j]/d;
     return *this;
   }
   const cmatrix cmatrix::operator/(const ldouble &d) const{
@@ -195,7 +212,7 @@ namespace spinas {
   cmatrix & cmatrix::operator/=(const int &d){
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	mat[i][j]=mat[i][j]/static_cast<ldouble>(d);
+	      mat[i][j]=mat[i][j]/static_cast<ldouble>(d);
     return *this;
   }
   const cmatrix cmatrix::operator/(const int &d) const{
@@ -206,9 +223,10 @@ namespace spinas {
   //==
   bool cmatrix::operator==(const cmatrix &m) const{
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
+    if(dimension != m.dimension) return false;
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	if(std::abs(mat[i][j]-m.mat[i][j]) > epsilon) return false;
+	      if(std::abs(mat[i][j]-m.mat[i][j]) > epsilon) return false;
     return true;
   }
   bool cmatrix::operator!=(const cmatrix &m) const{
@@ -223,10 +241,21 @@ namespace spinas {
   //Screen Output
   std::string cmatrix::to_string() const {
     std::stringstream tmpStr;
-    tmpStr<<"{ { "<<std::real(mat[0][0])<<" + I* "<<std::imag(mat[0][0])<<
+    tmpStr<<"{ ";
+    for(int i=0;i<dimension;i++){
+      tmpStr<<"{ ";
+      for(int j=0;j<dimension;j++){
+        tmpStr<<std::real(mat[i][j])<<" + I* "<<std::imag(mat[i][j]);
+        if(j<dimension-1) tmpStr<<" , ";
+      }
+      tmpStr<<" }";
+      if(i<dimension-1) tmpStr<<" , ";
+    }
+    tmpStr<<" }";
+    /*tmpStr<<"{ "<<std::real(mat[0][0])<<" + I* "<<std::imag(mat[0][0])<<
       " , "<<std::real(mat[0][1])<<" + I* "<<std::imag(mat[0][1])<<
       " } , { "<<std::real(mat[1][0])<<" + I* "<<std::imag(mat[1][0])<<
-      " , "<<std::real(mat[1][1])<<" + I* "<<std::imag(mat[1][1])<<" } }";
+      " , "<<std::real(mat[1][1])<<" + I* "<<std::imag(mat[1][1])<<" } }";*/
     return tmpStr.str();
   }
   
@@ -238,10 +267,21 @@ namespace spinas {
   
   std::string cmatrix::to_Mathematica_string() const {
     std::stringstream tmpStr;
-    tmpStr<<"{ { "<<std::real(mat[0][0])<<" + I* "<<std::imag(mat[0][0])<<
+    tmpStr<<"{ ";
+    for(int i=0;i<dimension;i++){
+      tmpStr<<"{ ";
+      for(int j=0;j<dimension;j++){
+        tmpStr<<std::real(mat[i][j])<<" + I* "<<std::imag(mat[i][j]);
+        if(j<dimension-1) tmpStr<<" , ";
+      }
+      tmpStr<<" }";
+      if(i<dimension-1) tmpStr<<" , ";
+    }
+    tmpStr<<" }";
+    /*tmpStr<<"{ { "<<std::real(mat[0][0])<<" + I* "<<std::imag(mat[0][0])<<
       " , "<<std::real(mat[0][1])<<" + I* "<<std::imag(mat[0][1])<<
       " } , { "<<std::real(mat[1][0])<<" + I* "<<std::imag(mat[1][0])<<
-      " , "<<std::real(mat[1][1])<<" + I* "<<std::imag(mat[1][1])<<" } }";
+      " , "<<std::real(mat[1][1])<<" + I* "<<std::imag(mat[1][1])<<" } }";*/
     return tmpStr.str();
   }
   
