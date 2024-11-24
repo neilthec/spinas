@@ -29,15 +29,20 @@ namespace spinas{
   class cmatrix{
   private:
     cdouble mat[3][3];
-    int sizeN;
+    int dimension;
     
   public:
     cmatrix();
+    explicit cmatrix(const int& dim);
     cmatrix(const ldouble p[4], const bool& upp);
     cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11);
     
-    //Get Elements
+    //Get
+    int get_dimension() const;
     cdouble get(const int& i, const int& j) const;
+
+    //Set Elements
+    void set(const int& i, const int& j, const cdouble& val);
     
     //Determinant
     ldouble get_det() const;

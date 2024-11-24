@@ -32,77 +32,122 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   cvector::cvector():
-    vec{cdouble(),cdouble()},
-    sizeN(2){}
+    vec{0,0,0},
+    dimension(2){}
+
+  cvector::cvector(const int& dim):
+    vec{0,0,0},
+    dimension(dim){}
 
   cvector::cvector(const cdouble& v0, const cdouble& v1):
-    vec{v0,v1},
-    sizeN(2){}
+    vec{v0,v1,0},
+    dimension(2){}
 
+  cvector::cvector(const cdouble& v0, const cdouble& v1, const cdouble& v2):
+    vec{v0,v1,v2},
+    dimension(3){}
 
   //Get Element
   cdouble cvector::get(const int& i) const{
-    if (i < 0 || i >= sizeN) 
+    if (i < 0 || i >= dimension) 
       throw std::out_of_range("cvector index out of bounds");
     return vec[i];
   }
 
   //Conjugate
   cvector cvector::get_conjugate() const{
-    return cvector(std::conj(vec[0]), std::conj(vec[1]));
+    cvector nvec(dimension);
+    for(int i=0;i<dimension;i++)
+      nvec.vec[i] = std::conj(vec[i]);
+    return nvec;
+    //return cvector(std::conj(vec[0]), std::conj(vec[1]));
   }
+
 
 
   //Algebra
   //*
   const cdouble cvector::operator*(const cvector& v2) const {
-    return vec[0]*v2.vec[0]+vec[1]*v2.vec[1];
+    if(dimension != v2.dimension)
+      throw std::invalid_argument("cvector dimensions do not match");
+    cdouble prod = 0;
+    for(int i=0;i<dimension;i++)
+      prod += vec[i]*v2.vec[i];
+    return prod;
   }
   const cvector cvector::operator*(const cmatrix& m) const {
-    constexpr ldouble zero = 0;
-    cdouble vnew[3] = {zero, zero, zero};
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
-	vnew[i] += vec[j]*m.get(j,i);
-    return cvector(vnew[0],vnew[1]);
+    if(dimension != m.get_dimension())
+      throw std::invalid_argument("cvector and cmatrix dimensions do not match");
+    cvector vnew(dimension);
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
+	      vnew.vec[i] += vec[j]*m.get(j,i);
+    return vnew;
   }
   cvector operator*(const cmatrix &m, const cvector& v2){
-    constexpr ldouble zero = 0;
-    cdouble vnew[3] = {zero, zero, zero};
-    for(int i=0;i<v2.sizeN;i++)
-      for(int j=0;j<v2.sizeN;j++)
-	vnew[i] += m.get(i,j)*v2.vec[j];
-    return cvector(vnew[0],vnew[1]);
+    if(m.get_dimension() != v2.dimension)
+      throw std::invalid_argument("cvector and cmatrix dimensions do not match");
+    cvector vnew(v2.dimension);
+    for(int i=0;i<v2.dimension;i++)
+      for(int j=0;j<v2.dimension;j++)
+	      vnew.vec[i] += m.get(i,j)*v2.vec[j];
+    return vnew;
   }
   const cvector cvector::operator*(const cdouble& d) const {
-    return cvector(d*vec[0],d*vec[1]);
+    cvector vnew(dimension);
+    for(int i=0;i<dimension;i++)
+      vnew.vec[i] = vec[i]*d;
+    return vnew;
   }
   cvector operator*(const cdouble &d, const cvector &v2) {
-    return cvector(d*v2.vec[0],d*v2.vec[1]);
+    cvector vnew(v2.dimension);
+    for(int i=0;i<v2.dimension;i++)
+      vnew.vec[i] = d*v2.vec[i];
+    return vnew;
   }
   const cvector cvector::operator*(const ldouble& d) const {
-    return cvector(d*vec[0],d*vec[1]);
+    cvector vnew(dimension);
+    for(int i=0;i<dimension;i++)
+      vnew.vec[i] = d*vec[i];
+    return vnew;
   }
   cvector operator*(const ldouble& d, const cvector& v2) {
-    return cvector(d*v2.vec[0],d*v2.vec[1]);
+    cvector vnew(v2.dimension);
+    for(int i=0;i<v2.dimension;i++)
+      vnew.vec[i] = d*v2.vec[i];
+    return vnew;
   }
   const cvector cvector::operator*(const int& d) const {
     ldouble dd = static_cast<ldouble>(d);
-    return cvector(dd*vec[0],dd*vec[1]);
+    cvector vnew(dimension);
+    for(int i=0;i<dimension;i++)
+      vnew.vec[i] = dd*vec[i];
+    return vnew;
   }
   cvector operator*(const int& d, const cvector& v2) {
     ldouble dd = static_cast<ldouble>(d);
-    return cvector(dd*v2.vec[0],dd*v2.vec[1]);
+    cvector vnew(v2.dimension);
+    for(int i=0;i<v2.dimension;i++)
+      vnew.vec[i] = dd*v2.vec[i];
+    return vnew;
   }
   //-
   cvector operator-(const cvector& v){
-    return cvector(-v.vec[0],-v.vec[1]);
+    cvector nvec(v.dimension);
+    for(int i=0;i<v.dimension;i++)
+      nvec.vec[i] = -v.vec[i];
+    return nvec;
   }
 
   //Outer Product: For example |i>[i| = p_i
   cmatrix outer(const cvector& v1, const cvector& v2){
-    return cmatrix(v1.vec[0]*v2.vec[0],v1.vec[0]*v2.vec[1],
-		   v1.vec[1]*v2.vec[0],v1.vec[1]*v2.vec[1]);
+    if(v1.dimension != v2.dimension)
+      throw std::invalid_argument("cvector dimensions do not match");
+    cmatrix m(v1.dimension);
+    for(int i=0;i<v1.dimension;i++)
+      for(int j=0;j<v2.dimension;j++)
+        m.set(i,j,v1.vec[i]*v2.vec[j]);
+    return m;
   }
 
 
@@ -110,7 +155,8 @@ namespace spinas {
   // ==
   bool cvector::operator==(const cvector &v2) const {
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 10000000;
-    for(int i=0;i<sizeN;i++)
+    if(dimension != v2.dimension) return false;
+    for(int i=0;i<dimension;i++)
       if(std::abs(vec[i]-v2.vec[i]) > epsilon) return false;
     return true;
   }
@@ -124,13 +170,26 @@ namespace spinas {
   //Screen Output
   std::string cvector::to_string(const int& which) const {
     std::stringstream tmpStr;
-    if(which==1) tmpStr<<"{ "<<vec[0]<<" , "<<vec[1]<<" }";
-    else tmpStr<<"{ "<<std::abs(vec[0])<<" exp(i * "<<std::arg(vec[0])<<" ) , "<<std::abs(vec[1])<<" exp(i * "<<std::arg(vec[1])<<" ) }";
+    tmpStr<<"{ ";
+    if(which==1){
+      tmpStr<<vec[0];
+      for(int i=1;i<dimension;i++)
+        tmpStr<<" , "<<vec[i];
+    } 
+    else{
+      tmpStr<<std::abs(vec[0])<<" exp(i * "<<std::arg(vec[0])<<" )";
+      for(int i=1;i<dimension;i++)
+        tmpStr<<" , "<<std::abs(vec[i])<<" exp(i * "<<std::arg(vec[i])<<" )";
+    }
+    tmpStr<<" }";
     return tmpStr.str();
   }
   std::string cvector::to_string() const {
     std::stringstream tmpStr;
-    tmpStr<<"{ "<<vec[0]<<" , "<<vec[1]<<" }";
+    tmpStr<<"{ "<<vec[0];
+    for(int i=1;i<dimension;i++)
+      tmpStr<<" , "<<vec[i];
+    tmpStr<<" }";
     return tmpStr.str();
   }
   
@@ -142,10 +201,10 @@ namespace spinas {
   
   std::string cvector::to_Mathematica_string() const {
     std::stringstream tmpStr;
-    tmpStr<<"{ "
-	  <<std::real(vec[0])<<" + I * "<<std::imag(vec[0])<<
-      " , "<<std::real(vec[1])<<" + I * "<<std::imag(vec[1])<<
-      " }";
+    tmpStr<<"{ "<<std::real(vec[0])<<" + I * "<<std::imag(vec[0]);
+    for(int i=1;i<dimension;i++)
+      tmpStr<<" , "<<std::real(vec[i])<<" + I * "<<std::imag(vec[i]);
+    tmpStr<<" }";
     return tmpStr.str();
   }
 

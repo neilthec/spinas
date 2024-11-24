@@ -33,11 +33,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace spinas {
   //Constructors
   cmatrix::cmatrix():
-    mat{{cdouble(),cdouble()},{cdouble(),cdouble()}},
-    sizeN(2){}
+    mat{{0,0,0},{0,0,0},{0,0,0}},
+    dimension(2){}
+
+  cmatrix::cmatrix(const int& dim):
+    mat{{0,0,0},{0,0,0},{0,0,0}},
+    dimension(dim){}
+
   
   cmatrix::cmatrix(const ldouble p[4], const bool& upp):
-  sizeN(2)
+  dimension(2)
   {
     if(upp){//Upper Lorentz indices
       mat[0][0] = cdouble(p[0]-p[3],0);
@@ -54,18 +59,26 @@ namespace spinas {
   }
   
   cmatrix::cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11):
-    sizeN(2),
+    dimension(2),
     mat{{m00,m01},{m10,m11}}{}
 
 
-  //Get Elements
+  //Get
+  int cmatrix::get_dimension() const{
+    return dimension;
+  }
   cdouble cmatrix::get(const int& i, const int& j) const{
-    if (i < 0 || i >= sizeN || j < 0 || j >= sizeN) 
+    if (i < 0 || i >= dimension || j < 0 || j >= dimension) 
       throw std::out_of_range("cmatrix index out of bounds");
     return mat[i][j];
   }
   
-  
+  //Set Elements
+  void cmatrix::set(const int& i, const int& j, const cdouble& val){
+    if (i < 0 || i >= dimension || j < 0 || j >= dimension) 
+      throw std::out_of_range("cmatrix index out of bounds");
+    mat[i][j] = val;
+  }
   
   //Determinant
   ldouble cmatrix::get_det() const{
@@ -86,8 +99,8 @@ namespace spinas {
     return cmatrix(*this) += m;
   }
   cmatrix & cmatrix::operator+=(const cmatrix& m){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]+=m.mat[i][j];
     return *this;		 
   }
@@ -96,8 +109,8 @@ namespace spinas {
     return cmatrix(*this) -= m;
   }
   cmatrix & cmatrix::operator-=(const cmatrix& m){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]-=m.mat[i][j];
     return *this;		 
   }
@@ -110,17 +123,17 @@ namespace spinas {
   }
   cmatrix & cmatrix::operator*=(const cmatrix& m){
     cdouble mnew[3][3];
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mnew[i][j] = mat[i][0]*m.mat[0][j]+mat[i][1]*m.mat[1][j];
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]=mnew[i][j];
     return *this;		 
   }
   cmatrix & cmatrix::operator*=(const cdouble& d){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]=mat[i][j]*d;
     return *this;
   }
@@ -131,20 +144,25 @@ namespace spinas {
     return m*d;
   }
   cmatrix & cmatrix::operator*=(const ldouble& d){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]=mat[i][j]*d;
     return *this;
   }
   const cmatrix cmatrix::operator*(const ldouble& d) const {
+    /*cmatrix mnew;
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
+        mnew.mat[i][j]=mat[i][j]*d;
+    return mnew;*/
     return cmatrix(*this) *= d;
   }
   cmatrix operator*(const ldouble &d, const cmatrix &m){
     return m*d;
   }
   cmatrix & cmatrix::operator*=(const int& d){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]=mat[i][j] * static_cast<ldouble>(d);
     return *this;
   }
@@ -157,8 +175,8 @@ namespace spinas {
   
   // /
   cmatrix & cmatrix::operator/=(const cdouble &d){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]=mat[i][j]/d;
     return *this;
   }
@@ -166,8 +184,8 @@ namespace spinas {
     return cmatrix(*this) /= d;
   }
   cmatrix & cmatrix::operator/=(const ldouble &d){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]=mat[i][j]/d;
     return *this;
   }
@@ -175,8 +193,8 @@ namespace spinas {
     return cmatrix(*this) /= d;
   }
   cmatrix & cmatrix::operator/=(const int &d){
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	mat[i][j]=mat[i][j]/static_cast<ldouble>(d);
     return *this;
   }
@@ -188,8 +206,8 @@ namespace spinas {
   //==
   bool cmatrix::operator==(const cmatrix &m) const{
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
-    for(int i=0;i<sizeN;i++)
-      for(int j=0;j<sizeN;j++)
+    for(int i=0;i<dimension;i++)
+      for(int j=0;j<dimension;j++)
 	if(std::abs(mat[i][j]-m.mat[i][j]) > epsilon) return false;
     return true;
   }
