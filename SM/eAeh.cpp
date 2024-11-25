@@ -162,18 +162,18 @@ namespace spinas {
     cdouble s12[2], a12[2], s23[2], a23[2], s243[2], a243[2], s241[2], a241[2], a13[2][2], s13[2][2], s2342, a2342, numP, numM;
     for(int i=0;i<2;i++){
       for(int j=0;j<2;j++){
-	a13[i][j] = p1.langle(2*i-1)*p3.rangle(2*j-1);
-	s13[i][j] = p1.lsquare(2*i-1)*p3.rsquare(2*j-1);
+	a13[i][j] = p1.langle(2*i-1,2)*p3.rangle(2*j-1, 2);
+	s13[i][j] = p1.lsquare(2*i-1,2)*p3.rsquare(2*j-1, 2);
       }
-      s12[i] = p1.lsquare(2*i-1)*p2.rsquare();
-      a12[i] = p1.langle(2*i-1)*p2.rangle();
-      s23[i] = p2.lsquare()*p3.rsquare(2*i-1);
-      a23[i] = p2.langle()*p3.rangle(2*i-1);
-      s243[i] = p2.lsquare()*p4.umat()*p3.rangle(2*i-1);
-      a243[i] = p2.langle()*p4.lmat()*p3.rsquare(2*i-1);
+      s12[i] = p1.lsquare(2*i-1,2)*p2.rsquare(2);
+      a12[i] = p1.langle(2*i-1,2)*p2.rangle(2);
+      s23[i] = p2.lsquare(2)*p3.rsquare(2*i-1,2);
+      a23[i] = p2.langle(2)*p3.rangle(2*i-1, 2);
+      s243[i] = p2.lsquare(2)*p4.umat(2)*p3.rangle(2*i-1, 2);
+      a243[i] = p2.langle(2)*p4.lmat(2)*p3.rsquare(2*i-1, 2);
     }
-    s2342 = p2.lsquare()*p3.umat()*p4.lmat()*p2.rsquare();
-    a2342 = p2.langle()*p3.lmat()*p4.umat()*p2.rangle();
+    s2342 = p2.lsquare(2)*p3.umat(2)*p4.lmat(2)*p2.rsquare(2);
+    a2342 = p2.langle(2)*p3.lmat(2)*p4.umat(2)*p2.rangle(2);
 
     //Now use these to calculate the amp.
     //Sum over spins

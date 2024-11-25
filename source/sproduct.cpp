@@ -265,17 +265,17 @@ namespace spinas {
     //Calculate pMat as the product of the momenta in the middle.
     if(N>0){
       if(isLeftAngle){
-	pMat = p[0]->lmat();
+	pMat = p[0]->lmat(2);
 	for(int i=1;i<N;i++){
-	  if(i%2==0) pMat *= p[i]->lmat();
-	  else pMat *= p[i]->umat();
+	  if(i%2==0) pMat *= p[i]->lmat(2);
+	  else pMat *= p[i]->umat(2);
 	}
       }
       else {
-	pMat = p[0]->umat();
+	pMat = p[0]->umat(2);
 	for(int i=1;i<N;i++){
-	  if(i%2==0) pMat *= p[i]->umat();
-	  else pMat *= p[i]->lmat();
+	  if(i%2==0) pMat *= p[i]->umat(2);
+	  else pMat *= p[i]->lmat(2);
 	}
       }
     }
@@ -294,22 +294,22 @@ namespace spinas {
     //Calcualte it.
     cvector vec;
     if(isLeftAngle){
-      vec = pL->langle();
+      vec = pL->langle(2);
       if(N>0)
 	vec = vec * pMat;
       if(N%2==0)
-	product[0][0] = vec * pR->rangle();
+	product[0][0] = vec * pR->rangle(2);
       else
-	product[0][0] = vec * pR->rsquare();
+	product[0][0] = vec * pR->rsquare(2);
     }
     else{
-      vec = pL->lsquare();
+      vec = pL->lsquare(2);
       if(N>0)
 	vec = vec * pMat;
       if(N%2==0)
-	product[0][0] = vec * pR->rsquare();
+	product[0][0] = vec * pR->rsquare(2);
       else
-	product[0][0] = vec * pR->rangle();
+	product[0][0] = vec * pR->rangle(2);
     }
     isCalculated[0][0] = true;
     return product[0][0];
@@ -328,22 +328,22 @@ namespace spinas {
       //Calcualte it.
       cvector vec;
       if(isLeftAngle){
-	vec = pL->langle(spin,isLeftUpper);
+	vec = pL->langle(spin,isLeftUpper,2);
 	if(N>0)
 	  vec = vec * pMat;
 	if(N%2==0)
-	  product[jL][0] = vec * pR->rangle();
+	  product[jL][0] = vec * pR->rangle(2);
 	else
-	  product[jL][0] = vec * pR->rsquare();
+	  product[jL][0] = vec * pR->rsquare(2);
       }
       else{
-	vec = pL->lsquare(spin,isLeftUpper);
+	vec = pL->lsquare(spin,isLeftUpper,2);
 	if(N>0)
 	  vec = vec * pMat;
 	if(N%2==0)
-	  product[jL][0] = vec * pR->rsquare();
+	  product[jL][0] = vec * pR->rsquare(2);
 	else
-	  product[jL][0] = vec * pR->rangle();
+	  product[jL][0] = vec * pR->rangle(2);
       }
       isCalculated[jL][0] = true;
       return product[jL][0];
@@ -360,22 +360,22 @@ namespace spinas {
       //Calcualte it.
       cvector vec;
       if(isLeftAngle){
-	vec = pL->langle();
+	vec = pL->langle(2);
 	if(N>0)
 	  vec = vec * pMat;
 	if(N%2==0)
-	  product[0][jR] = vec * pR->rangle(spin,isRightUpper);
+	  product[0][jR] = vec * pR->rangle(spin,isRightUpper,2);
 	else
-	  product[0][jR] = vec * pR->rsquare(spin,isRightUpper);
+	  product[0][jR] = vec * pR->rsquare(spin,isRightUpper,2);
       }
       else{
-	vec = pL->lsquare();
+	vec = pL->lsquare(2);
 	if(N>0)
 	  vec = vec * pMat;
 	if(N%2==0)
-	  product[0][jR] = vec * pR->rsquare(spin,isRightUpper);
+	  product[0][jR] = vec * pR->rsquare(spin,isRightUpper,2);
 	else
-	  product[0][jR] = vec * pR->rangle(spin,isRightUpper);
+	  product[0][jR] = vec * pR->rangle(spin,isRightUpper,2);
       }
       isCalculated[0][jR] = true;
       return product[0][jR];
@@ -398,22 +398,22 @@ namespace spinas {
     //Calcualte it.
     cvector vec;
     if(isLeftAngle){
-      vec = pL->langle(spinL,isLeftUpper);
+      vec = pL->langle(spinL,isLeftUpper,2);
       if(N>0)
 	vec = vec * pMat;
       if(N%2==0)
-	product[jL][jR] = vec * pR->rangle(spinR,isRightUpper);
+	product[jL][jR] = vec * pR->rangle(spinR,isRightUpper,2);
       else
-	product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper);
+	product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper,2);
     }
     else{
-      vec = pL->lsquare(spinL,isLeftUpper);
+      vec = pL->lsquare(spinL,isLeftUpper,2);
       if(N>0)
 	vec = vec * pMat;
       if(N%2==0)
-	product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper);
+	product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper,2);
       else
-	product[jL][jR] = vec * pR->rangle(spinR,isRightUpper);
+	product[jL][jR] = vec * pR->rangle(spinR,isRightUpper,2);
     }
     isCalculated[jL][jR] = true;
     return product[jL][jR];

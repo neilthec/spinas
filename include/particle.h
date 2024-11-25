@@ -36,33 +36,33 @@ namespace spinas {
 
     // 2-dimensional 
     //The matrices and spinors
-    bool upMatCalculated = false, loMatCalculated = false;
-    cmatrix upMat, loMat;
+    bool upMat2dimCalculated = false, loMat2dimCalculated = false;
+    cmatrix upMat2dim, loMat2dim;
     //Helicity Spinors
-    bool m0rangleCalculated = false, m0langleCalculated = false;
-    bool m0rsquareCalculated = false, m0lsquareCalculated = false;
-    cvector m0rangle, m0langle, m0rsquare, m0lsquare;
+    bool m0rangle2dimCalculated = false, m0langle2dimCalculated = false;
+    bool m0rsquare2dimCalculated = false, m0lsquare2dimCalculated = false;
+    cvector m0rangle2dim, m0langle2dim, m0rsquare2dim, m0lsquare2dim;
     //Spin Spinors
     //rangle
-    bool rangleUpperP1Calculated = false, rangleUpperM1Calculated = false;
-    cvector rangleUpperP1, rangleUpperM1;
-    bool rangleLowerP1Calculated = false, rangleLowerM1Calculated = false;
-    cvector rangleLowerP1, rangleLowerM1;
+    bool rangleUpperP12dimCalculated = false, rangleUpperM12dimCalculated = false;
+    cvector rangleUpperP12dim, rangleUpperM12dim;
+    bool rangleLowerP12dimCalculated = false, rangleLowerM12dimCalculated = false;
+    cvector rangleLowerP12dim, rangleLowerM12dim;
     //langle
-    bool langleUpperP1Calculated = false, langleUpperM1Calculated = false;
-    cvector langleUpperP1, langleUpperM1;
-    bool langleLowerP1Calculated = false, langleLowerM1Calculated = false;
-    cvector langleLowerP1, langleLowerM1;
+    bool langleUpperP12dimCalculated = false, langleUpperM12dimCalculated = false;
+    cvector langleUpperP12dim, langleUpperM12dim;
+    bool langleLowerP12dimCalculated = false, langleLowerM12dimCalculated = false;
+    cvector langleLowerP12dim, langleLowerM12dim;
     //lsquare
-    bool lsquareUpperP1Calculated = false, lsquareUpperM1Calculated = false;
-    cvector lsquareUpperP1, lsquareUpperM1;
-    bool lsquareLowerP1Calculated = false, lsquareLowerM1Calculated = false;
-    cvector lsquareLowerP1, lsquareLowerM1;
+    bool lsquareUpperP12dimCalculated = false, lsquareUpperM12dimCalculated = false;
+    cvector lsquareUpperP12dim, lsquareUpperM12dim;
+    bool lsquareLowerP12dimCalculated = false, lsquareLowerM12dimCalculated = false;
+    cvector lsquareLowerP12dim, lsquareLowerM12dim;
     //rsquare
-    bool rsquareUpperP1Calculated = false, rsquareUpperM1Calculated = false;
-    cvector rsquareUpperP1, rsquareUpperM1;
-    bool rsquareLowerP1Calculated = false, rsquareLowerM1Calculated = false;
-    cvector rsquareLowerP1, rsquareLowerM1;
+    bool rsquareUpperP12dimCalculated = false, rsquareUpperM12dimCalculated = false;
+    cvector rsquareUpperP12dim, rsquareUpperM12dim;
+    bool rsquareLowerP12dimCalculated = false, rsquareLowerM12dimCalculated = false;
+    cvector rsquareLowerP12dim, rsquareLowerM12dim;
 
 
   public:
@@ -82,25 +82,25 @@ namespace spinas {
     ldouble dot(const particle& p2) const;
 
     //Matrices
-    cmatrix umat();//Upper
-    cmatrix lmat();//Lower
+    cmatrix umat(const int& dim);//Upper
+    cmatrix lmat(const int& dim);//Lower
 
     //Spinors
     //Massless
-    cvector rangle();
-    cvector lsquare();
-    cvector langle();
-    cvector rsquare();
+    cvector rangle(const int& dim);
+    cvector lsquare(const int& dim);
+    cvector langle(const int& dim);
+    cvector rsquare(const int& dim);
 
     //Massive
-    cvector rangle(const int& spin2);
-    cvector rangle(const int& spin2, const bool& upper);
-    cvector langle(const int& spin2);
-    cvector langle(const int& spin2, const bool& upper);
-    cvector lsquare(const int& spin2);
-    cvector lsquare(const int& spin2, const bool& upper);
-    cvector rsquare(const int& spin2);
-    cvector rsquare(const int& spin2, const bool& upper);
+    cvector rangle(const int& spin2, const int& dim);
+    cvector rangle(const int& spin2, const bool& upper, const int& dim);
+    cvector langle(const int& spin2, const int& dim);
+    cvector langle(const int& spin2, const bool& upper, const int& dim);
+    cvector lsquare(const int& spin2, const int& dim);
+    cvector lsquare(const int& spin2, const bool& upper, const int& dim);
+    cvector rsquare(const int& spin2, const int& dim);
+    cvector rsquare(const int& spin2, const bool& upper, const int& dim);
 
     //Massive cmatrix form with both spins
     cmatrix rangle_matrix();
@@ -147,6 +147,6 @@ namespace spinas {
 
   };
 
-  int test_particle();
+  //int test_particle();
 }
 

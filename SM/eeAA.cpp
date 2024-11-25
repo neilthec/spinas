@@ -153,23 +153,23 @@ namespace spinas {
     ldouble amp2 = 0;
 
     cdouble s34, a34, s12, a12, s13, a13, s24, a24, s23, a23, s14, a14, s314, s413, numPP, numMM, numPM, numMP;
-    s34 = p3.lsquare()*p4.rsquare();
-    a34 = p3.langle()*p4.rangle();
-    s314 = p3.lsquare()*p1.umat()*p4.rangle();
-    s413 = p4.lsquare()*p1.umat()*p3.rangle();
+    s34 = p3.lsquare(2)*p4.rsquare(2);
+    a34 = p3.langle(2)*p4.rangle(2);
+    s314 = p3.lsquare(2)*p1.umat(2)*p4.rangle(2);
+    s413 = p4.lsquare(2)*p1.umat(2)*p3.rangle(2);
     //Sum over spins
     for(int j1=-1;j1<=1;j1+=2)
       for(int j2=-1;j2<=1;j2+=2){
-	s12 = p1.lsquare(j1)*p2.rsquare(j2);
-	a12 = p1.langle(j1)*p2.rangle(j2);	
-	s13 = p1.lsquare(j1)*p3.rsquare();
-	a13 = p1.langle(j1)*p3.rangle();
-	s24 = p2.lsquare(j2)*p4.rsquare();
-	a24 = p2.langle(j2)*p4.rangle();
-	s23 = p2.lsquare(j2)*p3.rsquare();
-	a23 = p2.langle(j2)*p3.rangle();
-	s14 = p1.lsquare(j1)*p4.rsquare();
-	a14 = p1.langle(j1)*p4.rangle();
+	s12 = p1.lsquare(j1,2)*p2.rsquare(j2,2);
+	a12 = p1.langle(j1,2)*p2.rangle(j2, 2);	
+	s13 = p1.lsquare(j1,2)*p3.rsquare(2);
+	a13 = p1.langle(j1,2)*p3.rangle(2);
+	s24 = p2.lsquare(j2,2)*p4.rsquare(2);
+	a24 = p2.langle(j2,2)*p4.rangle(2);
+	s23 = p2.lsquare(j2,2)*p3.rsquare(2);
+	a23 = p2.langle(j2,2)*p3.rangle(2);
+	s14 = p1.lsquare(j1,2)*p4.rsquare(2);
+	a14 = p1.langle(j1,2)*p4.rangle(2);
 
 	//Sign changes due to p3 and p4 being outgoing cancel.
 	numPP = me*s34*s34*a12;//std::cout<<"numPP="<<numPP<<std::endl;
