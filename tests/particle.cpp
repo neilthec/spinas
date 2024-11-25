@@ -132,30 +132,30 @@ BOOST_AUTO_TEST_CASE(helicity_spinors_test) {
     cvector zero_vector=cvector(0,0);
     
     // LJ3 |1> == -1/2 |1>
-    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle(2) == -half*p1.rangle(2));
+    BOOST_CHECK(p1.lorentz_j3_lu(2)*p1.rangle(2) == -half*p1.rangle(2));
     // LJ+ |1> == 0
-    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jp_lu(2)*p1.rangle(2) == zero_vector);
     // LJ- |1> == 0
-    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jm_lu(2)*p1.rangle(2) == zero_vector);
     // LJ3 <1| == -1/2 <1|
-    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle(2) == -half*p1.langle(2));
+    BOOST_CHECK(p1.lorentz_j3_ul(2)*p1.langle(2) == -half*p1.langle(2));
     // LJ+ <1| == 0
-    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jp_ul(2)*p1.langle(2) == zero_vector);
     // LJ- <1| == 0
-    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jm_ul(2)*p1.langle(2) == zero_vector);
     
     // LJ3 [1| == 1/2 [1|
-    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare(2) == half*p1.lsquare(2));
+    BOOST_CHECK(p1.lorentz_j3_lu_dot(2)*p1.lsquare(2) == half*p1.lsquare(2));
     // LJ+ [1| == 0
-    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jp_lu_dot(2)*p1.lsquare(2) == zero_vector);
     // LJ- [1| == 0
-    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jm_lu_dot(2)*p1.lsquare(2) == zero_vector);
     // LJ3 |1] == 1/2 |1]
-    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare(2) == half*p1.rsquare(2));
+    BOOST_CHECK(p1.lorentz_j3_ul_dot(2)*p1.rsquare(2) == half*p1.rsquare(2));
     // LJ+ |1] == 0
-    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jp_ul_dot(2)*p1.rsquare(2) == zero_vector);
     // LJ- |1] == 0
-    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare(2) == zero_vector);
+    BOOST_CHECK(p1.lorentz_jm_ul_dot(2)*p1.rsquare(2) == zero_vector);
     
   }
 }
@@ -281,60 +281,60 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
     //Lorentz and Spin Algebra
     
     // LJ3 |1>^I == |1>^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_j3_lu());
+    BOOST_CHECK(p1.lorentz_j3_lu(2)*p1.rangle_matrix(2) == p1.rangle_matrix(2)*p1.spin_j3_lu(2));
     // LJ+ |1>^I == |1>^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jp_lu());
+    BOOST_CHECK(p1.lorentz_jp_lu(2)*p1.rangle_matrix(2) == p1.rangle_matrix(2)*p1.spin_jp_lu(2));
     // LJ- |1>^I == |1>^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jm_lu());
+    BOOST_CHECK(p1.lorentz_jm_lu(2)*p1.rangle_matrix(2) == p1.rangle_matrix(2)*p1.spin_jm_lu(2));
     
     // LJ3 <1|^I == <1|^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_j3_lu());
+    BOOST_CHECK(p1.lorentz_j3_ul(2)*p1.langle_matrix(2) == p1.langle_matrix(2)*p1.spin_j3_lu(2));
     // LJ+ <1|^I == <1|^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jp_lu());
+    BOOST_CHECK(p1.lorentz_jp_ul(2)*p1.langle_matrix(2) == p1.langle_matrix(2)*p1.spin_jp_lu(2));
     // LJ- <1|^I == <1|^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jm_lu());
+    BOOST_CHECK(p1.lorentz_jm_ul(2)*p1.langle_matrix(2) == p1.langle_matrix(2)*p1.spin_jm_lu(2));
     
     // LJ3 |1>_I == |1>_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_j3_ul());
+    BOOST_CHECK(p1.lorentz_j3_lu(2)*p1.rangle_matrix(LOWER,2) == p1.rangle_matrix(LOWER,2)*p1.spin_j3_ul(2));
     // LJ+ |1>_I == |1>_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jp_ul());
+    BOOST_CHECK(p1.lorentz_jp_lu(2)*p1.rangle_matrix(LOWER,2) == p1.rangle_matrix(LOWER,2)*p1.spin_jp_ul(2));
     // LJ- |1>_I == |1>_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jm_ul());
+    BOOST_CHECK(p1.lorentz_jm_lu(2)*p1.rangle_matrix(LOWER,2) == p1.rangle_matrix(LOWER,2)*p1.spin_jm_ul(2));
     
     // LJ3 <1|_I == <1|_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_j3_ul());
+    BOOST_CHECK(p1.lorentz_j3_ul(2)*p1.langle_matrix(LOWER,2) == p1.langle_matrix(LOWER,2)*p1.spin_j3_ul(2));
     // LJ+ <1|_I == <1|_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jp_ul());
+    BOOST_CHECK(p1.lorentz_jp_ul(2)*p1.langle_matrix(LOWER,2) == p1.langle_matrix(LOWER,2)*p1.spin_jp_ul(2));
     // LJ- <1|_I == <1|_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jm_ul());
+    BOOST_CHECK(p1.lorentz_jm_ul(2)*p1.langle_matrix(LOWER,2) == p1.langle_matrix(LOWER,2)*p1.spin_jm_ul(2));
     
     // LJ3 [1|^I == [1|^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_j3_lu());
+    BOOST_CHECK(p1.lorentz_j3_lu_dot(2)*p1.lsquare_matrix(2) == p1.lsquare_matrix(2)*p1.spin_j3_lu(2));
     // LJ+ [1|^I == [1|^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jp_lu());
+    BOOST_CHECK(p1.lorentz_jp_lu_dot(2)*p1.lsquare_matrix(2) == p1.lsquare_matrix(2)*p1.spin_jp_lu(2));
     // LJ- [1|^I == [1|^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jm_lu());
+    BOOST_CHECK(p1.lorentz_jm_lu_dot(2)*p1.lsquare_matrix(2) == p1.lsquare_matrix(2)*p1.spin_jm_lu(2));
     
     // LJ3 |1]^I == |1]^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_j3_lu());
+    BOOST_CHECK(p1.lorentz_j3_ul_dot(2)*p1.rsquare_matrix(2) == p1.rsquare_matrix(2)*p1.spin_j3_lu(2));
     // LJ+ |1]^I == |1]^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jp_lu());
+    BOOST_CHECK(p1.lorentz_jp_ul_dot(2)*p1.rsquare_matrix(2) == p1.rsquare_matrix(2)*p1.spin_jp_lu(2));
     // LJ- |1]^I == |1]^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jm_lu());
+    BOOST_CHECK(p1.lorentz_jm_ul_dot(2)*p1.rsquare_matrix(2) == p1.rsquare_matrix(2)*p1.spin_jm_lu(2));
     
     // LJ3 [1|_I == [1|_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_j3_ul());
+    BOOST_CHECK(p1.lorentz_j3_lu_dot(2)*p1.lsquare_matrix(LOWER,2) == p1.lsquare_matrix(LOWER,2)*p1.spin_j3_ul(2));
     // LJ+ [1|_I == [1|_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jp_ul());
+    BOOST_CHECK(p1.lorentz_jp_lu_dot(2)*p1.lsquare_matrix(LOWER,2) == p1.lsquare_matrix(LOWER,2)*p1.spin_jp_ul(2));
     // LJ- [1|_I == [1|_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jm_ul());
+    BOOST_CHECK(p1.lorentz_jm_lu_dot(2)*p1.lsquare_matrix(LOWER,2) == p1.lsquare_matrix(LOWER,2)*p1.spin_jm_ul(2));
     
     // LJ3 |1]_I == |1]_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_j3_ul());
+    BOOST_CHECK(p1.lorentz_j3_ul_dot(2)*p1.rsquare_matrix(LOWER,2) == p1.rsquare_matrix(LOWER,2)*p1.spin_j3_ul(2));
     // LJ+ |1]_I == |1]_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jp_ul());
+    BOOST_CHECK(p1.lorentz_jp_ul_dot(2)*p1.rsquare_matrix(LOWER,2) == p1.rsquare_matrix(LOWER,2)*p1.spin_jp_ul(2));
     // LJ- |1]_I == |1]_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jm_ul());
+    BOOST_CHECK(p1.lorentz_jm_ul_dot(2)*p1.rsquare_matrix(LOWER,2) == p1.rsquare_matrix(LOWER,2)*p1.spin_jm_ul(2));
     
   }
   

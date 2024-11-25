@@ -103,50 +103,49 @@ namespace spinas {
     cvector rsquare(const int& spin2, const bool& upper, const int& dim);
 
     //Massive cmatrix form with both spins
-    cmatrix rangle_matrix();
-    cmatrix rangle_matrix(const bool& upper);
-    cmatrix langle_matrix();
-    cmatrix langle_matrix(const bool& upper);
+    cmatrix rangle_matrix(const int& dim);
+    cmatrix rangle_matrix(const bool& upper, const int& dim);
+    cmatrix langle_matrix(const int& dim);
+    cmatrix langle_matrix(const bool& upper, const int& dim);
     
-    cmatrix lsquare_matrix();
-    cmatrix lsquare_matrix(const bool& upper);
-    cmatrix rsquare_matrix();
-    cmatrix rsquare_matrix(const bool& upper);
+    cmatrix lsquare_matrix(const int& dim);
+    cmatrix lsquare_matrix(const bool& upper, const int& dim);
+    cmatrix rsquare_matrix(const int& dim);
+    cmatrix rsquare_matrix(const bool& upper, const int& dim);
 
 
     //Error message:
     void usage(const char* msg) const;
 
     //Generators of Lorentz Rotations with no dot (acting on left chiral angle brackets)
-    cmatrix lorentz_j3_lu() const;
-    cmatrix lorentz_jp_lu() const;
-    cmatrix lorentz_jm_lu() const;
+    cmatrix lorentz_j3_lu(const int& dim) const;
+    cmatrix lorentz_jp_lu(const int& dim) const;
+    cmatrix lorentz_jm_lu(const int& dim) const;
 
-    cmatrix lorentz_j3_ul() const;
-    cmatrix lorentz_jp_ul() const;
-    cmatrix lorentz_jm_ul() const;
+    cmatrix lorentz_j3_ul(const int& dim) const;
+    cmatrix lorentz_jp_ul(const int& dim) const;
+    cmatrix lorentz_jm_ul(const int& dim) const;
     
     //Generators of Lorentz Rotations with a dot (acting on right chiral square brackets)
-    cmatrix lorentz_j3_lu_dot() const;
-    cmatrix lorentz_jp_lu_dot() const;
-    cmatrix lorentz_jm_lu_dot() const;
+    cmatrix lorentz_j3_lu_dot(const int& dim) const;
+    cmatrix lorentz_jp_lu_dot(const int& dim) const;
+    cmatrix lorentz_jm_lu_dot(const int& dim) const;
 
-    cmatrix lorentz_j3_ul_dot() const;
-    cmatrix lorentz_jp_ul_dot() const;
-    cmatrix lorentz_jm_ul_dot() const;
+    cmatrix lorentz_j3_ul_dot(const int& dim) const;
+    cmatrix lorentz_jp_ul_dot(const int& dim) const;
+    cmatrix lorentz_jm_ul_dot(const int& dim) const;
     
     //Generators of spin
-    cmatrix spin_j3_lu() const;
-    cmatrix spin_jp_lu() const;
-    cmatrix spin_jm_lu() const;
+    cmatrix spin_j3_lu(const int& dim) const;
+    cmatrix spin_jp_lu(const int& dim) const;
+    cmatrix spin_jm_lu(const int& dim) const;
     
-    cmatrix spin_j3_ul() const;
-    cmatrix spin_jp_ul() const;
-    cmatrix spin_jm_ul() const;
+    cmatrix spin_j3_ul(const int& dim) const;
+    cmatrix spin_jp_ul(const int& dim) const;
+    cmatrix spin_jm_ul(const int& dim) const;
     
 
   };
 
-  //int test_particle();
 }
 
