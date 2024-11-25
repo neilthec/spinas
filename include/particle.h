@@ -77,25 +77,25 @@ namespace spinas {
     cvector m0rangle3dim, m0langle3dim, m0rsquare3dim, m0lsquare3dim;
     //Spin Spinors
     //rangle
-    bool rangleUpperP13dimCalculated = false, rangleUpperM13dimCalculated = false;
-    cvector rangleUpperP13dim, rangleUpperM13dim;
-    bool rangleLowerP13dimCalculated = false, rangleLowerM13dimCalculated = false;
-    cvector rangleLowerP13dim, rangleLowerM13dim;
+    bool rangleUpperP23dimCalculated = false, rangleUpper03dimCalculated = false, rangleUpperM23dimCalculated = false;
+    cvector rangleUpperP23dim, rangleUpper03dim, rangleUpperM23dim;
+    bool rangleLowerP23dimCalculated = false, rangleLower03dimCalculated = false, rangleLowerM23dimCalculated = false;
+    cvector rangleLowerP23dim, rangleLower03dim, rangleLowerM23dim;
     //langle
-    bool langleUpperP13dimCalculated = false, langleUpperM13dimCalculated = false;
-    cvector langleUpperP13dim, langleUpperM13dim;
-    bool langleLowerP13dimCalculated = false, langleLowerM13dimCalculated = false;
-    cvector langleLowerP13dim, langleLowerM13dim;
+    bool langleUpperP23dimCalculated = false, langleUpper03dimCalculated = false, langleUpperM23dimCalculated = false;
+    cvector langleUpperP23dim, langleUpper03dim, langleUpperM23dim;
+    bool langleLowerP23dimCalculated = false, langleLower03dimCalculated = false, langleLowerM23dimCalculated = false;
+    cvector langleLowerP23dim, langleLower03dim, langleLowerM23dim;
     //lsquare
-    bool lsquareUpperP13dimCalculated = false, lsquareUpperM13dimCalculated = false;
-    cvector lsquareUpperP13dim, lsquareUpperM13dim;
-    bool lsquareLowerP13dimCalculated = false, lsquareLowerM13dimCalculated = false;
-    cvector lsquareLowerP13dim, lsquareLowerM13dim;
+    bool lsquareUpperP23dimCalculated = false, lsquareUpper03dimCalculated = false, lsquareUpperM23dimCalculated = false;
+    cvector lsquareUpperP23dim, lsquareUpper03dim, lsquareUpperM23dim;
+    bool lsquareLowerP23dimCalculated = false, lsquareLower03dimCalculated = false, lsquareLowerM23dimCalculated = false;
+    cvector lsquareLowerP23dim, lsquareLower03dim, lsquareLowerM23dim;
     //rsquare
-    bool rsquareUpperP13dimCalculated = false, rsquareUpperM13dimCalculated = false;
-    cvector rsquareUpperP13dim, rsquareUpperM13dim;
-    bool rsquareLowerP13dimCalculated = false, rsquareLowerM13dimCalculated = false;
-    cvector rsquareLowerP13dim, rsquareLowerM13dim;
+    bool rsquareUpperP23dimCalculated = false, rsquareUpper03dimCalculated = false, rsquareUpperM23dimCalculated = false;
+    cvector rsquareUpperP23dim, rsquareUpper03dim, rsquareUpperM23dim;
+    bool rsquareLowerP23dimCalculated = false, rsquareLower03dimCalculated = false, rsquareLowerM23dimCalculated = false;
+    cvector rsquareLowerP23dim, rsquareLower03dim, rsquareLowerM23dim;
 
 
   public:

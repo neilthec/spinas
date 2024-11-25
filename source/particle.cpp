@@ -117,17 +117,17 @@ namespace spinas {
     m0rsquare3dimCalculated = false, m0lsquare3dimCalculated = false;
     //Spin Spinors
     //rangle
-    rangleUpperP13dimCalculated = false, rangleUpperM13dimCalculated = false;
-    rangleLowerP13dimCalculated = false, rangleLowerM13dimCalculated = false;
+    rangleUpperP23dimCalculated = false, rangleUpper03dimCalculated = false, rangleUpperM23dimCalculated = false;
+    rangleLowerP23dimCalculated = false, rangleLower03dimCalculated = false, rangleLowerM23dimCalculated = false;
     //langle
-    langleUpperP13dimCalculated = false, langleUpperM13dimCalculated = false;
-    langleLowerP13dimCalculated = false, langleLowerM13dimCalculated = false;
+    langleUpperP23dimCalculated = false, langleUpper03dimCalculated = false, langleUpperM23dimCalculated = false;
+    langleLowerP23dimCalculated = false, langleLower03dimCalculated = false, langleLowerM23dimCalculated = false;
     //lsquare
-    lsquareUpperP13dimCalculated = false, lsquareUpperM13dimCalculated = false;
-    lsquareLowerP13dimCalculated = false, lsquareLowerM13dimCalculated = false;
+    lsquareUpperP23dimCalculated = false, lsquareUpper03dimCalculated = false, lsquareUpperM23dimCalculated = false;
+    lsquareLowerP23dimCalculated = false, lsquareLower03dimCalculated = false, lsquareLowerM23dimCalculated = false;
     //rsquare
-    rsquareUpperP13dimCalculated = false, rsquareUpperM13dimCalculated = false;
-    rsquareLowerP13dimCalculated = false, rsquareLowerM13dimCalculated = false;
+    rsquareUpperP23dimCalculated = false, rsquareUpper03dimCalculated = false, rsquareUpperM23dimCalculated = false;
+    rsquareLowerP23dimCalculated = false, rsquareLower03dimCalculated = false, rsquareLowerM23dimCalculated = false;
   }
 
   //Test angles
@@ -319,219 +319,555 @@ namespace spinas {
   //Spin Spinors
   //rangle
   cvector particle::rangle(const int& spin2, const int& dim) {
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!rangleUpperM12dimCalculated){
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
+      }
+      if(spin2==-1){
+        if(!rangleUpperM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        rangleUpperM12dim = cvector(sqrtEpP*c,sqrtEpP*s);
+	        rangleUpperM12dimCalculated = true;
+        }
+        return rangleUpperM12dim;
+      }
+      if(!rangleUpperP12dimCalculated){
 	      if(m==0){
 	        usage("Incorrect usage:");
-	        throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rangleUpperM12dim = cvector(sqrtEpP*c,sqrtEpP*s);
-	      rangleUpperM12dimCalculated = true;
+	      rangleUpperP12dim = cvector(-sqrtEmP*sc,sqrtEmP*c);
+	      rangleUpperP12dimCalculated = true;
       }
-      return rangleUpperM12dim;
+      return rangleUpperP12dim;
     }
-    if(!rangleUpperP12dimCalculated){
-	    if(m==0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m==0");
-	    }
-	    rangleUpperP12dim = cvector(-sqrtEmP*sc,sqrtEmP*c);
-	    rangleUpperP12dimCalculated = true;
+    if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!rangleUpperM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          rangleUpperM23dim = eppz*cvector(c*c,sqrt2*c*s,s*s);
+          rangleUpperM23dimCalculated = true;
+        }
+        return rangleUpperM23dim;
+      }
+      else if(spin2==0){
+        if(!rangleUpper03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          rangleUpper03dim = m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rangleUpper03dimCalculated = true;
+        }
+        return rangleUpper03dim;
+      }
+      else if(spin2==2){
+        if(!rangleUpperP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          rangleUpperP23dim = empz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rangleUpperP23dimCalculated = true;
+        }
+        return rangleUpperP23dim;
+      }
     }
     return rangleUpperP12dim;
   }
   cvector particle::rangle(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return rangle(spin2, dim);
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!rangleLowerM12dimCalculated){
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
+      }
+      if(spin2==-1){
+        if(!rangleLowerM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        rangleLowerM12dim = cvector(-sqrtEmP*sc,sqrtEmP*c);
+	        rangleLowerM12dimCalculated = true;
+        }
+        return rangleLowerM12dim;
+      }
+      if(!rangleLowerP12dimCalculated){
 	      if(m==0){
 	        usage("Incorrect usage:");
-	        throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rangleLowerM12dim = cvector(-sqrtEmP*sc,sqrtEmP*c);
-	      rangleLowerM12dimCalculated = true;
+	      rangleLowerP12dim = cvector(-sqrtEpP*c,-sqrtEpP*s);
+	      rangleLowerP12dimCalculated = true;
       }
-      return rangleLowerM12dim;
+      return rangleLowerP12dim;
     }
-    if(!rangleLowerP12dimCalculated){
-	    if(m==0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m==0");
-	    }
-	    rangleLowerP12dim = cvector(-sqrtEpP*c,-sqrtEpP*s);
-	    rangleLowerP12dimCalculated = true;
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!rangleLowerM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          rangleLowerM23dim = empz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rangleLowerM23dimCalculated = true;
+        }
+        return rangleLowerM23dim;
+      }
+      else if(spin2==0){
+        if(!rangleLower03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          rangleLower03dim = m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
+          rangleLower03dimCalculated = true;
+        }
+        return rangleLower03dim;
+      }
+      else if(spin2==2){
+        if(!rangleLowerP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          rangleLowerP23dim = eppz*cvector(c*c,sqrt2*c*s,s*s);
+          rangleLowerP23dimCalculated = true;
+        }
+        return rangleLowerP23dim;
+      }
     }
     return rangleLowerP12dim;
   }
   //langle
   cvector particle::langle(const int& spin2, const int& dim) {
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!langleUpperM12dimCalculated){
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
+      }
+      if(spin2==-1){
+        if(!langleUpperM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        langleUpperM12dim = cvector(sqrtEpP*s,-sqrtEpP*c);
+	        langleUpperM12dimCalculated = true;
+        }
+        return langleUpperM12dim;
+      }
+      if(!langleUpperP12dimCalculated){
 	      if(m==0){
 	        usage("Incorrect usage:");
-	        throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      langleUpperM12dim = cvector(sqrtEpP*s,-sqrtEpP*c);
-	      langleUpperM12dimCalculated = true;
+	      langleUpperP12dim = cvector(sqrtEmP*c,sqrtEmP*sc);
+	      langleUpperP12dimCalculated = true;
       }
-      return langleUpperM12dim;
+      return langleUpperP12dim;
     }
-    if(!langleUpperP12dimCalculated){
-	    if(m==0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m==0");
-	    }
-	    langleUpperP12dim = cvector(sqrtEmP*c,sqrtEmP*sc);
-	    langleUpperP12dimCalculated = true;
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!langleUpperM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          langleUpperM23dim = eppz*cvector(s*s,-sqrt2*c*s,c*c);
+          langleUpperM23dimCalculated = true;
+        }
+        return langleUpperM23dim;
+      }
+      else if(spin2==0){
+        if(!langleUpper03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          langleUpper03dim = m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          langleUpper03dimCalculated = true;
+        }
+        return langleUpper03dim;
+      }
+      else if(spin2==2){
+        if(!langleUpperP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          langleUpperP23dim = empz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          langleUpperP23dimCalculated = true;
+        }
+        return langleUpperP23dim;
+      }
     }
-    return langleUpperP12dim;
+    return langleUpperM12dim;
   }
   cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return langle(spin2, dim);
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!langleLowerM12dimCalculated){
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
+      }
+      if(spin2==-1){
+        if(!langleLowerM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        langleLowerM12dim = cvector(sqrtEmP*c,sqrtEmP*sc);
+	        langleLowerM12dimCalculated = true;
+        }
+        return langleLowerM12dim;
+      }
+      if(!langleLowerP12dimCalculated){
 	      if(m==0){
 	        usage("Incorrect usage:");
-	        throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      langleLowerM12dim = cvector(sqrtEmP*c,sqrtEmP*sc);
-	      langleLowerM12dimCalculated = true;
+	      langleLowerP12dim = cvector(-sqrtEpP*s,sqrtEpP*c);
+	      langleLowerP12dimCalculated = true;
       }
-      return langleLowerM12dim;
+      return langleLowerP12dim;
     }
-    if(!langleLowerP12dimCalculated){
-	    if(m==0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m==0");
-	    }
-	    langleLowerP12dim = cvector(-sqrtEpP*s,sqrtEpP*c);
-	    langleLowerP12dimCalculated = true;
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!langleLowerM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          langleLowerM23dim = empz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          langleLowerM23dimCalculated = true;
+        }
+        return langleLowerM23dim;
+      }
+      else if(spin2==0){
+        if(!langleLower03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          langleLower03dim = m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
+          langleLower03dimCalculated = true;
+        }
+        return langleLower03dim;
+      }
+      else if(spin2==2){
+        if(!langleLowerP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          langleLowerP23dim = eppz*cvector(s*s,-sqrt2*c*s,c*c);
+          langleLowerP23dimCalculated = true;
+        }
+        return langleLowerP23dim;
+      }
     }
     return langleLowerP12dim;
   }
   //lsquare
   cvector particle::lsquare(const int& spin2, const int& dim) {
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!lsquareUpperM12dimCalculated){
-	  if(m==0){
-	    usage("Incorrect usage:");
-	    throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
-	  }
-	  lsquareUpperM12dim = cvector(sqrtEmP*s,-sqrtEmP*c);
-	  lsquareUpperM12dimCalculated = true;
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
       }
-      return lsquareUpperM12dim;
+      if(spin2==-1){
+        if(!lsquareUpperM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        lsquareUpperM12dim = cvector(sqrtEmP*s,-sqrtEmP*c);
+	        lsquareUpperM12dimCalculated = true;
+        }
+        return lsquareUpperM12dim;
+      }
+      if(!lsquareUpperP12dimCalculated){
+	      if(m==0){
+	        usage("Incorrect usage:");
+	        throw std::runtime_error("Incorrect usage: m==0");
+	      }
+	      lsquareUpperP12dim = cvector(sqrtEpP*c,sqrtEpP*sc);
+	      lsquareUpperP12dimCalculated = true;
+      }
+      return lsquareUpperP12dim;
     }
-    if(!lsquareUpperP12dimCalculated){
-	    if(m==0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m==0");
-	    }
-	    lsquareUpperP12dim = cvector(sqrtEpP*c,sqrtEpP*sc);
-	    lsquareUpperP12dimCalculated = true;
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!lsquareUpperM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          lsquareUpperM23dim = eppz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lsquareUpperM23dimCalculated = true;
+        }
+        return lsquareUpperM23dim;
+      }
+      else if(spin2==0){
+        if(!lsquareUpper03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          lsquareUpper03dim = m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
+          lsquareUpper03dimCalculated = true;
+        }
+        return lsquareUpper03dim;
+      }
+      else if(spin2==2){
+        if(!lsquareUpperP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          lsquareUpperP23dim = empz*cvector(s*s,-sqrt2*c*s,c*c);
+          lsquareUpperP23dimCalculated = true;
+        }
+        return lsquareUpperP23dim;
+      }
     }
     return lsquareUpperP12dim;
   }
   cvector particle::lsquare(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return lsquare(spin2,dim);
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!lsquareLowerM12dimCalculated){
-	      if(m==0){
-	        usage("Incorrect usage:");
-	        throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
-	      }
-	      lsquareLowerM12dim = cvector(sqrtEpP*c,sqrtEpP*sc);
-	      lsquareLowerM12dimCalculated = true;
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
       }
-      return lsquareLowerM12dim;
+      if(spin2==-1){
+        if(!lsquareLowerM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        lsquareLowerM12dim = cvector(sqrtEpP*c,sqrtEpP*sc);
+	        lsquareLowerM12dimCalculated = true;
+        }
+        return lsquareLowerM12dim;
+      }
+      if(!lsquareLowerP12dimCalculated){
+	    if(m==0){
+	      usage("Incorrect usage:");
+	      throw std::runtime_error("Incorrect usage: m==0");
+	    }
+	    lsquareLowerP12dim = cvector(-sqrtEmP*s,sqrtEmP*c);
+	    lsquareLowerP12dimCalculated = true;
+      }
+      return lsquareLowerP12dim;
     }
-    if(!lsquareLowerP12dimCalculated){
-	  if(m==0){
-	    usage("Incorrect usage:");
-	    throw std::runtime_error("Incorrect usage: m==0");
-	  }
-	  lsquareLowerP12dim = cvector(-sqrtEmP*s,sqrtEmP*c);
-	  lsquareLowerP12dimCalculated = true;
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!lsquareLowerM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          lsquareLowerM23dim = empz*cvector(s*s,-sqrt2*c*s,c*c);
+          lsquareLowerM23dimCalculated = true;
+        }
+        return lsquareLowerM23dim;
+      }
+      else if(spin2==0){
+        if(!lsquareLower03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          lsquareLower03dim = m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          lsquareLower03dimCalculated = true;
+        }
+        return lsquareLower03dim;
+      }
+      else if(spin2==2){
+        if(!lsquareLowerP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          lsquareLowerP23dim = eppz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lsquareLowerP23dimCalculated = true;
+        }
+        return lsquareLowerP23dim;
+      }
     }
     return lsquareLowerP12dim;
   }
   //rsquare
   cvector particle::rsquare(const int& spin2, const int& dim) {
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!rsquareUpperM12dimCalculated){
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
+      }
+      if(spin2==-1){
+        if(!rsquareUpperM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        rsquareUpperM12dim = cvector(-sqrtEmP*c,-sqrtEmP*s);
+	        rsquareUpperM12dimCalculated = true;
+        }
+        return rsquareUpperM12dim;
+      }
+      if(!rsquareUpperP12dimCalculated){
 	      if(m==0){
 	        usage("Incorrect usage:");
-	        throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rsquareUpperM12dim = cvector(-sqrtEmP*c,-sqrtEmP*s);
-	      rsquareUpperM12dimCalculated = true;
+	      rsquareUpperP12dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
+	      rsquareUpperP12dimCalculated = true;
       }
-      return rsquareUpperM12dim;
+      return rsquareUpperP12dim;
     }
-    if(!rsquareUpperP12dimCalculated){
-	    if(m==0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m==0");
-	    }
-	    rsquareUpperP12dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
-	    rsquareUpperP12dimCalculated = true;
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!rsquareUpperM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          rsquareUpperM23dim = eppz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rsquareUpperM23dimCalculated = true;
+        }
+        return rsquareUpperM23dim;
+      }
+      else if(spin2==0){
+        if(!rsquareUpper03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          rsquareUpper03dim = m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
+          rsquareUpper03dimCalculated = true;
+        }
+        return rsquareUpper03dim;
+      }
+      else if(spin2==2){
+        if(!rsquareUpperP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          rsquareUpperP23dim = empz*cvector(c*c,sqrt2*c*s,s*s);
+          rsquareUpperP23dimCalculated = true;
+        }
+        return rsquareUpperP23dim;
+      }
     }
     return rsquareUpperP12dim;
   }
   cvector particle::rsquare(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return rsquare(spin2, dim);
-    if(spin2!=1&&spin2!=-1){
-      usage("Incorrect usage:");
-      throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
-    }
-    if(spin2==-1){
-      if(!rsquareLowerM12dimCalculated){
+    if(dim==2){
+      if(spin2!=1&&spin2!=-1){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 1 or -1");
+      }
+      if(spin2==-1){
+        if(!rsquareLowerM12dimCalculated){
+	        if(m==0){
+	          usage("Incorrect usage:");
+	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        }
+	        rsquareLowerM12dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
+	        rsquareLowerM12dimCalculated = true;
+        }
+        return rsquareLowerM12dim;
+      }
+      if(!rsquareLowerP12dimCalculated){
 	      if(m==0){
 	        usage("Incorrect usage:");
-	        throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
+	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rsquareLowerM12dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
-	      rsquareLowerM12dimCalculated = true;
+	      rsquareLowerP12dim = cvector(sqrtEmP*c,sqrtEmP*s);
+	      rsquareLowerP12dimCalculated = true;
       }
-      return rsquareLowerM12dim;
+      return rsquareLowerP12dim;
     }
-    if(!rsquareLowerP12dimCalculated){
-	    if(m==0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m==0");
-	    }
-	    rsquareLowerP12dim = cvector(sqrtEmP*c,sqrtEmP*s);
-	    rsquareLowerP12dimCalculated = true;
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!rsquareLowerM23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
+          }
+          rsquareLowerM23dim = empz*cvector(c*c,sqrt2*c*s,s*s);
+          rsquareLowerM23dimCalculated = true;
+        }
+        return rsquareLowerM23dim;
+      }
+      else if(spin2==0){
+        if(!rsquareLower03dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
+          }
+          rsquareLower03dim = m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rsquareLower03dimCalculated = true;
+        }
+        return rsquareLower03dim;
+      }
+      else if(spin2==2){
+        if(!rsquareLowerP23dimCalculated){
+          if(m==0){
+            usage("Incorrect usage:");
+            throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
+          }
+          rsquareLowerP23dim = eppz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rsquareLowerP23dimCalculated = true;
+        }
+        return rsquareLowerP23dim;
+      }
     }
-  return rsquareLowerP12dim;
+    return rsquareLowerP12dim;
   }
 
   
@@ -541,37 +877,76 @@ namespace spinas {
     return rangle_matrix(UPPER, dim);
   }
   cmatrix particle::rangle_matrix(const bool& upper, const int& dim){
-    cvector ram=rangle(-1,upper,2), rap=rangle(+1,upper,2);
-    return cmatrix(ram.get(0), rap.get(0),
-		   ram.get(1), rap.get(1));
+    if(dim==2){
+      cvector ram=rangle(-1,upper,2), rap=rangle(+1,upper,2);
+      return cmatrix(ram.get(0), rap.get(0),
+		    ram.get(1), rap.get(1));
+    }
+    else if(dim==3){
+      cvector ram=rangle(-2,upper,3), ra0=rangle(0,upper,3), rap=rangle(+2,upper,3);
+      return cmatrix(ram.get(0), ra0.get(0), rap.get(0),
+        ram.get(1), ra0.get(1), rap.get(1),
+        ram.get(2), ra0.get(2), rap.get(2));
+    }
+    return cmatrix(0,0,0,0);
   }
   cmatrix particle::langle_matrix(const int& dim){
     return langle_matrix(UPPER,dim);
   }
   cmatrix particle::langle_matrix(const bool& upper, const int& dim){
-    cvector lam=langle(-1,upper,2), lap=langle(+1,upper,2);
-    return cmatrix(lam.get(0), lap.get(0),
-		   lam.get(1), lap.get(1)
-		   );
+    if(dim==2){
+      cvector lam=langle(-1,upper,2), lap=langle(+1,upper,2);
+      return cmatrix(lam.get(0), lap.get(0),
+		     lam.get(1), lap.get(1)
+		     );
+    }
+    else if(dim==3){
+      cvector lam=langle(-2,upper,3), la0=langle(0,upper,3), lap=langle(+2,upper,3);
+      return cmatrix(lam.get(0), la0.get(0), lap.get(0),
+         lam.get(1), la0.get(1), lap.get(1),
+         lam.get(2), la0.get(2), lap.get(2)
+         );
+    }
+    return cmatrix(0,0,0,0);
   }
   
   cmatrix particle::lsquare_matrix(const int& dim){
     return lsquare_matrix(UPPER, dim);
   }
   cmatrix particle::lsquare_matrix(const bool& upper, const int& dim){
-    cvector lsm=lsquare(-1,upper,2), lsp=lsquare(+1,upper,2);
-    return cmatrix(lsm.get(0), lsp.get(0),
-		   lsm.get(1), lsp.get(1)
-		   );
+    if(dim==2){
+      cvector lsm=lsquare(-1,upper,2), lsp=lsquare(+1,upper,2);
+      return cmatrix(lsm.get(0), lsp.get(0),
+		     lsm.get(1), lsp.get(1)
+		     );
+    }
+    else if(dim==3){
+      cvector lsm=lsquare(-2,upper,3), ls0=lsquare(0,upper,3), lsp=lsquare(+2,upper,3);
+      return cmatrix(lsm.get(0), ls0.get(0), lsp.get(0),
+         lsm.get(1), ls0.get(1), lsp.get(1),
+         lsm.get(2), ls0.get(2), lsp.get(2)
+         );
+    }
+    return cmatrix(0,0,0,0);
   }
   cmatrix particle::rsquare_matrix(const int& dim){
     return rsquare_matrix(UPPER, dim);
   }
   cmatrix particle::rsquare_matrix(const bool& upper, const int& dim){
-    cvector rsm=rsquare(-1,upper,2), rsp=rsquare(+1,upper,2);
-    return cmatrix(rsm.get(0), rsp.get(0),
-		   rsm.get(1), rsp.get(1)
-		   );
+    if(dim==2){
+      cvector rsm=rsquare(-1,upper,2), rsp=rsquare(+1,upper,2);
+      return cmatrix(rsm.get(0), rsp.get(0),
+		     rsm.get(1), rsp.get(1)
+		     );
+    }
+    else if(dim==3){
+      cvector rsm=rsquare(-2,upper,3), rs0=rsquare(0,upper,3), rsp=rsquare(+2,upper,3);
+      return cmatrix(rsm.get(0), rs0.get(0), rsp.get(0),
+         rsm.get(1), rs0.get(1), rsp.get(1),
+         rsm.get(2), rs0.get(2), rsp.get(2)
+         );
+    }
+    return cmatrix(0,0,0,0);
   }
 
 
