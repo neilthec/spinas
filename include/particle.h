@@ -34,6 +34,7 @@ namespace spinas {
     cdouble c, s, sc;//cos(theta/2), sin(theta/2)*exp(i*phi), s*
     cdouble sqrtEpP, sqrtEmP; //sqrt(E+p), sqrt(E-p)
 
+    // 2-dimensional 
     //The matrices and spinors
     bool upMatCalculated = false, loMatCalculated = false;
     cmatrix upMat, loMat;

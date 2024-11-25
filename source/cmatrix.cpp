@@ -40,27 +40,40 @@ namespace spinas {
     mat{{0,0,0},{0,0,0},{0,0,0}},
     dimension(dim){}
 
-  
   cmatrix::cmatrix(const ldouble p[4], const bool& upp):
-  dimension(2)
+    cmatrix(p,upp,2){}
+
+  
+  cmatrix::cmatrix(const ldouble p[4], const bool& upp, const int& dim):
+  dimension(dim)
   {
-    if(upp){//Upper Lorentz indices
-      mat[0][0] = cdouble(p[0]-p[3],0);
-      mat[0][1] = cdouble(-p[1],p[2]);
-      mat[1][0] = cdouble(-p[1],-p[2]);
-      mat[1][1] = cdouble(p[0]+p[3],0);
+    if(dim==2){
+      if(upp){//Upper Lorentz indices
+        mat[0][0] = cdouble(p[0]-p[3],0);
+        mat[0][1] = cdouble(-p[1],p[2]);
+        mat[1][0] = cdouble(-p[1],-p[2]);
+        mat[1][1] = cdouble(p[0]+p[3],0);
+      }
+      else{//Lower Lorentz indices
+        mat[0][0] = cdouble(p[0]+p[3],0);
+        mat[0][1] = cdouble(p[1],-p[2]);
+        mat[1][0] = cdouble(p[1],p[2]);
+        mat[1][1] = cdouble(p[0]-p[3],0);
+      }
     }
-    else{//Lower Lorentz indices
-      mat[0][0] = cdouble(p[0]+p[3],0);
-      mat[0][1] = cdouble(p[1],-p[2]);
-      mat[1][0] = cdouble(p[1],p[2]);
-      mat[1][1] = cdouble(p[0]-p[3],0);
-    }
+    //We don't use this in practice.  This was just for an early test.
+    //We aren't implementing 3x3 p here.  We do that in particle.
   }
   
   cmatrix::cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11):
     dimension(2),
     mat{{m00,m01},{m10,m11}}{}
+
+  cmatrix::cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m02,
+    const cdouble& m10, const cdouble& m11, const cdouble& m12,
+    const cdouble& m20, const cdouble& m21, const cdouble& m22):
+    dimension(3),
+    mat{{m00,m01,m02},{m10,m11,m12},{m20,m21,m22}}{}
 
 
   //Get

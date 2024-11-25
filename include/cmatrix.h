@@ -35,7 +35,11 @@ namespace spinas{
     cmatrix();
     explicit cmatrix(const int& dim);
     cmatrix(const ldouble p[4], const bool& upp);
+    cmatrix(const ldouble p[4], const bool& upp, const int& dim);
     cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11);
+    cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m02,
+      const cdouble& m10, const cdouble& m11, const cdouble& m12,
+      const cdouble& m20, const cdouble& m21, const cdouble& m22);
     
     //Get
     int get_dimension() const;
