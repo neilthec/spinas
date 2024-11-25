@@ -32,14 +32,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace spinas {
   //Constructors
-  particle::particle()
+  particle::particle():
+  sqrt2(std::sqrt(2))
   {}
 
   particle::particle(const ldouble& mass):
-    m(mass), p{m,0,0,0}{}
+  sqrt2(std::sqrt(2)),
+  m(mass), p{m,0,0,0}{}
 
   particle::particle(const ldouble momentum[4], const ldouble& mass):
-    m(mass),p{momentum[0],momentum[1],momentum[2],momentum[3]}
+  sqrt2(std::sqrt(2)),
+  m(mass),p{momentum[0],momentum[1],momentum[2],momentum[3]}
   {
     update();
   }
@@ -79,8 +82,14 @@ namespace spinas {
     sc = std::conj(s);
     sqrtEpP = cdouble(std::sqrt(p[0]+pmag),0);
     sqrtEmP = cdouble(std::sqrt(p[0]-pmag),0);
+
+    eppz = cdouble(p[0]+p[3],0);
+    empz = cdouble(p[0]-p[3],0);
+    pxppy = cdouble(p[1],p[2]);
+    pxmpy = cdouble(p[1],-p[2]);
     
     //Reset all the calcs.
+    //2-dim
     //The matrices and spinors
     upMat2dimCalculated = false, loMat2dimCalculated = false;
     //Helicity Spinors
@@ -99,6 +108,26 @@ namespace spinas {
     //rsquare
     rsquareUpperP12dimCalculated = false, rsquareUpperM12dimCalculated = false;
     rsquareLowerP12dimCalculated = false, rsquareLowerM12dimCalculated = false;
+
+    //3-dim
+    //The matrices and spinors
+    upMat3dimCalculated = false, loMat3dimCalculated = false;
+    //Helicity Spinors
+    m0rangle3dimCalculated = false, m0langle3dimCalculated = false;
+    m0rsquare3dimCalculated = false, m0lsquare3dimCalculated = false;
+    //Spin Spinors
+    //rangle
+    rangleUpperP13dimCalculated = false, rangleUpperM13dimCalculated = false;
+    rangleLowerP13dimCalculated = false, rangleLowerM13dimCalculated = false;
+    //langle
+    langleUpperP13dimCalculated = false, langleUpperM13dimCalculated = false;
+    langleLowerP13dimCalculated = false, langleLowerM13dimCalculated = false;
+    //lsquare
+    lsquareUpperP13dimCalculated = false, lsquareUpperM13dimCalculated = false;
+    lsquareLowerP13dimCalculated = false, lsquareLowerM13dimCalculated = false;
+    //rsquare
+    rsquareUpperP13dimCalculated = false, rsquareUpperM13dimCalculated = false;
+    rsquareLowerP13dimCalculated = false, rsquareLowerM13dimCalculated = false;
   }
 
   //Test angles
@@ -132,6 +161,7 @@ namespace spinas {
   //Matrices
   //Upper indices
   cmatrix particle::umat(const int& dim) {
+    constexpr ldouble two=2;
     if(dim==2){
       if(!upMat2dimCalculated) {
         upMat2dim = cmatrix(cdouble(p[0]-p[3],0),-std::polar(pxymag,-phi),
@@ -140,10 +170,22 @@ namespace spinas {
       }
     return upMat2dim;
     }
+    else if (dim==3){
+      if(!upMat3dimCalculated) {
+        upMat3dim = cmatrix(
+          empz*empz, -sqrt2*empz*pxmpy, pxmpy*pxmpy,
+          -sqrt2*empz*pxppy, m*m+two*pxppy*pxmpy, -sqrt2*eppz*pxmpy,
+          pxppy*pxppy, -sqrt2*eppz*pxppy, eppz*eppz);
+        upMat3dimCalculated = true;
+      }
+      return upMat3dim;
+    }
+    
     return upMat2dim;
   }
   //Lower indices
   cmatrix particle::lmat(const int& dim) {
+    constexpr ldouble two=2;
     if(dim==2){
       if(!loMat2dimCalculated) {
         loMat2dim = cmatrix(cdouble(p[0]+p[3],0),std::polar(pxymag,-phi),
@@ -152,51 +194,123 @@ namespace spinas {
       }
       return loMat2dim;
     }
+    if(dim==3){
+      if(!loMat3dimCalculated) {
+        loMat3dim = cmatrix(
+          eppz*eppz, sqrt2*eppz*pxmpy, pxmpy*pxmpy,
+          sqrt2*eppz*pxppy, m*m+two*pxppy*pxmpy, sqrt2*empz*pxmpy,
+          pxppy*pxppy, sqrt2*empz*pxppy, empz*empz);
+        loMat3dimCalculated = true;
+      }
+      return loMat3dim;      
+    }
     return loMat2dim;
   }
 
   //Helicity Spinors
   cvector particle::rangle(const int& dim) {
-    if(!m0rangle2dimCalculated){
-      if(m!=0) {
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m!=0");
+    constexpr ldouble two=2;
+    if(dim==2){
+      if(!m0rangle2dimCalculated){
+        if(m!=0) {
+	        usage("Incorrect usage:");
+	        throw std::runtime_error("Incorrect usage: m!=0");
+        }
+        m0rangle2dim = cvector(sqrtEpP*c,sqrtEpP*s);
+        m0rangle2dimCalculated = true;
       }
-      m0rangle2dim = cvector(sqrtEpP*c,sqrtEpP*s);
-      m0rangle2dimCalculated = true;
+      return m0rangle2dim;
     }
+    else if (dim==3){
+      if(!m0rangle3dimCalculated){
+        if(m!=0) {
+          usage("Incorrect usage:");
+          throw std::runtime_error("Incorrect usage: m!=0");
+        }
+        m0rangle3dim = two*p[0]*cvector(c*c,sqrt2*c*s,s*s);
+        m0rangle3dimCalculated = true;
+      }
+      return m0rangle3dim;
+    }
+    
     return m0rangle2dim;
   }
   cvector particle::lsquare(const int& dim) {
-    if(!m0lsquare2dimCalculated){
-      if(m!=0){
-      	usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m!=0");
+    constexpr ldouble two=2;
+    if(dim==2){
+      if(!m0lsquare2dimCalculated){
+        if(m!=0){
+      	  usage("Incorrect usage:");
+	        throw std::runtime_error("Incorrect usage: m!=0");
+        }
+        m0lsquare2dim = cvector(sqrtEpP*c,sqrtEpP*sc);
+        m0lsquare2dimCalculated = true;
       }
-      m0lsquare2dim = cvector(sqrtEpP*c,sqrtEpP*sc);
-      m0lsquare2dimCalculated = true;
+      return m0lsquare2dim;
     }
+    else if (dim==3){
+      if(!m0lsquare3dimCalculated){
+        if(m!=0){
+          usage("Incorrect usage:");
+          throw std::runtime_error("Incorrect usage: m!=0");
+        }
+        m0lsquare3dim = two*p[0]*cvector(c*c,sqrt2*c*sc,sc*sc);
+        m0lsquare3dimCalculated = true;
+      }
+      return m0lsquare3dim;
+    }
+    
     return m0lsquare2dim;
   }
   cvector particle::langle(const int& dim) {
-    if(!m0langle2dimCalculated){
-      if(m!=0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m!=0");
+    constexpr ldouble two=2;
+    if(dim==2){
+      if(!m0langle2dimCalculated){
+       if(m!=0){
+	       usage("Incorrect usage:");
+	       throw std::runtime_error("Incorrect usage: m!=0");
+       }
+       m0langle2dim = cvector(sqrtEpP*s,-sqrtEpP*c);
+       m0langle2dimCalculated = true;
       }
-      m0langle2dim = cvector(sqrtEpP*s,-sqrtEpP*c);
-      m0langle2dimCalculated = true;
+      return m0langle2dim;
+    }
+    else if(dim==3){
+      if(!m0langle3dimCalculated){
+        if(m!=0){
+          usage("Incorrect usage:");
+          throw std::runtime_error("Incorrect usage: m!=0");
+        }
+        m0langle3dim = two*p[0]*cvector(s*s,-sqrt2*c*s,c*c);
+        m0langle3dimCalculated = true;
+      }
+      return m0langle3dim;
     }
     return m0langle2dim;
   }
   cvector particle::rsquare(const int& dim) {
-    if(!m0rsquare2dimCalculated){
-      if(m!=0){
-	      usage("Incorrect usage:");
-	      throw std::runtime_error("Incorrect usage: m!=0");
+    constexpr ldouble two=2;
+    if(dim==2){
+      if(!m0rsquare2dimCalculated){
+        if(m!=0){
+	        usage("Incorrect usage:");
+	        throw std::runtime_error("Incorrect usage: m!=0");
+        }
+        m0rsquare2dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
+        m0rsquare2dimCalculated = true;
       }
-      m0rsquare2dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
-      m0rsquare2dimCalculated = true;
+      return m0rsquare2dim;
+    }
+    else if(dim==3){
+      if(!m0rsquare3dimCalculated){
+        if(m!=0){
+          usage("Incorrect usage:");
+          throw std::runtime_error("Incorrect usage: m!=0");
+        }
+        m0rsquare3dim = two*p[0]*cvector(sc*sc,-sqrt2*c*sc,c*c);
+        m0rsquare3dimCalculated = true;
+      }
+      return m0rsquare3dim;
     }
     return m0rsquare2dim;
   }

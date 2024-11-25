@@ -33,6 +33,9 @@ namespace spinas {
     ldouble theta, phi;//Spherical angles
     cdouble c, s, sc;//cos(theta/2), sin(theta/2)*exp(i*phi), s*
     cdouble sqrtEpP, sqrtEmP; //sqrt(E+p), sqrt(E-p)
+    ldouble sqrt2;
+    cdouble eppz, empz;//E+p, E-p
+    cdouble pxppy, pxmpy;//px+ipy, px-ipy
 
     // 2-dimensional 
     //The matrices and spinors
@@ -63,6 +66,36 @@ namespace spinas {
     cvector rsquareUpperP12dim, rsquareUpperM12dim;
     bool rsquareLowerP12dimCalculated = false, rsquareLowerM12dimCalculated = false;
     cvector rsquareLowerP12dim, rsquareLowerM12dim;
+
+    // 3-dimensional 
+    //The matrices and spinors
+    bool upMat3dimCalculated = false, loMat3dimCalculated = false;
+    cmatrix upMat3dim, loMat3dim;
+    //Helicity Spinors
+    bool m0rangle3dimCalculated = false, m0langle3dimCalculated = false;
+    bool m0rsquare3dimCalculated = false, m0lsquare3dimCalculated = false;
+    cvector m0rangle3dim, m0langle3dim, m0rsquare3dim, m0lsquare3dim;
+    //Spin Spinors
+    //rangle
+    bool rangleUpperP13dimCalculated = false, rangleUpperM13dimCalculated = false;
+    cvector rangleUpperP13dim, rangleUpperM13dim;
+    bool rangleLowerP13dimCalculated = false, rangleLowerM13dimCalculated = false;
+    cvector rangleLowerP13dim, rangleLowerM13dim;
+    //langle
+    bool langleUpperP13dimCalculated = false, langleUpperM13dimCalculated = false;
+    cvector langleUpperP13dim, langleUpperM13dim;
+    bool langleLowerP13dimCalculated = false, langleLowerM13dimCalculated = false;
+    cvector langleLowerP13dim, langleLowerM13dim;
+    //lsquare
+    bool lsquareUpperP13dimCalculated = false, lsquareUpperM13dimCalculated = false;
+    cvector lsquareUpperP13dim, lsquareUpperM13dim;
+    bool lsquareLowerP13dimCalculated = false, lsquareLowerM13dimCalculated = false;
+    cvector lsquareLowerP13dim, lsquareLowerM13dim;
+    //rsquare
+    bool rsquareUpperP13dimCalculated = false, rsquareUpperM13dimCalculated = false;
+    cvector rsquareUpperP13dim, rsquareUpperM13dim;
+    bool rsquareLowerP13dimCalculated = false, rsquareLowerM13dimCalculated = false;
+    cvector rsquareLowerP13dim, rsquareLowerM13dim;
 
 
   public:
