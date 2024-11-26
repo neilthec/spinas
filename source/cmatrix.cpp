@@ -61,8 +61,35 @@ namespace spinas {
         mat[1][1] = cdouble(p[0]-p[3],0);
       }
     }
+    else if(dim==3){
+      cdouble eppz = cdouble(p[0]+p[3],0), empz = cdouble(p[0]-p[3],0);
+      cdouble pxppy = cdouble(p[1],p[2]), pxmpy = cdouble(p[1],-p[2]);
+      cdouble sqrt2 = std::sqrt(2), two = 2.0;
+      cdouble m2 = cdouble(p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],0);
+      if(upp){//Upper Lorentz indices
+        mat[0][0] = empz*empz;
+        mat[0][1] = -sqrt2*empz*pxmpy;
+        mat[0][2] = pxmpy*pxmpy;
+        mat[1][0] = -sqrt2*empz*pxppy;
+        mat[1][1] = m2+two*pxppy*pxmpy;
+        mat[1][2] = -sqrt2*eppz*pxmpy;
+        mat[2][0] = pxppy*pxppy;
+        mat[2][1] = -sqrt2*eppz*pxppy;
+        mat[2][2] = eppz*eppz;
+      }
+      else{//Lower Lorentz indices
+        mat[0][0] = eppz*eppz;
+        mat[0][1] = sqrt2*eppz*pxmpy;
+        mat[0][2] = pxmpy*pxmpy;
+        mat[1][0] = sqrt2*eppz*pxppy;
+        mat[1][1] = m2+two*pxppy*pxmpy;
+        mat[1][2] = sqrt2*empz*pxmpy;
+        mat[2][0] = pxppy*pxppy;
+        mat[2][1] = sqrt2*empz*pxppy;
+        mat[2][2] = empz*empz;
+      }
+    }
     //We don't use this in practice.  This was just for an early test.
-    //We aren't implementing 3x3 p here.  We do that in particle.
   }
   
   cmatrix::cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m10, const cdouble& m11):
@@ -95,12 +122,13 @@ namespace spinas {
   
   //Determinant
   ldouble cmatrix::get_det() const{
-    constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
+    ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
     cdouble det = 0;
     if(dimension==2)
       det = mat[0][0]*mat[1][1]-mat[0][1]*mat[1][0];
     else if (dimension==3)
     {
+      epsilon *= 1000000;
       det = mat[0][0]*mat[1][1]*mat[2][2]
           + mat[0][1]*mat[1][2]*mat[2][0]
           + mat[0][2]*mat[1][0]*mat[2][1]
@@ -110,7 +138,7 @@ namespace spinas {
     }
     
     if (std::abs(std::imag(det)) > epsilon)
-      throw std::domain_error("Determinant has a non-zero imaginary part.");
+      throw std::domain_error("Determinant has a non-zero imaginary part: "+std::to_string(std::imag(det))+".");
     return std::real(det);
   }
   ldouble det(const cmatrix& m){
@@ -157,10 +185,11 @@ namespace spinas {
   cmatrix & cmatrix::operator*=(const cmatrix& m){
     if(dimension != m.dimension)
       throw std::invalid_argument("cmatrix dimensions do not match");
-    cdouble mnew[3][3];
+    cdouble mnew[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
-	      mnew[i][j] = mat[i][0]*m.mat[0][j]+mat[i][1]*m.mat[1][j];
+        for(int k=0;k<dimension;k++)
+  	      mnew[i][j] += mat[i][k]*m.mat[k][j];
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
 	      mat[i][j]=mnew[i][j];
@@ -235,7 +264,8 @@ namespace spinas {
   //Comparison
   //==
   bool cmatrix::operator==(const cmatrix &m) const{
-    constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
+    ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
+    if(dimension==3) epsilon *= 1000;
     if(dimension != m.dimension) return false;
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)

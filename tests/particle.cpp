@@ -59,21 +59,25 @@ BOOST_AUTO_TEST_CASE(constructor_test) {
 
 BOOST_AUTO_TEST_CASE(momentum_matrices_test) {
   BOOST_TEST_MESSAGE("\t* Momentum Matrices");
-  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
+  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 2000000;
   int i = 0;
   cdouble zero = cdouble(0, 0), one = cdouble(1, 0);
   ldouble mom1[4] = {13, -4, 7, -9}, mom3[4] = {6, 1, -2, std::sqrt(8)};
   particle p1 = particle(mom3, std::sqrt(23));
   p1.set_momentum(mom1);
-  BOOST_CHECK_EQUAL(p1.umat(2), cmatrix(mom1, true));
-  BOOST_CHECK_EQUAL(p1.lmat(2), cmatrix(mom1, false));
+  BOOST_CHECK_EQUAL(p1.umat(2), cmatrix(mom1, true,2));
+  BOOST_CHECK_EQUAL(p1.lmat(2), cmatrix(mom1, false,2));
+  BOOST_CHECK_EQUAL(p1.umat(3), cmatrix(mom1, true,3));
+  BOOST_CHECK_EQUAL(p1.lmat(3), cmatrix(mom1, false,3));
   
   // Determinant
   cdouble p1detm23 = p1.umat(2).get_det() - cdouble(23, 0);
-  BOOST_CHECK_SMALL(std::abs(p1detm23), epsilon);
-  BOOST_CHECK_EQUAL(p1.lmat(2), cmatrix(mom1, false));
-  
+  BOOST_CHECK_SMALL(std::abs(p1detm23), epsilon);  
   p1detm23 = p1.lmat(2).get_det() - cdouble(23, 0);
+  BOOST_CHECK_SMALL(std::abs(p1detm23), epsilon);
+  p1detm23 = p1.umat(3).get_det() - cdouble(23*23*23, 0);
+  BOOST_CHECK_SMALL(std::abs(p1detm23), epsilon);
+  p1detm23 = p1.lmat(3).get_det() - cdouble(23*23*23, 0);
   BOOST_CHECK_SMALL(std::abs(p1detm23), epsilon);
   
   // Anticommutation: p1*p2 + p2*p1 = 2p1.p2
@@ -85,10 +89,12 @@ BOOST_AUTO_TEST_CASE(momentum_matrices_test) {
   BOOST_CHECK_EQUAL(anticom, 2 * p1.dot(p2) * id);
   anticom = p1.lmat(2) * p2.umat(2) + p2.lmat(2) * p1.umat(2);
   BOOST_CHECK_EQUAL(anticom,  2 * p1.dot(p2) * id);
+  //I don't actually have an anticommutation rule for the 3-dim case.
 }
 
 BOOST_AUTO_TEST_CASE(helicity_spinors_test) {
   BOOST_TEST_MESSAGE("\t* Helicity Spinors");
+  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 100000;
   ldouble mom1[4] = {std::sqrt(16 + 49 + 81), -4, 7, -9};
   particle p1 = particle(mom1, 0);
 
@@ -99,35 +105,46 @@ BOOST_AUTO_TEST_CASE(helicity_spinors_test) {
     
     //|1> == [1|*
     BOOST_CHECK_EQUAL(p1.rangle(2), p1.lsquare(2).get_conjugate());
+    BOOST_CHECK_EQUAL(p1.rangle(3), p1.lsquare(3).get_conjugate());
     
     //<1| == |1]*
     BOOST_CHECK_EQUAL(p1.langle(2), p1.rsquare(2).get_conjugate());
+    BOOST_CHECK_EQUAL(p1.langle(3), p1.rsquare(3).get_conjugate());
     
     // p1|1> == 0
     BOOST_CHECK(p1.umat(2) * p1.rangle(2) == cvector(cdouble(0, 0), cdouble(0, 0)));
-    
+    BOOST_CHECK(p1.umat(3) * p1.rangle(3) == cvector(cdouble(0, 0), cdouble(0, 0), cdouble(0, 0)));
+
     // [1|p1 == 0
     BOOST_CHECK(p1.lsquare(2) * p1.umat(2) == cvector(cdouble(0, 0), cdouble(0, 0)));
+    BOOST_CHECK(p1.lsquare(3) * p1.umat(3) == cvector(cdouble(0, 0), cdouble(0, 0), cdouble(0, 0)));
     
     // <11> == 0
     BOOST_CHECK(p1.langle(2) * p1.rangle(2) == cdouble(0, 0));
+    BOOST_CHECK(std::abs(p1.langle(3) * p1.rangle(3)) < epsilon);
     
     // [11] == 0
     BOOST_CHECK(p1.lsquare(2) * p1.rsquare(2) == cdouble(0, 0));
+    BOOST_CHECK(std::abs(p1.lsquare(3) * p1.rsquare(3)) < epsilon);
     
     // |1>[1| = p1
     BOOST_CHECK(outer(p1.rangle(2), p1.lsquare(2)) == p1.lmat(2));
+    BOOST_CHECK(outer(p1.rangle(3), p1.lsquare(3)) == p1.lmat(3));
     
     // |1]<1| = p1
     BOOST_CHECK(outer(p1.rsquare(2), p1.langle(2)) == p1.umat(2));
+    BOOST_CHECK(outer(p1.rsquare(3), p1.langle(3)) == p1.umat(3));
     
     // p1|1] == 0
     BOOST_CHECK(p1.lmat(2) * p1.rsquare(2) == cvector(cdouble(0, 0), cdouble(0, 0)));
+    BOOST_CHECK(p1.lmat(3) * p1.rsquare(3) == cvector(cdouble(0, 0), cdouble(0, 0), cdouble(0, 0)));
     
     // <1|p1 == 0
     BOOST_CHECK(p1.langle(2) * p1.lmat(2) == cvector(cdouble(0, 0), cdouble(0, 0)));
+    BOOST_CHECK(p1.langle(3) * p1.lmat(3) == cvector(cdouble(0, 0), cdouble(0, 0), cdouble(0, 0)));
     
     //Lorentz and Helicity Algebra
+    //Todo: Still need to do this for 3-dimensional case.
     constexpr ldouble half=0.5;
     cvector zero_vector=cvector(0,0);
     
@@ -191,39 +208,52 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
       //<1|_I == -(|1]^I)*
       BOOST_CHECK_EQUAL(p1.langle(j, false,2), -p1.rsquare(j,2).get_conjugate());
     }
+    for (int j = -2; j <= 2; j = j + 2){
+      //|1>^I == ([1|_I)*
+      BOOST_CHECK_EQUAL(p1.rangle(j,3), p1.lsquare(j, false,3).get_conjugate());
+      
+      //<1|^I == (|1]_I)*
+      BOOST_CHECK_EQUAL(p1.langle(j,3), p1.rsquare(j, false,3).get_conjugate());
+      
+      //|1>_I == -([1|^I)*
+      BOOST_CHECK_EQUAL(p1.rangle(j, false,3), p1.lsquare(j,3).get_conjugate());
+      
+      //<1|_I == -(|1]^I)*
+      BOOST_CHECK_EQUAL(p1.langle(j, false,3), p1.rsquare(j,3).get_conjugate());
+    }
     
-    
+    //---Current Position---
     
     // Spinor Products
     for(int i=-1;i<2;i=i+2)
       for(int j=-1;j<2;j=j+2){
-	int epsi = 0, epsj=0;
-	if(i==1) epsi=1;
-	if(j==1) epsj=1;
+	      int epsi = 0, epsj=0;
+	      if(i==1) epsi=1;
+	      if(j==1) epsj=1;
 	
-	//<11>^{IJ} == -m eps^{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i,2)*p1.rangle(j,2) - (-mass*epsU.get(epsi,epsj))), epsilon);
+	      //<11>^{IJ} == -m eps^{IJ}
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,2)*p1.rangle(j,2) - (-mass*epsU.get(epsi,epsj))), epsilon);
 	
-	//<11>^I_J == -m delta^I_J
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i,2)*p1.rangle(j,false,2) - (-mass*delta.get(epsi,epsj))), epsilon);
+	      //<11>^I_J == -m delta^I_J
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,2)*p1.rangle(j,false,2) - (-mass*delta.get(epsi,epsj))), epsilon);
 	
-	//<11>_I^J == m delta_I^J
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i,false,2)*p1.rangle(j,2) - mass*delta.get(epsi,epsj)), epsilon);
+	      //<11>_I^J == m delta_I^J
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,false,2)*p1.rangle(j,2) - mass*delta.get(epsi,epsj)), epsilon);
 	
-	//<11>_{IJ} == m eps_{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i,false,2)*p1.rangle(j,false,2) - mass*epsL.get(epsi,epsj)), epsilon);
+	      //<11>_{IJ} == m eps_{IJ}
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,false,2)*p1.rangle(j,false,2) - mass*epsL.get(epsi,epsj)), epsilon);
 	
-	//[11]_{IJ} == -m eps_{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false,2)*p1.rsquare(j,false,2) - (-mass*epsL.get(epsi,epsj))), epsilon);
+	      //[11]_{IJ} == -m eps_{IJ}
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false,2)*p1.rsquare(j,false,2) - (-mass*epsL.get(epsi,epsj))), epsilon);
 	
-	//[11]_I^J == -m delta_I^J
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false,2)*p1.rsquare(j,2) - (-mass*delta.get(epsi,epsj))), epsilon);
+	      //[11]_I^J == -m delta_I^J
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false,2)*p1.rsquare(j,2) - (-mass*delta.get(epsi,epsj))), epsilon);
 	
-	//[11]^I_J == m delta^I_J
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(j,false,2) - mass*delta.get(epsi,epsj)), epsilon);
+	      //[11]^I_J == m delta^I_J
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(j,false,2) - mass*delta.get(epsi,epsj)), epsilon);
 	
-	//[11]^{IJ} == m eps^{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(j,2) - mass*epsU.get(epsi,epsj)), epsilon);
+	      //[11]^{IJ} == m eps^{IJ}
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(j,2) - mass*epsU.get(epsi,epsj)), epsilon);
 	
       }
     

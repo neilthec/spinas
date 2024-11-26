@@ -419,7 +419,7 @@ namespace spinas {
         usage("Incorrect usage:");
         throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
       }
-      if(spin2==-2){
+      if(spin2==2){
         if(!rangleLowerM23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -436,12 +436,12 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          rangleLower03dim = m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
+          rangleLower03dim = -m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
           rangleLower03dimCalculated = true;
         }
         return rangleLower03dim;
       }
-      else if(spin2==2){
+      else if(spin2==-2){
         if(!rangleLowerP23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -557,7 +557,7 @@ namespace spinas {
         usage("Incorrect usage:");
         throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
       }
-      if(spin2==-2){
+      if(spin2==2){
         if(!langleLowerM23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -574,12 +574,12 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          langleLower03dim = m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
+          langleLower03dim = -m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
           langleLower03dimCalculated = true;
         }
         return langleLower03dim;
       }
-      else if(spin2==2){
+      else if(spin2==-2){
         if(!langleLowerP23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -695,7 +695,7 @@ namespace spinas {
         usage("Incorrect usage:");
         throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
       }
-      if(spin2==-2){
+      if(spin2==2){
         if(!lsquareLowerM23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -712,12 +712,12 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          lsquareLower03dim = m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          lsquareLower03dim = -m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
           lsquareLower03dimCalculated = true;
         }
         return lsquareLower03dim;
       }
-      else if(spin2==2){
+      else if(spin2==-2){
         if(!lsquareLowerP23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -833,7 +833,7 @@ namespace spinas {
         usage("Incorrect usage:");
         throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
       }
-      if(spin2==-2){
+      if(spin2==2){
         if(!rsquareLowerM23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -850,12 +850,12 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          rsquareLower03dim = m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rsquareLower03dim = -m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
           rsquareLower03dimCalculated = true;
         }
         return rsquareLower03dim;
       }
-      else if(spin2==2){
+      else if(spin2==-2){
         if(!rsquareLowerP23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -969,6 +969,7 @@ namespace spinas {
   
 
   //Generators of Lorentz Rotations with no dot (acting on left chiral angle brackets)
+  //Todo: Still need to construct these for 3 dimensions.
   //LU acts on |j> (from the left)
   cmatrix particle::lorentz_j3_lu(const int& dim) const{
     constexpr ldouble half=0.5;
