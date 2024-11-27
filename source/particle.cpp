@@ -80,6 +80,8 @@ namespace spinas {
     c = cdouble(std::cos(theta/2.),0.);
     s = std::polar(std::sin(theta/2.),phi);
     sc = std::conj(s);
+    epP = p[0]+pmag;
+    emP = p[0]-pmag;
     sqrtEpP = cdouble(std::sqrt(p[0]+pmag),0);
     sqrtEmP = cdouble(std::sqrt(p[0]-pmag),0);
 
@@ -358,7 +360,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          rangleUpperM23dim = eppz*cvector(c*c,sqrt2*c*s,s*s);
+          rangleUpperM23dim = epP*cvector(c*c,sqrt2*c*s,s*s);//empz*cvector(c*c,sqrt2*c*sc,sc*sc)
           rangleUpperM23dimCalculated = true;
         }
         return rangleUpperM23dim;
@@ -380,7 +382,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          rangleUpperP23dim = empz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rangleUpperP23dim = emP*cvector(sc*sc,-sqrt2*c*sc,c*c);
           rangleUpperP23dimCalculated = true;
         }
         return rangleUpperP23dim;
@@ -430,7 +432,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          rangleLowerM23dim = empz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rangleLowerM23dim = emP*cvector(sc*sc,-sqrt2*c*sc,c*c);
           rangleLowerM23dimCalculated = true;
         }
         return rangleLowerM23dim;
@@ -452,7 +454,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          rangleLowerP23dim = eppz*cvector(c*c,sqrt2*c*s,s*s);
+          rangleLowerP23dim = epP*cvector(c*c,sqrt2*c*s,s*s);
           rangleLowerP23dimCalculated = true;
         }
         return rangleLowerP23dim;
@@ -501,7 +503,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          langleUpperM23dim = eppz*cvector(s*s,-sqrt2*c*s,c*c);
+          langleUpperM23dim = epP*cvector(s*s,-sqrt2*c*s,c*c);
           langleUpperM23dimCalculated = true;
         }
         return langleUpperM23dim;
@@ -523,7 +525,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          langleUpperP23dim = empz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          langleUpperP23dim = emP*cvector(c*c,sqrt2*c*sc,sc*sc);
           langleUpperP23dimCalculated = true;
         }
         return langleUpperP23dim;
@@ -573,7 +575,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          langleLowerM23dim = empz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          langleLowerM23dim = emP*cvector(c*c,sqrt2*c*sc,sc*sc);
           langleLowerM23dimCalculated = true;
         }
         return langleLowerM23dim;
@@ -595,7 +597,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          langleLowerP23dim = eppz*cvector(s*s,-sqrt2*c*s,c*c);
+          langleLowerP23dim = epP*cvector(s*s,-sqrt2*c*s,c*c);
           langleLowerP23dimCalculated = true;
         }
         return langleLowerP23dim;
@@ -644,7 +646,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          lsquareUpperM23dim = empz*cvector(s*s,-sqrt2*c*s,c*c);
+          lsquareUpperM23dim = emP*cvector(s*s,-sqrt2*c*s,c*c);
           lsquareUpperM23dimCalculated = true;
         }
         return lsquareUpperM23dim;
@@ -666,7 +668,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          lsquareUpperP23dim = eppz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lsquareUpperP23dim = epP*cvector(c*c,sqrt2*c*sc,sc*sc);
           lsquareUpperP23dimCalculated = true;
         }
         return lsquareUpperP23dim;
@@ -716,7 +718,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          lsquareLowerM23dim = empz*cvector(s*s,-sqrt2*c*s,c*c);
+          lsquareLowerM23dim = emP*cvector(s*s,-sqrt2*c*s,c*c);
           lsquareLowerM23dimCalculated = true;
         }
         return lsquareLowerM23dim;
@@ -738,7 +740,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          lsquareLowerP23dim = eppz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lsquareLowerP23dim = epP*cvector(c*c,sqrt2*c*sc,sc*sc);
           lsquareLowerP23dimCalculated = true;
         }
         return lsquareLowerP23dim;
@@ -787,7 +789,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          rsquareUpperM23dim = empz*cvector(c*c,sqrt2*c*s,s*s);
+          rsquareUpperM23dim = emP*cvector(c*c,sqrt2*c*s,s*s);
           rsquareUpperM23dimCalculated = true;
         }
         return rsquareUpperM23dim;
@@ -809,7 +811,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          rsquareUpperP23dim = eppz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rsquareUpperP23dim = epP*cvector(sc*sc,-sqrt2*c*sc,c*c);
           rsquareUpperP23dimCalculated = true;
         }
         return rsquareUpperP23dim;
@@ -859,7 +861,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          rsquareLowerM23dim = empz*cvector(c*c,sqrt2*c*s,s*s);
+          rsquareLowerM23dim = emP*cvector(c*c,sqrt2*c*s,s*s);
           rsquareLowerM23dimCalculated = true;
         }
         return rsquareLowerM23dim;
@@ -881,7 +883,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          rsquareLowerP23dim = eppz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rsquareLowerP23dim = epP*cvector(sc*sc,-sqrt2*c*sc,c*c);
           rsquareLowerP23dimCalculated = true;
         }
         return rsquareLowerP23dim;

@@ -32,7 +32,7 @@ namespace spinas {
     ldouble pmag, pxymag;//Magnitude of momentum
     ldouble theta, phi;//Spherical angles
     cdouble c, s, sc;//cos(theta/2), sin(theta/2)*exp(i*phi), s*
-    cdouble sqrtEpP, sqrtEmP; //sqrt(E+p), sqrt(E-p)
+    cdouble epP, emP, sqrtEpP, sqrtEmP; //E+p, E-p, sqrt(E+p), sqrt(E-p)
     ldouble sqrt2;
     cdouble eppz, empz;//E+p, E-p
     cdouble pxppy, pxmpy;//px+ipy, px-ipy

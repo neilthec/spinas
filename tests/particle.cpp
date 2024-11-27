@@ -187,6 +187,8 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
   cmatrix epsU = cmatrix(cdouble(0, 0), cdouble(1, 0), cdouble(-1, 0), cdouble(0, 0));
   cmatrix epsL = cmatrix(cdouble(0,0),cdouble(-1,0),cdouble(1,0),cdouble(0,0));
   cmatrix delta = cmatrix(cdouble(1, 0), cdouble(0, 0), cdouble(0, 0), cdouble(1, 0));
+  cmatrix eta3 = cmatrix(0,0,1, 0,-1,0, 1,0,0);
+  cmatrix delta3 = cmatrix(1,0,0,0,1,0,0,0,1);
 
   for(int i=0;i<100;i++){
     
@@ -223,9 +225,9 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
       BOOST_CHECK_EQUAL(p1.langle(-j, false,3), p1.rsquare(j,3).get_conjugate());
     }
     
-    //---Current Position---
     
     // Spinor Products
+    //Spin 1/2
     for(int i=-1;i<2;i=i+2)
       for(int j=-1;j<2;j=j+2){
 	      int epsi = 0, epsj=0;
@@ -257,6 +259,38 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
 	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(j,2) - mass*epsU.get(epsi,epsj)), epsilon);
 	
       }
+
+
+    //Spin 1
+    for(int i=-2;i<=2;i=i+2)
+      for(int j=-2;j<=2;j=j+2){
+	      int epsi = (2+i)/2, epsj=(2+j)/2;
+	
+	      //<<11>>^{IJ} == m^2 eta^{IJ}
+        BOOST_CHECK_SMALL(std::abs(p1.langle(i,3)*p1.rangle(j,3) - (mass*mass*eta3.get(epsi,epsj))), epsilon);
+	
+	      //<11>^I_J == m^2 delta^I_J
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,3)*p1.rangle(-j,false,3) - (mass*mass*delta3.get(epsi,epsj))), epsilon);
+	
+	      //<11>_I^J == m^2 delta_I^J
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(-i,false,3)*p1.rangle(j,3) - mass*mass*delta3.get(epsi,epsj)), epsilon);
+	
+	      //<11>_{IJ} == m^2 eps_{IJ}
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(-i,false,3)*p1.rangle(-j,false,3) - mass*mass*eta3.get(epsi,epsj)), epsilon);
+	
+	      //[11]_{IJ} == m^2 eps_{IJ}
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(-i,false,3)*p1.rsquare(-j,false,3) - (mass*mass*eta3.get(epsi,epsj))), epsilon);
+	
+	      //[11]_I^J == m^2 delta_I^J
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(-i,false,3)*p1.rsquare(j,3) - (mass*mass*delta3.get(epsi,epsj))), epsilon);
+	
+	      //[11]^I_J == m^2 delta^I_J
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,3)*p1.rsquare(-j,false,3) - mass*mass*delta3.get(epsi,epsj)), epsilon);
+	
+	      //[11]^{IJ} == m^2 eps^{IJ}
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,3)*p1.rsquare(j,3) - mass*mass*eta3.get(epsi,epsj)), epsilon);
+	
+      }
     
     
     //Outer Products
@@ -264,21 +298,39 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
     cmatrix outerProd = outer(p1.rangle(-1,2), p1.lsquare(1, false,2)) +
       outer(p1.rangle(1,2), p1.lsquare(-1, false,2));
     BOOST_CHECK(outerProd == p1.lmat(2));
+    outerProd = outer(p1.rangle(-2,3), p1.lsquare(2, false,3)) +
+      outer(p1.rangle(0,3), p1.lsquare(0, false,3)) +
+      outer(p1.rangle(2,3), p1.lsquare(-2, false,3));
+    BOOST_CHECK(outerProd == p1.lmat(3));
     
     //|1>_I[1|^I = -p1
     outerProd = outer(p1.rangle(1, false,2), p1.lsquare(-1,2)) +
       outer(p1.rangle(-1, false,2), p1.lsquare(1,2));
     BOOST_CHECK(outerProd == -p1.lmat(2));
+    //|1>_I[1|^I = p1
+    outerProd = outer(p1.rangle(2, false,3), p1.lsquare(-2,3)) +
+      outer(p1.rangle(0, false,3), p1.lsquare(0,3)) +
+      outer(p1.rangle(-2, false,3), p1.lsquare(2,3));
+    BOOST_CHECK(outerProd == p1.lmat(3));
     
     //|1]_I<1|^I = p1
     outerProd = outer(p1.rsquare(1, false,2), p1.langle(-1,2)) +
       outer(p1.rsquare(-1, false,2), p1.langle(1,2));
     BOOST_CHECK(outerProd == p1.umat(2));
+    outerProd = outer(p1.rsquare(2, false,3), p1.langle(-2,3)) +
+      outer(p1.rsquare(0, false,3), p1.langle(0,3)) +
+      outer(p1.rsquare(-2, false,3), p1.langle(2,3));
+    BOOST_CHECK(outerProd == p1.umat(3));
     
     //|1]^I<1|_I = -p1
     outerProd = outer(p1.rsquare(-1,2), p1.langle(1, false,2)) +
       outer(p1.rsquare(1,2), p1.langle(-1, false,2));
     BOOST_CHECK(outerProd == -p1.umat(2));
+    //|1]^I<1|_I = p1
+    outerProd = outer(p1.rsquare(-2,3), p1.langle(2, false,3)) +
+      outer(p1.rsquare(0,3), p1.langle(0, false,3)) +
+      outer(p1.rsquare(2,3), p1.langle(-2, false,3));
+    BOOST_CHECK(outerProd == p1.umat(3));
     
     // Momentum times Spinor Gives Mass times Spinor
     for(int j=-1;j<2;j=j+2){
@@ -306,10 +358,38 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
       //[1|_I*p1=<1|_I*m
       BOOST_CHECK_EQUAL(p1.lsquare(j,false,2)*p1.umat(2), mass*p1.langle(j,false,2));
     }
+
+
+    for(int j=-2;j<=2;j=j+2){
+      //p1|1>^I=m|1]^I
+      BOOST_CHECK_EQUAL(p1.umat(3)*p1.rangle(j,3), mass*mass*p1.rsquare(j,3));
+      
+      //<1|^I*p1=[1|^I*m
+      BOOST_CHECK_EQUAL(p1.langle(j,3)*p1.lmat(3), mass*mass*p1.lsquare(j,3));
+      
+      //p1|1>_I=-m|1]_I
+      BOOST_CHECK_EQUAL(p1.umat(3)*p1.rangle(j,false,3), mass*mass*p1.rsquare(j,false,3));
+      
+      //<1|_I*p1=[1|_I*m
+      BOOST_CHECK_EQUAL(p1.langle(j,false,3)*p1.lmat(3), mass*mass*p1.lsquare(j,false,3));
+      
+      //p1|1]^I=-m|1>^I
+      BOOST_CHECK_EQUAL(p1.lmat(3)*p1.rsquare(j,3), mass*mass*p1.rangle(j,3));
+      
+      //[1|^I*p1=<1|^I*m
+      BOOST_CHECK_EQUAL(p1.lsquare(j,3)*p1.umat(3), mass*mass*p1.langle(j,3));
+      
+      //p1|1]_I=-m|1>_I
+      BOOST_CHECK_EQUAL(p1.lmat(3)*p1.rsquare(j,false,3), mass*mass*p1.rangle(j,false,3));
+      
+      //[1|_I*p1=<1|_I*m
+      BOOST_CHECK_EQUAL(p1.lsquare(j,false,3)*p1.umat(3), mass*mass*p1.langle(j,false,3));
+    }
     
     
     
     //Lorentz and Spin Algebra
+    //Todo: Still need to do this for 3-dimensional case.
     
     // LJ3 |1>^I == |1>^J SJ3_J^I
     BOOST_CHECK(p1.lorentz_j3_lu(2)*p1.rangle_matrix(2) == p1.rangle_matrix(2)*p1.spin_j3_lu(2));
