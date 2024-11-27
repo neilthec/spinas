@@ -436,7 +436,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          rangleLower03dim = -m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
+          rangleLower03dim = -m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
           rangleLower03dimCalculated = true;
         }
         return rangleLower03dim;
@@ -574,7 +574,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          langleLower03dim = -m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
+          langleLower03dim = -m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
           langleLower03dimCalculated = true;
         }
         return langleLower03dim;
@@ -632,7 +632,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          lsquareUpperM23dim = eppz*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lsquareUpperM23dim = empz*cvector(s*s,-sqrt2*c*s,c*c);
           lsquareUpperM23dimCalculated = true;
         }
         return lsquareUpperM23dim;
@@ -643,7 +643,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          lsquareUpper03dim = m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
+          lsquareUpper03dim = -m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
           lsquareUpper03dimCalculated = true;
         }
         return lsquareUpper03dim;
@@ -654,7 +654,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          lsquareUpperP23dim = empz*cvector(s*s,-sqrt2*c*s,c*c);
+          lsquareUpperP23dim = eppz*cvector(c*c,sqrt2*c*sc,sc*sc);
           lsquareUpperP23dimCalculated = true;
         }
         return lsquareUpperP23dim;
@@ -695,7 +695,7 @@ namespace spinas {
         usage("Incorrect usage:");
         throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
       }
-      if(spin2==2){
+      if(spin2==-2){
         if(!lsquareLowerM23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -712,12 +712,12 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          lsquareLower03dim = -m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          lsquareLower03dim = m*cvector(-sqrt2*c*s,c*c-s*sc,sqrt2*c*sc);
           lsquareLower03dimCalculated = true;
         }
         return lsquareLower03dim;
       }
-      else if(spin2==-2){
+      else if(spin2==2){
         if(!lsquareLowerP23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -770,7 +770,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==-2 and m==0");
           }
-          rsquareUpperM23dim = eppz*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rsquareUpperM23dim = empz*cvector(c*c,sqrt2*c*s,s*s);
           rsquareUpperM23dimCalculated = true;
         }
         return rsquareUpperM23dim;
@@ -781,7 +781,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          rsquareUpper03dim = m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
+          rsquareUpper03dim = -m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
           rsquareUpper03dimCalculated = true;
         }
         return rsquareUpper03dim;
@@ -792,7 +792,7 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==2 and m==0");
           }
-          rsquareUpperP23dim = empz*cvector(c*c,sqrt2*c*s,s*s);
+          rsquareUpperP23dim = eppz*cvector(sc*sc,-sqrt2*c*sc,c*c);
           rsquareUpperP23dimCalculated = true;
         }
         return rsquareUpperP23dim;
@@ -833,7 +833,7 @@ namespace spinas {
         usage("Incorrect usage:");
         throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
       }
-      if(spin2==2){
+      if(spin2==-2){
         if(!rsquareLowerM23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");
@@ -850,12 +850,12 @@ namespace spinas {
             usage("Incorrect usage:");
             throw std::runtime_error("Incorrect usage: spin2==0 and m==0");
           }
-          rsquareLower03dim = -m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rsquareLower03dim = m*cvector(sqrt2*c*sc,-c*c+s*sc,-sqrt2*c*s);
           rsquareLower03dimCalculated = true;
         }
         return rsquareLower03dim;
       }
-      else if(spin2==-2){
+      else if(spin2==2){
         if(!rsquareLowerP23dimCalculated){
           if(m==0){
             usage("Incorrect usage:");

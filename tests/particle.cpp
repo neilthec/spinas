@@ -209,17 +209,18 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
       BOOST_CHECK_EQUAL(p1.langle(j, false,2), -p1.rsquare(j,2).get_conjugate());
     }
     for (int j = -2; j <= 2; j = j + 2){
+      //The spins are opposite for the conjugate, thus a -j.
       //|1>^I == ([1|_I)*
-      BOOST_CHECK_EQUAL(p1.rangle(j,3), p1.lsquare(j, false,3).get_conjugate());
+      BOOST_CHECK_EQUAL(p1.rangle(j,3), p1.lsquare(-j, false,3).get_conjugate());
       
       //<1|^I == (|1]_I)*
-      BOOST_CHECK_EQUAL(p1.langle(j,3), p1.rsquare(j, false,3).get_conjugate());
+      BOOST_CHECK_EQUAL(p1.langle(j,3), p1.rsquare(-j, false,3).get_conjugate());
       
-      //|1>_I == -([1|^I)*
-      BOOST_CHECK_EQUAL(p1.rangle(j, false,3), p1.lsquare(j,3).get_conjugate());
+      //|1>_I == ([1|^I)*
+      BOOST_CHECK_EQUAL(p1.rangle(-j, false,3), p1.lsquare(j,3).get_conjugate());
       
-      //<1|_I == -(|1]^I)*
-      BOOST_CHECK_EQUAL(p1.langle(j, false,3), p1.rsquare(j,3).get_conjugate());
+      //<1|_I == (|1]^I)*
+      BOOST_CHECK_EQUAL(p1.langle(-j, false,3), p1.rsquare(j,3).get_conjugate());
     }
     
     //---Current Position---
