@@ -565,21 +565,21 @@ void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, cons
   if(m1==0 && m3==0){
     cdouble spinorProd(0,0);
     for(int ds2=-1;ds2<=1;ds2+=2)
-      spinorProd += sp1->v(ds2)*sp2->v(ds2);
+      spinorProd += sp1->v(-ds2)*sp2->v(ds2);
     BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v() ), epsilon);
   }
   else if(m1==0)
     for(int ds3=-1;ds3<=1;ds3+=2){
       cdouble spinorProd(0,0);
       for(int ds2=-1;ds2<=1;ds2+=2)
-	spinorProd += sp1->v(ds2)*sp2->v(ds2,ds3);	
+	spinorProd += sp1->v(-ds2)*sp2->v(ds2,ds3);	
       BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds3) ), epsilon);
     }
   else if(m3==0)
     for(int ds1=-1;ds1<=1;ds1+=2){
       cdouble spinorProd(0,0);
       for(int ds2=-1;ds2<=1;ds2+=2)
-	spinorProd += sp1->v(ds1,ds2)*sp2->v(ds2);
+	spinorProd += sp1->v(ds1,-ds2)*sp2->v(ds2);
       BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1) ), epsilon);
     }
   else
@@ -587,7 +587,7 @@ void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, cons
       for(int ds3=-1;ds3<=1;ds3+=2){
 	cdouble spinorProd(0,0);
 	for(int ds2=-1;ds2<=1;ds2+=2)
-	  spinorProd += sp1->v(ds1,ds2)*sp2->v(ds2,ds3);	
+	  spinorProd += sp1->v(ds1,-ds2)*sp2->v(ds2,ds3);	
 	BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1,ds3) ), epsilon);
       }
 }
@@ -617,11 +617,11 @@ void test_sproduct(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, p
     ldouble spinProd = 0;
     if(ni==2)
       for(int j=0;j<2;j++)
-	for(int k=0;k<2;k++)
-	  spinProd += std::real(sp1->v(2*j-1,2*k-1)*std::conj(sp2->v(2*j-1,2*k-1)));
+	      for(int k=0;k<2;k++)
+	        spinProd += std::real(sp1->v(2*j-1,2*k-1)*std::conj(sp2->v(2*j-1,2*k-1)));
     else if(ni==1)
       for(int k=0;k<2;k++)
-	spinProd += std::real(sp1->v(2*k-1)*std::conj(sp2->v(2*k-1)));
+	    spinProd += std::real(sp1->v(2*k-1)*std::conj(sp2->v(2*k-1)));
     else
       spinProd += std::real(sp1->v()*std::conj(sp2->v()));
     

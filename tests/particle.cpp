@@ -197,16 +197,16 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
     // Conjugation
     for (int j = -1; j < 2; j = j + 2){
       //|1>^I == ([1|_I)*
-      BOOST_CHECK_EQUAL(p1.rangle(j,2), p1.lsquare(j, false,2).get_conjugate());
+      BOOST_CHECK_EQUAL(p1.rangle(j,2), p1.lsquare(-j, false,2).get_conjugate());
       
       //<1|^I == (|1]_I)*
-      BOOST_CHECK_EQUAL(p1.langle(j,2), p1.rsquare(j, false,2).get_conjugate());
+      BOOST_CHECK_EQUAL(p1.langle(j,2), p1.rsquare(-j, false,2).get_conjugate());
       
       //|1>_I == -([1|^I)*
-      BOOST_CHECK_EQUAL(p1.rangle(j, false,2), -p1.lsquare(j,2).get_conjugate());
+      BOOST_CHECK_EQUAL(p1.rangle(-j, false,2), -p1.lsquare(j,2).get_conjugate());
       
       //<1|_I == -(|1]^I)*
-      BOOST_CHECK_EQUAL(p1.langle(j, false,2), -p1.rsquare(j,2).get_conjugate());
+      BOOST_CHECK_EQUAL(p1.langle(-j, false,2), -p1.rsquare(j,2).get_conjugate());
     }
     for (int j = -2; j <= 2; j = j + 2){
       //The spins are opposite for the conjugate, thus a -j.
@@ -236,22 +236,22 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
 	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,2)*p1.rangle(j,2) - (-mass*epsU.get(epsi,epsj))), epsilon);
 	
 	      //<11>^I_J == -m delta^I_J
-	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,2)*p1.rangle(j,false,2) - (-mass*delta.get(epsi,epsj))), epsilon);
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,2)*p1.rangle(-j,false,2) - (-mass*delta.get(epsi,epsj))), epsilon);
 	
 	      //<11>_I^J == m delta_I^J
-	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,false,2)*p1.rangle(j,2) - mass*delta.get(epsi,epsj)), epsilon);
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(-i,false,2)*p1.rangle(j,2) - mass*delta.get(epsi,epsj)), epsilon);
 	
 	      //<11>_{IJ} == m eps_{IJ}
-	      BOOST_CHECK_SMALL(std::abs(p1.langle(i,false,2)*p1.rangle(j,false,2) - mass*epsL.get(epsi,epsj)), epsilon);
+	      BOOST_CHECK_SMALL(std::abs(p1.langle(-i,false,2)*p1.rangle(-j,false,2) - mass*epsL.get(epsi,epsj)), epsilon);
 	
 	      //[11]_{IJ} == -m eps_{IJ}
-	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false,2)*p1.rsquare(j,false,2) - (-mass*epsL.get(epsi,epsj))), epsilon);
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(-i,false,2)*p1.rsquare(-j,false,2) - (-mass*epsL.get(epsi,epsj))), epsilon);
 	
 	      //[11]_I^J == -m delta_I^J
-	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false,2)*p1.rsquare(j,2) - (-mass*delta.get(epsi,epsj))), epsilon);
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(-i,false,2)*p1.rsquare(j,2) - (-mass*delta.get(epsi,epsj))), epsilon);
 	
 	      //[11]^I_J == m delta^I_J
-	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(j,false,2) - mass*delta.get(epsi,epsj)), epsilon);
+	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(-j,false,2) - mass*delta.get(epsi,epsj)), epsilon);
 	
 	      //[11]^{IJ} == m eps^{IJ}
 	      BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,2)*p1.rsquare(j,2) - mass*epsU.get(epsi,epsj)), epsilon);
@@ -261,23 +261,23 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
     
     //Outer Products
     //|1>^I[1|_I = p1
-    cmatrix outerProd = outer(p1.rangle(-1,2), p1.lsquare(-1, false,2)) +
-      outer(p1.rangle(1,2), p1.lsquare(1, false,2));
+    cmatrix outerProd = outer(p1.rangle(-1,2), p1.lsquare(1, false,2)) +
+      outer(p1.rangle(1,2), p1.lsquare(-1, false,2));
     BOOST_CHECK(outerProd == p1.lmat(2));
     
     //|1>_I[1|^I = -p1
-    outerProd = outer(p1.rangle(-1, false,2), p1.lsquare(-1,2)) +
-      outer(p1.rangle(1, false,2), p1.lsquare(1,2));
+    outerProd = outer(p1.rangle(1, false,2), p1.lsquare(-1,2)) +
+      outer(p1.rangle(-1, false,2), p1.lsquare(1,2));
     BOOST_CHECK(outerProd == -p1.lmat(2));
     
     //|1]_I<1|^I = p1
-    outerProd = outer(p1.rsquare(-1, false,2), p1.langle(-1,2)) +
-      outer(p1.rsquare(1, false,2), p1.langle(1,2));
+    outerProd = outer(p1.rsquare(1, false,2), p1.langle(-1,2)) +
+      outer(p1.rsquare(-1, false,2), p1.langle(1,2));
     BOOST_CHECK(outerProd == p1.umat(2));
     
     //|1]^I<1|_I = -p1
-    outerProd = outer(p1.rsquare(-1,2), p1.langle(-1, false,2)) +
-      outer(p1.rsquare(1,2), p1.langle(1, false,2));
+    outerProd = outer(p1.rsquare(-1,2), p1.langle(1, false,2)) +
+      outer(p1.rsquare(1,2), p1.langle(-1, false,2));
     BOOST_CHECK(outerProd == -p1.umat(2));
     
     // Momentum times Spinor Gives Mass times Spinor

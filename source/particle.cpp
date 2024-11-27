@@ -317,7 +317,9 @@ namespace spinas {
 
 
   //Spin Spinors
-  //rangle
+  /********************************************************************
+                            |j>^I
+  *********************************************************************/
   cvector particle::rangle(const int& spin2, const int& dim) {
     if(dim==2){
       if(spin2!=1&&spin2!=-1){
@@ -330,7 +332,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        rangleUpperM12dim = cvector(sqrtEpP*c,sqrtEpP*s);
+	        rangleUpperM12dim = sqrtEpP*cvector(c,s);
 	        rangleUpperM12dimCalculated = true;
         }
         return rangleUpperM12dim;
@@ -340,7 +342,7 @@ namespace spinas {
 	        usage("Incorrect usage:");
 	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rangleUpperP12dim = cvector(-sqrtEmP*sc,sqrtEmP*c);
+	      rangleUpperP12dim = sqrtEmP*cvector(-sc,c);
 	      rangleUpperP12dimCalculated = true;
       }
       return rangleUpperP12dim;
@@ -386,6 +388,9 @@ namespace spinas {
     }
     return rangleUpperP12dim;
   }
+  /********************************************************************
+                            |j>_I
+  *********************************************************************/
   cvector particle::rangle(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return rangle(spin2, dim);
     if(dim==2){
@@ -399,7 +404,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        rangleLowerM12dim = cvector(-sqrtEmP*sc,sqrtEmP*c);
+	        rangleLowerM12dim = -sqrtEpP*cvector(c,s);
 	        rangleLowerM12dimCalculated = true;
         }
         return rangleLowerM12dim;
@@ -409,7 +414,7 @@ namespace spinas {
 	        usage("Incorrect usage:");
 	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rangleLowerP12dim = cvector(-sqrtEpP*c,-sqrtEpP*s);
+	      rangleLowerP12dim = sqrtEmP*cvector(-sc,c);
 	      rangleLowerP12dimCalculated = true;
       }
       return rangleLowerP12dim;
@@ -455,7 +460,9 @@ namespace spinas {
     }
     return rangleLowerP12dim;
   }
-  //langle
+/********************************************************************
+                            <j|^I
+*********************************************************************/
   cvector particle::langle(const int& spin2, const int& dim) {
     if(dim==2){
       if(spin2!=1&&spin2!=-1){
@@ -468,7 +475,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        langleUpperM12dim = cvector(sqrtEpP*s,-sqrtEpP*c);
+	        langleUpperM12dim = sqrtEpP*cvector(s,-c);
 	        langleUpperM12dimCalculated = true;
         }
         return langleUpperM12dim;
@@ -524,7 +531,10 @@ namespace spinas {
     }
     return langleUpperM12dim;
   }
-  cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
+/********************************************************************
+                            <j|_I
+*********************************************************************/
+cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return langle(spin2, dim);
     if(dim==2){
       if(spin2!=1&&spin2!=-1){
@@ -537,7 +547,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        langleLowerM12dim = cvector(sqrtEmP*c,sqrtEmP*sc);
+	        langleLowerM12dim = -sqrtEpP*cvector(s,-c);
 	        langleLowerM12dimCalculated = true;
         }
         return langleLowerM12dim;
@@ -547,7 +557,7 @@ namespace spinas {
 	        usage("Incorrect usage:");
 	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      langleLowerP12dim = cvector(-sqrtEpP*s,sqrtEpP*c);
+	      langleLowerP12dim = sqrtEmP*cvector(c,sc);
 	      langleLowerP12dimCalculated = true;
       }
       return langleLowerP12dim;
@@ -593,7 +603,9 @@ namespace spinas {
     }
     return langleLowerP12dim;
   }
-  //lsquare
+/********************************************************************
+                            [j|^I
+*********************************************************************/
   cvector particle::lsquare(const int& spin2, const int& dim) {
     if(dim==2){
       if(spin2!=1&&spin2!=-1){
@@ -606,7 +618,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        lsquareUpperM12dim = cvector(sqrtEmP*s,-sqrtEmP*c);
+	        lsquareUpperM12dim = -sqrtEmP*cvector(-s,c);
 	        lsquareUpperM12dimCalculated = true;
         }
         return lsquareUpperM12dim;
@@ -616,7 +628,7 @@ namespace spinas {
 	        usage("Incorrect usage:");
 	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      lsquareUpperP12dim = cvector(sqrtEpP*c,sqrtEpP*sc);
+	      lsquareUpperP12dim = sqrtEpP*cvector(c,sc);
 	      lsquareUpperP12dimCalculated = true;
       }
       return lsquareUpperP12dim;
@@ -662,6 +674,9 @@ namespace spinas {
     }
     return lsquareUpperP12dim;
   }
+/********************************************************************
+                            [j|_I
+*********************************************************************/
   cvector particle::lsquare(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return lsquare(spin2,dim);
     if(dim==2){
@@ -675,7 +690,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        lsquareLowerM12dim = cvector(sqrtEpP*c,sqrtEpP*sc);
+	        lsquareLowerM12dim = sqrtEmP*cvector(-s,c);
 	        lsquareLowerM12dimCalculated = true;
         }
         return lsquareLowerM12dim;
@@ -685,7 +700,7 @@ namespace spinas {
 	      usage("Incorrect usage:");
 	      throw std::runtime_error("Incorrect usage: m==0");
 	    }
-	    lsquareLowerP12dim = cvector(-sqrtEmP*s,sqrtEmP*c);
+	    lsquareLowerP12dim = sqrtEpP*cvector(c,sc);
 	    lsquareLowerP12dimCalculated = true;
       }
       return lsquareLowerP12dim;
@@ -731,7 +746,9 @@ namespace spinas {
     }
     return lsquareLowerP12dim;
   }
-  //rsquare
+/********************************************************************
+                            |j]^I
+*********************************************************************/
   cvector particle::rsquare(const int& spin2, const int& dim) {
     if(dim==2){
       if(spin2!=1&&spin2!=-1){
@@ -744,7 +761,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        rsquareUpperM12dim = cvector(-sqrtEmP*c,-sqrtEmP*s);
+	        rsquareUpperM12dim = -sqrtEmP*cvector(c,s);
 	        rsquareUpperM12dimCalculated = true;
         }
         return rsquareUpperM12dim;
@@ -754,7 +771,7 @@ namespace spinas {
 	        usage("Incorrect usage:");
 	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rsquareUpperP12dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
+	      rsquareUpperP12dim = sqrtEpP*cvector(sc,-c);
 	      rsquareUpperP12dimCalculated = true;
       }
       return rsquareUpperP12dim;
@@ -800,6 +817,9 @@ namespace spinas {
     }
     return rsquareUpperP12dim;
   }
+/********************************************************************
+                            |j]_I
+*********************************************************************/
   cvector particle::rsquare(const int& spin2, const bool& upper, const int& dim) {
     if(upper) return rsquare(spin2, dim);
     if(dim==2){
@@ -813,7 +833,7 @@ namespace spinas {
 	          usage("Incorrect usage:");
 	          throw std::runtime_error("Incorrect usage: spin2==-1 and m==0");
 	        }
-	        rsquareLowerM12dim = cvector(sqrtEpP*sc,-sqrtEpP*c);
+	        rsquareLowerM12dim = sqrtEmP*cvector(c,s);
 	        rsquareLowerM12dimCalculated = true;
         }
         return rsquareLowerM12dim;
@@ -823,7 +843,7 @@ namespace spinas {
 	        usage("Incorrect usage:");
 	        throw std::runtime_error("Incorrect usage: m==0");
 	      }
-	      rsquareLowerP12dim = cvector(sqrtEmP*c,sqrtEmP*s);
+	      rsquareLowerP12dim = sqrtEpP*cvector(sc,-c);
 	      rsquareLowerP12dimCalculated = true;
       }
       return rsquareLowerP12dim;
@@ -877,16 +897,18 @@ namespace spinas {
     return rangle_matrix(UPPER, dim);
   }
   cmatrix particle::rangle_matrix(const bool& upper, const int& dim){
+    int flip=1;
+    if(!upper) flip=-1;
     if(dim==2){
-      cvector ram=rangle(-1,upper,2), rap=rangle(+1,upper,2);
-      return cmatrix(ram.get(0), rap.get(0),
-		    ram.get(1), rap.get(1));
+      cvector ral=rangle(-flip,upper,2), rar=rangle(+flip,upper,2);
+      return cmatrix(ral.get(0), rar.get(0),
+		    ral.get(1), rar.get(1));
     }
     else if(dim==3){
-      cvector ram=rangle(-2,upper,3), ra0=rangle(0,upper,3), rap=rangle(+2,upper,3);
-      return cmatrix(ram.get(0), ra0.get(0), rap.get(0),
-        ram.get(1), ra0.get(1), rap.get(1),
-        ram.get(2), ra0.get(2), rap.get(2));
+      cvector ral=rangle(-2*flip,upper,3), ra0=rangle(0,upper,3), rar=rangle(+2*flip,upper,3);
+      return cmatrix(ral.get(0), ra0.get(0), rar.get(0),
+        ral.get(1), ra0.get(1), rar.get(1),
+        ral.get(2), ra0.get(2), rar.get(2));
     }
     return cmatrix(0,0,0,0);
   }
@@ -894,17 +916,19 @@ namespace spinas {
     return langle_matrix(UPPER,dim);
   }
   cmatrix particle::langle_matrix(const bool& upper, const int& dim){
+    int flip=1;
+    if(!upper) flip=-1;
     if(dim==2){
-      cvector lam=langle(-1,upper,2), lap=langle(+1,upper,2);
-      return cmatrix(lam.get(0), lap.get(0),
-		     lam.get(1), lap.get(1)
+      cvector lal=langle(-flip,upper,2), lar=langle(+flip,upper,2);
+      return cmatrix(lal.get(0), lar.get(0),
+		     lal.get(1), lar.get(1)
 		     );
     }
     else if(dim==3){
-      cvector lam=langle(-2,upper,3), la0=langle(0,upper,3), lap=langle(+2,upper,3);
-      return cmatrix(lam.get(0), la0.get(0), lap.get(0),
-         lam.get(1), la0.get(1), lap.get(1),
-         lam.get(2), la0.get(2), lap.get(2)
+      cvector lal=langle(-2*flip,upper,3), la0=langle(0,upper,3), lar=langle(+2*flip,upper,3);
+      return cmatrix(lal.get(0), la0.get(0), lar.get(0),
+         lal.get(1), la0.get(1), lar.get(1),
+         lal.get(2), la0.get(2), lar.get(2)
          );
     }
     return cmatrix(0,0,0,0);
@@ -914,17 +938,19 @@ namespace spinas {
     return lsquare_matrix(UPPER, dim);
   }
   cmatrix particle::lsquare_matrix(const bool& upper, const int& dim){
+    int flip=1;
+    if(!upper) flip=-1;
     if(dim==2){
-      cvector lsm=lsquare(-1,upper,2), lsp=lsquare(+1,upper,2);
-      return cmatrix(lsm.get(0), lsp.get(0),
-		     lsm.get(1), lsp.get(1)
+      cvector lsl=lsquare(-flip,upper,2), lsr=lsquare(+flip,upper,2);
+      return cmatrix(lsl.get(0), lsr.get(0),
+		     lsl.get(1), lsr.get(1)
 		     );
     }
     else if(dim==3){
-      cvector lsm=lsquare(-2,upper,3), ls0=lsquare(0,upper,3), lsp=lsquare(+2,upper,3);
-      return cmatrix(lsm.get(0), ls0.get(0), lsp.get(0),
-         lsm.get(1), ls0.get(1), lsp.get(1),
-         lsm.get(2), ls0.get(2), lsp.get(2)
+      cvector lsl=lsquare(-2*flip,upper,3), ls0=lsquare(0,upper,3), lsr=lsquare(+2*flip,upper,3);
+      return cmatrix(lsl.get(0), ls0.get(0), lsr.get(0),
+         lsl.get(1), ls0.get(1), lsr.get(1),
+         lsl.get(2), ls0.get(2), lsr.get(2)
          );
     }
     return cmatrix(0,0,0,0);
@@ -933,17 +959,19 @@ namespace spinas {
     return rsquare_matrix(UPPER, dim);
   }
   cmatrix particle::rsquare_matrix(const bool& upper, const int& dim){
+    int flip=1;
+    if(!upper) flip=-1;
     if(dim==2){
-      cvector rsm=rsquare(-1,upper,2), rsp=rsquare(+1,upper,2);
-      return cmatrix(rsm.get(0), rsp.get(0),
-		     rsm.get(1), rsp.get(1)
+      cvector rsl=rsquare(-flip,upper,2), rsr=rsquare(+flip,upper,2);
+      return cmatrix(rsl.get(0), rsr.get(0),
+		     rsl.get(1), rsr.get(1)
 		     );
     }
     else if(dim==3){
-      cvector rsm=rsquare(-2,upper,3), rs0=rsquare(0,upper,3), rsp=rsquare(+2,upper,3);
-      return cmatrix(rsm.get(0), rs0.get(0), rsp.get(0),
-         rsm.get(1), rs0.get(1), rsp.get(1),
-         rsm.get(2), rs0.get(2), rsp.get(2)
+      cvector rsl=rsquare(-2*flip,upper,3), rs0=rsquare(0,upper,3), rsr=rsquare(+2*flip,upper,3);
+      return cmatrix(rsl.get(0), rs0.get(0), rsr.get(0),
+         rsl.get(1), rs0.get(1), rsr.get(1),
+         rsl.get(2), rs0.get(2), rsr.get(2)
          );
     }
     return cmatrix(0,0,0,0);
