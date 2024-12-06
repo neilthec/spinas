@@ -44,8 +44,8 @@ namespace spinas {
     bool isLeftUpper = true, isRightUpper = true;
 
     //Whether the spinor product is calculated
-    bool isCalculated[2][2] = {{false,false},{false,false}};
-    cdouble product[2][2];
+    bool isCalculated[3][3] = {{false,false,false},{false,false,false},{false,false,false}};
+    cdouble product[3][3];
     
 
   public:
