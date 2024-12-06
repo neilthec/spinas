@@ -40,17 +40,17 @@ namespace spinas {
     p3=particle(mu);
     p4=particle(md);
     //Spinor Products
-    s12s= sproduct(SQUARE,&p1,&p2);
-    s13s= sproduct(SQUARE,&p1,&p3);
-    a24a= sproduct(ANGLE,&p2,&p4);
-    s142a= sproduct(SQUARE,&p1,&p4,&p2);
-    s143a= sproduct(SQUARE,&p1,&p4,&p3);
+    s12s= sproduct(SQUARE,&p1,&p2,2);
+    s13s= sproduct(SQUARE,&p1,&p3,2);
+    a24a= sproduct(ANGLE,&p2,&p4,2);
+    s142a= sproduct(SQUARE,&p1,&p4,&p2,2);
+    s143a= sproduct(SQUARE,&p1,&p4,&p3,2);
     //Spinor Products
-    a12a= sproduct(ANGLE,&p1,&p2);
-    a14a= sproduct(ANGLE,&p1,&p4);
-    s23s= sproduct(SQUARE,&p2,&p3);
-    s231a= sproduct(SQUARE,&p2,&p3,&p1);
-    s431a= sproduct(SQUARE,&p4,&p3,&p1);
+    a12a= sproduct(ANGLE,&p1,&p2,2);
+    a14a= sproduct(ANGLE,&p1,&p4,2);
+    s23s= sproduct(SQUARE,&p2,&p3,2);
+    s231a= sproduct(SQUARE,&p2,&p3,&p1,2);
+    s431a= sproduct(SQUARE,&p4,&p3,&p1,2);
     //prefactor
     pre = std::sqrt(2.0)*e*e/(MW*SW);
   }

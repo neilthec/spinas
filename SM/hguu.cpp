@@ -37,18 +37,18 @@ namespace spinas {
     p2=particle(0);
     p3=particle(mu);
     p4=particle(mu);
-    s24s = sproduct(SQUARE,&p2,&p4);
-    a24a = sproduct(ANGLE,&p2,&p4);
-    s23s = sproduct(SQUARE,&p2,&p3);
-    a23a = sproduct(ANGLE,&p2,&p3);
-    s34s = sproduct(SQUARE,&p3,&p4);
-    a34a = sproduct(ANGLE,&p3,&p4);
-    s213a = sproduct(SQUARE,&p2,&p1,&p3);
-    a213s = sproduct(ANGLE,&p2,&p1,&p3);
-    s214a = sproduct(SQUARE,&p2,&p1,&p4);
-    a214s = sproduct(ANGLE,&p2,&p1,&p4);
-    s2312s = sproduct(SQUARE,&p2,&p3,&p1,&p2);
-    a2312a = sproduct(ANGLE,&p2,&p3,&p1,&p2);
+    s24s = sproduct(SQUARE,&p2,&p4,2);
+    a24a = sproduct(ANGLE,&p2,&p4,2);
+    s23s = sproduct(SQUARE,&p2,&p3,2);
+    a23a = sproduct(ANGLE,&p2,&p3,2);
+    s34s = sproduct(SQUARE,&p3,&p4,2);
+    a34a = sproduct(ANGLE,&p3,&p4,2);
+    s213a = sproduct(SQUARE,&p2,&p1,&p3,2);
+    a213s = sproduct(ANGLE,&p2,&p1,&p3,2);
+    s214a = sproduct(SQUARE,&p2,&p1,&p4,2);
+    a214s = sproduct(ANGLE,&p2,&p1,&p4,2);
+    s2312s = sproduct(SQUARE,&p2,&p3,&p1,&p2,2);
+    a2312a = sproduct(ANGLE,&p2,&p3,&p1,&p2,2);
     pre = e*gs*mu/(sqrt2*MW*SW);
   }
   void hguu::set_masses(const ldouble& massu, const ldouble& massh, const ldouble& massW){

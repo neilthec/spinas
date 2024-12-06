@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(s12sa21a_tests) {
     if(o==3) ni=0;    
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);	
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);	
     ldouble expected = 2.*p1.dot(p2);//[12]
     test_sproduct(&s12s, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12][12]*", "-2p1.p2",10);//
   }
@@ -73,8 +73,8 @@ BOOST_AUTO_TEST_CASE(s12ss21s_tests) {
     if(o==3) ni=0;    
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);
-    sproduct a12a = sproduct(ANGLE,&p1,&p2);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,2);
     ldouble expected = -2.*m1*m2;
 test_sproduct(&s12s, &a12a, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12]<12>*", "-2m1m2",1000);//
 test_sproduct(&a12a, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "<12>[12]*", "-2m1m2",1000);//
@@ -101,8 +101,8 @@ BOOST_AUTO_TEST_CASE(s12sa231s_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);//[12]	
-    sproduct a132s = sproduct(ANGLE,&p1,&p3,&p2);//<132]* = -<231]
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);//[12]	
+    sproduct a132s = sproduct(ANGLE,&p1,&p3,&p2,2);//<132]* = -<231]
     ldouble expected = 2.*m1*p2.dot(p3);
 test_sproduct(&s12s, &a132s, ni, 3, &p1, &p2, &p3, &p3, &p3, expected, "[12]<132]*", "2m1p2.p3",100000);//
   }
@@ -128,8 +128,8 @@ BOOST_AUTO_TEST_CASE(s12ss2341s_tests) {
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
     particle p4=particle(mom4,m4);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);//[12]	
-    sproduct a1432a = sproduct(ANGLE,&p1,&p4,&p3,&p2);//<1432>* = [2341]	
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);//[12]	
+    sproduct a1432a = sproduct(ANGLE,&p1,&p4,&p3,&p2,2);//<1432>* = [2341]	
     ldouble expected = -2.*m1*m2*p3.dot(p4);
     test_sproduct(&s12s, &a1432a, ni, 4, &p1, &p2, &p3, &p4, &p4, expected, "[12]<1432>*", "-2m1m2p3.p4",500000);//
   }
@@ -160,8 +160,8 @@ BOOST_AUTO_TEST_CASE(s12sa2341a_tests) {
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
     particle p4=particle(mom4,m4);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);//[12]
-    sproduct s1432s = sproduct(SQUARE,&p1,&p4,&p3,&p2);//[1432]
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);//[12]
+    sproduct s1432s = sproduct(SQUARE,&p1,&p4,&p3,&p2,2);//[1432]
     ldouble expected = 2.*p1.dot(p2)*p3.dot(p4)-2.*p1.dot(p3)*p2.dot(p4)+2.*p1.dot(p4)*p2.dot(p3);
     test_sproduct(&s12s, &s1432s, ni, 4, &p1, &p2, &p3, &p4, &p4, expected, "[12][1432]*", "2p1.p2p3.p4-2p1.p3p2.p4+2p1.p4p2.p3",100000);//
   }
@@ -186,8 +186,8 @@ BOOST_AUTO_TEST_CASE(s142aa132sC_tests) {
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
     particle p4=particle(mom4,m4);
-    sproduct sp1 = sproduct(SQUARE,&p1,&p4,&p2);//[142>
-    sproduct sp2 = sproduct(ANGLE,&p1,&p3,&p2);//<132]
+    sproduct sp1 = sproduct(SQUARE,&p1,&p4,&p2,2);//[142>
+    sproduct sp2 = sproduct(ANGLE,&p1,&p3,&p2,2);//<132]
     ldouble expected = -2.*m1*m2*p3.dot(p4);
     test_sproduct(&sp1, &sp2, ni, 4, &p1, &p2, &p3, &p4, &p4, expected, "[142><132]*", "-2m1m2p3.p4",1000000);//
   }
@@ -217,8 +217,8 @@ BOOST_AUTO_TEST_CASE(s142as132aC_tests) {
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
     particle p4=particle(mom4,m4);
-    sproduct sp1 = sproduct(SQUARE,&p1,&p4,&p2);//[142>
-    sproduct sp2 = sproduct(SQUARE,&p1,&p3,&p2);//[132>
+    sproduct sp1 = sproduct(SQUARE,&p1,&p4,&p2,2);//[142>
+    sproduct sp2 = sproduct(SQUARE,&p1,&p3,&p2,2);//[132>
     ldouble expected = 2.*p1.dot(p4)*p2.dot(p3)-2.*p1.dot(p2)*p3.dot(p4)+2.*p1.dot(p3)*p2.dot(p4);
     test_sproduct(&sp1, &sp2, ni, 4, &p1, &p2, &p3, &p4, &p4, expected, "[142>[132>*", "2p1.p4p2.p3-2p1.p2p3.p4+2p1.p3p2.p4",100000);//
   }
@@ -249,8 +249,8 @@ BOOST_AUTO_TEST_CASE(s142as1352sC_tests) {
     particle p3=particle(mom3,m3);
     particle p4=particle(mom4,m4);
     particle p5=particle(mom5,m5);
-    sproduct sp1 = sproduct(SQUARE,&p1,&p4,&p2);//[142>
-    sproduct sp2 = sproduct(SQUARE,&p1,&p3,&p5,&p2);//[1352]
+    sproduct sp1 = sproduct(SQUARE,&p1,&p4,&p2,2);//[142>
+    sproduct sp2 = sproduct(SQUARE,&p1,&p3,&p5,&p2,2);//[1352]
     ldouble expected = -2.*m2*(p1.dot(p4)*p3.dot(p5)-p1.dot(p5)*p3.dot(p4)+p1.dot(p3)*p4.dot(p5));
     test_sproduct(&sp1, &sp2, ni, 5, &p1, &p2, &p3, &p4, &p5, expected, "[142>[1352]*", "-2m2(p1.p4p3.p5-p1.p5p3.p4+p1.p3p4.p5)",200000000);//
   }
@@ -275,9 +275,9 @@ BOOST_AUTO_TEST_CASE(s123a_lu_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2,LOWER);
-    sproduct a23a = sproduct(ANGLE,&p2,&p3);
-    sproduct s12sa23a = sproduct(SQUARE,&p1,&p2,&p3);//[123>
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,LOWER,2);
+    sproduct a23a = sproduct(ANGLE,&p2,&p3,2);
+    sproduct s12sa23a = sproduct(SQUARE,&p1,&p2,&p3,2);//[123>
     test_sproduct_spinsum(&s12s, &a23a, &s12sa23a, m1, m3, 1);
   }
 }
@@ -300,9 +300,9 @@ BOOST_AUTO_TEST_CASE(s123a_ul_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);
-    sproduct a23a = sproduct(ANGLE,&p2, LOWER, &p3);
-    sproduct s12sa23a = sproduct(SQUARE,&p1,&p2,&p3);//[123>
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);
+    sproduct a23a = sproduct(ANGLE,&p2, LOWER, &p3,2);
+    sproduct s12sa23a = sproduct(SQUARE,&p1,&p2,&p3,2);//[123>
     test_sproduct_spinsum(&s12s, &a23a, &s12sa23a, m1, m3, -1);
   }
 }
@@ -326,9 +326,9 @@ BOOST_AUTO_TEST_CASE(a123s_ul_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct a12a = sproduct(ANGLE,&p1,&p2);
-    sproduct s23s = sproduct(SQUARE,&p2, LOWER, &p3);
-    sproduct a12as23s = sproduct(ANGLE,&p1,&p2,&p3);//<123]
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,2);
+    sproduct s23s = sproduct(SQUARE,&p2, LOWER, &p3,2);
+    sproduct a12as23s = sproduct(ANGLE,&p1,&p2,&p3,2);//<123]
     test_sproduct_spinsum(&a12a, &s23s, &a12as23s, m1, m3, 1);
   }
 }
@@ -352,9 +352,9 @@ BOOST_AUTO_TEST_CASE(a123s_lu_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct a12a = sproduct(ANGLE,&p1,&p2, LOWER);
-    sproduct s23s = sproduct(SQUARE,&p2, &p3);
-    sproduct a12as23s = sproduct(ANGLE,&p1,&p2,&p3);//<123]
+    sproduct a12a = sproduct(ANGLE,&p1,&p2, LOWER,2);
+    sproduct s23s = sproduct(SQUARE,&p2, &p3,2);
+    sproduct a12as23s = sproduct(ANGLE,&p1,&p2,&p3,2);//<123]
     test_sproduct_spinsum(&a12a, &s23s, &a12as23s, m1, m3, -1);
   }
 }
@@ -377,9 +377,9 @@ BOOST_AUTO_TEST_CASE(m2s13s_lu_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2,LOWER);
-    sproduct s23s = sproduct(SQUARE,&p2,&p3);
-    sproduct s13s = sproduct(SQUARE,&p1,&p3);//[13]
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,LOWER,2);
+    sproduct s23s = sproduct(SQUARE,&p2,&p3,2);
+    sproduct s13s = sproduct(SQUARE,&p1,&p3,2);//[13]
     test_sproduct_spinsum(&s12s, &s23s, &s13s, m1, m3, m2);
   }
 }
@@ -401,9 +401,9 @@ BOOST_AUTO_TEST_CASE(m2s13s_ul_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);
-    sproduct s23s = sproduct(SQUARE,&p2, LOWER,&p3);
-    sproduct s13s = sproduct(SQUARE,&p1,&p3);//[13]
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);
+    sproduct s23s = sproduct(SQUARE,&p2, LOWER,&p3,2);
+    sproduct s13s = sproduct(SQUARE,&p1,&p3,2);//[13]
     test_sproduct_spinsum(&s12s, &s23s, &s13s, m1, m3, -m2);
   }
 }
@@ -425,9 +425,9 @@ BOOST_AUTO_TEST_CASE(m2a13a_ul_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct a12a = sproduct(ANGLE,&p1,&p2);
-    sproduct a23a = sproduct(ANGLE,&p2, LOWER,&p3);
-    sproduct a13a = sproduct(ANGLE,&p1,&p3);//<13>
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,2);
+    sproduct a23a = sproduct(ANGLE,&p2, LOWER,&p3,2);
+    sproduct a13a = sproduct(ANGLE,&p1,&p3,2);//<13>
     test_sproduct_spinsum(&a12a, &a23a, &a13a, m1, m3, m2);
   }
 }
@@ -449,9 +449,9 @@ BOOST_AUTO_TEST_CASE(m2a13a_lu_tests) {
     particle p1=particle(mom1,m1);
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
-    sproduct a12a = sproduct(ANGLE,&p1,&p2, LOWER);
-    sproduct a23a = sproduct(ANGLE,&p2,&p3);
-    sproduct a13a = sproduct(ANGLE,&p1,&p3);//<13>
+    sproduct a12a = sproduct(ANGLE,&p1,&p2, LOWER,2);
+    sproduct a23a = sproduct(ANGLE,&p2,&p3,2);
+    sproduct a13a = sproduct(ANGLE,&p1,&p3,2);//<13>
     test_sproduct_spinsum(&a12a, &a23a, &a13a, m1, m3, -m2);
   }
 }
@@ -485,10 +485,10 @@ BOOST_AUTO_TEST_CASE(s142a_m2s12s_m1a12a_s132a_tests) {
     particle p2=particle(mom2,m2);
     particle p3=particle(mom3,m3);
     particle p4=particle(mom4,m4);
-    sproduct s142a = sproduct(SQUARE,&p1,&p4,&p2);
-    sproduct s132a = sproduct(SQUARE,&p1,&p3,&p2);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);
-    sproduct a12a = sproduct(ANGLE,&p1,&p2);
+    sproduct s142a = sproduct(SQUARE,&p1,&p4,&p2,2);
+    sproduct s132a = sproduct(SQUARE,&p1,&p3,&p2,2);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,2);
     if(o==0||o==1)
       for(int ds1=-1;ds1<=1;ds1+=2)
 	for(int ds2=-1;ds2<=1;ds2+=2)
@@ -537,12 +537,12 @@ BOOST_AUTO_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
     particle p2=particle(mom2,m12);
     particle p3=particle(mom3,m3);
     particle p4=particle(mom4,m4);
-    sproduct s142a = sproduct(SQUARE,&p1,&p4,&p2);
-    sproduct s241a = sproduct(SQUARE,&p2,&p4,&p1);
-    sproduct s132a = sproduct(SQUARE,&p1,&p3,&p2);
-    sproduct s231a = sproduct(SQUARE,&p2,&p3,&p1);
-    sproduct s12s = sproduct(SQUARE,&p1,&p2);
-    sproduct a12a = sproduct(ANGLE,&p1,&p2);
+    sproduct s142a = sproduct(SQUARE,&p1,&p4,&p2,2);
+    sproduct s241a = sproduct(SQUARE,&p2,&p4,&p1,2);
+    sproduct s132a = sproduct(SQUARE,&p1,&p3,&p2,2);
+    sproduct s231a = sproduct(SQUARE,&p2,&p3,&p1,2);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,2);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,2);
     if(o<2)
       for(int ds1=-1;ds1<=1;ds1+=2)
 	for(int ds2=-1;ds2<=1;ds2+=2)

@@ -41,23 +41,23 @@ namespace spinas {
     p3=particle(MW);
     p4=particle(MW);
     //<12>,[12],<23>,[23],<24>,[24],<34>,[34],<14>,[14],<13>,[13]
-    s14s = sproduct(SQUARE,&p1,&p4);
-    a14a = sproduct(ANGLE,&p1,&p4);
-    s32s = sproduct(SQUARE,&p3,&p2);
-    a32a = sproduct(ANGLE,&p3,&p2);
-    s43s = sproduct(SQUARE,&p4,&p3);
-    a43a = sproduct(ANGLE,&p4,&p3);
-    s42s = sproduct(SQUARE,&p4,&p2);
-    a42a = sproduct(ANGLE,&p4,&p2);
-    s12s = sproduct(SQUARE,&p1,&p2);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    s13s = sproduct(SQUARE,&p1,&p3);
-    a13a = sproduct(ANGLE,&p1,&p3);
+    s14s = sproduct(SQUARE,&p1,&p4,2);
+    a14a = sproduct(ANGLE,&p1,&p4,2);
+    s32s = sproduct(SQUARE,&p3,&p2,2);
+    a32a = sproduct(ANGLE,&p3,&p2,2);
+    s43s = sproduct(SQUARE,&p4,&p3,2);
+    a43a = sproduct(ANGLE,&p4,&p3,2);
+    s42s = sproduct(SQUARE,&p4,&p2,2);
+    a42a = sproduct(ANGLE,&p4,&p2,2);
+    s12s = sproduct(SQUARE,&p1,&p2,2);
+    a12a = sproduct(ANGLE,&p1,&p2,2);
+    s13s = sproduct(SQUARE,&p1,&p3,2);
+    a13a = sproduct(ANGLE,&p1,&p3,2);
     //
-    s132a = sproduct(SQUARE,&p1,&p3,&p2);
-    s231a = sproduct(SQUARE,&p2,&p3,&p1);
-    s123a = sproduct(SQUARE,&p1,&p2,&p3);
-    s321a = sproduct(SQUARE,&p3,&p2,&p1);
+    s132a = sproduct(SQUARE,&p1,&p3,&p2,2);
+    s231a = sproduct(SQUARE,&p2,&p3,&p1,2);
+    s123a = sproduct(SQUARE,&p1,&p2,&p3,2);
+    s321a = sproduct(SQUARE,&p3,&p2,&p1,2);
     //Couplings
     preh = e*e/(MW*MW*SW*SW);
     preA = e*e/(2.0*MW*MW*MW);

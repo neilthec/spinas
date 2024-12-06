@@ -34,12 +34,12 @@ namespace spinas {
     p1(particle(mu)), p2(particle(md)),
     p3(particle(mt)), p4(particle(mb)),
     //<14>, [23], [12], <12>, [34], <34>
-    a14a(sproduct(ANGLE,&p1,&p4)),
-    s23s(sproduct(SQUARE,&p2,&p3)),
-    s12s(sproduct(SQUARE,&p1,&p2)),
-    a12a(sproduct(ANGLE,&p1,&p2)),
-    s34s(sproduct(SQUARE,&p3,&p4)),
-    a34a(sproduct(ANGLE,&p3,&p4))
+    a14a(sproduct(ANGLE,&p1,&p4,2)),
+    s23s(sproduct(SQUARE,&p2,&p3,2)),
+    s12s(sproduct(SQUARE,&p1,&p2,2)),
+    a12a(sproduct(ANGLE,&p1,&p2,2)),
+    s34s(sproduct(SQUARE,&p3,&p4,2)),
+    a34a(sproduct(ANGLE,&p3,&p4,2))
   {}
   void udtb::set_masses(const ldouble& massu, const ldouble& massd, const ldouble& masst, const ldouble& massb, const ldouble& massW){
     mu=massu;

@@ -37,18 +37,18 @@ namespace spinas {
     p2=particle(md);
     p3=particle(0);
     p4=particle(mh);
-    s13s = sproduct(SQUARE,&p1,&p3);
-    a13a = sproduct(ANGLE,&p1,&p3);
-    s23s = sproduct(SQUARE,&p2,&p3);
-    a23a = sproduct(ANGLE,&p2,&p3);
-    s12s = sproduct(SQUARE,&p1,&p2);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    s342a = sproduct(SQUARE,&p3,&p4,&p2);
-    a342s = sproduct(ANGLE,&p3,&p4,&p2);
-    s341a = sproduct(SQUARE,&p3,&p4,&p1);
-    a341s = sproduct(ANGLE,&p3,&p4,&p1);
-    s3243s = sproduct(SQUARE,&p3,&p2,&p4,&p3);
-    a3243a = sproduct(ANGLE,&p3,&p2,&p4,&p3);
+    s13s = sproduct(SQUARE,&p1,&p3,2);
+    a13a = sproduct(ANGLE,&p1,&p3,2);
+    s23s = sproduct(SQUARE,&p2,&p3,2);
+    a23a = sproduct(ANGLE,&p2,&p3,2);
+    s12s = sproduct(SQUARE,&p1,&p2,2);
+    a12a = sproduct(ANGLE,&p1,&p2,2);
+    s342a = sproduct(SQUARE,&p3,&p4,&p2,2);
+    a342s = sproduct(ANGLE,&p3,&p4,&p2,2);
+    s341a = sproduct(SQUARE,&p3,&p4,&p1,2);
+    a341s = sproduct(ANGLE,&p3,&p4,&p1,2);
+    s3243s = sproduct(SQUARE,&p3,&p2,&p4,&p3,2);
+    a3243a = sproduct(ANGLE,&p3,&p2,&p4,&p3,2);
     //2.*MW*SW/EE
     pre = sqrt2*e*e*Qd*md/(2.0*MW*SW);
   }

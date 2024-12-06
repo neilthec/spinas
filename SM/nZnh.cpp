@@ -40,8 +40,8 @@ namespace spinas {
     p3=particle(0);
     p4=particle(mh);
     //[23], <13>
-    s23s = sproduct(SQUARE,&p2,&p3);
-    a12a = sproduct(ANGLE,&p1,&p2);
+    s23s = sproduct(SQUARE,&p2,&p3,2);
+    a12a = sproduct(ANGLE,&p1,&p2,2);
     //Couplings
     preZ = sqrt2*two*e*e/(4.0*CW*CW*SW*SW);
   }

@@ -35,95 +35,95 @@ namespace spinas {
   sproduct::sproduct(){}
 
   //0 Internal Momenta
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(0) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(0), dimension(dim) {
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(0) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(0), dimension(dim) {
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(0) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(0), dimension(dim) {
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(0) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(0), dimension(dim) {
     update();
   }
   
   //1 Internal Momenta
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(1) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(1), dimension(dim) {
     p[0] = p0;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(1) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(1), dimension(dim) {
     p[0] = p0;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(1) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(1), dimension(dim) {
     p[0] = p0;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(1) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(1), dimension(dim) {
     p[0] = p0;
     update();
   }
 
   //2 Internal Momenta
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(2) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(2), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(2) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(2), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(2) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(2), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(2) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(2), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     update();
   }
 
   //3 Internal Momenta
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(3) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(3), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(3) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(3), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(3) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(3), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(3) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(3), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -131,32 +131,32 @@ namespace spinas {
   }
 
   //4 Internal Momenta
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(4) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(4), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
     p[3] = p3;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(4) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(4), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
     p[3] = p3;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(4) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(4), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
     p[3] = p3;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(4) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(4), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -165,8 +165,8 @@ namespace spinas {
   }
 
   //5 Internal Momenta
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(5) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(5), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -174,8 +174,8 @@ namespace spinas {
     p[4] = p4;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(5) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(5), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -183,8 +183,8 @@ namespace spinas {
     p[4] = p4;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(5) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(5), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -192,8 +192,8 @@ namespace spinas {
     p[4] = p4;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(5) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(5), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -204,8 +204,8 @@ namespace spinas {
 
 
   //6 Internal Momenta
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(6) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(true), N(6), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -214,8 +214,8 @@ namespace spinas {
     p[5] = p5;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(6) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(true), N(6), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -224,8 +224,8 @@ namespace spinas {
     p[5] = p5;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(6) {
+  sproduct::sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(true), pR(partR), isRightUpper(iRU), N(6), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
@@ -234,8 +234,8 @@ namespace spinas {
     p[5] = p5;
     update();
   }
-  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU):
-    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(6) {
+  sproduct::sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& dim):
+    isLeftAngle(as), pL(partL), isLeftUpper(iLU), pR(partR), isRightUpper(iRU), N(6), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;

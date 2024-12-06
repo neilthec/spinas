@@ -37,18 +37,18 @@ namespace spinas {
     p2=particle(0);
     p3=particle(mu);
     p4=particle(mh);
-    s12s = sproduct(SQUARE,&p1,&p2);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    s23s = sproduct(SQUARE,&p2,&p3);
-    a23a = sproduct(ANGLE,&p2,&p3);
-    s13s = sproduct(SQUARE,&p1,&p3);
-    a13a = sproduct(ANGLE,&p1,&p3);
-    s243a = sproduct(SQUARE,&p2,&p4,&p3);
-    a243s = sproduct(ANGLE,&p2,&p4,&p3);
-    s241a = sproduct(SQUARE,&p2,&p4,&p1);
-    a241s = sproduct(ANGLE,&p2,&p4,&p1);
-    s2342s = sproduct(SQUARE,&p2,&p3,&p4,&p2);
-    a2342a = sproduct(ANGLE,&p2,&p3,&p4,&p2);
+    s12s = sproduct(SQUARE,&p1,&p2,2);
+    a12a = sproduct(ANGLE,&p1,&p2,2);
+    s23s = sproduct(SQUARE,&p2,&p3,2);
+    a23a = sproduct(ANGLE,&p2,&p3,2);
+    s13s = sproduct(SQUARE,&p1,&p3,2);
+    a13a = sproduct(ANGLE,&p1,&p3,2);
+    s243a = sproduct(SQUARE,&p2,&p4,&p3,2);
+    a243s = sproduct(ANGLE,&p2,&p4,&p3,2);
+    s241a = sproduct(SQUARE,&p2,&p4,&p1,2);
+    a241s = sproduct(ANGLE,&p2,&p4,&p1,2);
+    s2342s = sproduct(SQUARE,&p2,&p3,&p4,&p2,2);
+    a2342a = sproduct(ANGLE,&p2,&p3,&p4,&p2,2);
     pre = sqrt2*e*e*Qu*mu/(2.0*MW*SW);
   }
   void uAuh::set_masses(const ldouble& massu, const ldouble& massh, const ldouble& massW){

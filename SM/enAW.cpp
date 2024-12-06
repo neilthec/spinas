@@ -39,16 +39,16 @@ namespace spinas {
     p3=particle(0);
     p4=particle(MW);
     //[34],<12>,<24>,[13],[314>
-    s34s = sproduct(SQUARE,&p3,&p4);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    a24a = sproduct(ANGLE,&p2,&p4);
-    s13s = sproduct(SQUARE,&p1,&p3);
-    s314a = sproduct(SQUARE,&p3,&p1,&p4);
+    s34s = sproduct(SQUARE,&p3,&p4,2);
+    a12a = sproduct(ANGLE,&p1,&p2,2);
+    a24a = sproduct(ANGLE,&p2,&p4,2);
+    s13s = sproduct(SQUARE,&p1,&p3,2);
+    s314a = sproduct(SQUARE,&p3,&p1,&p4,2);
     //<23>,[14],<34>,[413>
-    a23a = sproduct(ANGLE,&p2,&p3);
-    s14s = sproduct(SQUARE,&p1,&p4);
-    a34a = sproduct(ANGLE,&p3,&p4);
-    s413a = sproduct(SQUARE,&p4,&p1,&p3);
+    a23a = sproduct(ANGLE,&p2,&p3,2);
+    s14s = sproduct(SQUARE,&p1,&p4,2);
+    a34a = sproduct(ANGLE,&p3,&p4,2);
+    s413a = sproduct(SQUARE,&p4,&p1,&p3,2);
     //prefactor
     pre = std::sqrt(2.0)*e*e/(MW*SW);
   }

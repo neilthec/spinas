@@ -33,8 +33,8 @@ namespace spinas {
     e(echarge), MW(massW), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), WZ(widthZ),
     p1(particle(0)), p2(particle(0)),
     p3(particle(0)), p4(particle(0)),
-    a14a(sproduct(ANGLE,&p1,&p4)),
-    s23s(sproduct(SQUARE,&p2,&p3))
+    a14a(sproduct(ANGLE,&p1,&p4,2)),
+    s23s(sproduct(SQUARE,&p2,&p3,2))
   {
     //For some reason, MZ doesn't get set correctly above.  Redo it here.
     MZ=MW/CW;

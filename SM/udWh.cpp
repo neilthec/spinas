@@ -36,15 +36,15 @@ namespace spinas {
     p3=particle(MW);
     p4=particle(mh);
     //<13>,[23],<12>,[12],[343>
-    a13a = sproduct(ANGLE,&p1,&p3);
-    s23s = sproduct(SQUARE,&p2,&p3);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    s12s = sproduct(SQUARE,&p1,&p2);
-    s343a = sproduct(SQUARE,&p3,&p4,&p3);
+    a13a = sproduct(ANGLE,&p1,&p3,2);
+    s23s = sproduct(SQUARE,&p2,&p3,2);
+    a12a = sproduct(ANGLE,&p1,&p2,2);
+    s12s = sproduct(SQUARE,&p1,&p2,2);
+    s343a = sproduct(SQUARE,&p3,&p4,&p3,2);
     //<13>,[23],[342>
-    s342a = sproduct(SQUARE,&p3,&p4,&p2);
+    s342a = sproduct(SQUARE,&p3,&p4,&p2,2);
     //[23],<13>,[143>
-    s143a = sproduct(SQUARE,&p1,&p4,&p3);
+    s143a = sproduct(SQUARE,&p1,&p4,&p3,2);
     //Couplings
     preW = e*e/(2.0*MW*MW*SW*SW);
     preu = mu*preW;

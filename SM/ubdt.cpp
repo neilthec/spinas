@@ -34,12 +34,12 @@ namespace spinas {
     p1(particle(mu)), p2(particle(mb)),
     p3(particle(md)), p4(particle(mt)),
     //<14>, [23], [12], <12>, [34], <34>
-    s34s(sproduct(SQUARE,&p3,&p4)),
-    a12a(sproduct(ANGLE,&p1,&p2)),
-    a13a(sproduct(ANGLE,&p1,&p3)),
-    s13s(sproduct(SQUARE,&p1,&p3)),
-    s24s(sproduct(SQUARE,&p2,&p4)),
-    a24a(sproduct(ANGLE,&p2,&p4))
+    s34s(sproduct(SQUARE,&p3,&p4,2)),
+    a12a(sproduct(ANGLE,&p1,&p2,2)),
+    a13a(sproduct(ANGLE,&p1,&p3,2)),
+    s13s(sproduct(SQUARE,&p1,&p3,2)),
+    s24s(sproduct(SQUARE,&p2,&p4,2)),
+    a24a(sproduct(ANGLE,&p2,&p4,2))
   {
     preW = e*e/(4.0*MW*MW*SW*SW);
   }

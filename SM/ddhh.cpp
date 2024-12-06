@@ -34,10 +34,10 @@ namespace spinas {
     propd(md,0), proph(mh,wh),
     p1(particle(md)), p2(particle(md)),
     p3(particle(mh)), p4(particle(mh)),
-    s12s(sproduct(SQUARE,&p1,&p2)),
-    a12a(sproduct(ANGLE,&p1,&p2)),
-    s132a(sproduct(SQUARE,&p1,&p3,&p2)),
-    s231a(sproduct(SQUARE,&p2,&p3,&p1))
+    s12s(sproduct(SQUARE,&p1,&p2,2)),
+    a12a(sproduct(ANGLE,&p1,&p2,2)),
+    s132a(sproduct(SQUARE,&p1,&p3,&p2,2)),
+    s231a(sproduct(SQUARE,&p2,&p3,&p1,2))
   {
     prehS = 3*e*e*md*mh*mh/(4*MW*MW*SW*SW);
     prehTU = e*e*md*md/(4.0*MW*MW*SW*SW);

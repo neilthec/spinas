@@ -39,14 +39,14 @@ namespace spinas {
     p3=particle(MZ);
     p4=particle(0);
     //[23], [24], <13>, <14>, <34>
-    s34s = sproduct(SQUARE,&p3,&p4);
-    s24s = sproduct(SQUARE,&p2,&p4);
-    a13a = sproduct(ANGLE,&p1,&p3);
-    a12a = sproduct(ANGLE,&p1,&p2);
-    a23a = sproduct(ANGLE,&p2,&p3);
+    s34s = sproduct(SQUARE,&p3,&p4,2);
+    s24s = sproduct(SQUARE,&p2,&p4,2);
+    a13a = sproduct(ANGLE,&p1,&p3,2);
+    a12a = sproduct(ANGLE,&p1,&p2,2);
+    a23a = sproduct(ANGLE,&p2,&p3,2);
     //[314>, [413>
-    s312a = sproduct(SQUARE,&p3,&p1,&p2);
-    s213a = sproduct(SQUARE,&p2,&p1,&p3);
+    s312a = sproduct(SQUARE,&p3,&p1,&p2,2);
+    s213a = sproduct(SQUARE,&p2,&p1,&p3,2);
     //Couplings
     preTU = e*e/(2.0*MW*MW*SW*SW);
   }

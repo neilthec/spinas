@@ -34,10 +34,10 @@ namespace spinas {
     p1(particle(mm)), p2(particle(me)),
     p3(particle(0)), p4(particle(0)),
     //[24], ⟨13⟩, [14], ⟨23⟩
-    s24s(sproduct(SQUARE,&p2,&p4)),
-    a13a(sproduct(ANGLE,&p1,&p3)),
-    s14s(sproduct(SQUARE,&p1,&p4)),
-    a23a(sproduct(ANGLE,&p2,&p3))
+    s24s(sproduct(SQUARE,&p2,&p4,2)),
+    a13a(sproduct(ANGLE,&p1,&p3,2)),
+    s14s(sproduct(SQUARE,&p1,&p4,2)),
+    a23a(sproduct(ANGLE,&p2,&p3,2))
   {}
   void menn::set_masses(const ldouble& masse, const ldouble& massmu, const ldouble& massW){
     me=masse;
