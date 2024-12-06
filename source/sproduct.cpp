@@ -318,64 +318,70 @@ namespace spinas {
   cdouble sproduct::v(const int& spin){
     if(isLeftMassive){
       if(isRightMassive){
-	throw std::runtime_error("Incorrect usage of sproduct.val(j).  Only one particle must be massive.");
-	return cdouble(0,0);
+	      throw std::runtime_error("Incorrect usage of sproduct.val(j).  Only one particle must be massive.");
+	      return cdouble(0,0);
       }
       int jL=0;
-      if(spin>0) jL=1;
+      if(dimension==2)
+        jL = (spin+1)/2;
+      else if(dimension==3)
+        jL = (spin+2)/2;
       //Check whether it is already calculted.
       if(isCalculated[jL][0]) return product[jL][0];
       //Calcualte it.
       cvector vec;
       if(isLeftAngle){
-	vec = pL->langle(spin,isLeftUpper,dimension);
-	if(N>0)
-	  vec = vec * pMat;
-	if(N%2==0)
-	  product[jL][0] = vec * pR->rangle(dimension);
-	else
-	  product[jL][0] = vec * pR->rsquare(dimension);
+	      vec = pL->langle(spin,isLeftUpper,dimension);
+	      if(N>0)
+	        vec = vec * pMat;
+	      if(N%2==0)
+	        product[jL][0] = vec * pR->rangle(dimension);
+	      else
+	        product[jL][0] = vec * pR->rsquare(dimension);
       }
       else{
-	vec = pL->lsquare(spin,isLeftUpper,dimension);
-	if(N>0)
-	  vec = vec * pMat;
-	if(N%2==0)
-	  product[jL][0] = vec * pR->rsquare(dimension);
-	else
-	  product[jL][0] = vec * pR->rangle(dimension);
+	      vec = pL->lsquare(spin,isLeftUpper,dimension);
+	      if(N>0)
+	        vec = vec * pMat;
+	      if(N%2==0)
+	        product[jL][0] = vec * pR->rsquare(dimension);
+	      else
+	        product[jL][0] = vec * pR->rangle(dimension);
       }
       isCalculated[jL][0] = true;
       return product[jL][0];
     }
     else if(isRightMassive){
       if(isLeftMassive){
-	throw std::runtime_error("Incorrect usage of sproduct.val(j).  Only one particle must be massive.");
-	return cdouble(0,0);
+	      throw std::runtime_error("Incorrect usage of sproduct.val(j).  Only one particle must be massive.");
+	      return cdouble(0,0);
       }
       int jR=0;
-      if(spin>0) jR=1;
+      if(dimension==2)
+        jR = (spin+1)/2;
+      else if(dimension==3)
+        jR = (spin+2)/2;
       //Check whether it is already calculted.
       if(isCalculated[0][jR]) return product[0][jR];
       //Calcualte it.
       cvector vec;
       if(isLeftAngle){
-	vec = pL->langle(dimension);
-	if(N>0)
-	  vec = vec * pMat;
-	if(N%2==0)
-	  product[0][jR] = vec * pR->rangle(spin,isRightUpper,dimension);
-	else
-	  product[0][jR] = vec * pR->rsquare(spin,isRightUpper,dimension);
+	      vec = pL->langle(dimension);
+	      if(N>0)
+	        vec = vec * pMat;
+	      if(N%2==0)
+	        product[0][jR] = vec * pR->rangle(spin,isRightUpper,dimension);
+	      else
+	        product[0][jR] = vec * pR->rsquare(spin,isRightUpper,dimension);
       }
       else{
-	vec = pL->lsquare(dimension);
-	if(N>0)
-	  vec = vec * pMat;
-	if(N%2==0)
-	  product[0][jR] = vec * pR->rsquare(spin,isRightUpper,dimension);
-	else
-	  product[0][jR] = vec * pR->rangle(spin,isRightUpper,dimension);
+	      vec = pL->lsquare(dimension);
+	      if(N>0)
+	        vec = vec * pMat;
+	      if(N%2==0)
+	        product[0][jR] = vec * pR->rsquare(spin,isRightUpper,dimension);
+	      else
+	        product[0][jR] = vec * pR->rangle(spin,isRightUpper,dimension);
       }
       isCalculated[0][jR] = true;
       return product[0][jR];
@@ -389,10 +395,15 @@ namespace spinas {
       throw std::runtime_error("Incorrect usage of sproduct.val(jL,jR).  Both particles must be massive.");
       return cdouble(0,0);
     }
-    int jL=0;
-    if(spinL>0) jL=1;
-    int jR=0;
-    if(spinR>0) jR=1;
+    int jL=0, jR=0;
+    if(dimension==2){
+      jL = (spinL+1)/2;
+      jR = (spinR+1)/2;
+    }
+    else if(dimension==3){
+      jL = (spinL+2)/2;
+      jR = (spinR+2)/2;
+    }
     //Check whether it is already calculted.
     if(isCalculated[jL][jR]) return product[jL][jR];
     //Calcualte it.

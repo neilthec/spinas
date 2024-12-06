@@ -21,6 +21,7 @@
 using namespace spinas;
 
 void test_sproduct(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, particle* p1, particle* p2, particle* p3, particle* p4, particle* p5, const ldouble& expected, const char* spstring, const char* resstring, const ldouble& epsFactor);
+void test_sproduct_spin1(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, particle* p1, particle* p2, particle* p3, particle* p4, particle* p5, const ldouble& expected, const char* spstring, const char* resstring, const ldouble& epsFactor);
 
 void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, const ldouble& m1, const ldouble& m3, const ldouble& factor);
 
@@ -50,6 +51,36 @@ BOOST_AUTO_TEST_CASE(s12sa21a_tests) {
     sproduct s12s = sproduct(SQUARE,&p1,&p2,2);	
     ldouble expected = 2.*p1.dot(p2);//[12]
     test_sproduct(&s12s, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12][12]*", "-2p1.p2",10);//
+  }
+}
+
+
+
+//[12]<21>=2p1.p2 : spin-1
+BOOST_AUTO_TEST_CASE(s12sa21a_s1_tests) {
+  BOOST_TEST_MESSAGE("Testing sproduct:");
+  BOOST_TEST_MESSAGE("\t* [12]<21>=2p1.p2: spin-1");
+  ldouble m1,m2;
+  ldouble mom1[4], mom2[4];
+  int ni;
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m2=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom2,-50,50);
+    else m2 = choose_random_momentum(mom2,-50,50);
+    ni=2;
+    if(o==1||o==2) ni=1;
+    if(o==3) ni=0;    
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,3);	
+    ldouble expected = 2.*p1.dot(p2);
+    expected *= expected;
+    expected -= m1*m1*m2*m2;
+    test_sproduct_spin1(&s12s, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12][12]*", "-2p1.p2",1000);//
   }
 }
 
@@ -621,6 +652,92 @@ void test_sproduct(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, p
     else if(ni==1)
       for(int k=0;k<2;k++)
 	    spinProd += std::real(sp1->v(2*k-1)*std::conj(sp2->v(2*k-1)));
+    else
+      spinProd += std::real(sp1->v()*std::conj(sp2->v()));
+    
+    //Do the Boost Check
+    BOOST_CHECK_SMALL(std::abs(spinProd-expected), epsilon);
+    
+    //Reset Momentum before Rotations and Boosts
+    for(int k=0;k<4;k++){
+      mom1[k] = mom1o[k];
+      mom2[k] = mom2o[k];
+      mom3[k] = mom3o[k];
+      mom4[k] = mom4o[k];
+      mom5[k] = mom5o[k];
+    }
+    //Random rotation
+    ldouble u[3], um, angle, v[3], vm;
+    for(int k=0;k<3;k++) u[k] = choose_random_ldouble(0,1000);
+    um = std::sqrt(u[0]*u[0]+u[1]*u[1]+u[2]*u[2]);
+    for(int k=0;k<3;k++) u[k] /= um;
+    angle = choose_random_ldouble(0,2.*3.141592653589793238462643383279502884);
+    rotate_momentum(mom1,u,angle);
+    rotate_momentum(mom2,u,angle);
+    rotate_momentum(mom3,u,angle);
+    rotate_momentum(mom4,u,angle);
+    rotate_momentum(mom5,u,angle);
+    //Random Boost
+    vm = 2;
+    while(vm>=0.99){
+      for(int k=0;k<3;k++) v[k] = choose_random_ldouble(0,1);
+      vm = std::sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+    }
+    boost_momentum(mom1,v);
+    boost_momentum(mom2,v);
+    boost_momentum(mom3,v);
+    boost_momentum(mom4,v);
+    boost_momentum(mom5,v);
+    //Random Rotation
+    for(int k=0;k<3;k++) u[k] = choose_random_ldouble(0,1000);
+    um = std::sqrt(u[0]*u[0]+u[1]*u[1]+u[2]*u[2]);
+    for(int k=0;k<3;k++) u[k] /= um;
+    angle = choose_random_ldouble(0,2.*3.141592653589793238462643383279502884);
+    rotate_momentum(mom1,u,angle);
+    rotate_momentum(mom2,u,angle);
+    rotate_momentum(mom3,u,angle);
+    rotate_momentum(mom4,u,angle);
+    rotate_momentum(mom5,u,angle);
+    p1->set_momentum(mom1);
+    p2->set_momentum(mom2);
+    p3->set_momentum(mom3);
+    p4->set_momentum(mom4);
+    p5->set_momentum(mom5);
+    sp1->update();
+    sp2->update();
+  }
+}
+
+
+//ni is the number of spin indices, np is the number of particles.
+void test_sproduct_spin1(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, particle* p1, particle* p2, particle* p3, particle* p4, particle* p5, const ldouble& expected, const char* spstring, const char* resstring, const ldouble& epsFactor){
+  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 100000000*epsFactor;
+  int i=0;
+  ldouble mom1[4], mom2[4], mom3[4], mom4[4], mom5[4];
+  ldouble mom1o[4], mom2o[4], mom3o[4], mom4o[4], mom5o[4];
+  for(int j=0;j<4;j++){
+    mom1[j] = p1->get_momentum(j);
+    mom1o[j] = mom1[j];
+    mom2[j] = p2->get_momentum(j);
+    mom2o[j] = mom2[j];
+    mom3[j] = p3->get_momentum(j);
+    mom3o[j] = mom3[j];
+    mom4[j] = p4->get_momentum(j);
+    mom4o[j] = mom4[j];
+    mom5[j] = p5->get_momentum(j);
+    mom5o[j] = mom5[j];
+  }
+  sp1->update();
+  sp2->update();
+  for(int l=0;l<10;l++){
+    ldouble spinProd = 0;
+    if(ni==2)
+      for(int j=0;j<3;j++)
+	      for(int k=0;k<3;k++)
+	        spinProd += std::real(sp1->v(2*j-2,2*k-2)*std::conj(sp2->v(2*j-2,2*k-2)));
+    else if(ni==1)
+      for(int k=0;k<3;k++)
+	    spinProd += std::real(sp1->v(2*k-2)*std::conj(sp2->v(2*k-2)));
     else
       spinProd += std::real(sp1->v()*std::conj(sp2->v()));
     
