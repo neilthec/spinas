@@ -24,6 +24,7 @@ void test_sproduct(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, p
 void test_sproduct_spin1(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, particle* p1, particle* p2, particle* p3, particle* p4, particle* p5, const ldouble& expected, const char* spstring, const char* resstring, const ldouble& epsFactor);
 
 void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, const ldouble& m1, const ldouble& m3, const ldouble& factor);
+void test_sproduct_spinsum_spin1(sproduct* sp1, sproduct* sp2, sproduct* product, const ldouble& m1, const ldouble& m3, const ldouble& factor);
 
 
 BOOST_AUTO_TEST_SUITE(sproduct_tests)
@@ -56,10 +57,10 @@ BOOST_AUTO_TEST_CASE(s12sa21a_tests) {
 
 
 
-//[12]<21>=2p1.p2 : spin-1
+//[12]<21>=(2p1.p2)^2-m1^2*m2^2 : spin-1
 BOOST_AUTO_TEST_CASE(s12sa21a_s1_tests) {
   BOOST_TEST_MESSAGE("Testing sproduct:");
-  BOOST_TEST_MESSAGE("\t* [12]<21>=2p1.p2: spin-1");
+  BOOST_TEST_MESSAGE("\t* [12]<21>=(2p1.p2)^2-m1^2*m2^2: spin-1");
   ldouble m1,m2;
   ldouble mom1[4], mom2[4];
   int ni;
@@ -80,7 +81,7 @@ BOOST_AUTO_TEST_CASE(s12sa21a_s1_tests) {
     ldouble expected = 2.*p1.dot(p2);
     expected *= expected;
     expected -= m1*m1*m2*m2;
-    test_sproduct_spin1(&s12s, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12][12]*", "-2p1.p2",1000);//
+    test_sproduct_spin1(&s12s, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12][12]*", "(2p1.p2)^2-m1^2*m2^2",1000);//
   }
 }
 
@@ -112,6 +113,34 @@ test_sproduct(&a12a, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "<12>[12]*
   }
 }
 
+//[12][21]=3 m1^2*m2^2: spin-1
+//Not zero when m1=m2=0.  Don't test
+BOOST_AUTO_TEST_CASE(s12ss21s_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* [12][21]=3*m1^2*m2^2 and <12><21>=3*m1^2*m2^2: spin-1");
+  ldouble m1,m2;
+  ldouble mom1[4], mom2[4];
+  int ni;
+  for(int i=0;i<100;i++)
+  for(int o=0;o<3;o++){
+    m1=0;
+    m2=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom2,-50,50);
+    else m2 = choose_random_momentum(mom2,-50,50);
+    ni=2;
+    if(o==1||o==2) ni=1;
+    if(o==3) ni=0;    
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,3);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,3);
+    ldouble expected = 3.*m1*m1*m2*m2;
+test_sproduct_spin1(&s12s, &a12a, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "[12]<12>*", "3*m1^2*m2^2",10000);//
+test_sproduct_spin1(&a12a, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "<12>[12]*", "3*m1^2*m2^2",10000);//
+  }
+}
+
 //-[12]<231] = 2m1p2.p3
 //If m1=0, this formula does not apply.  So, we must skip it.
 BOOST_AUTO_TEST_CASE(s12sa231s_tests) {
@@ -139,6 +168,37 @@ test_sproduct(&s12s, &a132s, ni, 3, &p1, &p2, &p3, &p3, &p3, expected, "[12]<132
   }
 }
 
+
+//-[12]<231] = m1^2*[(2p2.p3)^2-m2^2*m3^2]
+//If m1=0, this formula does not apply.  So, we must skip it.
+BOOST_AUTO_TEST_CASE(s12sa231s_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* -[12]<231] = m1^2*[(2p2.p3)^2-m2^2*m3^2]: spin-1");
+  ldouble m1,m2,m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  int ni;
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m2=0;m3=0;
+    m1 = choose_random_momentum(mom1,-50,50);
+    if(o==1||o==3) choose_random_massless_momentum(mom2,-50,50);
+    else m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    ni=2;
+    if(o==1||o==3) ni=1;
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,3);//[12]	
+    sproduct a132s = sproduct(ANGLE,&p1,&p3,&p2,3);//<132]* = -<231]
+    ldouble expected = 2.*p2.dot(p3);
+    expected *= expected;
+    expected -= m2*m2*m3*m3;
+    expected *= m1*m1;
+test_sproduct_spin1(&s12s, &a132s, ni, 3, &p1, &p2, &p3, &p3, &p3, expected, "[12]<132]*", "m1^2*[(2p2.p3)^2-m2^2*m3^2]",20000000);//
+  }
+}
+
 //[12][2341] = -2m1m2p3.p4
 //If m1=0 or m2=0, this formula does not apply.  So, we must skip it.
 BOOST_AUTO_TEST_CASE(s12ss2341s_tests) {
@@ -163,6 +223,38 @@ BOOST_AUTO_TEST_CASE(s12ss2341s_tests) {
     sproduct a1432a = sproduct(ANGLE,&p1,&p4,&p3,&p2,2);//<1432>* = [2341]	
     ldouble expected = -2.*m1*m2*p3.dot(p4);
     test_sproduct(&s12s, &a1432a, ni, 4, &p1, &p2, &p3, &p4, &p4, expected, "[12]<1432>*", "-2m1m2p3.p4",500000);//
+  }
+}
+
+
+
+//[12][2341] = m1^2m2^2[(2p3.p4)^2-m3^2*m4^2]
+//If m1=0 or m2=0, this formula does not apply.  So, we must skip it.
+BOOST_AUTO_TEST_CASE(s12ss2341s_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* [12][2341] = m1^2m2^2[(2p3.p4)^2-m3^2*m4^2]: spin-1");
+  ldouble m1,m2,m3,m4;
+  ldouble mom1[4], mom2[4], mom3[4], mom4[4];
+  int ni=2;
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m3=0;m4=0;
+    m1=choose_random_momentum(mom1,-50,50);
+    m2=choose_random_momentum(mom2,-50,50);
+    if(o==1||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3=choose_random_momentum(mom3,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom4,-50,50);
+    else m4=choose_random_momentum(mom4,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    particle p4=particle(mom4,m4);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,3);//[12]	
+    sproduct a1432a = sproduct(ANGLE,&p1,&p4,&p3,&p2,3);//<1432>* = [2341]	
+    ldouble expected = 2.*p3.dot(p4);
+    expected *= expected;
+    expected -= m3*m3*m4*m4;
+    expected *= m1*m1*m2*m2;
+    test_sproduct_spin1(&s12s, &a1432a, ni, 4, &p1, &p2, &p3, &p4, &p4, expected, "[12]<1432>*", "m1^2m2^2[(2p3.p4)^2-m3^2*m4^2]",20000000000);//
   }
 }
 
@@ -314,6 +406,32 @@ BOOST_AUTO_TEST_CASE(s123a_lu_tests) {
 }
 
 
+
+//[12_I]<2^I3>=[123>: spin-1
+BOOST_AUTO_TEST_CASE(s123a_lu_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* [12_I]<2^I3>=[123>: spin-1");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,LOWER,3);
+    sproduct a23a = sproduct(ANGLE,&p2,&p3,3);
+    sproduct s12sa23a = sproduct(SQUARE,&p1,&p2,&p3,3);//[123>
+    test_sproduct_spinsum_spin1(&s12s, &a23a, &s12sa23a, m1, m3, 1);
+  }
+}
+
+
 //[12^I]<2_I3>=-[123>
 BOOST_AUTO_TEST_CASE(s123a_ul_tests) {
   BOOST_TEST_MESSAGE("\t* [12^I]<2_I3>=-[123>");
@@ -340,6 +458,33 @@ BOOST_AUTO_TEST_CASE(s123a_ul_tests) {
 
 
 
+//[12^I]<2_I3>=[123>: spin-1
+BOOST_AUTO_TEST_CASE(s123a_ul_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* [12^I]<2_I3>=[123>: spin-1");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,3);
+    sproduct a23a = sproduct(ANGLE,&p2, LOWER, &p3,3);
+    sproduct s12sa23a = sproduct(SQUARE,&p1,&p2,&p3,3);//[123>
+    test_sproduct_spinsum_spin1(&s12s, &a23a, &s12sa23a, m1, m3, 1);
+  }
+}
+
+
+
+
 //<12^I>[2_I3]=<123]
 BOOST_AUTO_TEST_CASE(a123s_ul_tests) {
   BOOST_TEST_MESSAGE("\t* <12^I>[2_I3]=<123]");
@@ -361,6 +506,32 @@ BOOST_AUTO_TEST_CASE(a123s_ul_tests) {
     sproduct s23s = sproduct(SQUARE,&p2, LOWER, &p3,2);
     sproduct a12as23s = sproduct(ANGLE,&p1,&p2,&p3,2);//<123]
     test_sproduct_spinsum(&a12a, &s23s, &a12as23s, m1, m3, 1);
+  }
+}
+
+
+
+//<12^I>[2_I3]=<123]
+BOOST_AUTO_TEST_CASE(a123s_ul_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* <12^I>[2_I3]=<123]: spin-1");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,3);
+    sproduct s23s = sproduct(SQUARE,&p2, LOWER, &p3,3);
+    sproduct a12as23s = sproduct(ANGLE,&p1,&p2,&p3,3);//<123]
+    test_sproduct_spinsum_spin1(&a12a, &s23s, &a12as23s, m1, m3, 1);
   }
 }
 
@@ -391,6 +562,32 @@ BOOST_AUTO_TEST_CASE(a123s_lu_tests) {
 }
 
 
+
+//<12_I>[2^I3]=<123]: spin-1
+BOOST_AUTO_TEST_CASE(a123s_lu_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* <12_I>[2^I3]=<123]: spin-1");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2, LOWER,3);
+    sproduct s23s = sproduct(SQUARE,&p2, &p3,3);
+    sproduct a12as23s = sproduct(ANGLE,&p1,&p2,&p3,3);//<123]
+    test_sproduct_spinsum_spin1(&a12a, &s23s, &a12as23s, m1, m3, 1);
+  }
+}
+
+
 //[12_I][2^I3]=m2[13]
 BOOST_AUTO_TEST_CASE(m2s13s_lu_tests) {
   BOOST_TEST_MESSAGE("\t* [12_I][2^I3]=m2[13]");
@@ -412,6 +609,30 @@ BOOST_AUTO_TEST_CASE(m2s13s_lu_tests) {
     sproduct s23s = sproduct(SQUARE,&p2,&p3,2);
     sproduct s13s = sproduct(SQUARE,&p1,&p3,2);//[13]
     test_sproduct_spinsum(&s12s, &s23s, &s13s, m1, m3, m2);
+  }
+}
+
+//[12_I][2^I3]=m2^2[13]: spin-1
+BOOST_AUTO_TEST_CASE(m2s13s_lu_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* [12_I][2^I3]=m2^2[13]: spin-1");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,LOWER,3);
+    sproduct s23s = sproduct(SQUARE,&p2,&p3,3);
+    sproduct s13s = sproduct(SQUARE,&p1,&p3,3);//[13]
+    test_sproduct_spinsum_spin1(&s12s, &s23s, &s13s, m1, m3, m2*m2);
   }
 }
 
@@ -439,6 +660,31 @@ BOOST_AUTO_TEST_CASE(m2s13s_ul_tests) {
   }
 }
 
+
+//[12^I][2_I3]=m2^2[13]: spin-1
+BOOST_AUTO_TEST_CASE(m2s13s_ul_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* [12^I][2_I3]=m2^2[13]: spin-1");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct s12s = sproduct(SQUARE,&p1,&p2,3);
+    sproduct s23s = sproduct(SQUARE,&p2, LOWER,&p3,3);
+    sproduct s13s = sproduct(SQUARE,&p1,&p3,3);//[13]
+    test_sproduct_spinsum_spin1(&s12s, &s23s, &s13s, m1, m3, m2*m2);
+  }
+}
+
 //<12^I><2_I3>=m2<13>
 BOOST_AUTO_TEST_CASE(m2a13a_ul_tests) {
   BOOST_TEST_MESSAGE("\t* <12^I><2_I3>=m2<13>");
@@ -463,6 +709,30 @@ BOOST_AUTO_TEST_CASE(m2a13a_ul_tests) {
   }
 }
 
+//<12^I><2_I3>=m2^2<13>: spin-1
+BOOST_AUTO_TEST_CASE(m2a13a_ul_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* <12^I><2_I3>=m2<13>");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2,3);
+    sproduct a23a = sproduct(ANGLE,&p2, LOWER,&p3,3);
+    sproduct a13a = sproduct(ANGLE,&p1,&p3,3);//<13>
+    test_sproduct_spinsum_spin1(&a12a, &a23a, &a13a, m1, m3, m2*m2);
+  }
+}
+
 //<12_I><2^I3>=-m2<13>
 BOOST_AUTO_TEST_CASE(m2a13a_lu_tests) {
   BOOST_TEST_MESSAGE("\t* <12_I><2^I3>=-m2<13>");
@@ -484,6 +754,31 @@ BOOST_AUTO_TEST_CASE(m2a13a_lu_tests) {
     sproduct a23a = sproduct(ANGLE,&p2,&p3,2);
     sproduct a13a = sproduct(ANGLE,&p1,&p3,2);//<13>
     test_sproduct_spinsum(&a12a, &a23a, &a13a, m1, m3, -m2);
+  }
+}
+
+
+//<12_I><2^I3>=m2^2<13>: spin-1
+BOOST_AUTO_TEST_CASE(m2a13a_lu_spin1_tests) {
+  BOOST_TEST_MESSAGE("\t* <12_I><2^I3>=m2^2<13>");
+  ldouble m1, m2, m3;
+  ldouble mom1[4], mom2[4], mom3[4];
+  for(int i=0;i<100;i++)
+  for(int o=0;o<4;o++){
+    m1=0;
+    m3=0;
+    if(o==1||o==3) choose_random_massless_momentum(mom1,-50,50);
+    else m1 = choose_random_momentum(mom1,-50,50);
+    m2 = choose_random_momentum(mom2,-50,50);
+    if(o==2||o==3) choose_random_massless_momentum(mom3,-50,50);
+    else m3 = choose_random_momentum(mom3,-50,50);
+    particle p1=particle(mom1,m1);
+    particle p2=particle(mom2,m2);
+    particle p3=particle(mom3,m3);
+    sproduct a12a = sproduct(ANGLE,&p1,&p2, LOWER,3);
+    sproduct a23a = sproduct(ANGLE,&p2,&p3,3);
+    sproduct a13a = sproduct(ANGLE,&p1,&p3,3);//<13>
+    test_sproduct_spinsum_spin1(&a12a, &a23a, &a13a, m1, m3, m2*m2);
   }
 }
 
@@ -617,6 +912,40 @@ void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, cons
       for(int ds3=-1;ds3<=1;ds3+=2){
 	cdouble spinorProd(0,0);
 	for(int ds2=-1;ds2<=1;ds2+=2)
+	  spinorProd += sp1->v(ds1,-ds2)*sp2->v(ds2,ds3);	
+	BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1,ds3) ), epsilon);
+      }
+}
+
+
+
+void test_sproduct_spinsum_spin1(sproduct* sp1, sproduct* sp2, sproduct* product, const ldouble& m1, const ldouble& m3, const ldouble& factor){
+  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000;//
+  if(m1==0 && m3==0){
+    cdouble spinorProd(0,0);
+    for(int ds2=-2;ds2<=2;ds2+=2)
+      spinorProd += sp1->v(-ds2)*sp2->v(ds2);
+    BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v() ), epsilon);
+  }
+  else if(m1==0)
+    for(int ds3=-2;ds3<=2;ds3+=2){
+      cdouble spinorProd(0,0);
+      for(int ds2=-2;ds2<=2;ds2+=2)
+	spinorProd += sp1->v(-ds2)*sp2->v(ds2,ds3);	
+      BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds3) ), epsilon);
+    }
+  else if(m3==0)
+    for(int ds1=-2;ds1<=2;ds1+=2){
+      cdouble spinorProd(0,0);
+      for(int ds2=-2;ds2<=2;ds2+=2)
+	spinorProd += sp1->v(ds1,-ds2)*sp2->v(ds2);
+      BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1) ), epsilon);
+    }
+  else
+    for(int ds1=-2;ds1<=2;ds1+=2)
+      for(int ds3=-2;ds3<=2;ds3+=2){
+	cdouble spinorProd(0,0);
+	for(int ds2=-2;ds2<=2;ds2+=2)
 	  spinorProd += sp1->v(ds1,-ds2)*sp2->v(ds2,ds3);	
 	BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1,ds3) ), epsilon);
       }
