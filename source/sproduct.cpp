@@ -286,7 +286,7 @@ namespace spinas {
   //Both massless
   cdouble sproduct::v(){
     if(isLeftMassive || isRightMassive){
-      throw std::runtime_error("Incorrect usage of sproduct.val().  Both particles must be massless.");
+      throw std::runtime_error("Incorrect usage of sproduct.v().  Both particles must be massless.");
       return cdouble(0,0);
     }
     //Check whether it is already calculted.
@@ -318,7 +318,7 @@ namespace spinas {
   cdouble sproduct::v(const int& spin){
     if(isLeftMassive){
       if(isRightMassive){
-	      throw std::runtime_error("Incorrect usage of sproduct.val(j).  Only one particle must be massive.");
+	      throw std::runtime_error("Incorrect usage of sproduct.v(j).  Only one particle must be massive.");
 	      return cdouble(0,0);
       }
       int jL=0;
@@ -353,7 +353,7 @@ namespace spinas {
     }
     else if(isRightMassive){
       if(isLeftMassive){
-	      throw std::runtime_error("Incorrect usage of sproduct.val(j).  Only one particle must be massive.");
+	      throw std::runtime_error("Incorrect usage of sproduct.v(j).  Only one particle must be massive.");
 	      return cdouble(0,0);
       }
       int jR=0;
@@ -386,13 +386,13 @@ namespace spinas {
       isCalculated[0][jR] = true;
       return product[0][jR];
     }
-    throw std::runtime_error("Incorrect usage of sproduct.val(j).  One particle must be massive.");
+    throw std::runtime_error("Incorrect usage of sproduct.v(j).  One particle must be massive.");
     return cdouble(0,0);
   }
   //Both massive
   cdouble sproduct::v(const int& spinL, const int& spinR){
     if(!isLeftMassive || !isRightMassive){
-      throw std::runtime_error("Incorrect usage of sproduct.val(jL,jR).  Both particles must be massive.");
+      throw std::runtime_error("Incorrect usage of sproduct.v(jL,jR).  Both particles must be massive.");
       return cdouble(0,0);
     }
     int jL=0, jR=0;
