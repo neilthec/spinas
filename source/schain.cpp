@@ -207,7 +207,7 @@ namespace spinas {
 
   //Massive spinor
   cvector schain::v(const int& spin){
-    if(isRightMassive){
+    if(!isRightMassive){
       throw std::runtime_error("Incorrect usage of schain.v(j).  The particle must be massive.");
 	  return cvector(0,0);
     }
