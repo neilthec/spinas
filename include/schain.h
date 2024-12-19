@@ -29,7 +29,7 @@ namespace spinas {
   class schain{
   private:
     int dimension;//Whether spinors are for spin-1/2 (2) or spin-1 (3).
-    particle *pR;//Particles in the right spinors.
+    particle *pR;//Particle in the right spinors.
     particle *p[6];//Particles to the left.
     cmatrix pMat;//Product of all momenta in between the spinors
     int N;//Number of particles/momenta in product
@@ -83,6 +83,9 @@ namespace spinas {
     //Must be run after masses or momenta of particles is updated.
     void update();
     
+    //Return whether the exposed Lorentz index is dotted, right spinor is massive.
+    bool is_Lindex_dotted() const;
+    bool is_right_massive() const;
 
     //products
     cvector v();

@@ -178,6 +178,15 @@ namespace spinas {
     }
   }
 
+  //Return whether the exposed Lorentz index is dotted, right spinor is massive.
+  bool schain::is_Lindex_dotted() const{
+    if((isRightAngle && N%2==0)||(!isRightAngle && N%2!=0)) return false;
+    return true;
+  }
+  bool schain::is_right_massive() const{
+    return isRightMassive;
+  }
+
 
   //Products
   //Massless
