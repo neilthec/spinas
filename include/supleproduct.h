@@ -38,8 +38,8 @@ namespace spinas {
     bool isRightMassive[3] = {false,false,false};
 
     //Whether the spinor uple product is calculated
-    bool isCalculated[3][3] = {{false,false,false},{false,false,false},{false,false,false}};
-    cdouble product[3][3];
+    bool isCalculated[3][3][3];
+    cdouble product[3][3][3];
 
     //Check that it makes sense
     void check();
@@ -60,8 +60,8 @@ namespace spinas {
     //products
     cdouble v();
     cdouble v(const int& ds);
-    cdouble v(const int& ds1, const int& ds2);
-    cdouble v(const int& ds1, const int& ds2, const int& ds3);
+    cdouble v(const int& ds0, const int& ds1);
+    cdouble v(const int& ds0, const int& ds1, const int& ds2);
 
   };
   
