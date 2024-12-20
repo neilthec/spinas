@@ -21,11 +21,11 @@ using namespace spinas;
 
 BOOST_AUTO_TEST_SUITE(supleproduct_tests)
 
-//[123]=-[132] & <123>=-<132>
+//[[123]]=-[[132]] & <<123>>=-<<132>>
 BOOST_AUTO_TEST_CASE(stp123stp132_tests) {
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 10000000;// 
   BOOST_TEST_MESSAGE("Testing supleproduct:");
-  BOOST_TEST_MESSAGE("\t* [123]=-[132] & <123>=-<132>");
+  BOOST_TEST_MESSAGE("\t* [[123]]=-[[132]] & <<123>>=-<<132>>");
   ldouble m1,m2,m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -94,11 +94,11 @@ BOOST_AUTO_TEST_CASE(stp123stp132_tests) {
   }
 }
 
-//[111]=0 & <111>=0
+//[[111]]=0 & <<111>>=0
 BOOST_AUTO_TEST_CASE(stp111_tests) {
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;// 
   BOOST_TEST_MESSAGE("Testing supleproduct:");
-  BOOST_TEST_MESSAGE("\t* [111]=0 & <111>=0");
+  BOOST_TEST_MESSAGE("\t* [[111]]=0 & <<111>>=0");
   ldouble m1=0;
   ldouble mom1[4];
   for(int i=0;i<100;i++){
@@ -114,11 +114,11 @@ BOOST_AUTO_TEST_CASE(stp111_tests) {
   }
 }
 
-//[111]=m1^3epsilon & <111>=m1^3epsilon
+//[[111]]=m1^3epsilon & <<111>>=m1^3epsilon
 BOOST_AUTO_TEST_CASE(stp111m3_tests) {
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;// 
   BOOST_TEST_MESSAGE("Testing supleproduct:");
-  BOOST_TEST_MESSAGE("\t* [111]=m1^3*epsilon & <111>=m1^3*epsilon");
+  BOOST_TEST_MESSAGE("\t* [[111]]=m1^3*epsilon & <<111>>=m1^3*epsilon");
   ldouble m1;
   ldouble mom1[4];
   for(int i=0;i<100;i++){
@@ -145,6 +145,79 @@ BOOST_AUTO_TEST_CASE(stp111m3_tests) {
 
       BOOST_CHECK_SMALL(std::abs(s111.v(2,2,0)),epsilon);
       BOOST_CHECK_SMALL(std::abs(a111.v(2,2,0)),epsilon);
+  }
+}
+
+//[[ijk]][[klm]]=mk^2[[il]][[jm]]-mk^2[[im]][[jl]]
+BOOST_AUTO_TEST_CASE(stp123stp456_tests) {
+  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000000;// 
+  BOOST_TEST_MESSAGE("Testing supleproduct:");
+  BOOST_TEST_MESSAGE("\t* [[ijk]][[klm]]=mk^2[[il]][[jm]]-mk^2[[im]][[jl]]");
+  ldouble mi,mj,mk,ml,mm;
+  ldouble momi[4], momj[4], momk[4], moml[4], momm[4];
+  for(int n=0;n<100;n++){
+    mk = choose_random_momentum(momk,-50,50);
+    particle pk=particle(momk,mk);
+    schain cksU = schain(&pk,SQUARE,3);
+    schain cksL = schain(&pk,LOWER,SQUARE,3);
+    schain ckaU = schain(&pk,ANGLE,3);
+    schain ckaL = schain(&pk,LOWER,ANGLE,3);
+    for(int i=0;i<2;i++){
+      mi=0;
+      if(i==0) choose_random_massless_momentum(momi,-50,50);
+      else mi = choose_random_momentum(momi,-50,50);
+      particle pi=particle(momi,mi);
+      schain cis = schain(&pi,SQUARE,3);
+      schain cia = schain(&pi,ANGLE,3);
+      for(int j=0;j<2;j++){
+        mj=0;
+        if(j==0) choose_random_massless_momentum(momj,-50,50);
+        else mj = choose_random_momentum(momj,-50,50);
+        particle pj=particle(momj,mj);
+        schain cjs = schain(&pj,SQUARE,3);
+        schain cja = schain(&pj,ANGLE,3);
+        for(int l=0;l<2;l++){
+          ml=0;
+          if(l==0) choose_random_massless_momentum(moml,-50,50);
+          else ml = choose_random_momentum(moml,-50,50);
+          particle pl=particle(moml,ml);
+          schain cls = schain(&pl,SQUARE,3);
+          schain cla = schain(&pl,ANGLE,3);
+          for(int m=0;m<2;m++){
+            mm=0;
+            if(m==0) choose_random_massless_momentum(momm,-50,50);
+            else mm = choose_random_momentum(momm,-50,50);
+            particle pm=particle(momm,mm);
+            schain cms = schain(&pm,SQUARE,3);
+            schain cma = schain(&pm,ANGLE,3);
+            //All the particles are set up.  Now we can test the supleproducts.
+            supleproduct sijks = supleproduct(&cis,&cjs,&cksU);
+            supleproduct sklms = supleproduct(&cksL,&cls,&cms);
+            supleproduct sijka = supleproduct(&cia,&cja,&ckaU);
+            supleproduct sklma = supleproduct(&ckaL,&cla,&cma);
+            sproduct sils = sproduct(SQUARE,&pi,&pl,3);
+            sproduct sjms = sproduct(SQUARE,&pj,&pm,3);
+            sproduct sims = sproduct(SQUARE,&pi,&pm,3);
+            sproduct sjls = sproduct(SQUARE,&pj,&pl,3);
+            sproduct aila = sproduct(ANGLE,&pi,&pl,3);
+            sproduct ajma = sproduct(ANGLE,&pj,&pm,3);
+            sproduct aima = sproduct(ANGLE,&pi,&pm,3);
+            sproduct ajla = sproduct(ANGLE,&pj,&pl,3);
+           
+            //Now for the tests
+            if(i==0&&j==0&&l==0&&m==0){
+              cdouble ress = cdouble(0,0), resa = cdouble(0,0);
+              for(int dsk=-2;dsk<=2;dsk+=2){
+                ress += sijks.v(dsk)*sklms.v(-dsk);
+                resa += sijka.v(dsk)*sklma.v(-dsk);
+              }
+              BOOST_CHECK_SMALL(std::abs(ress-mk*mk*sils.v()*sjms.v()+mk*mk*sims.v()*sjls.v()),epsilon);
+              BOOST_CHECK_SMALL(std::abs(resa-mk*mk*aila.v()*ajma.v()+mk*mk*aima.v()*ajla.v()),epsilon);
+            }
+          }
+        }
+      }
+    }
   }
 }
 
