@@ -45,23 +45,30 @@ set_target_properties(spinas_static PROPERTIES OUTPUT_NAME spinas)
 ####################################################
 #                      Boost Tests
 ####################################################
-#find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-find_package(Boost REQUIRED COMPONENTS unit_test_framework CONFIG)
+# Try to find Boost
+find_package(Boost COMPONENTS unit_test_framework CONFIG QUIET)
 
-# Collect all source files in the tests directory
-file(GLOB TEST_SRCS tests/*.cpp)
+# Check if Boost was found
+if(Boost_FOUND)
+    message(STATUS "Boost found. Enabling Boost unit tests.")
+    
+    # Collect all source files in the tests directory
+    file(GLOB TEST_SRCS tests/*.cpp)
 
-# Add test executables
-add_executable(test_spinas ${TEST_SRCS})
+    # Add test executables
+    add_executable(test_spinas ${TEST_SRCS})
 
-# Link test executables to Boost Unit Test Framework
-target_link_libraries(test_spinas spinas_static Boost::unit_test_framework)
+    # Link test executables to Boost Unit Test Framework
+    target_link_libraries(test_spinas spinas_static Boost::unit_test_framework)
 
-# Enable testing
-enable_testing()
+    # Enable testing
+    enable_testing()
 
-# Add tests
-add_test(NAME test_spinas COMMAND test_spinas)
+    # Add tests
+    add_test(NAME test_spinas COMMAND test_spinas)
+else()
+    message(WARNING "Boost not found. Skipping Boost unit tests.")
+endif()
 
 ####################################################
 #                      SM Tests
