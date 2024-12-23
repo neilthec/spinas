@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//File:  SPINAS/include/supleproduct.h
+//File:  SPINAS/include/starproduct.h
 
 #pragma once
 
@@ -26,31 +26,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace spinas {
   
-  class supleproduct{
+  class starproduct{
   private:
-    schain *s[3]; //The three chains for spin-1.  Needs to be increased for higher spin.
-    int N;//Number of chains
-
-    //Whether the Lorentz indices are dotted.
-    bool isDotted= false;
+    schain *s[4]; //The four chains for spin-1.  Needs to be increased for higher spin.
+    particle *p; //The particle, whose momentum is at the center of the chains.
+    cmatrix pMat;//Momentum matrix in the middle.
+    int N;//Number of chains on each side of the star.
 
     //Whether the ends are massive
-    bool isRightMassive[3] = {false,false,false};
+    bool isMassive[4] = {false,false,false,false};
 
-    //Whether the spinor uple product is calculated
-    bool isCalculated[3][3][3];
-    cdouble product[3][3][3];
+    //Whether the spinor star product is calculated
+    bool isCalculated[3][3][3][3];
+    cdouble product[3][3][3][3];
 
     //Check that it makes sense
     void check();
 
     //products
-    cdouble v(cvector vec[3]);
+    cdouble v(cvector vec[4]);
     
 
   public:
     //3 chains for a triple product
-    supleproduct(schain *s0, schain *s1, schain *s2);
+    starproduct(schain *s0, schain *s1, particle *pp, schain *s2, schain *s3);
 
     //Update
     //Must be run after masses or momenta of particles is updated.
@@ -62,8 +61,8 @@ namespace spinas {
     cdouble v(const int& ds);
     cdouble v(const int& ds0, const int& ds1);
     cdouble v(const int& ds0, const int& ds1, const int& ds2);
+    cdouble v(const int& ds0, const int& ds1, const int& ds2, const int& ds3);
 
   };
-  
   
 }
