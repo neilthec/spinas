@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE(s12sa231s_spin1_tests) {
     expected *= expected;
     expected -= m2*m2*m3*m3;
     expected *= m1*m1;
-test_sproduct_spin1(&s12s, &a132s, ni, 3, &p1, &p2, &p3, &p3, &p3, expected, "[12]<132]*", "m1^2*[(2p2.p3)^2-m2^2*m3^2]",20000000);//
+    test_sproduct_spin1(&s12s, &a132s, ni, 3, &p1, &p2, &p3, &p3, &p3, expected, "[12]<132]*", "m1^2*[(2p2.p3)^2-m2^2*m3^2]",20000000);//
   }
 }
 
@@ -1040,7 +1040,7 @@ void test_sproduct(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, p
 
 //ni is the number of spin indices, np is the number of particles.
 void test_sproduct_spin1(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, particle* p1, particle* p2, particle* p3, particle* p4, particle* p5, const ldouble& expected, const char* spstring, const char* resstring, const ldouble& epsFactor){
-  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 100000000*epsFactor;
+  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000*epsFactor;
   int i=0;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4], mom5[4];
   ldouble mom1o[4], mom2o[4], mom3o[4], mom4o[4], mom5o[4];

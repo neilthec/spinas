@@ -55,6 +55,10 @@ namespace spinas {
     for(int j=0;j<4;j++) p[j]=momentum[j];
     update();
   }
+  //Make the particle off shell
+  void particle::set_off_shell(){
+    onShell = false;
+  }
   //Get momentum and mass
   const ldouble particle::mass() const{
     return m;
@@ -71,7 +75,7 @@ namespace spinas {
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000;
     pxymag = std::sqrt(p[1]*p[1]+p[2]*p[2]);
     pmag = std::sqrt(pxymag*pxymag+p[3]*p[3]);
-    if(std::abs(p[0]*p[0]-pmag*pmag-m*m) > epsilon){
+    if(onShell && std::abs(p[0]*p[0]-pmag*pmag-m*m) > epsilon){
       throw std::runtime_error("Momentum and mass don't match:  p^2 = " + std::to_string(p[0]*p[0]-pmag*pmag) + " != " + std::to_string(m*m));
     }
     theta = atan2(pxymag,p[3]);
@@ -176,7 +180,7 @@ namespace spinas {
       if(!upMat3dimCalculated) {
         upMat3dim = cmatrix(
           empz*empz, -sqrt2*empz*pxmpy, pxmpy*pxmpy,
-          -sqrt2*empz*pxppy, m*m+two*pxppy*pxmpy, -sqrt2*eppz*pxmpy,
+          -sqrt2*empz*pxppy, /*m*m*/(p[0]*p[0]-pmag*pmag)+two*pxppy*pxmpy, -sqrt2*eppz*pxmpy,
           pxppy*pxppy, -sqrt2*eppz*pxppy, eppz*eppz);
         upMat3dimCalculated = true;
       }
@@ -200,7 +204,7 @@ namespace spinas {
       if(!loMat3dimCalculated) {
         loMat3dim = cmatrix(
           eppz*eppz, sqrt2*eppz*pxmpy, pxmpy*pxmpy,
-          sqrt2*eppz*pxppy, m*m+two*pxppy*pxmpy, sqrt2*empz*pxmpy,
+          sqrt2*eppz*pxppy, /*m*m*/(p[0]*p[0]-pmag*pmag)+two*pxppy*pxmpy, sqrt2*empz*pxmpy,
           pxppy*pxppy, sqrt2*empz*pxppy, empz*empz);
         loMat3dimCalculated = true;
       }

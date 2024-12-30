@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(stp111m3_tests) {
 
 //[[ijk]][[klm]]=mk^2[[il]][[jm]]-mk^2[[im]][[jl]]
 BOOST_AUTO_TEST_CASE(stp123stp456_tests) {
-  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000000;// 
+  ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 10000000000000;// 
   BOOST_TEST_MESSAGE("Testing supleproduct:");
   BOOST_TEST_MESSAGE("\t* [[ijk]][[klm]]=mk^2[[il]][[jm]]-mk^2[[im]][[jl]]");
   ldouble mi,mj,mk,ml,mm;

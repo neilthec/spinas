@@ -33,7 +33,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace spinas {
   //Constructors
-  
+  starproduct::starproduct(){}
+
   //4 chains for spin-1
   starproduct::starproduct(schain *s0, schain *s1, particle *pp, schain *s2, schain *s3):
     N(2) {
@@ -61,6 +62,11 @@ namespace spinas {
       if(s[i]->is_Lindex_dotted()==isDotted)
         throw std::runtime_error("Incorrect usage of starproduct.  The chains on the other side must have the opposite Lorentz index exposed.");
 
+    if(isDotted)
+      isMomUpper = false;
+    else
+      isMomUpper = true;
+
     //Determine which chains are massive
     for(int i=0;i<2*N;i++)
       isMassive[i] = s[i]->is_right_massive();
@@ -75,7 +81,10 @@ namespace spinas {
         for(int k=0;k<N+1;k++)
           for(int l=0;l<N+1;l++)
             isCalculated[i][j][k][l] = false;
-    pMat = p->lmat(N+1);
+    if(isMomUpper)
+      pMat = p->umat(N+1);
+    else
+      pMat = p->lmat(N+1);
   } 
 
 
@@ -320,7 +329,54 @@ namespace spinas {
   cdouble starproduct::v(cvector vec[4]){
     if(N!=2)
       throw std::runtime_error("Only spin-1 star products are implemented.");
-    return vec[0].get(0) * vec[1].get(1) 
+    //The left chains are facing the wrong way.  (All schains are right facing.)  
+    //Use the metric to switch their direction.
+    //This means 0 and 2 are switched and 1 gets a minus sign.
+    //Also, the matrix needs to be transposed.  See paper.
+    return (vec[0].get(2)) * (-vec[1].get(1)) 
+            * ( pMat.get(0,2) * vec[2].get(1) * vec[3].get(2)
+              + pMat.get(1,2) * vec[2].get(2) * vec[3].get(0)
+              + pMat.get(2,2) * vec[2].get(0) * vec[3].get(1)
+              - pMat.get(0,2) * vec[2].get(2) * vec[3].get(1)
+              - pMat.get(1,2) * vec[2].get(0) * vec[3].get(2)
+              - pMat.get(2,2) * vec[2].get(1) * vec[3].get(0) )
+         + (-vec[0].get(1)) * (vec[1].get(0)) 
+            * ( pMat.get(0,0) * vec[2].get(1) * vec[3].get(2)
+              + pMat.get(1,0) * vec[2].get(2) * vec[3].get(0)
+              + pMat.get(2,0) * vec[2].get(0) * vec[3].get(1)
+              - pMat.get(0,0) * vec[2].get(2) * vec[3].get(1)
+              - pMat.get(1,0) * vec[2].get(0) * vec[3].get(2)
+              - pMat.get(2,0) * vec[2].get(1) * vec[3].get(0) )
+         + (vec[0].get(0)) * (vec[1].get(2)) 
+            * ( pMat.get(0,1) * vec[2].get(1) * vec[3].get(2)
+              + pMat.get(1,1) * vec[2].get(2) * vec[3].get(0)
+              + pMat.get(2,1) * vec[2].get(0) * vec[3].get(1)
+              - pMat.get(0,1) * vec[2].get(2) * vec[3].get(1)
+              - pMat.get(1,1) * vec[2].get(0) * vec[3].get(2)
+              - pMat.get(2,1) * vec[2].get(1) * vec[3].get(0) )
+         - (vec[0].get(0)) * (-vec[1].get(1)) 
+            * ( pMat.get(0,0) * vec[2].get(1) * vec[3].get(2)
+              + pMat.get(1,0) * vec[2].get(2) * vec[3].get(0)
+              + pMat.get(2,0) * vec[2].get(0) * vec[3].get(1)
+              - pMat.get(0,0) * vec[2].get(2) * vec[3].get(1)
+              - pMat.get(1,0) * vec[2].get(0) * vec[3].get(2)
+              - pMat.get(2,0) * vec[2].get(1) * vec[3].get(0) )
+         - (vec[0].get(2)) * (vec[1].get(0)) 
+            * ( pMat.get(0,1) * vec[2].get(1) * vec[3].get(2)
+              + pMat.get(1,1) * vec[2].get(2) * vec[3].get(0)
+              + pMat.get(2,1) * vec[2].get(0) * vec[3].get(1)
+              - pMat.get(0,1) * vec[2].get(2) * vec[3].get(1)
+              - pMat.get(1,1) * vec[2].get(0) * vec[3].get(2)
+              - pMat.get(2,1) * vec[2].get(1) * vec[3].get(0) )
+         - (-vec[0].get(1)) * (vec[1].get(2)) 
+            * ( pMat.get(0,2) * vec[2].get(1) * vec[3].get(2)
+              + pMat.get(1,2) * vec[2].get(2) * vec[3].get(0)
+              + pMat.get(2,2) * vec[2].get(0) * vec[3].get(1)
+              - pMat.get(0,2) * vec[2].get(2) * vec[3].get(1)
+              - pMat.get(1,2) * vec[2].get(0) * vec[3].get(2)
+              - pMat.get(2,2) * vec[2].get(1) * vec[3].get(0) )
+        ;
+        /*vec[0].get(0) * vec[1].get(1) 
             * ( pMat.get(2,0) * vec[2].get(1) * vec[3].get(2)
               + pMat.get(2,1) * vec[2].get(2) * vec[3].get(0)
               + pMat.get(2,2) * vec[2].get(0) * vec[3].get(1)
@@ -362,7 +418,7 @@ namespace spinas {
               - pMat.get(2,0) * vec[2].get(2) * vec[3].get(1)
               - pMat.get(2,1) * vec[2].get(0) * vec[3].get(2)
               - pMat.get(2,2) * vec[2].get(1) * vec[3].get(0) )
-        ;
+        ;*/
   }
 
 }

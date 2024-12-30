@@ -37,6 +37,9 @@ namespace spinas {
     cdouble eppz, empz;//E+p, E-p
     cdouble pxppy, pxmpy;//px+ipy, px-ipy
 
+    //Whether on shell
+    bool onShell = true;
+
     // 2-dimensional 
     //The matrices and spinors
     bool upMat2dimCalculated = false, loMat2dimCalculated = false;
@@ -104,6 +107,7 @@ namespace spinas {
     particle(const ldouble momentum[4], const ldouble& mass);
     void set_mass(const ldouble& mass);
     void set_momentum(const ldouble momentum[4]);
+    void set_off_shell();
     const ldouble mass() const;
     const ldouble get_mass() const;
     const ldouble get_momentum(const int& mu) const;

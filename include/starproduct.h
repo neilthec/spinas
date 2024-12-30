@@ -40,6 +40,9 @@ namespace spinas {
     bool isCalculated[3][3][3][3];
     cdouble product[3][3][3][3];
 
+    //Whether the momentum matrix is lower or upper
+    bool isMomUpper = true;
+
     //Check that it makes sense
     void check();
 
@@ -48,6 +51,7 @@ namespace spinas {
     
 
   public:
+    starproduct();
     //3 chains for a triple product
     starproduct(schain *s0, schain *s1, particle *pp, schain *s2, schain *s3);
 

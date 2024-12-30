@@ -164,6 +164,7 @@ using namespace std;
 #include "include/ZZWW.h"
 #include "include/ZWZW.h"
 #include "include/WWWW.h"
+#include "include/WWWW-v2.h"
 #include "include/WWWW2.h"
 #include "include/gggg.h"
 
@@ -325,6 +326,7 @@ int main(){
   j = spinas::test_ZZWW(); if(j>0){message<<"    ZZWW   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_ZWZW(); if(j>0){message<<"    ZWZW   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_WWWW(); if(j>0){message<<"    WWWW   : "<<j<<" failed tests."<<endl;n++;}
+  j = spinas::test_WWWWv2(); if(j>0){message<<"    WWWWv2 : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_WWWW2(); if(j>0){message<<"    WWWW2   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_gggg(); if(j>0){message<<"    gggg   : "<<j<<" failed tests."<<endl;n++;}
   

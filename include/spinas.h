@@ -28,6 +28,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "particle.h"
 #include "propagator.h"
 #include "sproduct.h"
+#include "schain.h"
+#include "supleproduct.h"
+#include "starproduct.h"
 #include "process.h"
 
 
