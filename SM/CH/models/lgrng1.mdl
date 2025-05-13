@@ -122,14 +122,14 @@ A    |W+.f |W-   |Z.f  |-EE^2/(2*SW)                                      |m1.m3
 A    |W+.f |W-   |h    |i*EE^2/(2*SW)                                     |m1.m3
 A    |W+.f |W-.f |Z    |-EE^2/(CW*SW)                                     |-B00000*m1.m4
 G    |G    |G.t  |     |GG*Sqrt2/2                                        |m1.m3*m2.M3-m1.M3*m2.m3
-W+   |W+   |W-   |W-   |EE^2/SW^2                                         |2*m1.m2*m3.m4-m1.m4*m2.m3-m1.m3*m2.m4
-W+   |W+.f |W-   |W-.f |EE^2/(2*SW^2)                                     |m1.m3
+%W+   |W+   |W-   |W-   |EE^2/SW^2                                         |2*m1.m2*m3.m4-m1.m4*m2.m3-m1.m3*m2.m4
+%W+   |W+.f |W-   |W-.f |EE^2/(2*SW^2)                                     |m1.m3
 W+   |W-   |Z    |Z    |-CW^2*EE^2/SW^2                                   |2*m1.m2*m3.m4-m1.m3*m2.m4-m1.m4*m2.m3
 W+   |W-   |Z.f  |Z.f  |EE^2/(2*SW^2)                                     |m1.m2
 W+   |W-   |h    |h    |EE^2/(2*SW^2)                                     |m1.m2
 W+   |W-.f |Z    |Z.f  |EE^2/(2*CW)                                       |m1.m3
 W+   |W-.f |Z    |h    |i*EE^2/(2*CW)                                     |m1.m3
-W+.f |W+.f |W-.f |W-.f |-EE^2*Mh^2/(2*MW^2*SW^2)                          |1
+%W+.f |W+.f |W-.f |W-.f |-EE^2*Mh^2/(2*MW^2*SW^2)                          |1
 W+.f |W-   |Z    |Z.f  |EE^2/(2*CW)                                       |m2.m3
 W+.f |W-   |Z    |h    |-i*EE^2/(2*CW)                                    |m2.m3
 W+.f |W-.f |Z    |Z    |EE^2/(2*CW^2*SW^2)                                |B00001*m3.m4

@@ -38,7 +38,7 @@ namespace spinas {
     bool isRightMassive = false;
 
     //Whether the right spinor is angle or square
-    bool isRightAngle = false;
+    int isRightAngle = SQUARE;
     
     //Whether the end is upper
     bool isRightUpper = true;
@@ -52,32 +52,32 @@ namespace spinas {
     schain();
 
     //0 Internal Momenta
-    schain(particle* partR, const bool& as, const int& dim);
-    schain(particle* partR, const bool& iRU, const bool& as, const int& dim);
+    schain(particle* partR, const int& as, const int& dim);
+    schain(particle* partR, const bool& iRU, const int& as, const int& dim);
 
     //1 Internal Momentum
-    schain(particle* p0,  particle* partR, const bool& as, const int& dim);
-    schain(particle* p0,  particle* partR, const bool& iRU, const bool& as, const int& dim);
+    schain(particle* p0,  particle* partR, const int& as, const int& dim);
+    schain(particle* p0,  particle* partR, const bool& iRU, const int& as, const int& dim);
 
     //2 Internal Momenta
-    schain(particle* p0,  particle* p1,  particle* partR, const bool& as, const int& dim);
-    schain(particle* p0,  particle* p1,  particle* partR, const bool& iRU, const bool& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* partR, const int& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& as, const int& dim);
 
     //3 Internal Momenta
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& as, const int& dim);
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const bool& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& as, const int& dim);
 
     //4 Internal Momenta
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& as, const int& dim);
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const bool& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& as, const int& dim);
 
     //5 Internal Momenta
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& as, const int& dim);
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const bool& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& as, const int& dim);
 
     //6 Internal Momenta
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& as, const int& dim);
-    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const bool& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& as, const int& dim);
+    schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& as, const int& dim);
 
     //Update
     //Must be run after masses or momenta of particles is updated.

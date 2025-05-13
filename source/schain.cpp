@@ -36,35 +36,35 @@ namespace spinas {
   schain::schain(){}
 
   //0 Internal Momenta
-  schain::schain(particle* partR, const bool& as, const int& dim):
+  schain::schain(particle* partR, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(true), N(0), dimension(dim) {
     update();
   }
-  schain::schain(particle* partR, const bool& iRU, const bool& as, const int& dim):
+  schain::schain(particle* partR, const bool& iRU, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(iRU), N(0), dimension(dim) {
     update();
   }
   
   //1 Internal Momenta
-  schain::schain(particle* p0,  particle* partR, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* partR, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(true), N(1), dimension(dim) {
     p[0] = p0;
     update();
   }
-  schain::schain(particle* p0,  particle* partR, const bool& iRU, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* partR, const bool& iRU, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(iRU), N(1), dimension(dim) {
     p[0] = p0;
     update();
   }
 
   //2 Internal Momenta
-  schain::schain(particle* p0,  particle* p1,  particle* partR, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* partR, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(true), N(2), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     update();
   }
-  schain::schain(particle* p0,  particle* p1,  particle* partR, const bool& iRU, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(iRU), N(2), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -72,14 +72,14 @@ namespace spinas {
   }
 
   //3 Internal Momenta
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(true), N(3), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
     p[2] = p2;
     update();
   }
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(iRU), N(3), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -88,7 +88,7 @@ namespace spinas {
   }
 
   //4 Internal Momenta
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(true), N(4), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -96,7 +96,7 @@ namespace spinas {
     p[3] = p3;
     update();
   }
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(iRU), N(4), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -106,7 +106,7 @@ namespace spinas {
   }
 
   //5 Internal Momenta
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(true), N(5), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -115,7 +115,7 @@ namespace spinas {
     p[4] = p4;
     update();
   }
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(iRU), N(5), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -127,7 +127,7 @@ namespace spinas {
 
 
   //6 Internal Momenta
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(true), N(6), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -137,7 +137,7 @@ namespace spinas {
     p[5] = p5;
     update();
   }
-  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const bool& as, const int& dim):
+  schain::schain(particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& as, const int& dim):
     isRightAngle(as), pR(partR), isRightUpper(iRU), N(6), dimension(dim) {
     p[0] = p0;
     p[1] = p1;
@@ -161,7 +161,7 @@ namespace spinas {
 	    isCalculated[i] = false;
     //Calculate pMat as the product of the momenta in the middle.
     if(N>0){
-      if((isRightAngle&&N%2==0)||(!isRightAngle&&N%2==1)){
+      if((isRightAngle==ANGLE&&N%2==0)||(isRightAngle!=ANGLE&&N%2==1)){
     	pMat = p[0]->lmat(dimension);
 	    for(int i=1;i<N;i++){
 	        if(i%2==0) pMat *= p[i]->lmat(dimension);
@@ -180,7 +180,7 @@ namespace spinas {
 
   //Return whether the exposed Lorentz index is dotted, right spinor is massive.
   bool schain::is_Lindex_dotted() const{
-    if((isRightAngle && N%2==0)||(!isRightAngle && N%2!=0)) return false;
+    if((isRightAngle==ANGLE && N%2==0)||(isRightAngle!=ANGLE && N%2!=0)) return false;
     return true;
   }
   bool schain::is_right_massive() const{
@@ -198,7 +198,7 @@ namespace spinas {
     //Check whether it is already calculted.
     if(isCalculated[0]) return product[0];
     //Calcualte it.
-    if(isRightAngle){
+    if(isRightAngle==ANGLE){
       if(N>0)
 	    product[0] = pMat * pR->rangle(dimension);
       else
@@ -228,7 +228,7 @@ namespace spinas {
     //Check whether it is already calculted.
     if(isCalculated[jR]) return product[jR];
     //Calcualte it.
-    if(isRightAngle){
+    if(isRightAngle==ANGLE){
 	    if(N>0)
 	        product[jR] = pMat * pR->rangle(spin,isRightUpper,dimension);
 	    else

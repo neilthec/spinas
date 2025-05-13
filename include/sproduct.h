@@ -38,7 +38,7 @@ namespace spinas {
     bool isLeftMassive = false, isRightMassive = false;
 
     //Whether the left spinor is angle or square
-    bool isLeftAngle = false;
+    int isLeftAngle = SQUARE;
     
     //Whether the ends are upper
     bool isLeftUpper = true, isRightUpper = true;
@@ -52,46 +52,46 @@ namespace spinas {
     sproduct();
 
     //0 Internal Momenta
-    sproduct(const bool& as,  particle* partL,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL,  particle* partR, const bool& iRU, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* partR, const bool& iRU, const int& dim);
 
     //1 Internal Momentum
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* partR, const bool& iRU, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* partR, const bool& iRU, const int& dim);
 
     //2 Internal Momenta
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* partR, const bool& iRU, const int& dim);
 
     //3 Internal Momenta
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* partR, const bool& iRU, const int& dim);
 
     //4 Internal Momenta
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* partR, const bool& iRU, const int& dim);
 
     //5 Internal Momenta
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4,  particle* partR, const bool& iRU, const int& dim);
 
     //6 Internal Momenta
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& dim);
-    sproduct(const bool& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& dim);
-    sproduct(const bool& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const int& dim);
+    sproduct(const int& as,  particle* partL,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& dim);
+    sproduct(const int& as,  particle* partL, const bool& iLU,  particle* p0,  particle* p1,  particle* p2,  particle* p3,  particle* p4, particle* p5,  particle* partR, const bool& iRU, const int& dim);
 
     //Update
     //Must be run after masses or momenta of particles is updated.

@@ -134,6 +134,12 @@ namespace spinas {
     //rsquare
     rsquareUpperP23dimCalculated = false, rsquareUpper03dimCalculated = false, rsquareUpperM23dimCalculated = false;
     rsquareLowerP23dimCalculated = false, rsquareLower03dimCalculated = false, rsquareLowerM23dimCalculated = false;
+    //rcurly
+    rcurlyUpperP23dimCalculated = false, rcurlyUpper03dimCalculated = false, rcurlyUpperM23dimCalculated = false;
+    rcurlyLowerP23dimCalculated = false, rcurlyLower03dimCalculated = false, rcurlyLowerM23dimCalculated = false;
+    //lcurly
+    lcurlyUpperP23dimCalculated = false, lcurlyUpper03dimCalculated = false, lcurlyUpperM23dimCalculated = false;
+    lcurlyLowerP23dimCalculated = false, lcurlyLower03dimCalculated = false, lcurlyLowerM23dimCalculated = false;
   }
 
   //Test angles
@@ -894,6 +900,152 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
       }
     }
     return rsquareLowerP12dim;
+  }
+  /********************************************************************
+                            |j}^I
+  *********************************************************************/
+  cvector particle::rcurly(const int& spin2, const int& dim) {
+    if(dim==2||m==0){
+      throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
+    }
+    if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!rcurlyUpperM23dimCalculated){
+          rcurlyUpperM23dim = m*cvector(c*c,sqrt2*c*s,s*s);//empz*cvector(c*c,sqrt2*c*sc,sc*sc)
+          rcurlyUpperM23dimCalculated = true;
+        }
+        return rcurlyUpperM23dim;
+      }
+      else if(spin2==0){
+        if(!rcurlyUpper03dimCalculated){
+          rcurlyUpper03dim = m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rcurlyUpper03dimCalculated = true;
+        }
+        return rcurlyUpper03dim;
+      }
+      else if(spin2==2){
+        if(!rcurlyUpperP23dimCalculated){
+          rcurlyUpperP23dim = m*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rcurlyUpperP23dimCalculated = true;
+        }
+        return rcurlyUpperP23dim;
+      }
+    }
+    return rcurlyUpperP23dim;
+  }
+  /********************************************************************
+                            |j}_I
+  *********************************************************************/
+  cvector particle::rcurly(const int& spin2, const bool& upper, const int& dim) {
+    if(upper) return rcurly(spin2, dim);
+    if(dim==2||m==0){
+      throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
+    }
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==2){
+        if(!rcurlyLowerM23dimCalculated){
+          rcurlyLowerM23dim = m*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rcurlyLowerM23dimCalculated = true;
+        }
+        return rcurlyLowerM23dim;
+      }
+      else if(spin2==0){
+        if(!rcurlyLower03dimCalculated){
+          rcurlyLower03dim = -m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rcurlyLower03dimCalculated = true;
+        }
+        return rcurlyLower03dim;
+      }
+      else if(spin2==-2){
+        if(!rcurlyLowerP23dimCalculated){
+          rcurlyLowerP23dim = m*cvector(c*c,sqrt2*c*s,s*s);
+          rcurlyLowerP23dimCalculated = true;
+        }
+        return rcurlyLowerP23dim;
+      }
+    }
+    return rcurlyLowerP23dim;
+  }
+/********************************************************************
+                            {j|^I
+*********************************************************************/
+  cvector particle::lcurly(const int& spin2, const int& dim) {
+    if(dim==2||m==0){
+      throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
+    }
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==-2){
+        if(!lcurlyUpperM23dimCalculated){
+          lcurlyUpperM23dim = m*cvector(s*s,-sqrt2*c*s,c*c);
+          lcurlyUpperM23dimCalculated = true;
+        }
+        return lcurlyUpperM23dim;
+      }
+      else if(spin2==0){
+        if(!lcurlyUpper03dimCalculated){
+          lcurlyUpper03dim = m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          lcurlyUpper03dimCalculated = true;
+        }
+        return lcurlyUpper03dim;
+      }
+      else if(spin2==2){
+        if(!lcurlyUpperP23dimCalculated){
+          lcurlyUpperP23dim = m*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lcurlyUpperP23dimCalculated = true;
+        }
+        return lcurlyUpperP23dim;
+      }
+    }
+    return lcurlyUpperM23dim;
+  }
+/********************************************************************
+                            {j|_I
+*********************************************************************/
+cvector particle::lcurly(const int& spin2, const bool& upper, const int& dim) {
+    if(upper) return lcurly(spin2, dim);
+    if(dim==2||m==0){
+      throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
+    }
+    else if(dim==3){
+      if(spin2!=2&&spin2!=0&&spin2!=-2){
+        usage("Incorrect usage:");
+        throw std::runtime_error("Incorrect usage: spin2 != 2, 0 or -2");
+      }
+      if(spin2==2){
+        if(!lcurlyLowerM23dimCalculated){
+          lcurlyLowerM23dim = m*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lcurlyLowerM23dimCalculated = true;
+        }
+        return lcurlyLowerM23dim;
+      }
+      else if(spin2==0){
+        if(!lcurlyLower03dimCalculated){
+          lcurlyLower03dim = -m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          lcurlyLower03dimCalculated = true;
+        }
+        return lcurlyLower03dim;
+      }
+      else if(spin2==-2){
+        if(!lcurlyLowerP23dimCalculated){
+          lcurlyLowerP23dim = m*cvector(s*s,-sqrt2*c*s,c*c);
+          lcurlyLowerP23dimCalculated = true;
+        }
+        return lcurlyLowerP23dim;
+      }
+    }
+    return lcurlyLowerP23dim;
   }
 
   

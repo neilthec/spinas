@@ -99,6 +99,16 @@ namespace spinas {
     cvector rsquareUpperP23dim, rsquareUpper03dim, rsquareUpperM23dim;
     bool rsquareLowerP23dimCalculated = false, rsquareLower03dimCalculated = false, rsquareLowerM23dimCalculated = false;
     cvector rsquareLowerP23dim, rsquareLower03dim, rsquareLowerM23dim;
+    //rcurly
+    bool rcurlyUpperP23dimCalculated = false, rcurlyUpper03dimCalculated = false, rcurlyUpperM23dimCalculated = false;
+    cvector rcurlyUpperP23dim, rcurlyUpper03dim, rcurlyUpperM23dim;
+    bool rcurlyLowerP23dimCalculated = false, rcurlyLower03dimCalculated = false, rcurlyLowerM23dimCalculated = false;
+    cvector rcurlyLowerP23dim, rcurlyLower03dim, rcurlyLowerM23dim;
+    //lcurly
+    bool lcurlyUpperP23dimCalculated = false, lcurlyUpper03dimCalculated = false, lcurlyUpperM23dimCalculated = false;
+    cvector lcurlyUpperP23dim, lcurlyUpper03dim, lcurlyUpperM23dim;
+    bool lcurlyLowerP23dimCalculated = false, lcurlyLower03dimCalculated = false, lcurlyLowerM23dimCalculated = false;
+    cvector lcurlyLowerP23dim, lcurlyLower03dim, lcurlyLowerM23dim;
 
 
   public:
@@ -138,6 +148,10 @@ namespace spinas {
     cvector lsquare(const int& spin2, const bool& upper, const int& dim);
     cvector rsquare(const int& spin2, const int& dim);
     cvector rsquare(const int& spin2, const bool& upper, const int& dim);
+    cvector rcurly(const int& spin2, const int& dim);
+    cvector rcurly(const int& spin2, const bool& upper, const int& dim);
+    cvector lcurly(const int& spin2, const int& dim);
+    cvector lcurly(const int& spin2, const bool& upper, const int& dim);
 
     //Massive cmatrix form with both spins
     cmatrix rangle_matrix(const int& dim);
@@ -149,6 +163,11 @@ namespace spinas {
     cmatrix lsquare_matrix(const bool& upper, const int& dim);
     cmatrix rsquare_matrix(const int& dim);
     cmatrix rsquare_matrix(const bool& upper, const int& dim);
+
+    cmatrix rcurly_matrix(const int& dim);
+    cmatrix rcurly_matrix(const bool& upper, const int& dim);
+    cmatrix lcurly_matrix(const int& dim);
+    cmatrix lcurly_matrix(const bool& upper, const int& dim);
 
 
     //Error message:
