@@ -80,6 +80,10 @@ namespace spinas {
     a14a3 = sproduct(ANGLE,&p1,&p4,3);
     s23s3 = sproduct(SQUARE,&p2,&p3,3);
     a23a3 = sproduct(ANGLE,&p2,&p3,3);
+    s13s3 = sproduct(SQUARE,&p1,&p3,3);
+    a13a3 = sproduct(ANGLE,&p1,&p3,3);
+    s24s3 = sproduct(SQUARE,&p2,&p4,3);
+    a24a3 = sproduct(ANGLE,&p2,&p4,3);
     //Star products
     s13Z24a = starproduct(&c1s,&c3s,&pZ,&c2a,&c4a);
     a13Z24s = starproduct(&c1a,&c3a,&pZ,&c2s,&c4s);
@@ -151,6 +155,10 @@ namespace spinas {
     a14a3.update();
     s23s3.update();
     a23a3.update();
+    s13s3.update();
+    a13a3.update();
+    s24s3.update();
+    a24a3.update();
     //Schains
     c1s.update();
     c1a.update();
@@ -165,13 +173,12 @@ namespace spinas {
     a13Z24s.update();
   }
 
-  
+
   //Amplitude
   //set_momenta(...) must be called before amp(...).
-  cdouble WWWWv2::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4){//Double Spin
+  cdouble WWWWv2::amp_old(const int& ds1, const int& ds2, const int& ds3, const int& ds4){//Double Spin
     cdouble amplitude(0,0);
     constexpr ldouble one=1, two=2, three=3, four=4, five=5, six=6, eight=8, nine=9, eleven=11;
-    ldouble sqrt2 = std::sqrt(2.0);
     int ds1a, ds1b, ds2a, ds2b, ds3a, ds3b, ds4a, ds4b;
 
     //Symmetrize the Z-Boson Spin indices for the spin-0 cases
@@ -186,13 +193,13 @@ namespace spinas {
       //preh = e*e/(MW*MW*SW*SW);
       //all ingoing = 34 outgoing:
       //preh [13]<13>[24]<24>/(t-Mh^2)
-      //amplitude += -normFactor*preh*s13s.v(ds1a,ds3a)*a13a.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*a24a.v(ds2b,ds4b)/pDenTh;
+      amplitude += -normFactor*preh*s13s.v(ds1a,ds3a)*a13a.v(ds1b,ds3b)*s24s.v(ds2a,ds4a)*a24a.v(ds2b,ds4b)/pDenTh;
       
       //U-Channel h
       //preh = e*e/(MW*MW*SW*SW);
       //all ingoing = 34 outgoing:
       //preh [14]<14>[23]<23>/(u-Mh^2)
-      //amplitude += -normFactor*preh*s14s.v(ds1a,ds4a)*a14a.v(ds1b,ds4b)*s23s.v(ds2a,ds3a)*a23a.v(ds2b,ds3b)/pDenUh;
+      amplitude += -normFactor*preh*s14s.v(ds1a,ds4a)*a14a.v(ds1b,ds4b)*s23s.v(ds2a,ds3a)*a23a.v(ds2b,ds3b)/pDenUh;
 
       //T-Channel A
       //preA = e*e/(MW*MW*MW);
@@ -220,10 +227,10 @@ namespace spinas {
         -a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s23s.v(ds2b,ds3b)*s431a.v(ds4b,ds1b)
         +a24a.v(ds2a,ds4a)*s13s.v(ds1a,ds3a)*s23s.v(ds2b,ds3b)*s431a.v(ds4b,ds1b)
         +a23a.v(ds2a,ds3a)*s13s.v(ds1a,ds3b)*s24s.v(ds2b,ds4a)*s431a.v(ds4b,ds1b)
-        )/pDenTA;*/
+        )/pDenTA;
 
       //U-Channel A
-      /*amplitude += normFactor*preA*(
+      amplitude += normFactor*preA*(
         -MW*a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4b)*s13s.v(ds1b,ds3b)
         -two*MW*a23a.v(ds2a,ds3b)*a34a.v(ds3a,ds4a)*s12s.v(ds1a,ds2b)*s14s.v(ds1b,ds4b)
         +two*MW*a23a.v(ds2a,ds3a)*a24a.v(ds2b,ds4a)*s13s.v(ds1a,ds3b)*s14s.v(ds1b,ds4b)
@@ -247,11 +254,11 @@ namespace spinas {
         +a24a.v(ds2a,ds4a)*s14s.v(ds1a,ds4b)*s23s.v(ds2b,ds3a)*s341a.v(ds3b,ds1b)
         -a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s24s.v(ds2b,ds4b)*s341a.v(ds3b,ds1b)
         +a23a.v(ds2a,ds3a)*s14s.v(ds1a,ds4a)*s24s.v(ds2b,ds4b)*s341a.v(ds3b,ds1b)
-        )/pDenUA;*/
+        )/pDenUA;
 
       //T-Channel Z
       //preZ = e*e/(2*MW*MW*MZ*SW*SW);
-      /*amplitude += -normFactor*preZ*(
+      amplitude += -normFactor*preZ*(
         (two*a12a.v(ds1a,ds2b)*a34a.v(ds3a,ds4a)*s13s.v(ds1b,ds3b)*s24s.v(ds2a,ds4b)
         -a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)
         -a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s13s.v(ds1b,ds3b)*s24s.v(ds2b,ds4b)
@@ -277,22 +284,11 @@ namespace spinas {
         +three*a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s23s.v(ds2b,ds3b)*s431a.v(ds4b,ds1b)
         -a24a.v(ds2a,ds4a)*s13s.v(ds1a,ds3a)*s23s.v(ds2b,ds3b)*s431a.v(ds4b,ds1b)
         -a23a.v(ds2a,ds3a)*s13s.v(ds1a,ds3b)*s24s.v(ds2b,ds4a)*s431a.v(ds4b,ds1b))*CW
-        )/pDenTZ;*/
-        amplitude += -normFactor*preZ*(
-          sqrt2*MZ*MZ*(a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)+a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-                +s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)+s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3))
-          +s13Z24a.v(ds1,ds3,ds2,ds4)-a13Z24s.v(ds1,ds3,ds2,ds4)
         )/pDenTZ;
-
-        /*amplitude += -normFactor*preZ*(
-          two*MZ*MZ*(a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)-a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-                +s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)-s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3))
-          //+s13Z24a.v(ds1,ds3,ds2,ds4)+a13Z24s.v(ds1,ds3,ds2,ds4)
-        )/pDenTZ;*/
 
 
       //U-Channel Z
-      /*amplitude += -normFactor*preZ*(
+      amplitude += -normFactor*preZ*(
         (-two*a12a.v(ds1a,ds2b)*a34a.v(ds3a,ds4a)*s14s.v(ds1b,ds4b)*s23s.v(ds2a,ds3b)
         -a13a.v(ds1a,ds3a)*a24a.v(ds2a,ds4a)*s14s.v(ds1b,ds4b)*s23s.v(ds2b,ds3b)
         -a14a.v(ds1a,ds4a)*a23a.v(ds2a,ds3a)*s13s.v(ds1b,ds3b)*s24s.v(ds2b,ds4b)
@@ -327,6 +323,61 @@ namespace spinas {
     return amplitude;
   }
   
+  //Amplitude
+  //set_momenta(...) must be called before amp(...).
+  cdouble WWWWv2::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4){//Double Spin
+    cdouble amplitude(0,0);
+    constexpr ldouble one=1, two=2, three=3, four=4, five=5, six=6, eight=8, nine=9, eleven=11;
+    ldouble sqrt2 = std::sqrt(2.0);
+
+     
+    //T-Channel h
+    //preh = e*e/(MW*MW*SW*SW);
+    //all ingoing = 34 outgoing:
+    //preh ([[13]]+<<13>>)([[24]]+<<24>>)/(t-Mh^2)
+    amplitude += -preh/eight*(a13a3.v(ds1,ds3)+s13s3.v(ds1,ds3))*(a24a3.v(ds2,ds4)+s24s3.v(ds2,ds4))/pDenTh;
+    //amplitude += preh*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)/pDenTh;
+
+    //U-Channel h
+    //preh = e*e/(MW*MW*SW*SW);
+    //all ingoing = 34 outgoing:
+    //preh ([[14]]+<<14>>)([[23]]+<<23>>)/(u-Mh^2)
+    amplitude += -preh/eight*(a14a3.v(ds1,ds4)+s14s3.v(ds1,ds4))*(a23a3.v(ds2,ds3)+s23s3.v(ds2,ds3))/pDenUh;
+    //amplitude += preh*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)/pDenUh;
+
+    //T-Channel A
+    //preA = e*e/(MW*MW*MW);
+    /*amplitude += normFactor*preA*(
+      )/pDenTA;*/
+
+    //U-Channel A
+    /*amplitude += normFactor*preA*(
+      )/pDenUA;*/
+
+    //T-Channel Z
+    //preZ = e*e/(2*MW*MW*MZ*SW*SW);
+    /*amplitude += -normFactor*preZ*(
+      )/pDenTZ;*/
+      /*amplitude += -normFactor*preZ*(
+        sqrt2*MZ*MZ*(a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)+a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+              +s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)+s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3))
+        +s13Z24a.v(ds1,ds3,ds2,ds4)+a13Z24s.v(ds1,ds3,ds2,ds4)
+      )/pDenTZ;*/
+
+    /*amplitude += -normFactor*preZ*(
+        two*MZ*MZ*(a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)-a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+              +s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)-s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3))
+        //+s13Z24a.v(ds1,ds3,ds2,ds4)+a13Z24s.v(ds1,ds3,ds2,ds4)
+      )/pDenTZ;*/
+
+
+    //U-Channel Z
+    /*amplitude += -normFactor*preZ*(
+      )/pDenUZ;*/
+    
+    return amplitude;
+  }
+  
   //set_momenta(...) must be called before amp2().
   ldouble WWWWv2::amp2(){
     ldouble amp2 = 0;
@@ -335,11 +386,11 @@ namespace spinas {
     //Sum over spins
     for(int j1=-2;j1<=2;j1+=2)
       for(int j2=-2;j2<=2;j2+=2)
-	for(int j3=-2;j3<=2;j3+=2)
-	  for(int j4=-2;j4<=2;j4+=2){
-	    M = amp(j1,j2,j3,j4);
-	    amp2 += std::pow(std::abs(M),2);
-	  }
+	      for(int j3=-2;j3<=2;j3+=2)
+	        for(int j4=-2;j4<=2;j4+=2){
+	          M = amp(j1,j2,j3,j4);
+	          amp2 += std::pow(std::abs(M),2);
+	        }
     //Average over spins 1/3^2=1/9
     //Symmetry factor 1/2
     return amp2/18.0;
@@ -361,9 +412,12 @@ namespace spinas {
       ldouble MZ=MW/CW;//std::cout<<"MZ="<<MZ<<"\n";
       WWWWv2 WWWWAmp = WWWWv2(EE,mh,0,MW,0,SW);
       ldouble pspatial=250;
+      //Complete, only Z, only h
       //ldouble dataCH[20] = {1.330498476822454E+02,2.574400305762363E+01,1.117817047479175E+01,6.389083613347302E+00,4.249873849952222E+00,3.130785827467675E+00,2.492964262988100E+00,2.117842664358412E+00,1.905654805317800E+00,1.809199057352321E+00,1.809199057352527E+00,1.905654805317751E+00,2.117842664358410E+00,2.492964262988184E+00,3.130785827467681E+00,4.249873849952687E+00,6.389083613346880E+00,1.117817047479180E+01,2.574400305762331E+01,1.330498476822448E+02};
-      ldouble dataCH[20] = {163.664,142.179,148.485,158.734,168.968,178.026,185.452,191.033,194.658,196.263,195.81,193.272,188.633,181.881,173.008,162.006,148.873,133.603,116.194,96.6441};
+      //ldouble dataCH[20] = {163.664,142.179,148.485,158.734,168.968,178.026,185.452,191.033,194.658,196.263,195.81,193.272,188.633,181.881,173.008,162.006,148.873,133.603,116.194,96.6441};
+      ldouble dataCH[20] = {1.065432660422373E+00,9.531627330206415E-01,9.019583151212617E-01,8.731892544962671E-01,8.552209288622006E-01,8.433602858804521E-01,8.353723130528455E-01,8.300813276734555E-01,8.268388786237630E-01,8.252949656831252E-01,8.252949656831252E-01,8.268388786237629E-01,8.300813276734554E-01,8.353723130528458E-01,8.433602858804522E-01,8.552209288622007E-01,8.731892544962669E-01,9.019583151212617E-01,9.531627330206414E-01,1.065432660422373E+00};
       i += WWWWAmp.test_2to2_amp2([&]() { return WWWWAmp.amp2(); }, MW,MW,MW,MW,pspatial,dataCH);
+      WWWWAmp.test_amp( MW,MW,MW,MW,pspatial);
       //i += WWWWAmp.test_2to2_amp2_rotations([&]() { return WWWWAmp.amp2(); }, MW,MW,MW,MW,pspatial,dataCH);
       //i += WWWWAmp.test_2to2_amp2_boosts([&]() { return WWWWAmp.amp2(); }, MW,MW,MW,MW,pspatial,dataCH);
       //i += WWWWAmp.test_2to2_amp2_boosts_and_rotations([&]() { return WWWWAmp.amp2(); }, MW,MW,MW,MW,pspatial,dataCH);
@@ -450,7 +504,31 @@ namespace spinas {
   }
 
 
-  
+  //  Tests
+  int WWWWv2::test_amp(const ldouble& m1, const ldouble& m2, const ldouble& m3, const ldouble& m4, const ldouble& Pin){
+    int i=0;
+    ldouble En1, En2, En3, En4, Pout;
+    set_test_initializations(m1, m2, m3, m4, Pin, En1, En2, Pout, En3, En4);
+    ldouble p1[4], p2[4], p3[4], p4[4];
+    ldouble cost;
+    cdouble amp_new, amp_old;
+    for(int j=0;j<20;j++){
+      cost = 0.95-0.1*j;
+      //Lab Frame
+      set_test_momenta(p1, p2, p3, p4, En1, En2, Pin, En3, En4, Pout, cost);
+      //Calculate amp^2
+      set_momenta(p1,p2,p3,p4);
+      for(int j=-2;j<=2;j+=2)
+        for(int k=-2;k<=2;k+=2)
+          for(int l=-2;l<=2;l+=2)
+            for(int m=-2;m<=2;m+=2){
+              amp_new = WWWWv2::amp(j,k,l,m);
+              amp_old = WWWWv2::amp_old(j,k,l,m);
+              std::cout<<"cost="<<cost<<"   spins="<<j<<","<<k<<","<<l<<","<<m<<"   new="<<amp_new<<"  old="<<amp_old<<std::endl;
+            }
+    }
+    return i;
+  }
   
 
 }

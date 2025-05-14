@@ -33,7 +33,7 @@ namespace spinas {
     //<12>,[12],<23>,[23],<24>,[24],<34>,[34],<14>,[14],<13>,[13]
     sproduct s12s, a12a, a34a, s34s, s24s, a24a, s23s, a23a, a14a, s14s, a13a, s13s;
     sproduct s431a, s134a, s341a, s143a, s43s, a43a;
-    sproduct s12s3, a12a3, s34s3, a34a3, s14s3, a14a3, s23s3, a23a3;
+    sproduct s12s3, a12a3, s34s3, a34a3, s14s3, a14a3, s23s3, a23a3, s13s3, a13a3, s24s3, a24a3;
     starproduct s13Z24a, a13Z24s;
     ldouble preh, preA, preZ;
 
@@ -47,11 +47,12 @@ namespace spinas {
     void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]);
 
     //Amplitude
+    cdouble amp_old(const int& ds1, const int& ds2, const int& ds3, const int& ds4);//Double the spins
     cdouble amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4);//Double the spins
     ldouble amp2();
     
 
-    
+    int test_amp(const ldouble& m1, const ldouble& m2, const ldouble& m3, const ldouble& m4, const ldouble& Pin);
     
   };
   //Tests
