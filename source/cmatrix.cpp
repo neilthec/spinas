@@ -89,6 +89,25 @@ namespace spinas {
         mat[2][2] = empz*empz;
       }
     }
+    else if(dim==4){
+      cdouble m2 = cdouble(p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],0);
+      mat[0][0] = cdouble(-p[0]*p[0],0)+m2;
+      mat[0][1] = cdouble(-p[0]*p[1],0);
+      mat[0][2] = cdouble(-p[0]*p[2],0);
+      mat[0][3] = cdouble(-p[0]*p[3],0);
+      mat[1][0] = cdouble(p[0]*p[1],0);
+      mat[1][1] = cdouble(p[1]*p[1],0)+m2;
+      mat[1][2] = cdouble(p[1]*p[2],0);
+      mat[1][3] = cdouble(p[1]*p[3],0);
+      mat[2][0] = cdouble(p[0]*p[2],0);
+      mat[2][1] = cdouble(p[1]*p[2],0);
+      mat[2][2] = cdouble(p[2]*p[2],0)+m2;
+      mat[2][3] = cdouble(p[2]*p[3],0);
+      mat[3][0] = cdouble(p[0]*p[3],0);
+      mat[3][1] = cdouble(p[1]*p[3],0);
+      mat[3][2] = cdouble(p[2]*p[3],0);
+      mat[3][3] = cdouble(p[3]*p[3],0)+m2;
+    }
     //We don't use this in practice.  This was just for an early test.
   }
   
@@ -102,6 +121,12 @@ namespace spinas {
     dimension(3),
     mat{{m00,m01,m02},{m10,m11,m12},{m20,m21,m22}}{}
 
+  cmatrix::cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m02, const cdouble& m03,
+    const cdouble& m10, const cdouble& m11, const cdouble& m12, const cdouble& m13,
+    const cdouble& m20, const cdouble& m21, const cdouble& m22, const cdouble& m23,
+    const cdouble& m30, const cdouble& m31, const cdouble& m32, const cdouble& m33):
+    dimension(4),
+    mat{{m00,m01,m02,m03},{m10,m11,m12,m13},{m20,m21,m22,m23},{m30,m31,m32,m33}}{}
 
   //Get
   int cmatrix::get_dimension() const{
@@ -135,6 +160,41 @@ namespace spinas {
           - mat[0][2]*mat[1][1]*mat[2][0]
           - mat[0][1]*mat[1][0]*mat[2][2]
           - mat[0][0]*mat[1][2]*mat[2][1];
+    }
+    else if(dimension==4)
+    {
+      det = mat[0][0]*(
+          mat[1][1]*mat[2][2]*mat[3][3]
+        + mat[1][2]*mat[2][3]*mat[3][1]
+        + mat[1][3]*mat[2][1]*mat[3][2]
+        - mat[1][3]*mat[2][2]*mat[3][1]
+        - mat[1][2]*mat[2][1]*mat[3][3]
+        - mat[1][1]*mat[2][3]*mat[3][2]
+      )
+      - mat[0][1]*(
+          mat[1][0]*mat[2][2]*mat[3][3]
+        + mat[1][2]*mat[2][3]*mat[3][0]
+        + mat[1][3]*mat[2][0]*mat[3][2]
+        - mat[1][3]*mat[2][2]*mat[3][0]
+        - mat[1][2]*mat[2][0]*mat[3][3]
+        - mat[1][0]*mat[2][3]*mat[3][2]
+      )
+      + mat[0][2]*(
+          mat[1][0]*mat[2][1]*mat[3][3]
+        + mat[1][1]*mat[2][3]*mat[3][0]
+        + mat[1][3]*mat[2][0]*mat[3][1]
+        - mat[1][3]*mat[2][1]*mat[3][0]
+        - mat[1][1]*mat[2][0]*mat[3][3]
+        - mat[1][0]*mat[2][3]*mat[3][1]
+      )
+      - mat[0][3]*(
+          mat[1][0]*mat[2][1]*mat[3][2]
+        + mat[1][1]*mat[2][2]*mat[3][0]
+        + mat[1][2]*mat[2][0]*mat[3][1]
+        - mat[1][2]*mat[2][1]*mat[3][0]
+        - mat[1][1]*mat[2][0]*mat[3][2]
+        - mat[1][0]*mat[2][2]*mat[3][1]
+      );
     }
     
     if (std::abs(std::imag(det)) > epsilon)
@@ -185,7 +245,7 @@ namespace spinas {
   cmatrix & cmatrix::operator*=(const cmatrix& m){
     if(dimension != m.dimension)
       throw std::invalid_argument("cmatrix dimensions do not match");
-    cdouble mnew[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+    cdouble mnew[4][4] = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
     for(int i=0;i<dimension;i++)
       for(int j=0;j<dimension;j++)
         for(int k=0;k<dimension;k++)
@@ -264,7 +324,7 @@ namespace spinas {
   //Comparison
   //==
   bool cmatrix::operator==(const cmatrix &m) const{
-    ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
+    ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 100000000;
     if(dimension==3) epsilon *= 1000;
     if(dimension != m.dimension) return false;
     for(int i=0;i<dimension;i++)

@@ -93,6 +93,14 @@ BOOST_AUTO_TEST_CASE(determinant) {
     BOOST_CHECK_SMALL(std::abs(det(m_true) - mass6), epsilon);
     BOOST_CHECK_SMALL(std::abs(det(m_false) - mass6), epsilon);
   }
+
+  epsilon *= 5000;
+  //Test Random Momenta
+  for(int i=0;i<NTESTS;i++){
+    choose_random_momentum(p, -50, 50);
+    m_true = cmatrix(p,true,4);
+    BOOST_CHECK_SMALL(std::abs(det(m_true)), epsilon);
+  }
 }
 
 BOOST_AUTO_TEST_CASE(addition) {
@@ -133,6 +141,25 @@ BOOST_AUTO_TEST_CASE(addition) {
       for(int k=0;k<3;k++)
         BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) + m2.get(j,k));
   }
+
+
+  for(int i=0;i<NTESTS;i++){
+    choose_random_momentum(p1, -50, 50);
+    m1 = cmatrix(p1,true,4);
+    choose_random_momentum(p2, -50, 50);
+    m2 = cmatrix(p2,true,4);
+    m3 = m1 + m2;
+    
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) + m2.get(j,k));
+    
+    m3 = m1;
+    m3+= m2;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) + m2.get(j,k));
+  }
 }
 
 BOOST_AUTO_TEST_CASE(subtraction) {
@@ -171,6 +198,24 @@ BOOST_AUTO_TEST_CASE(subtraction) {
     m3-= m2;
     for(int j=0;j<3;j++)
       for(int k=0;k<3;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) - m2.get(j,k));
+  }
+  
+  for(int i=0;i<NTESTS;i++){
+    choose_random_momentum(p1, -50, 50);
+    m1 = cmatrix(p1,true,4);
+    choose_random_momentum(p2, -50, 50);
+    m2 = cmatrix(p2,true,4);
+    m3 = m1 - m2;
+    
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) - m2.get(j,k));
+    
+    m3 = m1;
+    m3-= m2;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
         BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) - m2.get(j,k));
   }
 }
@@ -270,6 +315,53 @@ BOOST_AUTO_TEST_CASE(multiplication) {
       for(int k=0;k<3;k++)
         BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) * cdouble(in,0));
   }
+
+
+
+  for(int i=0;i<NTESTS;i++){
+    choose_random_momentum(p, -50, 50);
+    mass2 = p[0]*p[0];
+    for(int j=1;j<4;j++) mass2 -= p[j]*p[j];
+    m1 = cmatrix(p,true,4);
+    expected = mass2*m1;
+
+    
+    BOOST_CHECK_EQUAL(m1 * m1, expected);
+    
+    m3 = m1;
+    m3 *= m1;
+    BOOST_CHECK_EQUAL(m3, expected);
+
+    cn = choose_random_cdouble(-50, 50);
+    m3 = m1 * cn;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) * cn);
+    m3 = cn * m1;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) * cn);
+    
+    ln1 = choose_random_ldouble(-50, 50);
+    m3 = m1 * ln1;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) * ln1);
+    m3 = ln1 * m1;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) * ln1);
+
+    in = choose_random_int(0, 50);
+    m3 = m1 * in;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) * cdouble(in,0));
+    m3 = in * m1;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m3.get(j,k), m1.get(j,k) * cdouble(in,0));
+  }
 }
 
 BOOST_AUTO_TEST_CASE(division) {
@@ -307,6 +399,24 @@ BOOST_AUTO_TEST_CASE(division) {
     m2 = m1 / ln1;
     for(int j=0;j<3;j++)
       for(int k=0;k<3;k++)
+        BOOST_CHECK_EQUAL(m2.get(j,k), m1.get(j,k) / ln1);
+  }
+
+
+  for(int i=0;i<NTESTS;i++){
+    choose_random_momentum(p, -50, 50);
+    m1 = cmatrix(p, true,4);
+    
+    cn = choose_random_cdouble(-50, 50);
+    m2 = m1 / cn;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
+        BOOST_CHECK_EQUAL(m2.get(j,k), m1.get(j,k) / cn);
+    
+    ln1 = choose_random_ldouble(-50, 50);
+    m2 = m1 / ln1;
+    for(int j=0;j<4;j++)
+      for(int k=0;k<4;k++)
         BOOST_CHECK_EQUAL(m2.get(j,k), m1.get(j,k) / ln1);
   }
 }

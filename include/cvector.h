@@ -27,7 +27,7 @@ namespace spinas{
   
   class cvector{
   private:
-    cdouble vec[3];
+    cdouble vec[4];
     int dimension;
     
   public:
@@ -35,6 +35,7 @@ namespace spinas{
     cvector(const int& dim);
     cvector(const cdouble& v0, const cdouble& v1);
     cvector(const cdouble& v0, const cdouble& v1, const cdouble& v2);
+    cvector(const cdouble& v0, const cdouble& v1, const cdouble& v2, const cdouble& v3);
     
     //Get Element
     cdouble get(const int& i) const;

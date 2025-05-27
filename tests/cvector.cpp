@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(conjugate_test) {
 
 BOOST_AUTO_TEST_CASE(multiplication_test) {
   BOOST_TEST_MESSAGE("\t* Multiplication");
-  cdouble vec0, vec1, vec2, vec3, vec4, vec5, sp;
+  cdouble vec0, vec1, vec2, vec3, vec4, vec5, vec6, vec7, sp;
   cvector svec, svec2, svec3;
   ldouble p[4];
   cmatrix mat;
@@ -135,6 +135,40 @@ BOOST_AUTO_TEST_CASE(multiplication_test) {
     BOOST_CHECK_EQUAL(svec3.get(0), svec.get(0) * mat.get(0, 0) + svec.get(1) * mat.get(1, 0) + svec.get(2) * mat.get(2, 0));
     BOOST_CHECK_EQUAL(svec3.get(1), svec.get(0) * mat.get(0, 1) + svec.get(1) * mat.get(1, 1) + svec.get(2) * mat.get(2, 1));
     BOOST_CHECK_EQUAL(svec3.get(2), svec.get(0) * mat.get(0, 2) + svec.get(1) * mat.get(1, 2) + svec.get(2) * mat.get(2, 2));
+  }
+
+  for(int i=0;i<NTESTS;i++){
+    vec0 = choose_random_cdouble(-50,50);
+    vec1 = choose_random_cdouble(-50,50);
+    vec2 = choose_random_cdouble(-50,50);
+    vec3 = choose_random_cdouble(-50,50);
+    svec = cvector(vec0, vec1, vec2, vec3);
+    vec4 = choose_random_cdouble(-50,50);
+    vec5 = choose_random_cdouble(-50,50);
+    vec6 = choose_random_cdouble(-50,50);
+    vec7 = choose_random_cdouble(-50,50);
+    svec2 = cvector(vec4, vec5, vec6, vec7);
+    sp = svec * svec2;
+    
+    BOOST_CHECK_EQUAL(sp, vec0 * vec4 + vec1 * vec5 + vec2 * vec6 + vec3 * vec7);
+    
+    mat = cmatrix(choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50),
+      choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50),
+      choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50),
+      choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50), choose_random_cdouble(-50,50));
+    svec3 = mat * svec;
+    
+    BOOST_CHECK_EQUAL(svec3.get(0), mat.get(0, 0) * svec.get(0) + mat.get(0, 1) * svec.get(1) + mat.get(0, 2) * svec.get(2) + mat.get(0, 3) * svec.get(3));
+    BOOST_CHECK_EQUAL(svec3.get(1), mat.get(1, 0) * svec.get(0) + mat.get(1, 1) * svec.get(1) + mat.get(1, 2) * svec.get(2) + mat.get(1, 3) * svec.get(3));
+    BOOST_CHECK_EQUAL(svec3.get(2), mat.get(2, 0) * svec.get(0) + mat.get(2, 1) * svec.get(1) + mat.get(2, 2) * svec.get(2) + mat.get(2, 3) * svec.get(3));
+    BOOST_CHECK_EQUAL(svec3.get(3), mat.get(3, 0) * svec.get(0) + mat.get(3, 1) * svec.get(1) + mat.get(3, 2) * svec.get(2) + mat.get(3, 3) * svec.get(3));
+    
+    svec3 = svec * mat;
+    
+    BOOST_CHECK_EQUAL(svec3.get(0), svec.get(0) * mat.get(0, 0) + svec.get(1) * mat.get(1, 0) + svec.get(2) * mat.get(2, 0) + svec.get(3) * mat.get(3, 0));
+    BOOST_CHECK_EQUAL(svec3.get(1), svec.get(0) * mat.get(0, 1) + svec.get(1) * mat.get(1, 1) + svec.get(2) * mat.get(2, 1) + svec.get(3) * mat.get(3, 1));
+    BOOST_CHECK_EQUAL(svec3.get(2), svec.get(0) * mat.get(0, 2) + svec.get(1) * mat.get(1, 2) + svec.get(2) * mat.get(2, 2) + svec.get(3) * mat.get(3, 2));
+    BOOST_CHECK_EQUAL(svec3.get(3), svec.get(0) * mat.get(0, 3) + svec.get(1) * mat.get(1, 3) + svec.get(2) * mat.get(2, 3) + svec.get(3) * mat.get(3, 3));
   }
 }
 

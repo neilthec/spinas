@@ -28,7 +28,7 @@ namespace spinas{
   
   class cmatrix{
   private:
-    cdouble mat[3][3];
+    cdouble mat[4][4];
     int dimension;
     
   public:
@@ -40,6 +40,10 @@ namespace spinas{
     cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m02,
       const cdouble& m10, const cdouble& m11, const cdouble& m12,
       const cdouble& m20, const cdouble& m21, const cdouble& m22);
+    cmatrix(const cdouble& m00, const cdouble& m01, const cdouble& m02, const cdouble& m03,
+      const cdouble& m10, const cdouble& m11, const cdouble& m12, const cdouble& m13,
+      const cdouble& m20, const cdouble& m21, const cdouble& m22, const cdouble& m23,
+      const cdouble& m30, const cdouble& m31, const cdouble& m32, const cdouble& m33);
     
     //Get
     int get_dimension() const;

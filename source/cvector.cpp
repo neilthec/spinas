@@ -47,6 +47,10 @@ namespace spinas {
     vec{v0,v1,v2},
     dimension(3){}
 
+  cvector::cvector(const cdouble& v0, const cdouble& v1, const cdouble& v2, const cdouble& v3):
+    vec{v0,v1,v2,v3},
+    dimension(4){}
+
   //Get Element
   cdouble cvector::get(const int& i) const{
     if (i < 0 || i >= dimension) 
