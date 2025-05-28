@@ -263,20 +263,24 @@ namespace spinas {
       for(int j=0;j<dimension;j++)
 	      isCalculated[i][j] = false;
     //Calculate pMat as the product of the momenta in the middle.
+    //If the spinors are curly, then the momentum matrix dimension is 4.
+    int pMatDimension = dimension;
+    if(isLeftAngle == CURLY)
+      pMatDimension = 4;
     if(N>0){
       if(isLeftAngle == ANGLE){
-	pMat = p[0]->lmat(dimension);
-	for(int i=1;i<N;i++){
-	  if(i%2==0) pMat *= p[i]->lmat(dimension);
-	  else pMat *= p[i]->umat(dimension);
-	}
+	      pMat = p[0]->lmat(dimension);
+	      for(int i=1;i<N;i++){
+	        if(i%2==0) pMat *= p[i]->lmat(dimension);
+	        else pMat *= p[i]->umat(dimension);
+	      }
       }
       else {
-	pMat = p[0]->umat(dimension);
-	for(int i=1;i<N;i++){
-	  if(i%2==0) pMat *= p[i]->umat(dimension);
-	  else pMat *= p[i]->lmat(dimension);
-	}
+	      pMat = p[0]->umat(pMatDimension);
+	      for(int i=1;i<N;i++){
+	        if(i%2==0) pMat *= p[i]->umat(pMatDimension);
+	        else pMat *= p[i]->lmat(pMatDimension);
+	      }
       }
     }
   }
@@ -296,20 +300,20 @@ namespace spinas {
     if(isLeftAngle == ANGLE){
       vec = pL->langle(dimension);
       if(N>0)
-	vec = vec * pMat;
+	      vec = vec * pMat;
       if(N%2==0)
-	product[0][0] = vec * pR->rangle(dimension);
+	      product[0][0] = vec * pR->rangle(dimension);
       else
-	product[0][0] = vec * pR->rsquare(dimension);
+	      product[0][0] = vec * pR->rsquare(dimension);
     }
     else if(isLeftAngle == SQUARE){
       vec = pL->lsquare(dimension);
       if(N>0)
-	vec = vec * pMat;
+	      vec = vec * pMat;
       if(N%2==0)
-	product[0][0] = vec * pR->rsquare(dimension);
+	      product[0][0] = vec * pR->rsquare(dimension);
       else
-	product[0][0] = vec * pR->rangle(dimension);
+	      product[0][0] = vec * pR->rangle(dimension);
     }
     isCalculated[0][0] = true;
     return product[0][0];
@@ -411,29 +415,26 @@ namespace spinas {
     if(isLeftAngle == ANGLE){
       vec = pL->langle(spinL,isLeftUpper,dimension);
       if(N>0)
-	vec = vec * pMat;
+	      vec = vec * pMat;
       if(N%2==0)
-	product[jL][jR] = vec * pR->rangle(spinR,isRightUpper,dimension);
+	      product[jL][jR] = vec * pR->rangle(spinR,isRightUpper,dimension);
       else
-	product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper,dimension);
+	      product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper,dimension);
     }
     else if(isLeftAngle == SQUARE){
       vec = pL->lsquare(spinL,isLeftUpper,dimension);
       if(N>0)
-	vec = vec * pMat;
+	      vec = vec * pMat;
       if(N%2==0)
-	product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper,dimension);
+	      product[jL][jR] = vec * pR->rsquare(spinR,isRightUpper,dimension);
       else
-	product[jL][jR] = vec * pR->rangle(spinR,isRightUpper,dimension);
+	      product[jL][jR] = vec * pR->rangle(spinR,isRightUpper,dimension);
     }
     else if(isLeftAngle == CURLY){
       vec = pL->lcurly(spinL,isLeftUpper,dimension);
       if(N>0)
         vec = vec * pMat;
-      if(N%2==0)
-        product[jL][jR] = vec * pR->rcurly(spinR,isRightUpper,dimension);
-      else
-        throw std::runtime_error("Incorrect usage of sproduct.v(jL,jR) with curly....");
+      product[jL][jR] = vec * pR->rcurly(spinR,isRightUpper,dimension);
     }
     isCalculated[jL][jR] = true;
     return product[jL][jR];

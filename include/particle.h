@@ -99,6 +99,10 @@ namespace spinas {
     cvector rsquareUpperP23dim, rsquareUpper03dim, rsquareUpperM23dim;
     bool rsquareLowerP23dimCalculated = false, rsquareLower03dimCalculated = false, rsquareLowerM23dimCalculated = false;
     cvector rsquareLowerP23dim, rsquareLower03dim, rsquareLowerM23dim;
+
+    //The matrices and spinors
+    bool upMat4dimCalculated = false;
+    cmatrix upMat4dim;
     //rcurly
     bool rcurlyUpperP23dimCalculated = false, rcurlyUpper03dimCalculated = false, rcurlyUpperM23dimCalculated = false;
     cvector rcurlyUpperP23dim, rcurlyUpper03dim, rcurlyUpperM23dim;

@@ -198,14 +198,14 @@ namespace spinas {
     //T-Channel h
     //preh = e*e/(MW*MW*SW*SW);
     //all ingoing = 34 outgoing:
-    //preh ([[13]]+<<13>>)([[24]]+<<24>>)/(t-Mh^2)
+    //preh {{13}}{{24}}/(t-Mh^2)
     //amplitude += preh/eight*(a13a3.v(ds1,ds3)+s13s3.v(ds1,ds3))*(a24a3.v(ds2,ds4)+s24s3.v(ds2,ds4))/pDenTh;
     amplitude += preh*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)/pDenTh;
 
     //U-Channel h
     //preh = e*e/(MW*MW*SW*SW);
     //all ingoing = 34 outgoing:
-    //preh ([[14]]+<<14>>)([[23]]+<<23>>)/(u-Mh^2)
+    //preh {{14}}{{23}}/(u-Mh^2)
     //amplitude += preh/eight*(a14a3.v(ds1,ds4)+s14s3.v(ds1,ds4))*(a23a3.v(ds2,ds3)+s23s3.v(ds2,ds3))/pDenUh;
     amplitude += preh*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)/pDenUh;
 

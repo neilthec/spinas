@@ -192,6 +192,18 @@ namespace spinas {
       }
       return upMat3dim;
     }
+    else if (dim==4){//Curly Spinors
+      if(!upMat4dimCalculated) {
+        upMat4dim = cmatrix(
+          cdouble(-p[0]*p[0],0)+m*m, cdouble(-p[0]*p[1],0), cdouble(-p[0]*p[2],0), cdouble(-p[0]*p[3],0),
+          cdouble(p[0]*p[1],0), cdouble(p[1]*p[1],0)+m*m, cdouble(p[1]*p[2],0), cdouble(p[1]*p[3],0),
+          cdouble(p[0]*p[2],0), cdouble(p[1]*p[2],0), cdouble(p[2]*p[2],0)+m*m, cdouble(p[2]*p[3],0),
+          cdouble(p[0]*p[3],0), cdouble(p[1]*p[3],0), cdouble(p[2]*p[3],0), cdouble(p[3]*p[3],0)+m*m
+          );
+        upMat4dimCalculated = true;
+      }
+      return upMat4dim;
+    }
     
     return upMat2dim;
   }
@@ -215,6 +227,18 @@ namespace spinas {
         loMat3dimCalculated = true;
       }
       return loMat3dim;      
+    }
+    else if (dim==4){//Curly Spinors
+      if(!upMat4dimCalculated) {
+        upMat4dim = cmatrix(
+          cdouble(-p[0]*p[0],0)+m*m, cdouble(-p[0]*p[1],0), cdouble(-p[0]*p[2],0), cdouble(-p[0]*p[3],0),
+          cdouble(p[0]*p[1],0), cdouble(p[1]*p[1],0)+m*m, cdouble(p[1]*p[2],0), cdouble(p[1]*p[3],0),
+          cdouble(p[0]*p[2],0), cdouble(p[1]*p[2],0), cdouble(p[2]*p[2],0)+m*m, cdouble(p[2]*p[3],0),
+          cdouble(p[0]*p[3],0), cdouble(p[1]*p[3],0), cdouble(p[2]*p[3],0), cdouble(p[3]*p[3],0)+m*m
+          );
+        upMat4dimCalculated = true;
+      }
+      return upMat4dim;
     }
     return loMat2dim;
   }
@@ -905,6 +929,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
                             |j}^I
   *********************************************************************/
   cvector particle::rcurly(const int& spin2, const int& dim) {
+    constexpr cdouble i=cdouble(0,1), two=cdouble(2,0);
     if(dim==2||m==0){
       throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
     }
@@ -915,21 +940,21 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
       }
       if(spin2==-2){
         if(!rcurlyUpperM23dimCalculated){
-          rcurlyUpperM23dim = m*cvector(c*c,sqrt2*c*s,s*s);//empz*cvector(c*c,sqrt2*c*sc,sc*sc)
+          rcurlyUpperM23dim = m/sqrt2*cvector(0.0,sc*sc-c*c,i*(c*c+sc*sc),two*c*sc);
           rcurlyUpperM23dimCalculated = true;
         }
         return rcurlyUpperM23dim;
       }
       else if(spin2==0){
         if(!rcurlyUpper03dimCalculated){
-          rcurlyUpper03dim = m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rcurlyUpper03dim = cvector(pmag,-p[0]*c*(s+sc),i*p[0]*c*(s-sc),p[0]*(s*sc-c*c));
           rcurlyUpper03dimCalculated = true;
         }
         return rcurlyUpper03dim;
       }
       else if(spin2==2){
         if(!rcurlyUpperP23dimCalculated){
-          rcurlyUpperP23dim = m*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rcurlyUpperP23dim = m/sqrt2*cvector(0.0,c*c-s*s,i*(s*s+c*c),-two*c*s);
           rcurlyUpperP23dimCalculated = true;
         }
         return rcurlyUpperP23dim;
@@ -941,6 +966,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
                             |j}_I
   *********************************************************************/
   cvector particle::rcurly(const int& spin2, const bool& upper, const int& dim) {
+    constexpr cdouble i = cdouble(0,1), two = cdouble(2,0);
     if(upper) return rcurly(spin2, dim);
     if(dim==2||m==0){
       throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
@@ -952,21 +978,21 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
       }
       if(spin2==2){
         if(!rcurlyLowerM23dimCalculated){
-          rcurlyLowerM23dim = m*cvector(sc*sc,-sqrt2*c*sc,c*c);
+          rcurlyLowerM23dim = m/sqrt2*cvector(0.0,c*c-s*s,i*(s*s+c*c),-two*c*s);
           rcurlyLowerM23dimCalculated = true;
         }
         return rcurlyLowerM23dim;
       }
       else if(spin2==0){
         if(!rcurlyLower03dimCalculated){
-          rcurlyLower03dim = -m*cvector(-sqrt2*c*sc,c*c-s*sc,sqrt2*c*s);
+          rcurlyLower03dim = -cvector(pmag,-p[0]*c*(s+sc),i*p[0]*c*(s-sc),p[0]*(s*sc-c*c));
           rcurlyLower03dimCalculated = true;
         }
         return rcurlyLower03dim;
       }
       else if(spin2==-2){
         if(!rcurlyLowerP23dimCalculated){
-          rcurlyLowerP23dim = m*cvector(c*c,sqrt2*c*s,s*s);
+          rcurlyLowerP23dim = m/sqrt2*cvector(0.0,sc*sc-c*c,i*(c*c+sc*sc),two*c*sc);
           rcurlyLowerP23dimCalculated = true;
         }
         return rcurlyLowerP23dim;
@@ -978,6 +1004,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
                             {j|^I
 *********************************************************************/
   cvector particle::lcurly(const int& spin2, const int& dim) {
+    constexpr cdouble i = cdouble(0,1), two = cdouble(2,0);
     if(dim==2||m==0){
       throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
     }
@@ -988,21 +1015,21 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
       }
       if(spin2==-2){
         if(!lcurlyUpperM23dimCalculated){
-          lcurlyUpperM23dim = m*cvector(s*s,-sqrt2*c*s,c*c);
+          lcurlyUpperM23dim = m/sqrt2*cvector(0.0,-sc*sc+c*c,-i*(c*c+sc*sc),-two*c*sc);
           lcurlyUpperM23dimCalculated = true;
         }
         return lcurlyUpperM23dim;
       }
       else if(spin2==0){
         if(!lcurlyUpper03dimCalculated){
-          lcurlyUpper03dim = m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          lcurlyUpper03dim = cvector(pmag,p[0]*c*(s+sc),-i*p[0]*c*(s-sc),-p[0]*(s*sc-c*c));
           lcurlyUpper03dimCalculated = true;
         }
         return lcurlyUpper03dim;
       }
       else if(spin2==2){
         if(!lcurlyUpperP23dimCalculated){
-          lcurlyUpperP23dim = m*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lcurlyUpperP23dim = m/sqrt2*cvector(0.0,-c*c+s*s,-i*(s*s+c*c),two*c*s);
           lcurlyUpperP23dimCalculated = true;
         }
         return lcurlyUpperP23dim;
@@ -1014,6 +1041,7 @@ cvector particle::langle(const int& spin2, const bool& upper, const int& dim) {
                             {j|_I
 *********************************************************************/
 cvector particle::lcurly(const int& spin2, const bool& upper, const int& dim) {
+    constexpr cdouble i = cdouble(0,1), two = cdouble(2,0);
     if(upper) return lcurly(spin2, dim);
     if(dim==2||m==0){
       throw std::runtime_error("Incorrect usage: rculry cannot be dim=2 or m=0!");
@@ -1025,21 +1053,21 @@ cvector particle::lcurly(const int& spin2, const bool& upper, const int& dim) {
       }
       if(spin2==2){
         if(!lcurlyLowerM23dimCalculated){
-          lcurlyLowerM23dim = m*cvector(c*c,sqrt2*c*sc,sc*sc);
+          lcurlyLowerM23dim = m/sqrt2*cvector(0.0,-c*c+s*s,-i*(s*s+c*c),two*c*s);
           lcurlyLowerM23dimCalculated = true;
         }
         return lcurlyLowerM23dim;
       }
       else if(spin2==0){
         if(!lcurlyLower03dimCalculated){
-          lcurlyLower03dim = -m*cvector(sqrt2*c*s,-c*c+s*sc,-sqrt2*c*sc);
+          lcurlyLower03dim = -cvector(pmag,p[0]*c*(s+sc),-i*p[0]*c*(s-sc),-p[0]*(s*sc-c*c));
           lcurlyLower03dimCalculated = true;
         }
         return lcurlyLower03dim;
       }
       else if(spin2==-2){
         if(!lcurlyLowerP23dimCalculated){
-          lcurlyLowerP23dim = m*cvector(s*s,-sqrt2*c*s,c*c);
+          lcurlyLowerP23dim = m/sqrt2*cvector(0.0,-sc*sc+c*c,-i*(c*c+sc*sc),-two*c*sc);
           lcurlyLowerP23dimCalculated = true;
         }
         return lcurlyLowerP23dim;
