@@ -25,11 +25,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <complex>
 
 #include "spinas.h"
-#include "include/WWWW-v2.h"
+#include "include/WWWW-example.h"
 
 namespace spinas {
 
-  WWWWv2::WWWWv2(const ldouble& echarge, const ldouble& massh, const ldouble& widthh, const ldouble& massW, const ldouble& widthZ, const ldouble& sinW):
+  WWWWv3::WWWWv3(const ldouble& echarge, const ldouble& massh, const ldouble& widthh, const ldouble& massW, const ldouble& widthZ, const ldouble& sinW):
     e(echarge), mh(massh), wh(widthh), MW(massW), WZ(widthZ), SW(sinW), CW(std::sqrt(1.0-sinW*sinW)), MZ(massW/CW) {
     CW = std::sqrt(1.0-sinW*sinW);
     MZ = MW/CW;//std::cout<<"constructor: MZ="<<MZ<<"\n";
@@ -98,7 +98,7 @@ namespace spinas {
     preA = e*e/(MW*MW*MW);
     preZ = e*e/(2.0*MW*MW*MZ*SW*SW);
   }
-  void WWWWv2::set_masses(const ldouble& massh, const ldouble& massW){
+  void WWWWv3::set_masses(const ldouble& massh, const ldouble& massW){
     mh=massh;
     MW=massW;
     MZ=MW/CW;//std::cout<<"set_masses: MZ="<<MZ<<"\n";
@@ -114,7 +114,7 @@ namespace spinas {
     preA = e*e/(MW*MW*MW);
     preZ = e*e/(2.0*MW*MW*MZ*SW*SW);
   }
-  void WWWWv2::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
+  void WWWWv3::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
     //Particles
     p1.set_momentum(mom1);
     p2.set_momentum(mom2);
@@ -188,7 +188,7 @@ namespace spinas {
   
   //Amplitude
   //set_momenta(...) must be called before amp(...).
-  cdouble WWWWv2::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4){//Double Spin
+  cdouble WWWWv3::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const ldouble params[20]){//Double Spin
     cdouble amplitude(0,0);
     constexpr ldouble one=1, two=2, three=3, four=4, five=5, six=6, eight=8, nine=9, eleven=11;
     ldouble sqrt2 = std::sqrt(2.0);
@@ -210,18 +210,40 @@ namespace spinas {
     //T-Channel A
     //preA = e*e/(MW*MW*MW);
     //(- <<14>>[[23]] + <<12>>[[34]] - [[14]]<<23>> + [[12]]<<34>>)/t
-    amplitude += - preA*(
+    /*amplitude += - preA*(
 			  - a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3) + a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
 			  - s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3) + s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-			  )/pDenTA;
+			  )/pDenTA;*/
+
+    amplitude += - preA*(
+          params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[3]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[4]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[6]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[7]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+    )/pDenTA;  
 
     //U-Channel A
     //Switch 3<->4
     //(- <<13>>[[24]] - <<12>>[[34]] - [[13]]<<24>> - [[12]]<<34>>)/u
-    amplitude += + preA*(
+    /*amplitude += + preA*(
 			    + a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4) + a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
 			    + s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4) + s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-			    )/pDenUA;
+			    )/pDenUA;*/
+    
+    amplitude += + preA*(
+          params[8]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[9]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[10]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[11]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[12]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[13]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[14]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[15]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+    )/pDenUA;
 
     //T-Channel Z
     //preZ = e*e/(2*MW*MW*MZ*SW*SW);
@@ -251,16 +273,35 @@ namespace spinas {
   }
   
   //set_momenta(...) must be called before amp2().
-  ldouble WWWWv2::amp2(){
+  ldouble WWWWv3::amp2(){
     ldouble amp2 = 0;
     cdouble M;
+    ldouble params[20]={1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
     //Sum over spins
     for(int j1=-2;j1<=2;j1+=2)
       for(int j2=-2;j2<=2;j2+=2)
 	      for(int j3=-2;j3<=2;j3+=2)
 	        for(int j4=-2;j4<=2;j4+=2){
-	          M = amp(j1,j2,j3,j4);
+	          M = amp(j1,j2,j3,j4, params);
+	          amp2 += std::pow(std::abs(M),2);
+	        }
+    //Average over spins 1/3^2=1/9
+    //Symmetry factor 1/2
+    return amp2/18.0;
+  }
+
+
+  ldouble WWWWv3::amp2_params(const ldouble params[20]){
+    ldouble amp2 = 0;
+    cdouble M;
+    
+    //Sum over spins
+    for(int j1=-2;j1<=2;j1+=2)
+      for(int j2=-2;j2<=2;j2+=2)
+	      for(int j3=-2;j3<=2;j3+=2)
+	        for(int j4=-2;j4<=2;j4+=2){
+	          M = amp(j1,j2,j3,j4, params);
 	          amp2 += std::pow(std::abs(M),2);
 	        }
     //Average over spins 1/3^2=1/9
@@ -272,7 +313,7 @@ namespace spinas {
 
 
   //  Tests
-  int test_WWWWv2(){
+  int test_WWWWv3(){
     int n=0;//Number of fails
     std::cout<<"\t* W+, W+ -> W+, W+ v2   :";
     {//amp^2
@@ -282,7 +323,7 @@ namespace spinas {
       ldouble EE=0.31333,MW=80.385, SW=0.474;
       ldouble CW=std::sqrt(1-SW*SW);
       ldouble MZ=MW/CW;//std::cout<<"MZ="<<MZ<<"\n";
-      WWWWv2 WWWWAmp = WWWWv2(EE,mh,0,MW,0,SW);
+      WWWWv3 WWWWAmp = WWWWv3(EE,mh,0,MW,0,SW);
       ldouble pspatial=250;
       //full, Z only, h only, A only
       //ldouble dataCH[20] = {1.330498476822454E+02,2.574400305762363E+01,1.117817047479175E+01,6.389083613347302E+00,4.249873849952222E+00,3.130785827467675E+00,2.492964262988100E+00,2.117842664358412E+00,1.905654805317800E+00,1.809199057352321E+00,1.809199057352527E+00,1.905654805317751E+00,2.117842664358410E+00,2.492964262988184E+00,3.130785827467681E+00,4.249873849952687E+00,6.389083613346880E+00,1.117817047479180E+01,2.574400305762331E+01,1.330498476822448E+02};
@@ -374,6 +415,35 @@ namespace spinas {
     
     return n;
   }
+
+
+  
+  //  Tests
+  ldouble score_WWWW(const ldouble params[20]){
+    ldouble score=0;
+    {//amp^2
+      int i=0;
+      //std::cout<<"\n# mh=125, MW=80.385, pspatial=250\n";
+      ldouble mh=125;
+      ldouble EE=0.31333,MW=80.385, SW=0.474;
+      ldouble CW=std::sqrt(1-SW*SW);
+      ldouble MZ=MW/CW;//std::cout<<"MZ="<<MZ<<"\n";
+      WWWWv3 WWWWAmp = WWWWv3(EE,mh,0,MW,0,SW);
+      ldouble pspatial=250;
+      //full, Z only, h only, A only
+      //ldouble dataCH[20] = {1.330498476822454E+02,2.574400305762363E+01,1.117817047479175E+01,6.389083613347302E+00,4.249873849952222E+00,3.130785827467675E+00,2.492964262988100E+00,2.117842664358412E+00,1.905654805317800E+00,1.809199057352321E+00,1.809199057352527E+00,1.905654805317751E+00,2.117842664358410E+00,2.492964262988184E+00,3.130785827467681E+00,4.249873849952687E+00,6.389083613346880E+00,1.117817047479180E+01,2.574400305762331E+01,1.330498476822448E+02};
+      //ldouble dataCH[20] = {163.664,142.179,148.485,158.734,168.968,178.026,185.452,191.033,194.658,196.263,195.81,193.272,188.633,181.881,173.008,162.006,148.873,133.603,116.194,96.6441};
+      //ldouble dataCH[20] = {1.065432660422373E+00,9.531627330206415E-01,9.019583151212617E-01,8.731892544962671E-01,8.552209288622006E-01,8.433602858804521E-01,8.353723130528455E-01,8.300813276734555E-01,8.268388786237630E-01,8.252949656831252E-01,8.252949656831252E-01,8.268388786237629E-01,8.300813276734554E-01,8.353723130528458E-01,8.433602858804522E-01,8.552209288622007E-01,8.731892544962669E-01,9.019583151212617E-01,9.531627330206414E-01,1.065432660422373E+00};
+      ldouble dataCH[20] = {2.010324783060262E+02,1.668490838082068E+02,1.800973667520510E+02,1.962894369586450E+02,2.117489420177231E+02,2.254053390431327E+02,2.367499778331918E+02,2.454792380289816E+02,2.513979351867144E+02,2.543861059069274E+02,2.543861059069274E+02,2.513979351867144E+02,2.454792380289816E+02,2.367499778331919E+02,2.254053390431327E+02,2.117489420177232E+02,1.962894369586450E+02,1.800973667520510E+02,1.668490838082068E+02,2.010324783060260E+02};
+      //i += WWWWAmp.test_2to2_amp2([&]() { return WWWWAmp.amp2(); }, MW,MW,MW,MW,pspatial,dataCH);
+      score += WWWWAmp.score_2to2_amp2([&](const ldouble*) { return WWWWAmp.amp2_params(params); }, MW,MW,MW,MW,pspatial,dataCH, params);
+      //std::cout<<"\n# me=0.0005, mh=125, MW=80.385, pspatial=125.1\n";
+      
+    }
+    
+    return score;
+  }
+
 
 
   
