@@ -190,7 +190,7 @@ namespace spinas {
   //set_momenta(...) must be called before amp(...).
   cdouble WWWWv3::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const ldouble params[20]){//Double Spin
     cdouble amplitude(0,0);
-    constexpr ldouble one=1, two=2, three=3, four=4, five=5, six=6, eight=8, nine=9, eleven=11;
+    constexpr ldouble one=1, two=2, three=3, four=4, five=5, six=6, eight=8, nine=9, ten=10, eleven=11;
     ldouble sqrt2 = std::sqrt(2.0);
     int ds1a, ds1b, ds2a, ds2b, ds3a, ds3b, ds4a, ds4b;
 
@@ -215,15 +215,22 @@ namespace spinas {
 			  - s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3) + s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
 			  )/pDenTA;*/
 
-    amplitude += - preA*(
+    amplitude += - preA*MW/two*(
           params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
           + params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[2]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[3]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[4]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[6]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          + params[7]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[3]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[4]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[5]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[6]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[7]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[8]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[9]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[10]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[11]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          //+ params[0]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
+          //- two*MW*params[0]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
+          //+ params[2]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
     )/pDenTA;  
 
     //U-Channel A
@@ -234,15 +241,22 @@ namespace spinas {
 			    + s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4) + s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
 			    )/pDenUA;*/
     
-    amplitude += + preA*(
-          params[8]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          + params[9]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[10]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[11]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[12]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[13]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[14]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          + params[15]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+    amplitude += - preA*MW/two*(
+          params[0]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          - params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[3]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          - params[4]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[5]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[6]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[7]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[8]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[9]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          - params[10]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          - params[11]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          //+ params[0]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
+          //- two*MW*params[0]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
+          //- params[2]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
     )/pDenUA;
 
     //T-Channel Z
