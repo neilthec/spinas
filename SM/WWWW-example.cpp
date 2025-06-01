@@ -216,14 +216,14 @@ namespace spinas {
 			  )/pDenTA;*/
 
     amplitude += - preA*(
-          //params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          //+ params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          //+ params[2]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          //+ params[3]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[9]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[1]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[2]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          + params[3]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[3]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[4]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[6]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[7]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
     )/pDenTA;  
 
     //U-Channel A
@@ -235,14 +235,14 @@ namespace spinas {
 			    )/pDenUA;*/
     
     amplitude += + preA*(
-          //params[8]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          //+ params[9]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          //+ params[10]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          //+ params[11]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[4]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[6]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          + params[7]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          params[8]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[9]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[10]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[11]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[12]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[13]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[14]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[15]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
     )/pDenUA;
 
     //T-Channel Z
