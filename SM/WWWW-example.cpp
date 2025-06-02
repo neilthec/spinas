@@ -216,21 +216,21 @@ namespace spinas {
 			  )/pDenTA;*/
 
     amplitude += - preA*MW/two*(
-          params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          + params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[2]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          + params[3]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[4]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[5]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[6]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[7]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          + params[8]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[9]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          + params[10]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[11]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[12]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
-          + params[13]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
-          + params[14]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
+          + params[0]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[0]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[1]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[1]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[2]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[3]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[3]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[4]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[4]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[5]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[6]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
+          + params[7]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
+          + params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
     )/pDenTA;  
 
     //U-Channel A
@@ -242,21 +242,21 @@ namespace spinas {
 			    )/pDenUA;*/
     
     amplitude += - preA*MW/two*(
-          params[0]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          - params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[2]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          + params[3]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          - params[4]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[5]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[6]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[7]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          + params[8]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[9]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          - params[10]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          - params[11]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[12]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
-          + params[13]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
-          - params[14]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
+          + params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[0]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[1]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[1]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          - params[2]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          - params[2]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[3]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[3]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[4]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[4]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          - params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          - params[5]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[6]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
+          + params[7]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
+          - params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
     )/pDenUA;
 
     //T-Channel Z
