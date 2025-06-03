@@ -93,6 +93,22 @@ namespace spinas {
     //Star products
     s13Z24a = starproduct(&c1s,&c3s,&pZ,&c2a,&c4a);
     a13Z24s = starproduct(&c1a,&c3a,&pZ,&c2s,&c4s);
+    s13124a = starproduct(&c1s,&c3s,&p1,&c2a,&c4a);
+    s13224a = starproduct(&c1s,&c3s,&p2,&c2a,&c4a);
+    s13324a = starproduct(&c1s,&c3s,&p3,&c2a,&c4a);
+    s13424a = starproduct(&c1s,&c3s,&p4,&c2a,&c4a);
+    a13124s = starproduct(&c1a,&c3a,&p1,&c2s,&c4s);
+    a13224s = starproduct(&c1a,&c3a,&p2,&c2s,&c4s);
+    a13324s = starproduct(&c1a,&c3a,&p3,&c2s,&c4s);
+    a13424s = starproduct(&c1a,&c3a,&p4,&c2s,&c4s);
+    s14123a = starproduct(&c1s,&c4s,&p1,&c2a,&c3a);
+    s14223a = starproduct(&c1s,&c4s,&p2,&c2a,&c3a);
+    s14323a = starproduct(&c1s,&c4s,&p3,&c2a,&c3a);
+    s14423a = starproduct(&c1s,&c4s,&p4,&c2a,&c3a);
+    a14123s = starproduct(&c1a,&c4a,&p1,&c2s,&c3s);
+    a14223s = starproduct(&c1a,&c4a,&p2,&c2s,&c3s);
+    a14323s = starproduct(&c1a,&c4a,&p3,&c2s,&c3s);
+    a14423s = starproduct(&c1a,&c4a,&p4,&c2s,&c3s);
     //Couplings
     preh = e*e/(MW*MW*SW*SW);
     preA = e*e/(MW*MW*MW);
@@ -183,6 +199,22 @@ namespace spinas {
     //Star products
     s13Z24a.update();
     a13Z24s.update();
+    s13124a.update();
+    s13224a.update();
+    s13324a.update();
+    s13424a.update();
+    a13124s.update();
+    a13224s.update();
+    a13324s.update();
+    a13424s.update();
+    s14123a.update();
+    s14223a.update();
+    s14323a.update();
+    s14423a.update();
+    a14123s.update();
+    a14223s.update();
+    a14323s.update();
+    a14423s.update();
   }
 
   
@@ -215,7 +247,7 @@ namespace spinas {
 			  - s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3) + s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
 			  )/pDenTA;*/
 
-    amplitude += - preA*MW/two*(
+    amplitude += - preA*MW*(
           + params[0]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
           + params[0]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
           + params[1]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
@@ -228,9 +260,17 @@ namespace spinas {
           + params[4]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
           + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
           + params[5]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[6]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
-          + params[7]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
-          + params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
+          //+ params[6]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
+          //+ params[7]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
+          //+ params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
+          + params[6]*s13124a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[6]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[7]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[7]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[8]*s13324a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[8]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[9]*s13424a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[9]*a13424s.v(ds1,ds3,ds2,ds4)/MW/MW
     )/pDenTA;  
 
     //U-Channel A
@@ -241,7 +281,7 @@ namespace spinas {
 			    + s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4) + s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
 			    )/pDenUA;*/
     
-    amplitude += - preA*MW/two*(
+    amplitude += - preA*MW*(
           + params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
           + params[0]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
           + params[1]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
@@ -254,9 +294,17 @@ namespace spinas {
           + params[4]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
           + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
           + params[5]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          + params[6]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
-          + params[7]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
-          + params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
+          //+ params[6]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
+          //+ params[7]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
+          //+ params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
+          + params[6]*s14123a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[6]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[7]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[7]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[8]*s14323a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[8]*a14323s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[9]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[9]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
     )/pDenUA;
 
     //T-Channel Z

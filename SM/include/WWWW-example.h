@@ -36,6 +36,8 @@ namespace spinas {
     sproduct s12s3, a12a3, s34s3, a34a3, s14s3, a14a3, s23s3, a23a3, s13s3, a13a3, s24s3, a24a3;
     sproduct c12c3, c34c3, c14c3, c23c3, c13c3, c24c3;
     starproduct s13Z24a, a13Z24s;
+    starproduct s13124a, a13124s, s13224a, a13224s, s13324a, a13324s, a13424s, s13424a;
+    starproduct s14123a, a14123s, s14223a, a14223s, s14323a, a14323s, a14423s, s14423a;
     ldouble preh, preA, preZ;
 
     
