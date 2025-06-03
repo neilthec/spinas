@@ -26,7 +26,7 @@ namespace spinas {
     ldouble e;//Electric Charge
     ldouble mh, wh, MW, WZ, SW, CW, MZ;//Mass of h, W and Z, width of h and W and sin(theta_W)
     particle p1,p2,p3,p4;
-    particle pZ;
+    particle pZ, pAT, pAU;
     schain c1s, c1a, c2s, c2a, c3s, c3a, c4s, c4a;
     propagator proph, propZ, propA;
     cdouble pDenTh, pDenUh, pDenTZ, pDenUZ, pDenTA, pDenUA;
@@ -35,7 +35,7 @@ namespace spinas {
     sproduct s431a, s134a, s341a, s143a, s43s, a43a;
     sproduct s12s3, a12a3, s34s3, a34a3, s14s3, a14a3, s23s3, a23a3, s13s3, a13a3, s24s3, a24a3;
     sproduct c12c3, c34c3, c14c3, c23c3, c13c3, c24c3;
-    starproduct s13Z24a, a13Z24s;
+    starproduct s13Z24a, a13Z24s, s13A24a, a13A24s, s14A23a, a14A23s;
     starproduct s13124a, a13124s, s13224a, a13224s, s13324a, a13324s, a13424s, s13424a;
     starproduct s14123a, a14123s, s14223a, a14223s, s14323a, a14323s, a14423s, s14423a;
     ldouble preh, preA, preZ;

@@ -42,6 +42,10 @@ namespace spinas {
     p4=particle(MW);
     pZ=particle(MZ);
     pZ.set_off_shell();
+    pAT=particle(0);
+    pAT.set_off_shell();
+    pAU=particle(0);
+    pAU.set_off_shell();
     //Schains
     c1s = schain(&p1,SQUARE,3);
     c1a = schain(&p1,ANGLE,3);
@@ -93,6 +97,10 @@ namespace spinas {
     //Star products
     s13Z24a = starproduct(&c1s,&c3s,&pZ,&c2a,&c4a);
     a13Z24s = starproduct(&c1a,&c3a,&pZ,&c2s,&c4s);
+    s13A24a = starproduct(&c1s,&c3s,&pAT,&c2a,&c4a);
+    a13A24s = starproduct(&c1a,&c3a,&pAT,&c2s,&c4s);
+    s14A23a = starproduct(&c1s,&c4s,&pAU,&c2a,&c3a);
+    a14A23s = starproduct(&c1a,&c4a,&pAU,&c2s,&c3s);
     s13124a = starproduct(&c1s,&c3s,&p1,&c2a,&c4a);
     s13224a = starproduct(&c1s,&c3s,&p2,&c2a,&c4a);
     s13324a = starproduct(&c1s,&c3s,&p3,&c2a,&c4a);
@@ -144,6 +152,8 @@ namespace spinas {
       propUP[j] = mom1[j]-mom4[j];
     }
     pZ.set_momentum(propTP);
+    pAT.set_momentum(propTP);
+    pAU.set_momentum(propUP);
     pDenTh=proph.denominator(propTP);
     pDenUh=proph.denominator(propUP);
     pDenTZ=propZ.denominator(propTP);
@@ -271,6 +281,8 @@ namespace spinas {
           //+ params[8]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*s13424a.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*a13424s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[8]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[8]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW
     )/pDenTA;  
 
     //U-Channel A
@@ -305,6 +317,8 @@ namespace spinas {
           //+ params[8]*a14323s.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[9]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[9]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[8]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[8]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
     )/pDenUA;
 
     //T-Channel Z
