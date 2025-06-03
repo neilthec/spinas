@@ -267,10 +267,10 @@ namespace spinas {
           + params[6]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[7]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[7]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[8]*s13324a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[8]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[9]*s13424a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[9]*a13424s.v(ds1,ds3,ds2,ds4)/MW/MW
+          //+ params[8]*s13324a.v(ds1,ds3,ds2,ds4)/MW/MW
+          //+ params[8]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
+          //+ params[9]*s13424a.v(ds1,ds3,ds2,ds4)/MW/MW
+          //+ params[9]*a13424s.v(ds1,ds3,ds2,ds4)/MW/MW
     )/pDenTA;  
 
     //U-Channel A
@@ -301,10 +301,10 @@ namespace spinas {
           + params[6]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[7]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[7]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[8]*s14323a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[8]*a14323s.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[9]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[9]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
+          //+ params[8]*s14323a.v(ds1,ds4,ds2,ds3)/MW/MW
+          //+ params[8]*a14323s.v(ds1,ds4,ds2,ds3)/MW/MW
+          //+ params[9]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
+          //+ params[9]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
     )/pDenUA;
 
     //T-Channel Z
