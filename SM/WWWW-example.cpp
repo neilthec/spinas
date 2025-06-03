@@ -209,6 +209,10 @@ namespace spinas {
     //Star products
     s13Z24a.update();
     a13Z24s.update();
+    s13A24a.update();
+    a13A24s.update();
+    s14A23a.update();
+    a14A23s.update();
     s13124a.update();
     s13224a.update();
     s13324a.update();
