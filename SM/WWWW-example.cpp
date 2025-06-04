@@ -532,6 +532,9 @@ namespace spinas {
       //i += WWWWAmp.test_2to2_amp2([&]() { return WWWWAmp.amp2(); }, MW,MW,MW,MW,pspatial,dataCH);
       score += WWWWAmp.score_2to2_amp2([&](const ldouble*) { return WWWWAmp.amp2_params(params); }, MW,MW,MW,MW,pspatial,dataCH, params);
       //std::cout<<"\n# me=0.0005, mh=125, MW=80.385, pspatial=125.1\n";
+      pspatial = 125;
+      ldouble dataCH1[20] = {4.939803447520011E+01,7.898962143631064E+00,4.540548305582714E+00,3.681220125094095E+00,3.387994064383381E+00,3.284122419779228E+00,3.254056884553298E+00,3.252570243091210E+00,3.259300044731354E+00,3.264632299208926E+00,3.264632299208926E+00,3.259300044731353E+00,3.252570243091209E+00,3.254056884553299E+00,3.284122419779229E+00,3.387994064383382E+00,3.681220125094094E+00,4.540548305582713E+00,7.898962143631060E+00,4.939803447519990E+01};
+      score += WWWWAmp.score_2to2_amp2([&](const ldouble*) { return WWWWAmp.amp2_params(params); }, MW,MW,MW,MW,pspatial,dataCH1, params);
       
     }
     
