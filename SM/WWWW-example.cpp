@@ -264,8 +264,8 @@ namespace spinas {
         //slurm/scan_14.out: Final score: 7.021974648753163e-07   Final parameters: [ 3.09983478  0.00977462 -0.0999198   0.77228752 -0.97216255  1.00280562 -0.22478263 -1.17304607 -0.25000384]
 
     amplitude += - preA*MW*(
-          + params[0]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)*three
-          + params[0]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)*three
+          + params[0]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[0]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
           + params[1]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
           + params[1]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
           //+ params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
@@ -291,8 +291,8 @@ namespace spinas {
           //+ params[8]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*s13424a.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*a13424s.v(ds1,ds3,ds2,ds4)/MW/MW
-          - params[8]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW/four
-          - params[8]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW/four
+          - params[8]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
+          - params[8]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[9]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[9]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
     )/pDenTA;  
@@ -306,8 +306,8 @@ namespace spinas {
 			    )/pDenUA;*/
     
     amplitude += - preA*MW*(
-          + params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)*three
-          + params[0]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)*three
+          + params[0]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[0]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
           + params[1]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
           + params[1]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
           //+ params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
@@ -333,8 +333,8 @@ namespace spinas {
           //+ params[8]*a14323s.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[9]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[9]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
-          - params[8]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW/four
-          - params[8]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW/four
+          - params[8]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
+          - params[8]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[9]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[9]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW
     )/pDenUA;
