@@ -268,33 +268,33 @@ namespace spinas {
           + params[0]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
           + params[1]*a14a3.v(ds1,ds4)*s23s3.v(ds2,ds3)
           + params[1]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          //+ params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          //+ params[1]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[2]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[2]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          + params[3]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[3]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          //+ params[4]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          //+ params[4]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[3]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[3]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[4]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[4]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[5]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
           //+ params[6]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
           //+ params[7]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
           //+ params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
-          + params[4]*s13124a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[4]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[5]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[5]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[6]*s14123a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[6]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[7]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[7]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[6]*s13124a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[6]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[7]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[7]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[8]*s14123a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[8]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[9]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[9]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[8]*s13324a.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[8]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*s13424a.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*a13424s.v(ds1,ds3,ds2,ds4)/MW/MW
-          - params[8]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
-          - params[8]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[9]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[9]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
+          - params[10]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
+          - params[10]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[11]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[11]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
     )/pDenTA;  
 
     //U-Channel A
@@ -310,33 +310,33 @@ namespace spinas {
           + params[0]*s14s3.v(ds1,ds4)*a23a3.v(ds2,ds3)
           + params[1]*a13a3.v(ds1,ds3)*s24s3.v(ds2,ds4)
           + params[1]*s13s3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          //+ params[1]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
-          //+ params[1]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          + params[2]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
-          + params[2]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
-          + params[3]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
-          + params[3]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
-          //+ params[4]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
-          //+ params[4]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*a12a3.v(ds1,ds2)*s34s3.v(ds3,ds4)
+          + params[2]*s12s3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[3]*a14a3.v(ds1,ds4)*a23a3.v(ds2,ds3)
+          + params[3]*s14s3.v(ds1,ds4)*s23s3.v(ds2,ds3)
+          + params[4]*a13a3.v(ds1,ds3)*a24a3.v(ds2,ds4)
+          + params[4]*s13s3.v(ds1,ds3)*s24s3.v(ds2,ds4)
+          + params[5]*a12a3.v(ds1,ds2)*a34a3.v(ds3,ds4)
+          + params[5]*s12s3.v(ds1,ds2)*s34s3.v(ds3,ds4)
           //+ params[6]*c14c3.v(ds1,ds4)*c23c3.v(ds2,ds3)
           //+ params[7]*c13c3.v(ds1,ds3)*c24c3.v(ds2,ds4)
           //+ params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
-          + params[4]*s14123a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[4]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[5]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[5]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[6]*s13124a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[6]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[7]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[7]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[6]*s14123a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[6]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[7]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[7]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[8]*s13124a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[8]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[9]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[9]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[8]*s14323a.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[8]*a14323s.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[9]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[9]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
-          - params[8]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
-          - params[8]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[9]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[9]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW
+          - params[10]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
+          - params[10]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[11]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[11]*a13A24s.v(ds1,ds3,ds2,ds4)/MW/MW
     )/pDenUA;
 
     //T-Channel Z
@@ -533,9 +533,11 @@ namespace spinas {
       score += WWWWAmp.score_2to2_amp2([&](const ldouble*) { return WWWWAmp.amp2_params(params); }, MW,MW,MW,MW,pspatial,dataCH, params);
       //std::cout<<"\n# me=0.0005, mh=125, MW=80.385, pspatial=125.1\n";
       pspatial = 125;
-      ldouble dataCH1[20] = {4.939803447520011E+01,7.898962143631064E+00,4.540548305582714E+00,3.681220125094095E+00,3.387994064383381E+00,3.284122419779228E+00,3.254056884553298E+00,3.252570243091210E+00,3.259300044731354E+00,3.264632299208926E+00,3.264632299208926E+00,3.259300044731353E+00,3.252570243091209E+00,3.254056884553299E+00,3.284122419779229E+00,3.387994064383382E+00,3.681220125094094E+00,4.540548305582713E+00,7.898962143631060E+00,4.939803447519990E+01};
-      score += WWWWAmp.score_2to2_amp2([&](const ldouble*) { return WWWWAmp.amp2_params(params); }, MW,MW,MW,MW,pspatial,dataCH1, params);
-      
+      ldouble dataCH2[20] = {4.939803447520011E+01,7.898962143631064E+00,4.540548305582714E+00,3.681220125094095E+00,3.387994064383381E+00,3.284122419779228E+00,3.254056884553298E+00,3.252570243091210E+00,3.259300044731354E+00,3.264632299208926E+00,3.264632299208926E+00,3.259300044731353E+00,3.252570243091209E+00,3.254056884553299E+00,3.284122419779229E+00,3.387994064383382E+00,3.681220125094094E+00,4.540548305582713E+00,7.898962143631060E+00,4.939803447519990E+01};
+      score += WWWWAmp.score_2to2_amp2([&](const ldouble*) { return WWWWAmp.amp2_params(params); }, MW,MW,MW,MW,pspatial,dataCH2, params);
+      pspatial = 1;
+      ldouble dataCH4[20] = {3.278626606117641E+08,3.796096199559890E+07,1.437371926149558E+07,7.798083344422405E+06,5.080511957864182E+06,3.717248946334380E+06,2.958661384786724E+06,2.518679785613928E+06,2.271759608121502E+06,2.159965380682692E+06,2.159965380682692E+06,2.271759608121501E+06,2.518679785613927E+06,2.958661384786724E+06,3.717248946334379E+06,5.080511957864181E+06,7.798083344422400E+06,1.437371926149557E+07,3.796096199559887E+07,3.278626606117627E+08};
+      score += WWWWAmp.score_2to2_amp2([&](const ldouble*) { return WWWWAmp.amp2_params(params); }, MW,MW,MW,MW,pspatial,dataCH4, params);
     }
     
     return score;
