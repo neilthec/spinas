@@ -281,14 +281,14 @@ namespace spinas {
           + params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
           + params[9]*s13124a.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[9]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[10]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
-          + params[10]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
+          //+ params[10]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
+          //+ params[10]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[11]*s14123a.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[11]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[12]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[12]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
-          //+ params[8]*s13324a.v(ds1,ds3,ds2,ds4)/MW/MW
-          //+ params[8]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[10]*s13324a.v(ds1,ds3,ds2,ds4)/MW/MW
+          + params[10]*a13324s.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*s13424a.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[9]*a13424s.v(ds1,ds3,ds2,ds4)/MW/MW
           - params[13]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
@@ -323,16 +323,16 @@ namespace spinas {
           + params[8]*c12c3.v(ds1,ds2)*c34c3.v(ds3,ds4)
           + params[9]*s14123a.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[9]*a14123s.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[10]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
-          + params[10]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
+          //+ params[10]*s14223a.v(ds1,ds4,ds2,ds3)/MW/MW
+          //+ params[10]*a14223s.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[11]*s13124a.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[11]*a13124s.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[12]*s13224a.v(ds1,ds3,ds2,ds4)/MW/MW
           + params[12]*a13224s.v(ds1,ds3,ds2,ds4)/MW/MW
           //+ params[8]*s14323a.v(ds1,ds4,ds2,ds3)/MW/MW
           //+ params[8]*a14323s.v(ds1,ds4,ds2,ds3)/MW/MW
-          //+ params[9]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
-          //+ params[9]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[10]*s14423a.v(ds1,ds4,ds2,ds3)/MW/MW
+          + params[10]*a14423s.v(ds1,ds4,ds2,ds3)/MW/MW
           - params[13]*s14A23a.v(ds1,ds4,ds2,ds3)/MW/MW
           - params[13]*a14A23s.v(ds1,ds4,ds2,ds3)/MW/MW
           + params[14]*s13A24a.v(ds1,ds3,ds2,ds4)/MW/MW
