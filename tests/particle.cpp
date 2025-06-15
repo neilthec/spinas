@@ -63,16 +63,16 @@ BOOST_AUTO_TEST_CASE(momentum_4vector_test) {
   ldouble mom1[4] = {13, -4, 7, -9};
   ldouble mass1 = std::sqrt(mom1[0]*mom1[0] - mom1[1]*mom1[1] - mom1[2]*mom1[2] - mom1[3]*mom1[3]);
   particle p1 = particle(mom1, mass1);
-  BOOST_CHECK_SMALL(abs(p1.pmu(true)*p1.pmu(false)) - mass1*mass1, epsilon);
+  BOOST_CHECK_SMALL(std::abs(p1.pmu(true)*p1.pmu(false)) - mass1*mass1, epsilon);
   for(int i=0;i<NTESTS;i++){
     mass1 = choose_random_momentum(mom1, -50, 50);
     p1.set_mass(mass1);
     p1.set_momentum(mom1);
-    BOOST_CHECK_SMALL(abs(abs(p1.pmu(true)*p1.pmu(false)) - mass1*mass1), epsilon);
+    BOOST_CHECK_SMALL(std::abs(abs(p1.pmu(true)*p1.pmu(false)) - mass1*mass1), epsilon);
     p1.set_mass(0);
     choose_random_massless_momentum(mom1, -50, 50);
     p1.set_momentum(mom1);
-    BOOST_CHECK_SMALL(abs(p1.pmu(true)*p1.pmu(false)), epsilon);
+    BOOST_CHECK_SMALL(std::abs(p1.pmu(true)*p1.pmu(false)), epsilon);
   }
 }
 
