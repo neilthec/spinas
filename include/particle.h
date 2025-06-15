@@ -1,7 +1,7 @@
 
 /*
 SPINAS - Spinor Amplitudes
-Copyright (C) 2023 Neil Christensen
+Copyright (C) 2023-2025 Neil Christensen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,6 +39,10 @@ namespace spinas {
 
     //Whether on shell
     bool onShell = true;
+
+    //Momentum 4-vector
+    bool pmuUpperCalculated = false, pmuLowerCalculated = false;
+    cvector pmuUpper, pmuLower;
 
     // 2-dimensional 
     //The matrices and spinors
@@ -128,6 +132,8 @@ namespace spinas {
     void update();
     bool test_angles() const;
 
+    cvector pmu(); //Momentum as a 4-vector with an upper Lorentz index
+    cvector pmu(const bool& upper); //Momentum as a 4-vector with upper or lower Lorentz index
 
     //dot: p1.p2
     ldouble dot(const particle& p2) const;

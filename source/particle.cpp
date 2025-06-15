@@ -95,6 +95,8 @@ namespace spinas {
     pxmpy = cdouble(p[1],-p[2]);
     
     //Reset all the calcs.
+    pmuUpperCalculated = false;
+    pmuLowerCalculated = false;
     //2-dim
     //The matrices and spinors
     upMat2dimCalculated = false, loMat2dimCalculated = false;
@@ -167,8 +169,26 @@ namespace spinas {
     return p[0]*p2.p[0]-p[1]*p2.p[1]-p[2]*p2.p[2]-p[3]*p2.p[3];
   }
 
-  
-
+  //Momentum 4-vector
+  cvector particle::pmu(const bool& upper) {
+    if(upper) {
+      if(!pmuUpperCalculated) {
+        pmuUpper = cvector(p[0],p[1],p[2],p[3]);
+        pmuUpperCalculated = true;
+      }
+      return pmuUpper;
+    }
+    else {
+      if(!pmuLowerCalculated) {
+        pmuLower = cvector(p[0],-p[1],-p[2],-p[3]);
+        pmuLowerCalculated = true;
+      }
+      return pmuLower;
+    }
+  }
+  cvector particle::pmu() {
+    return pmu(true);
+  }
 
   //Matrices
   //Upper indices

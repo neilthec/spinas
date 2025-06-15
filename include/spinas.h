@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "schain.h"
 #include "supleproduct.h"
 #include "starproduct.h"
+#include "psproduct.h"
 #include "process.h"
 
 
