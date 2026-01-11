@@ -46,7 +46,11 @@ set_target_properties(spinas_static PROPERTIES OUTPUT_NAME spinas)
 #                      Boost Tests
 ####################################################
 #find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-find_package(Boost REQUIRED COMPONENTS unit_test_framework CONFIG)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
 # Collect all source files in the tests directory
 file(GLOB TEST_SRCS tests/*.cpp)
