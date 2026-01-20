@@ -84,6 +84,8 @@ namespace spinas {
     c = cdouble(std::cos(theta/2.),0.);
     s = std::polar(std::sin(theta/2.),phi);
     sc = std::conj(s);
+    ct = cdouble(std::cos(theta),0);
+    st = cdouble(std::sin(theta),0);
     epP = p[0]+pmag;
     emP = p[0]-pmag;
     sqrtEpP = cdouble(std::sqrt(p[0]+pmag),0);
@@ -191,7 +193,7 @@ namespace spinas {
   }
 
   //Matrices
-  //Upper indices
+  //Momentum with Upper indices
   cmatrix particle::umat(const int& dim) {
     constexpr ldouble two=2;
     if(dim==2){
@@ -227,7 +229,7 @@ namespace spinas {
     
     return upMat2dim;
   }
-  //Lower indices
+  //Momentum with Lower indices
   cmatrix particle::lmat(const int& dim) {
     constexpr ldouble two=2;
     if(dim==2){
@@ -261,6 +263,86 @@ namespace spinas {
       return upMat4dim;
     }
     return loMat2dim;
+  }
+
+  //Curly Matrix with Upper indices
+  cmatrix particle::ucurlymat(const int& spin2, const int& dim) {
+    constexpr ldouble one=1, two=2;
+    if(spin2!=2&&spin2!=0&&spin2!=-2){
+      throw std::runtime_error("Incorrect usage: ucurlymat requires spin = 2, 0 or -2");
+    }
+    int spinj = (spin2+2)/2;
+    if(dim==2){
+      if(!upCurlyMat2dimCalculated[spinj]) {
+        if(spin2==-2){
+          upCurlyMat2dim[spinj] = std::polar(m/sqrt2,-phi)*cmatrix(
+            st,(cdouble(1,0)-ct)*std::polar(one,-phi),
+		        -(cdouble(1,0)+ct)*std::polar(one,phi),-st);
+          upCurlyMat2dimCalculated[spinj] = true;
+        }
+        else if(spin2==0){
+          upCurlyMat2dim[spinj] = cmatrix(
+            pmag-p[0]*ct,-p[0]*st*std::polar(one,-phi),
+            -p[0]*st*std::polar(one,phi),pmag+p[0]*ct);
+          upCurlyMat2dimCalculated[spinj] = true;
+        }
+        else if(spin2==2){
+          upCurlyMat2dim[spinj] = std::polar(m/sqrt2,phi)*cmatrix(
+            -st,(cdouble(1,0)+ct)*std::polar(one,-phi),
+		        -(cdouble(1,0)-ct)*std::polar(one,phi),st);
+          upCurlyMat2dimCalculated[spinj] = true;
+        }
+      }
+      return upCurlyMat2dim[spinj];
+    }
+    else if (dim==3){
+      throw std::runtime_error("Curly matrices not defined in 3-dim");
+    }
+    else if (dim==4){//Curly Spinors
+      throw std::runtime_error("Curly matrices not defined in 4-dim");
+    }
+
+    return upCurlyMat2dim[spinj];
+  }
+
+  //Curly Matrix with Upper indices
+  cmatrix particle::lcurlymat(const int& spin2, const int& dim) {
+    constexpr ldouble one=1, two=2;
+    if(spin2!=2&&spin2!=0&&spin2!=-2){
+      throw std::runtime_error("Incorrect usage: lcurlymat requires spin = 2, 0 or -2");
+    }
+    int spinj = (spin2+2)/2;
+    if(dim==2){
+      if(!loCurlyMat2dimCalculated[spinj]) {
+        if(spin2==-2){
+          loCurlyMat2dim[spinj] = std::polar(m/sqrt2,-phi)*cmatrix(
+            -st,-(cdouble(1,0)-ct)*std::polar(one,-phi),
+		        (cdouble(1,0)+ct)*std::polar(one,phi),st);
+          loCurlyMat2dimCalculated[spinj] = true;
+        }
+        else if(spin2==0){
+          loCurlyMat2dim[spinj] = cmatrix(
+            pmag+p[0]*ct,p[0]*st*std::polar(one,-phi),
+            p[0]*st*std::polar(one,phi),pmag-p[0]*ct);
+          loCurlyMat2dimCalculated[spinj] = true;
+        }
+        else if(spin2==2){
+          loCurlyMat2dim[spinj] = std::polar(m/sqrt2,phi)*cmatrix(
+            st,-(cdouble(1,0)+ct)*std::polar(one,-phi),
+		        (cdouble(1,0)-ct)*std::polar(one,phi),-st);
+          loCurlyMat2dimCalculated[spinj] = true;
+        }
+      }
+      return upCurlyMat2dim[spinj];
+    }
+    else if (dim==3){
+      throw std::runtime_error("Curly matrices not defined in 3-dim");
+    }
+    else if (dim==4){//Curly Spinors
+      throw std::runtime_error("Curly matrices not defined in 4-dim");
+    }
+
+    return upCurlyMat2dim[spinj];
   }
 
   //Helicity Spinors

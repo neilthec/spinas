@@ -32,6 +32,7 @@ namespace spinas {
     ldouble pmag, pxymag;//Magnitude of momentum
     ldouble theta, phi;//Spherical angles
     cdouble c, s, sc;//cos(theta/2), sin(theta/2)*exp(i*phi), s*
+    cdouble ct, st;//cos(theta), sin(theta)
     cdouble epP, emP, sqrtEpP, sqrtEmP; //E+p, E-p, sqrt(E+p), sqrt(E-p)
     ldouble sqrt2;
     cdouble eppz, empz;//E+p, E-p
@@ -48,6 +49,11 @@ namespace spinas {
     //The matrices and spinors
     bool upMat2dimCalculated = false, loMat2dimCalculated = false;
     cmatrix upMat2dim, loMat2dim;
+    bool upCurlyMat2dimCalculated[3] = {false, false, false};//spin2 = 2, 0, -2
+    bool loCurlyMat2dimCalculated[3] = {false, false, false};//spin2 = 2, 0, -2
+    cmatrix upCurlyMat2dim[3];//spin2 = 2, 0, -2
+    cmatrix loCurlyMat2dim[3];//spin2 = 2, 0, -2
+
     //Helicity Spinors
     bool m0rangle2dimCalculated = false, m0langle2dimCalculated = false;
     bool m0rsquare2dimCalculated = false, m0lsquare2dimCalculated = false;
@@ -139,8 +145,10 @@ namespace spinas {
     ldouble dot(const particle& p2) const;
 
     //Matrices
-    cmatrix umat(const int& dim);//Upper
-    cmatrix lmat(const int& dim);//Lower
+    cmatrix umat(const int& dim);//Upper momentum
+    cmatrix lmat(const int& dim);//Lower momentum
+    cmatrix ucurlymat(const int& spin2, const int& dim);//Upper curly
+    cmatrix lcurlymat(const int& spin2, const int& dim);//Lower curly
 
     //Spinors
     //Massless
