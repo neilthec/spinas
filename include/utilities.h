@@ -22,6 +22,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include <string>
+#include <algorithm>
+#include <vector>
+#include <iostream>
 #include "types.h"
 
 namespace spinas {
@@ -40,5 +43,15 @@ namespace spinas {
   cdouble choose_random_cdouble(ldouble begin, ldouble end);  
   ldouble choose_random_ldouble(ldouble begin, ldouble end);
   int choose_random_int(int begin, int end);
+
+  //String Utilities for File Import
+  std::vector<std::string> split(const std::string& s, char delimiter);
+  std::string remove_whitespace(const std::string& original_string);
+  std::vector<std::string> remove_whitespace(const std::vector<std::string>& original_string_vector);
+  std::string trim(const std::string& str);
+
+  //Import Les Houches (.lhc) file
+  std::vector<std::string> event_string_processor (const std::string& directory, const int& file_number);
+
 }
 

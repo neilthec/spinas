@@ -25,7 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include <cmath>
 #include <random>
-
+#include <fstream>
 #include "types.h"
 //#include "aliases.h"
 #include "utilities.h"
@@ -129,5 +129,101 @@ namespace spinas {
     ldouble ld2 = choose_random_ldouble(begin,end);
     return cdouble(ld1, ld2);
   }
-  
+
+  //Tools for File Importing
+
+  //Break up string into multiple based on delimiter
+  std::vector<std::string> split(const std::string& s, char delimiter) {
+        std::vector<std::string> tokens;
+        std::string token;
+        std::istringstream tokenStream(s);
+
+        while (std::getline(tokenStream, token, delimiter)) {
+            tokens.push_back(token);
+        }
+
+        return tokens;
+    }
+
+    std::string remove_whitespace(const std::string& original_string) {
+        std::string new_string = original_string;
+        new_string.erase(std::remove_if(new_string.begin(), new_string.end(), ::isspace), new_string.end());
+        return new_string;
+    }
+
+    std::vector<std::string> remove_whitespace(const std::vector<std::string>& original_string_vector) {
+        std::vector<std::string> new_string_vector;
+        for (auto it = original_string_vector.begin(); it != original_string_vector.end(); ++it) 
+            new_string_vector.push_back(remove_whitespace(*it));
+        return new_string_vector;
+    }
+
+    //Removes spaces from start and end of string
+    std::string trim(const std::string& str) {
+        const std::string whitespace = " \t\n\r\f\v";
+
+        size_t start = str.find_first_not_of(whitespace);
+        //If no non-whitespace character is found, return an empty string
+        if (start == std::string::npos) {
+            return "";
+        }
+
+        size_t end = str.find_last_not_of(whitespace);
+
+        return str.substr(start, end - start + 1);
+    }
+
+    std::vector<std::string> event_string_processor (const std::string& directory, const int& file_number) {
+      // Construct filename (adjust naming convention as needed)
+      std::string filename = directory + "/events" + std::to_string(file_number) + ".lhe";
+      std::ifstream file(filename);
+      
+      std::vector<std::string> event_strings;
+      if (!file.is_open()) {
+          std::cerr << "Error: Could not open file " << filename << std::endl;
+          return event_strings;
+      }
+
+      std::string line;
+      std::string current_event;
+      bool recording = false;
+
+      while (std::getline(file, line)) {
+          // Use your trim utility to handle potential leading spaces around tags
+          std::string trimmed = trim(line);
+
+          if (trimmed == "<event>") {
+              recording = true;
+              current_event.clear();
+              continue; 
+          }
+
+          if (trimmed == "</event>") {
+              recording = false;
+              if (!current_event.empty()) {
+                  event_strings.push_back(current_event);
+              }
+              continue;
+          }
+
+          if (recording) {
+              // Append line and a newline to preserve the LHE structure for the stringstream
+              current_event += line + "\n";
+          }
+      }
+
+      file.close();
+      return event_strings;
+    }
+
+    /* 
+    Right, here's the plan. 
+
+    1. Data structure at event.h & event.cpp is in place. 
+        - make a constructor which takes string argument. 
+    2. Here will be the logic for dividing up lhs file into multiple discreet events (from <event> to </event>)
+    3. In tests, I will make a iterator which calls this, iterates through each event string, instnantiates an event, and tests it against spinas using the same values
+        - Note that I will also need logic for getting N, IDs, and alpha values
+        - Also note that I will want to iterate through all "events#.lhs" files 
+    */
 }
