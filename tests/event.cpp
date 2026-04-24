@@ -37,6 +37,15 @@ void check_complex_relative(cdouble actual, cdouble expected, ldouble tol_percen
 
 BOOST_AUTO_TEST_SUITE(event_tests)
 
+/* Create a new BOOST_AUTO_TEST_CASE. Do basic tests for set and get with hardcoded numbers. Repeat with random momenta (see function somewhere).
+Create a constructor that doesn't take a string and creates an empty event. Test a hardcoded event string using a constructor to read it in and give an event.
+*/ 
+BOOST_AUTO_TEST_CASE(test_event_basic) {
+
+    BOOST_CHECK_EQUAL(1,0);
+
+}
+
 BOOST_AUTO_TEST_CASE(test_lhe_parsing_and_instantiation) {
     // 1. Setup pathing (Adjust directory as needed for your build system)
     std::string test_dir = "../event_files"; 

@@ -20,4 +20,4 @@ file_structure.txt
 .*~
 .vscode
 .devcontainer/
-
+.DS_Store

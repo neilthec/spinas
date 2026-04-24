@@ -1,7 +1,7 @@
 
 /*
 SPINAS - Spinor Amplitudes
-Copyright (C) 2023 Neil Christensen
+Copyright (C) 2025 Gabe Minney, Neil Christensen
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
