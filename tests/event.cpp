@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(test_event_manual_build) {
     BOOST_CHECK_EQUAL(ev.get_pdg(0), 11);
     BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
 
-    ldouble p0 = ev.get_p(0);
+    auto p0 = ev.get_p(0);
     BOOST_CHECK_CLOSE(p0[3], 10.0, 1e-9);
 }
 
