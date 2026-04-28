@@ -178,6 +178,10 @@ namespace spinas {
         pdg.push_back(index);
     }
 
+    void event::add_stat(const int& stat_val) {
+        stat.push_back(stat_val);
+    }
+
     // Vector adders
     void event::add_mother(const int& mother1, int& mother2) {
         mother.push_back(std::make_pair(mother1, mother2));
