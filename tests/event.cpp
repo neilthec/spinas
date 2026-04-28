@@ -40,10 +40,45 @@ BOOST_AUTO_TEST_SUITE(event_tests)
 /* Create a new BOOST_AUTO_TEST_CASE. Do basic tests for set and get with hardcoded numbers. Repeat with random momenta (see function somewhere).
 Create a constructor that doesn't take a string and creates an empty event. Test a hardcoded event string using a constructor to read it in and give an event.
 */ 
-BOOST_AUTO_TEST_CASE(test_event_basic) {
+BOOST_AUTO_TEST_CASE(test_event_manual_build) {
 
-    BOOST_CHECK_EQUAL(1,0);
+    event ev("");  // temporary workaround if no default constructor
 
+    int n = 2;
+    ev.set_n(n);
+
+    ev.add_pdg(11);
+    ev.add_pdg(-11);
+
+    ev.add_stat(-1);
+    ev.add_stat(1);
+
+    int zero = 0;
+    ev.add_mother(zero, zero);
+    ev.add_mother(zero, zero);
+
+    ev.add_color(zero, zero);
+    ev.add_color(zero, zero);
+
+    // p = (px, py, pz, E)
+    ev.add_p(0.0, 0.0, 10.0, 10.0);
+    ev.add_p(0.0, 0.0, -10.0, 10.0);
+
+    ev.add_m(0.0005);
+    ev.add_m(0.0005);
+
+    ev.add_lt(0.0);
+    ev.add_lt(0.0);
+
+    ev.add_spin(1.0);
+    ev.add_spin(-1.0);
+
+    BOOST_CHECK_EQUAL(ev.get_n(), 2);
+    BOOST_CHECK_EQUAL(ev.get_pdg(0), 11);
+    BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
+
+    ldouble p0 = ev.get_p(0);
+    BOOST_CHECK_CLOSE(p0[3], 10.0, 1e-9);
 }
 
 BOOST_AUTO_TEST_CASE(test_lhe_parsing_and_instantiation) {
