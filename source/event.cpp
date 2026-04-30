@@ -27,7 +27,7 @@ namespace spinas {
 
         // 1. Parse the first line (Global event info)
         if (!(ss >> n >> id >> w >> q >> a_em >> a_s)) {
-            return; // Or throw an error if the string is malformed
+            throw std::runtime_error("Malformed event string (header)");
         }
 
         // Pre-reserve memory for efficiency
