@@ -70,12 +70,12 @@ namespace spinas {
         ldouble get_lt(const int& index) const;
         ldouble get_spin(const int& index) const;
 
-        void set_n(int& n_val);
-        void set_id(int& id_val);
-        void set_w(ldouble& w_val);
-        void set_q(ldouble& q_val);
-        void set_a_em(ldouble& a_em_val);
-        void set_a_s(ldouble& a_s_val);
+        void set_n(const int& n_val);
+        void set_id(const int& id_val);
+        void set_w(const ldouble& w_val);
+        void set_q(const ldouble& q_val);
+        void set_a_em(const ldouble& a_em_val);
+        void set_a_s(const ldouble& a_s_val);
 
         void add_pdg(const int& pdg_val);
         void add_stat(const int& stat_val);

@@ -101,6 +101,42 @@ namespace spinas {
         }
     }
 
+    int event::get_stat(const int& index) const {
+        try {
+            if (index < 0 || index >= static_cast<int>(stat.size())) {
+                throw std::out_of_range("stat index out of range");
+            }
+            return stat[index];
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            return 0;
+        }
+    }
+
+    ldouble event::get_m(const int& index) const {
+        try {
+            if (index < 0 || index >= static_cast<int>(m.size())) {
+                throw std::out_of_range("m index out of range");
+            }
+            return m[index];
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            return 0;
+        }
+    }
+
+    ldouble event::get_lt(const int& index) const {
+        try {
+            if (index < 0 || index >= static_cast<int>(lt.size())) {
+                throw std::out_of_range("lt index out of range");
+            }
+            return lt[index];
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            return 0;
+        }
+    }
+
     std::pair<int, int> event::get_mother(const int& index) const {
         try {
             if (index < 0 || index >= static_cast<int>(mother.size())) {
@@ -150,27 +186,27 @@ namespace spinas {
     }
 
     // Scalar setters (fix parameter types)
-    void event::set_n(int& n_val) {
+    void event::set_n(const int& n_val) {
         n = n_val;
     }
 
-    void event::set_id(int& id_val) {
+    void event::set_id(const int& id_val) {
         id = id_val;
     }
 
-    void event::set_w(ldouble& w_val) {
+    void event::set_w(const ldouble& w_val) {
         w = w_val;
     }
 
-    void event::set_q(ldouble& q_val) {
+    void event::set_q(const ldouble& q_val) {
         q = q_val;
     }
 
-    void event::set_a_em(ldouble& a_em_val) {
+    void event::set_a_em(const ldouble& a_em_val) {
         a_em = a_em_val;
     }
 
-    void event::set_a_s(ldouble& a_s_val) {
+    void event::set_a_s(const ldouble& a_s_val) {
         a_s = a_s_val;
     }
 
