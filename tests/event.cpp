@@ -81,6 +81,44 @@ BOOST_AUTO_TEST_CASE(test_event_manual_build) {
     BOOST_CHECK_CLOSE(p0[3], 10.0, 1e-9);
 }
 
+BOOST_AUTO_TEST_CASE(test_event_random_momenta) {
+
+    event ev("");
+    int n = 5;
+    ev.set_n(n);
+
+    for (int i = 0; i < n; ++i) {
+        ldouble pvec[4];
+        ldouble mass = choose_random_ldouble(0.0, 5.0);
+
+        choose_random_momentum(pvec, -10.0, 10.0);
+
+        ev.add_p(pvec[0], pvec[1], pvec[2], pvec[3]);
+        ev.add_m(mass);
+
+        // Add minimal required structure
+        ev.add_pdg(choose_random_int(-20, 20));
+        ev.add_stat(1);
+
+        int zero = 0;
+        ev.add_mother(zero, zero);
+        ev.add_color(zero, zero);
+        ev.add_lt(0.0);
+        ev.add_spin(0.0);
+    }
+
+    // Check on-shell condition: E^2 - |p|^2 = m^2
+    for (int i = 0; i < n; ++i) {
+        auto p = ev.get_p(i);
+        ldouble m = ev.get_m(i);
+
+        ldouble mass_sq =
+            p[3]*p[3] - p[0]*p[0] - p[1]*p[1] - p[2]*p[2];
+
+        BOOST_CHECK_CLOSE(mass_sq, m*m, 1e-6);
+    }
+}
+
 BOOST_AUTO_TEST_CASE(test_lhe_parsing_and_instantiation) {
     // 1. Setup pathing (Adjust directory as needed for your build system)
     std::string test_dir = "../event_files"; 
