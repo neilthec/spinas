@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(test_event_random_momenta) {
         ldouble m = ev.get_m(i);
 
         ldouble mass_sq =
-            p[3]*p[3] - p[0]*p[0] - p[1]*p[1] - p[2]*p[2];
+            p[0]*p[0] - p[1]*p[1] - p[2]*p[2] - p[3]*p[3];
 
         BOOST_CHECK_CLOSE(mass_sq, m*m, 1e-6);
     }

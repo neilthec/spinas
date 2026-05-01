@@ -58,7 +58,7 @@ namespace spinas {
                 stat.push_back(p_stat);
                 mother.push_back({m1, m2});
                 color.push_back({c1, c2});
-                p.push_back({px, py, pz, e});
+                p.push_back({e, px, py, pz});
                 m.push_back(mass);
                 lt.push_back(lifetime);
                 spin.push_back(s);

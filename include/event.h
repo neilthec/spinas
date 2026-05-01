@@ -46,7 +46,7 @@ namespace spinas {
         std::vector<int> stat;              // Status (-1: incoming, 1: outgoing)
         std::vector<std::pair<int, int>> mother; // Indices of first and last mother particles
         std::vector<std::pair<int, int>> color;  // Color and anti-color flow tags
-        std::vector<std::array<ldouble, 4>> p;   // Four-momentum (px, py, pz, E) in GeV
+        std::vector<std::array<ldouble, 4>> p;   // Four-momentum (E, px, py, pz) in GeV
         std::vector<ldouble> m;             // Generated mass in GeV
         std::vector<ldouble> lt;            // Proper lifetime (c*tau) in mm
         std::vector<ldouble> spin;          // Helicity or spin projection (the 13th column)
