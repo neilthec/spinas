@@ -21,6 +21,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace spinas {
 
+    event::event()
+        : n(0), id(0), w(0.0), q(0.0), a_em(0.0), a_s(0.0) {
+        // All vectors default-initialize to empty automatically
+        }
+
     event::event(std::string event_string) {
         
         std::stringstream ss(event_string);

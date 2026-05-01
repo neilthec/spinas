@@ -52,6 +52,7 @@ namespace spinas {
         std::vector<ldouble> spin;          // Helicity or spin projection (the 13th column)
 
     public:
+        event(); //Default constructor
         event(std::string event_string); //Constructor from string
 
         int get_n() const;
