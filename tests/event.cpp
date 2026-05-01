@@ -89,9 +89,8 @@ BOOST_AUTO_TEST_CASE(test_event_random_momenta) {
 
     for (int i = 0; i < n; ++i) {
         ldouble pvec[4];
-        ldouble mass = choose_random_ldouble(0.0, 5.0);
 
-        choose_random_momentum(pvec, -10.0, 10.0);
+        ldouble mass = choose_random_momentum(pvec, -10.0, 10.0);
 
         ev.add_p(pvec[0], pvec[1], pvec[2], pvec[3]);
         ev.add_m(mass);
@@ -109,7 +108,7 @@ BOOST_AUTO_TEST_CASE(test_event_random_momenta) {
 
     // Check on-shell condition: E^2 - |p|^2 = m^2
     for (int i = 0; i < n; ++i) {
-        auto p = ev.get_p(i);
+        std::array<ldouble, 4> p = ev.get_p(i);
         ldouble m = ev.get_m(i);
 
         ldouble mass_sq =
