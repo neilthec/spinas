@@ -119,6 +119,17 @@ BOOST_AUTO_TEST_CASE(test_event_random_momenta) {
     }
 }
 
+BOOST_AUTO_TEST_CASE(test_event_default_constructor) {
+
+    event ev;  // requires you implemented this
+
+    BOOST_CHECK_EQUAL(ev.get_n(), 0);
+    BOOST_CHECK_EQUAL(ev.get_pdg_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_p_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_m_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_stat_size(), 0);
+}
+
 BOOST_AUTO_TEST_CASE(test_lhe_parsing_and_instantiation) {
     // 1. Setup pathing (Adjust directory as needed for your build system)
     std::string test_dir = "../event_files"; 
