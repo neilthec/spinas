@@ -42,7 +42,7 @@ Create a constructor that doesn't take a string and creates an empty event. Test
 */ 
 BOOST_AUTO_TEST_CASE(test_event_manual_build) {
 
-    event ev();  // temporary workaround if no default constructor
+    event ev;
 
     int n = 2;
     ev.set_n(n);
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(test_event_manual_build) {
 
 BOOST_AUTO_TEST_CASE(test_event_random_momenta) {
 
-    event ev();
+    event ev;
     int n = 5;
     ev.set_n(n);
 
