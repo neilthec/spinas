@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE(test_event_from_string) {
     BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
 
     std::array<ldouble, 4> p1 = ev.get_p(1);
-    BOOST_CHECK_CLOSE(p1[2], -10.0, 1e-9);
+    BOOST_CHECK_CLOSE(p1[3], -10.0, 1e-9);
 
     BOOST_CHECK_CLOSE(ev.get_m(0), 0.0005, 1e-9);
 }
