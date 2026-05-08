@@ -131,26 +131,120 @@ BOOST_AUTO_TEST_CASE(test_event_default_constructor) {
 
 BOOST_AUTO_TEST_CASE(test_event_from_string) {
 
+    // LHE-style event string
+    // Format:
+    // n id w q a_em a_s
+    //
+    // PDG STAT M1 M2 C1 C2 PX PY PZ E M LT SPIN
+    //
+    // Internally stored as:
+    // p = (E, px, py, pz)
+
     std::string lhe_event =
-        "2 1 1.0 1.0 0.007297 0.118\n"
-        "11 -1 0 0 0 0 0.0 0.0 10.0 10.0 0.0005 0.0 1.0\n"
-        "-11 1 0 0 0 0 0.0 0.0 -10.0 10.0 0.0005 0.0 -1.0\n";
+        "2 13 1.25 91.1876 0.00729735 0.118\n"
+        "11  -1  0 0  0 0   0.0  0.0  10.0  10.0000000125  0.0005  0.0   1.0\n"
+        "-11  1  0 0  0 0   0.0  0.0 -10.0  10.0000000125  0.0005  0.0  -1.0\n";
 
     event ev(lhe_event);
 
-    BOOST_CHECK_EQUAL(ev.get_n(), 2);
-    BOOST_CHECK_EQUAL(ev.get_id(), 1);
+    // ============================================================
+    // Global event information
+    // ============================================================
 
-    BOOST_CHECK_CLOSE(ev.get_w(), 1.0, 1e-9);
-    BOOST_CHECK_CLOSE(ev.get_a_em(), 0.007297, 1e-6);
+    BOOST_CHECK_EQUAL(ev.get_n(), 2);
+    BOOST_CHECK_EQUAL(ev.get_id(), 13);
+
+    BOOST_CHECK_CLOSE(ev.get_w(),    1.25,       1e-9);
+    BOOST_CHECK_CLOSE(ev.get_q(),    91.1876,    1e-9);
+    BOOST_CHECK_CLOSE(ev.get_a_em(), 0.00729735, 1e-9);
+    BOOST_CHECK_CLOSE(ev.get_a_s(),  0.118,      1e-9);
+
+    // ============================================================
+    // Vector sizes
+    // ============================================================
+
+    BOOST_CHECK_EQUAL(ev.get_pdg_size(),    2);
+    BOOST_CHECK_EQUAL(ev.get_stat_size(),   2);
+    BOOST_CHECK_EQUAL(ev.get_mother_size(), 2);
+    BOOST_CHECK_EQUAL(ev.get_color_size(),  2);
+    BOOST_CHECK_EQUAL(ev.get_p_size(),      2);
+    BOOST_CHECK_EQUAL(ev.get_m_size(),      2);
+    BOOST_CHECK_EQUAL(ev.get_lt_size(),     2);
+
+    // ============================================================
+    // Particle 0
+    // ============================================================
 
     BOOST_CHECK_EQUAL(ev.get_pdg(0), 11);
-    BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
+    BOOST_CHECK_EQUAL(ev.get_stat(0), -1);
 
-    std::array<ldouble, 4> p1 = ev.get_p(1);
+    std::pair<int,int> mother0 = ev.get_mother(0);
+    BOOST_CHECK_EQUAL(mother0.first,  0);
+    BOOST_CHECK_EQUAL(mother0.second, 0);
+
+    std::pair<int,int> color0 = ev.get_color(0);
+    BOOST_CHECK_EQUAL(color0.first,  0);
+    BOOST_CHECK_EQUAL(color0.second, 0);
+
+    std::array<ldouble,4> p0 = ev.get_p(0);
+
+    // Stored internally as (E, px, py, pz)
+    BOOST_CHECK_CLOSE(p0[0], 10.0000000125, 1e-9);
+    BOOST_CHECK_SMALL(p0[1], 1e-12);
+    BOOST_CHECK_SMALL(p0[2], 1e-12);
+    BOOST_CHECK_CLOSE(p0[3], 10.0, 1e-9);
+
+    BOOST_CHECK_CLOSE(ev.get_m(0),    0.0005, 1e-9);
+    BOOST_CHECK_CLOSE(ev.get_lt(0),   0.0,    1e-9);
+    BOOST_CHECK_CLOSE(ev.get_spin(0), 1.0,    1e-9);
+
+    // ============================================================
+    // Particle 1
+    // ============================================================
+
+    BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
+    BOOST_CHECK_EQUAL(ev.get_stat(1), 1);
+
+    std::pair<int,int> mother1 = ev.get_mother(1);
+    BOOST_CHECK_EQUAL(mother1.first,  0);
+    BOOST_CHECK_EQUAL(mother1.second, 0);
+
+    std::pair<int,int> color1 = ev.get_color(1);
+    BOOST_CHECK_EQUAL(color1.first,  0);
+    BOOST_CHECK_EQUAL(color1.second, 0);
+
+    std::array<ldouble,4> p1 = ev.get_p(1);
+
+    // Stored internally as (E, px, py, pz)
+    BOOST_CHECK_CLOSE(p1[0], 10.0000000125, 1e-9);
+    BOOST_CHECK_SMALL(p1[1], 1e-12);
+    BOOST_CHECK_SMALL(p1[2], 1e-12);
     BOOST_CHECK_CLOSE(p1[3], -10.0, 1e-9);
 
-    BOOST_CHECK_CLOSE(ev.get_m(0), 0.0005, 1e-9);
+    BOOST_CHECK_CLOSE(ev.get_m(1),    0.0005, 1e-9);
+    BOOST_CHECK_CLOSE(ev.get_lt(1),   0.0,    1e-9);
+    BOOST_CHECK_CLOSE(ev.get_spin(1), -1.0,   1e-9);
+
+    // ============================================================
+    // Invariant mass checks
+    // ============================================================
+
+    for (int i = 0; i < ev.get_n(); ++i) {
+
+        std::array<ldouble,4> p = ev.get_p(i);
+
+        // Convention: p = (E, px, py, pz)
+        ldouble mass_sq =
+            p[0]*p[0]
+            - p[1]*p[1]
+            - p[2]*p[2]
+            - p[3]*p[3];
+
+        ldouble expected_mass_sq =
+            ev.get_m(i) * ev.get_m(i);
+
+        BOOST_CHECK_CLOSE(mass_sq, expected_mass_sq, 1e-6);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(test_lhe_parsing_and_instantiation) {
