@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(event_tests)
 
 /* Create a new BOOST_AUTO_TEST_CASE. Do basic tests for set and get with hardcoded numbers. Repeat with random momenta (see function somewhere).
 Create a constructor that doesn't take a string and creates an empty event. Test a hardcoded event string using a constructor to read it in and give an event.
-*/ 
+Add all the different parts of the event and test them.*/ 
 BOOST_AUTO_TEST_CASE(test_event_manual_build) {
 
     event ev;
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(test_event_manual_build) {
     BOOST_CHECK_EQUAL(ev.get_pdg(0), 11);
     BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
 
-    auto p0 = ev.get_p(0);
+    ldouble p0 = ev.get_p(0);
     BOOST_CHECK_CLOSE(p0[3], 10.0, 1e-9);
 }
 
@@ -127,6 +127,30 @@ BOOST_AUTO_TEST_CASE(test_event_default_constructor) {
     BOOST_CHECK_EQUAL(ev.get_p_size(), 0);
     BOOST_CHECK_EQUAL(ev.get_m_size(), 0);
     BOOST_CHECK_EQUAL(ev.get_stat_size(), 0);
+}
+
+BOOST_AUTO_TEST_CASE(test_event_from_string) {
+
+    std::string lhe_event =
+        "2 1 1.0 1.0 0.007297 0.118\n"
+        "11 -1 0 0 0 0 0.0 0.0 10.0 10.0 0.0005 0.0 1.0\n"
+        "-11 1 0 0 0 0 0.0 0.0 -10.0 10.0 0.0005 0.0 -1.0\n";
+
+    event ev(lhe_event);
+
+    BOOST_CHECK_EQUAL(ev.get_n(), 2);
+    BOOST_CHECK_EQUAL(ev.get_id(), 1);
+
+    BOOST_CHECK_CLOSE(ev.get_w(), 1.0, 1e-9);
+    BOOST_CHECK_CLOSE(ev.get_a_em(), 0.007297, 1e-6);
+
+    BOOST_CHECK_EQUAL(ev.get_pdg(0), 11);
+    BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
+
+    ldouble p1 = ev.get_p(1);
+    BOOST_CHECK_CLOSE(p1[2], -10.0, 1e-9);
+
+    BOOST_CHECK_CLOSE(ev.get_m(0), 0.0005, 1e-9);
 }
 
 BOOST_AUTO_TEST_CASE(test_lhe_parsing_and_instantiation) {
