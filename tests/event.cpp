@@ -190,8 +190,8 @@ BOOST_AUTO_TEST_CASE(test_event_from_string) {
 
     // Stored internally as (E, px, py, pz)
     BOOST_CHECK_CLOSE(p0[0], 10.0000000125, 1e-9);
-    BOOST_CHECK_SMALL(p0[1], 1e-12);
-    BOOST_CHECK_SMALL(p0[2], 1e-12);
+    BOOST_CHECK_SMALL(p0[1], static_cast<ldouble>(1e-12));
+    BOOST_CHECK_SMALL(p0[2], static_cast<ldouble>(1e-12));
     BOOST_CHECK_CLOSE(p0[3], 10.0, 1e-9);
 
     BOOST_CHECK_CLOSE(ev.get_m(0),    0.0005, 1e-9);
@@ -217,8 +217,8 @@ BOOST_AUTO_TEST_CASE(test_event_from_string) {
 
     // Stored internally as (E, px, py, pz)
     BOOST_CHECK_CLOSE(p1[0], 10.0000000125, 1e-9);
-    BOOST_CHECK_SMALL(p1[1], 1e-12);
-    BOOST_CHECK_SMALL(p1[2], 1e-12);
+    BOOST_CHECK_SMALL(p1[1], static_cast<ldouble>(1e-12));
+    BOOST_CHECK_SMALL(p1[2], static_cast<ldouble>(1e-12));
     BOOST_CHECK_CLOSE(p1[3], -10.0, 1e-9);
 
     BOOST_CHECK_CLOSE(ev.get_m(1),    0.0005, 1e-9);
