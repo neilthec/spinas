@@ -224,16 +224,16 @@ namespace spinas {
     }
 
     // Vector adders
-    void event::add_mother(const int& mother1, int& mother2) {
+    void event::add_mother(int& mother1, int& mother2) {
         mother.push_back(std::make_pair(mother1, mother2));
     }
 
-    void event::add_color(const int& color1, int& color2) {
+    void event::add_color(int& color1, int& color2) {
         color.push_back(std::make_pair(color1, color2));
     }
 
-    void event::add_p(const ldouble& p0, const ldouble& p1, const ldouble& p2, const ldouble& p3) {
-        p.push_back({p0, p1, p2, p3});
+    void event::add_p(const ldouble& E, const ldouble& px, const ldouble& py, const ldouble& pz) {
+        p.push_back({E, px, py, pz});
     }
 
     void event::add_m(const ldouble& m_val) {
