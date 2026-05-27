@@ -87,13 +87,18 @@ namespace spinas {
         void add_lt(const ldouble& lt_val);
         void add_spin(const ldouble& spin_val);
 
+        void clear();
+
         // Vector size getters
-        int get_pdg_size() const;
-        int get_stat_size() const;
-        int get_mother_size() const;
-        int get_color_size() const;
-        int get_p_size() const;
-        int get_m_size() const;
-        int get_lt_size() const;
+        size_t get_pdg_size() const;
+        size_t get_stat_size() const;
+        size_t get_mother_size() const;
+        size_t get_color_size() const;
+        size_t get_p_size() const;
+        size_t get_m_size() const;
+        size_t get_lt_size() const;
+        size_t get_spin_size() const;
+
+        bool validate() const;
     };
 }

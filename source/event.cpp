@@ -26,13 +26,14 @@ namespace spinas {
         // All vectors default-initialize to empty automatically
         }
 
-    event::event(std::string event_string) {
+    event::event(std::string event_string) 
+        : n(0), id(0), w(0.0), q(0.0), a_em(0.0), a_s(0.0) {
         
         std::stringstream ss(event_string);
 
         // 1. Parse the first line (Global event info)
         if (!(ss >> n >> id >> w >> q >> a_em >> a_s)) {
-            throw std::runtime_error("Malformed event string (header)");
+            throw std::runtime_error("Malformed event string (header).");
         }
 
         // Pre-reserve memory for efficiency
@@ -51,18 +52,30 @@ namespace spinas {
             ldouble px, py, pz, e, mass, lifetime, s;
 
             // The stream operator >> ignores all whitespace/newlines automatically
-            if (ss >> p_pdg >> p_stat >> m1 >> m2 >> c1 >> c2 
-                   >> px >> py >> pz >> e >> mass >> lifetime >> s) {
-                
-                pdg.push_back(p_pdg);
-                stat.push_back(p_stat);
-                mother.push_back({m1, m2});
-                color.push_back({c1, c2});
-                p.push_back({e, px, py, pz});
-                m.push_back(mass);
-                lt.push_back(lifetime);
-                spin.push_back(s);
+            if (!(ss >> p_pdg >> p_stat >> m1 >> m2
+                    >> c1 >> c2
+                    >> px >> py >> pz >> e
+                    >> mass >> lifetime >> s)) {
+
+                throw std::runtime_error(
+                    "Malformed particle entry in event string."
+                );
             }
+                
+            pdg.push_back(p_pdg);
+            stat.push_back(p_stat);
+            mother.push_back({m1, m2});
+            color.push_back({c1, c2});
+            p.push_back({e, px, py, pz});
+            m.push_back(mass);
+            lt.push_back(lifetime);
+            spin.push_back(s);
+        }
+
+        if (static_cast<int>(pdg.size()) != n) {
+            throw std::runtime_error(
+            "Parsed particle count does not match event header."
+            );
         }
     }
 
@@ -95,99 +108,75 @@ namespace spinas {
 
     // Vector getters with proper signatures matching header
     int event::get_pdg(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(pdg.size())) {
-                throw std::out_of_range("Index out of range");
-            }
-            return pdg[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return 0;
+
+        if (index < 0 || index >= static_cast<int>(pdg.size())) {
+            throw std::out_of_range("pdg index out of range");
         }
+
+        return pdg[index];
     }
 
     int event::get_stat(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(stat.size())) {
-                throw std::out_of_range("stat index out of range");
-            }
-            return stat[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return 0;
+
+        if (index < 0 || index >= static_cast<int>(stat.size())) {
+            throw std::out_of_range("Stat index out of range");
         }
+
+        return stat[index];
     }
 
     ldouble event::get_m(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(m.size())) {
-                throw std::out_of_range("m index out of range");
-            }
-            return m[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return 0;
+
+        if (index < 0 || index >= static_cast<int>(m.size())) {
+            throw std::out_of_range("Mass index out of range");
         }
+
+        return m[index];
     }
 
     ldouble event::get_lt(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(lt.size())) {
-                throw std::out_of_range("lt index out of range");
-            }
-            return lt[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return 0;
+
+        if (index < 0 || index >= static_cast<int>(lt.size())) {
+            throw std::out_of_range("Lifetime index out of range");
         }
+
+        return lt[index];
     }
 
-    std::pair<int, int> event::get_mother(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(mother.size())) {
-                throw std::out_of_range("Index out of range");
-            }
-            return mother[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return std::make_pair(-1, -1);
+    std::pair<int,int> event::get_mother(const int& index) const {
+
+        if (index < 0 || index >= static_cast<int>(mother.size())) {
+            throw std::out_of_range("mother index out of range");
         }
+
+        return mother[index];
     }
 
-    std::pair<int, int> event::get_color(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(color.size())) {
-                throw std::out_of_range("Index out of range");
-            }
-            return color[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return std::make_pair(-1, -1);
+    std::pair<int,int> event::get_color(const int& index) const {
+
+        if (index < 0 || index >= static_cast<int>(color.size())) {
+            throw std::out_of_range("color index out of range");
         }
+
+        return color[index];
     }
 
-    std::array<ldouble, 4> event::get_p(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(p.size())) {
-                throw std::out_of_range("Index out of range");
-            }
-            return p[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return {0.0, 0.0, 0.0, 0.0};
+    std::array<ldouble,4> event::get_p(const int& index) const {
+
+        if (index < 0 || index >= static_cast<int>(p.size())) {
+            throw std::out_of_range("momentum index out of range");
         }
+
+        return p[index];
     }
 
     ldouble event::get_spin(const int& index) const {
-        try {
-            if (index < 0 || index >= static_cast<int>(spin.size())) {
-                throw std::out_of_range("Index out of range");
-            }
-            return spin[index];
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return 0.0;
+
+        if (index < 0 || index >= static_cast<int>(spin.size())) {
+            throw std::out_of_range("spin index out of range");
         }
+
+        return spin[index];
     }
 
     // Scalar setters (fix parameter types)
@@ -215,8 +204,8 @@ namespace spinas {
         a_s = a_s_val;
     }
 
-    void event::add_pdg(const int& index) {
-        pdg.push_back(index);
+    void event::add_pdg(const int& pdg_val) {
+        pdg.push_back(pdg_val);
     }
 
     void event::add_stat(const int& stat_val) {
@@ -248,33 +237,71 @@ namespace spinas {
         spin.push_back(spin_val);
     }
 
+    void event::clear() {
+
+        n = 0;
+        id = 0;
+        w = 0.0;
+        q = 0.0;
+        a_em = 0.0;
+        a_s = 0.0;
+
+        pdg.clear();
+        stat.clear();
+        mother.clear();
+        color.clear();
+        p.clear();
+        m.clear();
+        lt.clear();
+        spin.clear();
+    }
+
     // Size getters
-    int event::get_pdg_size() const {
+    size_t event::get_pdg_size() const {
         return static_cast<int>(pdg.size());
     }
 
-    int event::get_stat_size() const {
+    size_t event::get_stat_size() const {
         return static_cast<int>(stat.size());
     }
 
-    int event::get_mother_size() const {
+    size_t event::get_mother_size() const {
         return static_cast<int>(mother.size());
     }
 
-    int event::get_color_size() const {
+    size_t event::get_color_size() const {
         return static_cast<int>(color.size());
     }
 
-    int event::get_p_size() const {
+    size_t event::get_p_size() const {
         return static_cast<int>(p.size());
     }
 
-    int event::get_m_size() const {
+    size_t event::get_m_size() const {
         return static_cast<int>(m.size());
     }
 
-    int event::get_lt_size() const {
+    size_t event::get_lt_size() const {
         return static_cast<int>(lt.size());
+    }
+
+    size_t event::get_spin_size() const {
+        return static_cast<int>(spin.size());
+    }
+
+    bool event::validate() const {
+
+        size_t N = static_cast<size_t>(n);
+
+        return
+            pdg.size()    == N &&
+            stat.size()   == N &&
+            mother.size() == N &&
+            color.size()  == N &&
+            p.size()      == N &&
+            m.size()      == N &&
+            lt.size()     == N &&
+            spin.size()   == N;
     }
 
     /*
