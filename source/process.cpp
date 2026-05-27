@@ -399,6 +399,11 @@ namespace spinas {
     std::cout<<std::endl;
   }
 
+  int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
+      int i = 0;
+
+    }
+
   //   ldouble En1, En2, En3, En4, Pout;
   //   set_test_initializations(m1, m2, m3, m4, Pin, En1, En2, Pout, En3, En4);
   //   ldouble p1[4], p2[4], p3[4], p4[4];

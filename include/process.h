@@ -85,6 +85,7 @@ namespace spinas {
     void boost_random_test_momenta(ldouble p1[4], ldouble p2[4], ldouble p3[4], ldouble p4[4]) const;
     void print_test_message(const char *frame_string, const ldouble &m1, const ldouble &m2, const ldouble &m3, const ldouble &m4,
 			    const ldouble &ampSquared, const ldouble &amp2_data, const ldouble &cost) const;
+    int test_2toN_amp2(amp2Func amp2_func, const std::string& file);
 
   };
 
