@@ -247,6 +247,263 @@ BOOST_AUTO_TEST_CASE(test_event_from_string) {
     }
 }
 
+BOOST_AUTO_TEST_CASE(test_event_all_components) {
+
+    event ev;
+
+    // ============================================================
+    // Global event information
+    // ============================================================
+
+    ev.set_n(3);
+    ev.set_id(42);
+
+    ev.set_w(static_cast<ldouble>(2.5));
+    ev.set_q(static_cast<ldouble>(125.0));
+    ev.set_a_em(static_cast<ldouble>(0.00729735));
+    ev.set_a_s(static_cast<ldouble>(0.118));
+
+    BOOST_CHECK_EQUAL(ev.get_n(), 3);
+    BOOST_CHECK_EQUAL(ev.get_id(), 42);
+
+    BOOST_CHECK_CLOSE(ev.get_w(), 2.5, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_q(), 125.0, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_a_em(), 0.00729735, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_a_s(), 0.118, 1e-12);
+
+    // ============================================================
+    // Particle 0
+    // ============================================================
+
+    ev.add_pdg(11);
+    ev.add_stat(-1);
+
+    ev.add_mother(0,0);
+    ev.add_color(0,0);
+
+    // Internal convention:
+    // (E, px, py, pz)
+    ev.add_p(100.0, 1.0, 2.0, 3.0);
+
+    ev.add_m(0.0005);
+    ev.add_lt(0.0);
+    ev.add_spin(1.0);
+
+    // ============================================================
+    // Particle 1
+    // ============================================================
+
+    ev.add_pdg(-11);
+    ev.add_stat(-1);
+
+    ev.add_mother(0,0);
+    ev.add_color(0,0);
+
+    ev.add_p(100.0, -1.0, -2.0, -3.0);
+
+    ev.add_m(0.0005);
+    ev.add_lt(0.0);
+    ev.add_spin(-1.0);
+
+    // ============================================================
+    // Particle 2
+    // ============================================================
+
+    ev.add_pdg(22);
+    ev.add_stat(1);
+
+    ev.add_mother(1,2);
+    ev.add_color(0,0);
+
+    ev.add_p(8.0, 0.0, 0.0, 0.0);
+
+    ev.add_m(0.0);
+    ev.add_lt(0.0);
+    ev.add_spin(9.0);
+
+    // ============================================================
+    // Validation
+    // ============================================================
+
+    BOOST_CHECK(ev.validate());
+
+    // ============================================================
+    // Size checks
+    // ============================================================
+
+    BOOST_CHECK_EQUAL(ev.get_pdg_size(), 3);
+    BOOST_CHECK_EQUAL(ev.get_stat_size(), 3);
+    BOOST_CHECK_EQUAL(ev.get_mother_size(), 3);
+    BOOST_CHECK_EQUAL(ev.get_color_size(), 3);
+    BOOST_CHECK_EQUAL(ev.get_p_size(), 3);
+    BOOST_CHECK_EQUAL(ev.get_m_size(), 3);
+    BOOST_CHECK_EQUAL(ev.get_lt_size(), 3);
+    BOOST_CHECK_EQUAL(ev.get_spin_size(), 3);
+
+    // ============================================================
+    // Particle checks
+    // ============================================================
+
+    BOOST_CHECK_EQUAL(ev.get_pdg(0), 11);
+    BOOST_CHECK_EQUAL(ev.get_pdg(1), -11);
+    BOOST_CHECK_EQUAL(ev.get_pdg(2), 22);
+
+    BOOST_CHECK_EQUAL(ev.get_stat(0), -1);
+    BOOST_CHECK_EQUAL(ev.get_stat(1), -1);
+    BOOST_CHECK_EQUAL(ev.get_stat(2), 1);
+
+    auto mother = ev.get_mother(2);
+
+    BOOST_CHECK_EQUAL(mother.first, 1);
+    BOOST_CHECK_EQUAL(mother.second, 2);
+
+    auto color = ev.get_color(2);
+
+    BOOST_CHECK_EQUAL(color.first, 0);
+    BOOST_CHECK_EQUAL(color.second, 0);
+
+    // ============================================================
+    // Momentum ordering checks
+    // ============================================================
+
+    auto p0 = ev.get_p(0);
+
+    BOOST_CHECK_CLOSE(p0[0], 100.0, 1e-12);
+    BOOST_CHECK_CLOSE(p0[1], 1.0, 1e-12);
+    BOOST_CHECK_CLOSE(p0[2], 2.0, 1e-12);
+    BOOST_CHECK_CLOSE(p0[3], 3.0, 1e-12);
+
+    auto p1 = ev.get_p(1);
+
+    BOOST_CHECK_CLOSE(p1[0], 100.0, 1e-12);
+    BOOST_CHECK_CLOSE(p1[1], -1.0, 1e-12);
+    BOOST_CHECK_CLOSE(p1[2], -2.0, 1e-12);
+    BOOST_CHECK_CLOSE(p1[3], -3.0, 1e-12);
+
+    // ============================================================
+    // Scalar checks
+    // ============================================================
+
+    BOOST_CHECK_CLOSE(ev.get_m(0), 0.0005, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_m(1), 0.0005, 1e-12);
+    BOOST_CHECK_SMALL(ev.get_m(2), 1e-12);
+
+    BOOST_CHECK_CLOSE(ev.get_lt(0), 0.0, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_lt(1), 0.0, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_lt(2), 0.0, 1e-12);
+
+    BOOST_CHECK_CLOSE(ev.get_spin(0), 1.0, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_spin(1), -1.0, 1e-12);
+    BOOST_CHECK_CLOSE(ev.get_spin(2), 9.0, 1e-12);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_event_bounds_checking) {
+
+    event ev;
+
+    ev.set_n(1);
+
+    ev.add_pdg(11);
+    ev.add_stat(-1);
+    ev.add_mother(0,0);
+    ev.add_color(0,0);
+
+    ev.add_p(10.0, 0.0, 0.0, 10.0);
+
+    ev.add_m(0.0);
+    ev.add_lt(0.0);
+    ev.add_spin(1.0);
+
+    BOOST_CHECK_THROW(
+        ev.get_pdg(1),
+        std::out_of_range
+    );
+
+    BOOST_CHECK_THROW(
+        ev.get_p(5),
+        std::out_of_range
+    );
+
+    BOOST_CHECK_THROW(
+        ev.get_spin(-1),
+        std::out_of_range
+    );
+}
+
+
+BOOST_AUTO_TEST_CASE(test_momentum_ordering) {
+
+    event ev;
+
+    // Internal convention:
+    // (E, px, py, pz)
+    ev.add_p(100.0, 1.0, 2.0, 3.0);
+
+    auto p = ev.get_p(0);
+
+    BOOST_CHECK_CLOSE(p[0], 100.0, 1e-12);
+    BOOST_CHECK_CLOSE(p[1], 1.0, 1e-12);
+    BOOST_CHECK_CLOSE(p[2], 2.0, 1e-12);
+    BOOST_CHECK_CLOSE(p[3], 3.0, 1e-12);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_bad_event_string) {
+
+    std::string malformed =
+        "2 13 1.0\n"
+        "11 -1 0 0\n";
+
+    BOOST_CHECK_THROW(
+        event(malformed),
+        std::runtime_error
+    );
+}
+
+
+BOOST_AUTO_TEST_CASE(test_event_parser_detects_bad_particle_count) {
+
+    std::string bad =
+        "2 13 1.0 91.0 0.007 0.118\n"
+        "11 -1 0 0 0 0 0 0 1 1 0 0 1\n";
+
+    BOOST_CHECK_THROW(
+        event(bad),
+        std::runtime_error
+    );
+}
+
+
+BOOST_AUTO_TEST_CASE(test_event_clear) {
+
+    event ev;
+
+    ev.set_n(2);
+
+    ev.add_pdg(11);
+    ev.add_stat(-1);
+    ev.add_mother(0,0);
+    ev.add_color(0,0);
+    ev.add_p(10.0,0.0,0.0,10.0);
+    ev.add_m(0.0);
+    ev.add_lt(0.0);
+    ev.add_spin(1.0);
+
+    ev.clear();
+
+    BOOST_CHECK_EQUAL(ev.get_n(), 0);
+
+    BOOST_CHECK_EQUAL(ev.get_pdg_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_stat_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_mother_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_color_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_p_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_m_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_lt_size(), 0);
+    BOOST_CHECK_EQUAL(ev.get_spin_size(), 0);
+}
+
 BOOST_AUTO_TEST_CASE(test_lhe_parsing_and_instantiation) {
     // 1. Setup pathing (Adjust directory as needed for your build system)
     std::string test_dir = "../event_files"; 
