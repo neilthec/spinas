@@ -213,11 +213,11 @@ namespace spinas {
     }
 
     // Vector adders
-    void event::add_mother(int& mother1, int& mother2) {
+    void event::add_mother(const int& mother1, const int& mother2) {
         mother.push_back(std::make_pair(mother1, mother2));
     }
 
-    void event::add_color(int& color1, int& color2) {
+    void event::add_color(const int& color1, const int& color2) {
         color.push_back(std::make_pair(color1, color2));
     }
 

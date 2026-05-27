@@ -80,8 +80,8 @@ namespace spinas {
 
         void add_pdg(const int& pdg_val);
         void add_stat(const int& stat_val);
-        void add_mother(int& mother1, int& mother2);
-        void add_color(int& color1, int& color2);
+        void add_mother(const int& mother1, const int& mother2);
+        void add_color(const int& color1, const int& color2);
         void add_p(const ldouble& E, const ldouble& px, const ldouble& py, const ldouble& pz);
         void add_m(const ldouble& m_val);
         void add_lt(const ldouble& lt_val);
