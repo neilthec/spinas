@@ -20,14 +20,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //File:  SPINAS/source/process.cpp
 
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include <stdio.h>
 #include <vector>
+#include <array>
 
 #include "types.h"
 //#include "aliases.h"
 #include "utilities.h"
 #include "cmatrix.h"
 #include "cvector.h"
+#include "event.h"
 #include "particle.h"
 #include "sproduct.h"
 #include "process.h"
@@ -38,8 +42,11 @@ namespace spinas {
   {}
 
   //Prototype set_momenta
-  void process::set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]){
-    throw std::runtime_error("set_momenta(p1, p2, p3, p4) not implemented yet!");
+  void process::set_momenta(const std::vector<std::array<ldouble,4>>& momenta) {
+      throw std::runtime_error(
+        "Generalized set_momenta() not implemented "
+        "for this process."
+      );
   }
 
   //Functions to determine the number of loops, the normalization factor and the spin indices for massive spin 1.
@@ -389,14 +396,16 @@ namespace spinas {
     boost_momentum(p4,v);
   }
 
-  void process::print_test_message(const char *frame_string, const ldouble &m1, const ldouble &m2, const ldouble &m3, const ldouble &m4,
-				   const ldouble &ampSquared, const ldouble &amp2_data, const ldouble &cost) const {
-    std::cout<<"-----"<<frame_string<<"-------"<<std::endl;
-    std::cout<<"m1,m2,m3,m4="<<m1<<","<<m2<<","<<m3<<","<<m4<<std::endl;
-    std::cout<<"amp2 = "<<ampSquared<<" amp2_data="<<amp2_data<<" @ cos(theta) = "<<cost<<std::endl;
-    std::cout<<"    amp2/amp2_data = ";
-    printf("%.10E",double(ampSquared/amp2_data));
-    std::cout<<std::endl;
+  void process::print_test_message(const char* label, const ldouble& ampSquared, const ldouble& reference) const {
+
+      std::cout
+          << "\nERROR IN " << label << '\n'
+          << "Calculated: " << ampSquared << '\n'
+          << "Reference : " << reference << '\n'
+          << "Difference: "
+          << std::abs(ampSquared-reference)
+          << "\n"
+          << std::endl;
   }
 
 int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {

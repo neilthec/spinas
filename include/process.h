@@ -36,7 +36,7 @@ namespace spinas {
 
     //Prototype set_momenta
     //Used in test_2to2_amp2 tests.
-    virtual void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]);
+    virtual void set_momenta(const std::vector<std::array<ldouble,4>>& momenta);
 
     //Functions to determine the number of loops, the normalization factor and the spin indices for massive spin 1.
     //Number of loops
@@ -83,8 +83,7 @@ namespace spinas {
 			  const ldouble &Pin, const ldouble &En3, const ldouble &En4, const ldouble &Pout, const ldouble &cost) const;
     void rotate_random_test_momenta(ldouble p1[4], ldouble p2[4], ldouble p3[4], ldouble p4[4]) const;
     void boost_random_test_momenta(ldouble p1[4], ldouble p2[4], ldouble p3[4], ldouble p4[4]) const;
-    void print_test_message(const char *frame_string, const ldouble &m1, const ldouble &m2, const ldouble &m3, const ldouble &m4,
-			    const ldouble &ampSquared, const ldouble &amp2_data, const ldouble &cost) const;
+    void print_test_message(const char* label, const ldouble& ampSquared, const ldouble& reference) const;
     int test_2toN_amp2(amp2Func amp2_func, const std::string& file);
 
   };
