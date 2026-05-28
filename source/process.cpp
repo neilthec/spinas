@@ -399,10 +399,136 @@ namespace spinas {
     std::cout<<std::endl;
   }
 
-  int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
-      int i = 0;
+int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
+    int failures = 0;
 
+    // ============================================================
+    // Open LHE file
+    // ============================================================
+
+    std::ifstream file(filename);
+
+    if(!file.is_open()){
+
+        throw std::runtime_error(
+            "Could not open LHE file: " + filename
+        );
     }
+
+    // ============================================================
+    // Read event blocks
+    // ============================================================
+
+    std::string line;
+
+    while(std::getline(file,line)){
+
+        // --------------------------------------------------------
+        // Find beginning of event
+        // --------------------------------------------------------
+
+        if(line.find("<event>") != std::string::npos){
+
+            std::stringstream event_buffer;
+
+            // ----------------------------------------------------
+            // Read until </event>
+            // ----------------------------------------------------
+
+            while(std::getline(file,line)){
+
+                if(line.find("</event>")
+                   != std::string::npos){
+
+                    break;
+                }
+
+                event_buffer << line << '\n';
+            }
+
+            try{
+
+                // =================================================
+                // Construct event
+                // =================================================
+
+                event ev(event_buffer.str());
+
+                if(!ev.validate()){
+
+                    throw std::runtime_error(
+                        "Invalid event encountered."
+                    );
+                }
+
+                // =================================================
+                // Build momentum container
+                // =================================================
+
+                std::vector<std::array<ldouble,4>> momenta;
+
+                momenta.reserve(ev.get_n());
+
+                for(int i=0;i<ev.get_n();++i){
+
+                    momenta.push_back(
+                        ev.get_p(i)
+                    );
+                }
+
+                // =================================================
+                // Set process momenta
+                // =================================================
+
+                set_momenta(momenta);
+
+                // =================================================
+                // Evaluate matrix element squared
+                // =================================================
+
+                ldouble ampSquared =
+                    amp2_func();
+
+                // =================================================
+                // Reference value
+                // =================================================
+
+                ldouble reference =
+                    ev.get_w();
+
+                // =================================================
+                // Numerical comparison
+                // =================================================
+
+                if(std::isnan(ampSquared)
+                   || std::isinf(ampSquared)
+                   || (std::abs(ampSquared-reference)>1e-15
+                       && std::abs(ampSquared-reference)
+                          /std::abs(ampSquared+reference)>1e-9)){
+
+                    print_test_message(
+                        "LHE Event",
+                        ampSquared,
+                        reference
+                    );
+
+                    failures++;
+                }
+
+            } catch(const std::exception& e){
+
+                std::cerr
+                    << "Event processing error: "
+                    << e.what()
+                    << std::endl;
+
+                failures++;
+            }
+        }
+    }
+
+    return failures;
+}
 
   //   ldouble En1, En2, En3, En4, Pout;
   //   set_test_initializations(m1, m2, m3, m4, Pin, En1, En2, Pout, En3, En4);
