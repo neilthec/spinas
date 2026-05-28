@@ -328,6 +328,10 @@ int main(){
   j = spinas::test_WWWW2(); if(j>0){message<<"    WWWW2   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_gggg(); if(j>0){message<<"    gggg   : "<<j<<" failed tests."<<endl;n++;}
   
+  cout<<"==============================================================================\n";
+  cout<<"Testing SM Processes with Les Houches events\n";
+  cout<<"=============================================================================="<<endl;
+  j = spinas::test_eemm_lhe(); if(j>0){message<<"    eemm   : "<<j<<" failed tests."<<endl;n++;}
   
   cout<<"==============================================================================\n";
   cout<<"All Tests:     ";
