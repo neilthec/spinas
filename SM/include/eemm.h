@@ -42,7 +42,7 @@ namespace spinas {
     void set_masses(const ldouble& masse, const ldouble& massmu, const ldouble& massh, const ldouble& massW);
     //Set Momenta
     void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4]);
-    void eemm::set_momenta(const std::vector<std::array<ldouble,4>>& momenta);
+    void set_momenta(const std::vector<std::array<ldouble,4>>& momenta);
 
     //Amplitude
     cdouble amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4);//Double the spins
