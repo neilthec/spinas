@@ -289,7 +289,7 @@ namespace spinas {
       //std::cout<<"########### me=0.0005, mmu=0.105, pspatial=250\n";
       ldouble me=0.0005, mmu=0.105, mh=125, wh=0, MW=80.385, SW=0.474, WZ=0;//Set width to 0 for comparison with Feynman diagrams.
       eemm eemmAmp = eemm(0.31333,me,mmu,mh,wh,MW,SW,WZ);
-      i += eemmAmp.test_2toN_amp2([&]() { return eemmAmp.amp2(); }, "Les_Houches/eemm.lhe");
+      i += eemmAmp.test_2toN_amp2([&]() { return eemmAmp.amp2(); }, "../SM/Les_Houches/eemm.lhe");
     }
 
 
