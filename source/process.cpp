@@ -46,7 +46,7 @@ namespace spinas {
     throw std::runtime_error(
         "4-point set_momenta() not implemented."
     );
-}
+  }
   void process::set_momenta(const std::vector<std::array<ldouble,4>>& momenta) {
       throw std::runtime_error(
         "Generalized set_momenta() not implemented "
@@ -444,7 +444,7 @@ void process::print_test_message(const char *frame_string, const ldouble &m1, co
   }
 
 int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
-    int failures = 0;
+    int i = 0;
 
     // ============================================================
     // Open LHE file
@@ -556,7 +556,7 @@ int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
                         reference
                     );
 
-                    failures++;
+                    i++;
                 }
 
             } catch(const std::exception& e){
@@ -566,12 +566,163 @@ int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
                     << e.what()
                     << std::endl;
 
-                failures++;
+                i++;
             }
         }
     }
 
-    return failures;
+    return i;
+}
+
+int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
+
+    int i = 0;
+
+    std::ifstream file(filename);
+
+    if(!file.is_open()){
+
+        throw std::runtime_error(
+            "Could not open LHE file: " + filename
+        );
+    }
+
+    std::string line;
+
+    int event_number = 0;
+
+    while(std::getline(file,line)){
+
+        if(line.find("<event>") != std::string::npos){
+
+            event_number++;
+
+            std::stringstream event_buffer;
+
+            while(std::getline(file,line)){
+
+                if(line.find("</event>")
+                   != std::string::npos){
+
+                    break;
+                }
+
+                event_buffer << line << '\n';
+            }
+
+            try{
+
+                event ev(event_buffer.str());
+
+                std::cout
+                    << "\n====================================\n"
+                    << "EVENT " << event_number << '\n'
+                    << "====================================\n";
+
+                // ------------------------------------------------
+                // Event header info
+                // ------------------------------------------------
+
+                std::cout
+                    << "n     = " << ev.get_n() << '\n'
+                    << "id    = " << ev.get_id() << '\n'
+                    << "w     = " << ev.get_w() << '\n'
+                    << "scale = " << ev.get_q() << '\n';
+
+                // ------------------------------------------------
+                // Particle table
+                // ------------------------------------------------
+
+                for(int j=0;j<ev.get_n();++j){
+
+                    auto pj = ev.get_p(j);
+
+                    std::cout
+                        << "\nParticle " << j
+                        << "\nPDG    = " << ev.get_pdg(j)
+                        << "\nstat   = " << ev.get_stat(j)
+                        << "\nmass   = " << ev.get_m(j)
+                        << "\nspin   = " << ev.get_spin(j)
+                        << "\n(E,px,py,pz) = ("
+                        << pj[0] << ", "
+                        << pj[1] << ", "
+                        << pj[2] << ", "
+                        << pj[3] << ")"
+                        << '\n';
+                }
+
+                // ------------------------------------------------
+                // Build momenta
+                // ------------------------------------------------
+
+                std::vector<std::array<ldouble,4>> momenta;
+
+                momenta.reserve(ev.get_n());
+
+                for(int j=0;j<ev.get_n();++j){
+
+                    momenta.push_back(ev.get_p(j));
+                }
+
+                // ------------------------------------------------
+                // Print momentum vector
+                // ------------------------------------------------
+
+                std::cout << "\nMomentum container:\n";
+
+                for(size_t j=0;j<momenta.size();++j){
+
+                    std::cout
+                        << j << ": ("
+                        << momenta[j][0] << ", "
+                        << momenta[j][1] << ", "
+                        << momenta[j][2] << ", "
+                        << momenta[j][3] << ")\n";
+                }
+
+                // ------------------------------------------------
+                // Set momenta
+                // ------------------------------------------------
+
+                std::cout
+                    << "\nCalling set_momenta(...)\n";
+
+                set_momenta(momenta);
+
+                std::cout
+                    << "set_momenta(...) succeeded\n";
+
+                // ------------------------------------------------
+                // Compute amplitude
+                // ------------------------------------------------
+
+                ldouble ampSquared =
+                    amp2_func();
+
+                std::cout
+                    << "\nComputed amp² = "
+                    << ampSquared << '\n';
+
+                std::cout
+                    << "Reference w  = "
+                    << ev.get_w() << '\n';
+
+            }
+            catch(const std::exception& e){
+
+                std::cerr
+                    << "\nERROR processing event "
+                    << event_number
+                    << ": "
+                    << e.what()
+                    << '\n';
+
+                i++;
+            }
+        }
+    }
+
+    return i;
 }
 
   //   ldouble En1, En2, En3, En4, Pout;

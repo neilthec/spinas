@@ -54,4 +54,5 @@ namespace spinas {
   };
   //Tests
   int test_eemm();
+  int test_eemm_lhe();
 }
