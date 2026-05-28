@@ -103,7 +103,7 @@ namespace spinas {
 
   void eemm::set_momenta(const std::vector<std::array<ldouble,4>>& momenta) {
     ldouble mom1[4], mom2[4], mom3[4], mom[4];
-    for (i=0; i<4, i++) {
+    for (int i=0; i<4; i++) {
       mom1[i] = momenta[0][i];
       mom2[i] = momenta[1][i];
       mom3[i] = momenta[2][i];
