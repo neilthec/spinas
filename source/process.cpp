@@ -443,136 +443,136 @@ void process::print_test_message(const char *frame_string, const ldouble &m1, co
           << std::endl;
   }
 
-int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
-    int i = 0;
+// int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
+//     int i = 0;
 
-    // ============================================================
-    // Open LHE file
-    // ============================================================
+//     // ============================================================
+//     // Open LHE file
+//     // ============================================================
 
-    std::ifstream file(filename);
+//     std::ifstream file(filename);
 
-    if(!file.is_open()){
+//     if(!file.is_open()){
 
-        throw std::runtime_error(
-            "Could not open LHE file: " + filename
-        );
-    }
+//         throw std::runtime_error(
+//             "Could not open LHE file: " + filename
+//         );
+//     }
 
-    // ============================================================
-    // Read event blocks
-    // ============================================================
+//     // ============================================================
+//     // Read event blocks
+//     // ============================================================
 
-    std::string line;
+//     std::string line;
 
-    while(std::getline(file,line)){
+//     while(std::getline(file,line)){
 
-        // --------------------------------------------------------
-        // Find beginning of event
-        // --------------------------------------------------------
+//         // --------------------------------------------------------
+//         // Find beginning of event
+//         // --------------------------------------------------------
 
-        if(line.find("<event>") != std::string::npos){
+//         if(line.find("<event>") != std::string::npos){
 
-            std::stringstream event_buffer;
+//             std::stringstream event_buffer;
 
-            // ----------------------------------------------------
-            // Read until </event>
-            // ----------------------------------------------------
+//             // ----------------------------------------------------
+//             // Read until </event>
+//             // ----------------------------------------------------
 
-            while(std::getline(file,line)){
+//             while(std::getline(file,line)){
 
-                if(line.find("</event>")
-                   != std::string::npos){
+//                 if(line.find("</event>")
+//                    != std::string::npos){
 
-                    break;
-                }
+//                     break;
+//                 }
 
-                event_buffer << line << '\n';
-            }
+//                 event_buffer << line << '\n';
+//             }
 
-            try{
+//             try{
 
-                // =================================================
-                // Construct event
-                // =================================================
+//                 // =================================================
+//                 // Construct event
+//                 // =================================================
 
-                event ev(event_buffer.str());
+//                 event ev(event_buffer.str());
 
-                if(!ev.validate()){
+//                 if(!ev.validate()){
 
-                    throw std::runtime_error(
-                        "Invalid event encountered."
-                    );
-                }
+//                     throw std::runtime_error(
+//                         "Invalid event encountered."
+//                     );
+//                 }
 
-                // =================================================
-                // Build momentum container
-                // =================================================
+//                 // =================================================
+//                 // Build momentum container
+//                 // =================================================
 
-                std::vector<std::array<ldouble,4>> momenta;
+//                 std::vector<std::array<ldouble,4>> momenta;
 
-                momenta.reserve(ev.get_n());
+//                 momenta.reserve(ev.get_n());
 
-                for(int i=0;i<ev.get_n();++i){
+//                 for(int i=0;i<ev.get_n();++i){
 
-                    momenta.push_back(
-                        ev.get_p(i)
-                    );
-                }
+//                     momenta.push_back(
+//                         ev.get_p(i)
+//                     );
+//                 }
 
-                // =================================================
-                // Set process momenta
-                // =================================================
+//                 // =================================================
+//                 // Set process momenta
+//                 // =================================================
 
-                set_momenta(momenta);
+//                 set_momenta(momenta);
 
-                // =================================================
-                // Evaluate matrix element squared
-                // =================================================
+//                 // =================================================
+//                 // Evaluate matrix element squared
+//                 // =================================================
 
-                ldouble ampSquared =
-                    amp2_func();
+//                 ldouble ampSquared =
+//                     amp2_func();
 
-                // =================================================
-                // Reference value
-                // =================================================
+//                 // =================================================
+//                 // Reference value
+//                 // =================================================
 
-                ldouble reference =
-                    ev.get_w();
+//                 ldouble reference =
+//                     ev.get_w();
 
-                // =================================================
-                // Numerical comparison
-                // =================================================
+//                 // =================================================
+//                 // Numerical comparison
+//                 // =================================================
 
-                if(std::isnan(ampSquared)
-                   || std::isinf(ampSquared)
-                   || (std::abs(ampSquared-reference)>1e-15
-                       && std::abs(ampSquared-reference)
-                          /std::abs(ampSquared+reference)>1e-9)){
+//                 if(std::isnan(ampSquared)
+//                    || std::isinf(ampSquared)
+//                    || (std::abs(ampSquared-reference)>1e-15
+//                        && std::abs(ampSquared-reference)
+//                           /std::abs(ampSquared+reference)>1e-9)){
 
-                    print_test_message(
-                        "LHE Event",
-                        ampSquared,
-                        reference
-                    );
+//                     print_test_message(
+//                         "LHE Event",
+//                         ampSquared,
+//                         reference
+//                     );
 
-                    i++;
-                }
+//                     i++;
+//                 }
 
-            } catch(const std::exception& e){
+//             } catch(const std::exception& e){
 
-                std::cerr
-                    << "Event processing error: "
-                    << e.what()
-                    << std::endl;
+//                 std::cerr
+//                     << "Event processing error: "
+//                     << e.what()
+//                     << std::endl;
 
-                i++;
-            }
-        }
-    }
+//                 i++;
+//             }
+//         }
+//     }
 
-    return i;
-}
+//     return i;
+// }
 
 int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
 
