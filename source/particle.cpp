@@ -69,7 +69,12 @@ namespace spinas {
     pxymag = std::sqrt(p[1]*p[1]+p[2]*p[2]);
     pmag = std::sqrt(pxymag*pxymag+p[3]*p[3]);
     if(std::abs(p[0]*p[0]-pmag*pmag-m*m) > epsilon){
-      throw std::runtime_error("Momentum and mass don't match:  p^2 = " + std::to_string(p[0]*p[0]-pmag*pmag) + " != " + std::to_string(m*m));
+       std::ostringstream oss;
+        oss << std::scientific << std::setprecision(20)
+        << "Momentum and mass don't match:"
+        << "p^2   = " << p2 << " != " << "m^2   = " << m*m << " : diff  = " << diff;
+
+      throw std::runtime_error(oss.str());
     }
     theta = atan2(pxymag,p[3]);
     phi = atan2(p[2],p[1]);

@@ -665,7 +665,7 @@ int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
                 }
 
                 // ------------------------------------------------
-                // Print momentum vector
+                // Print momentum vector (change this to a formatted output)
                 // ------------------------------------------------
 
                 std::cout << "\nMomentum container:\n";
@@ -723,27 +723,7 @@ int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
     }
 
     return i;
-}
-
-  //   ldouble En1, En2, En3, En4, Pout;
-  //   set_test_initializations(m1, m2, m3, m4, Pin, En1, En2, Pout, En3, En4);
-  //   ldouble p1[4], p2[4], p3[4], p4[4];
-  //   ldouble cost;
-  //   ldouble ampSquared;
-  //   for(int j=0;j<20;j++){
-  //     cost = 0.95-0.1*j;
-  //     //Lab Frame
-  //     set_test_momenta(p1, p2, p3, p4, En1, En2, Pin, En3, En4, Pout, cost);
-  //     //Calculate amp^2
-  //     set_momenta(p1,p2,p3,p4);
-  //     ampSquared = amp2_func();
-  //     if(std::isinf(ampSquared) || std::isnan(ampSquared) ||
-	//  (std::abs(ampSquared-data[j])>1e-15 &&
-	//   std::abs(ampSquared-data[j])/std::abs(ampSquared+data[j])>1e-9)){
-	//   print_test_message("Lab Frame", m1, m2, m3, m4, ampSquared, data[j], cost);
-	// i++;
-  //     }
-  //   }
+  }
 
 
 }

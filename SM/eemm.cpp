@@ -293,7 +293,7 @@ namespace spinas {
     }
 
 
-
+    n += i;
     return n;
   }
   
