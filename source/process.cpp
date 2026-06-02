@@ -664,33 +664,31 @@ int process::test_2toN_amp2(amp2Func amp2_func, const std::string& filename) {
                     momenta.push_back(ev.get_p(j));
                 }
 
-                // ------------------------------------------------
-                // Print momentum vector (change this to a formatted output)
-                // ------------------------------------------------
-
-                std::cout << "\nMomentum container:\n";
-
-                for(size_t j=0;j<momenta.size();++j){
-
-                    std::cout
-                        << j << ": ("
-                        << momenta[j][0] << ", "
-                        << momenta[j][1] << ", "
-                        << momenta[j][2] << ", "
-                        << momenta[j][3] << ")\n";
-                }
 
                 // ------------------------------------------------
                 // Set momenta
                 // ------------------------------------------------
 
-                std::cout
-                    << "\nCalling set_momenta(...)\n";
+                try {
+                    set_momenta(momenta);
+                    std::cout << "set_momenta(...) succeeded\n";
+                }
+                catch (const std::exception& e) {
 
-                set_momenta(momenta);
+                    std::cerr << "\nset_momenta FAILED: " << e.what() << "\n";
 
-                std::cout
-                    << "set_momenta(...) succeeded\n";
+                    std::cerr << "Dumping momenta for debugging:\n";
+                    for (size_t j = 0; j < momenta.size(); ++j) {
+                        std::cerr
+                            << j << ": ("
+                            << momenta[j][0] << ", "
+                            << momenta[j][1] << ", "
+                            << momenta[j][2] << ", "
+                            << momenta[j][3] << ")\n";
+                    }
+
+                    throw; // or `continue;` depending on whether you want to abort event or skip it
+                }
 
                 // ------------------------------------------------
                 // Compute amplitude
