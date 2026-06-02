@@ -282,9 +282,9 @@ namespace spinas {
  
   int test_eemm_lhe(){
     int n=0;//Number of fails
+    int i=0;
     std::cout<<"\t*LHE: e , E  -> m , M       :";
     {//amp^2
-      int i=0;
       //std::cout<<"\n###########  All Diagrams\n";
       //std::cout<<"########### me=0.0005, mmu=0.105, pspatial=250\n";
       ldouble me=0.0005, mmu=0.105, mh=125, wh=0, MW=80.385, SW=0.474, WZ=0;//Set width to 0 for comparison with Feynman diagrams.

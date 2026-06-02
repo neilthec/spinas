@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include <cmath>
 #include <limits>
+#include <iomanip>
 
 #include "types.h"
 //#include "aliases.h"
@@ -68,6 +69,8 @@ namespace spinas {
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000;
     pxymag = std::sqrt(p[1]*p[1]+p[2]*p[2]);
     pmag = std::sqrt(pxymag*pxymag+p[3]*p[3]);
+    ldouble p2   = p[0]*p[0] - pmag*pmag;
+    ldouble diff = p2 - m*m;
     if(std::abs(p[0]*p[0]-pmag*pmag-m*m) > epsilon){
        std::ostringstream oss;
         oss << std::scientific << std::setprecision(20)
