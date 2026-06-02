@@ -292,7 +292,6 @@ namespace spinas {
       i += eemmAmp.test_2toN_amp2([&]() { return eemmAmp.amp2(); }, "../SM/Les_Houches/eemm.lhe");
     }
 
-
     n += i;
     return n;
   }
