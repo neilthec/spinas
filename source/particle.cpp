@@ -74,8 +74,7 @@ namespace spinas {
     if(std::abs(p[0]*p[0]-pmag*pmag-m*m) > epsilon){
        std::ostringstream oss;
         oss << std::scientific << std::setprecision(20)
-        << "Momentum and mass don't match:"
-        << "p^2   = " << p2 << " != " << "m^2   = " << m*m << " : diff  = " << diff;
+        << "Momentum and mass don't match: " << "p^2 = " << p2 << " != " << "m^2 = " << m*m << " : diff = " << diff;
 
       throw std::runtime_error(oss.str());
     }
