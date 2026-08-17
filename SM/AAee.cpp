@@ -51,6 +51,13 @@ namespace spinas {
     a14a = sproduct(ANGLE,&p1,&p4);
     s132a = sproduct(SQUARE,&p1,&p3,&p2);
     s231a = sproduct(SQUARE,&p2,&p3,&p1);
+    s321a = sproduct(SQUARE,&p3,&p2,&p1);
+    s421a = sproduct(SQUARE,&p4,&p2,&p1);
+    s432a = sproduct(SQUARE,&p4,&p3,&p2);
+    s342a = sproduct(SQUARE,&p3,&p4,&p2);
+    s4243s = sproduct(SQUARE,&p4,&p2,&p3,&p4);
+    s4323s = sproduct(SQUARE,&p4,&p3,&p2,&p3);
+    s4343s = sproduct(SQUARE,&p4,&p3,&p4,&p3);
   }
   void AAee::set_masses(const ldouble& masse){
     me=masse;
