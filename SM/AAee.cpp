@@ -51,13 +51,13 @@ namespace spinas {
     a14a = sproduct(ANGLE,&p1,&p4);
     s132a = sproduct(SQUARE,&p1,&p3,&p2);
     s231a = sproduct(SQUARE,&p2,&p3,&p1);
-    s321a = sproduct(SQUARE,&p3,&p2,&p1);
-    s421a = sproduct(SQUARE,&p4,&p2,&p1);
-    s432a = sproduct(SQUARE,&p4,&p3,&p2);
-    s342a = sproduct(SQUARE,&p3,&p4,&p2);
-    s4243s = sproduct(SQUARE,&p4,&p2,&p3,&p4);
-    s4323s = sproduct(SQUARE,&p4,&p3,&p2,&p3);
-    s4343s = sproduct(SQUARE,&p4,&p3,&p4,&p3);
+    s143a = sproduct(SQUARE,&p1,&p4,&p3);
+    s243a = sproduct(SQUARE,&p2,&p4,&p3);
+    s214a = sproduct(SQUARE,&p2,&p1,&p4);
+    s124a = sproduct(SQUARE,&p1,&p2,&p4);
+    s2421s = sproduct(SQUARE,&p2,&p4,&p2,&p1);
+    s2141s = sproduct(SQUARE,&p2,&p1,&p4,&p1);
+    s2121s = sproduct(SQUARE,&p2,&p1,&p2,&p1);
   }
   void AAee::set_masses(const ldouble& masse){
     me=masse;
@@ -85,13 +85,12 @@ namespace spinas {
     a14a.update();
     s132a.update();
     s231a.update();
-    s321a.update();
-    s421a.update();
-    s432a.update();
-    s342a.update();
-    s4243s.update();
-    s4323s.update();
-    s4343s.update();
+    s143a.update();
+    s243a.update();
+    s214a.update();
+    s124a.update();
+    s2141s.update();
+    s2121s.update();
     //Propagator Momentum
     ldouble propSP[4], propTP[4], propUP[4];
     for(int j=0;j<4;j++){
@@ -144,13 +143,13 @@ namespace spinas {
     if(ds1>0&&ds2>0){
       cdouble zero(0,0);
       cdouble ampt, ampu;
-      ampt = s24s.v(ds4)*s321a.v(ds3)*s4323s.v(ds3,ds4) + s24s.v(ds4)*s321a.v(ds3)*s4343s.v(ds3,ds4) 
-       - me*s13s.v(ds3)*s24s.v(ds4)*s4323s.v(ds3,ds4) - me*s34s.v(ds3,ds4)*s321a.v(ds3)*s432a.v(ds4)
-       + me*me*s13s.v(ds3)*s34s.v(ds3,ds4)*s432a.v(ds4);
-      ampu = -s23s.v(ds3)*s421a.v(ds4)*s4243s.v(ds3,ds4) - s23s.v(ds3)*s421a.v(ds4)*s4343s.v(ds3,ds4) 
-       + me*s14s.v(ds4)*s23s.v(ds3)*s4243s.v(ds3,ds4) + me*s34s.v(ds3,ds4)*s421a.v(ds4)*s342a.v(ds3)
-       - me*me*s14s.v(ds4)*s34s.v(ds3,ds4)*s342a.v(ds3);
-      return 2.0*e*e*me*(ampt + ampu)/pDenS/pDenT/pDenU;
+      ampt = s24s.v(ds4)*s143a.v(ds3)*s2141s.v() + s24s.v(ds4)*s143a.v(ds3)*s2121s.v() 
+       - me*s24s.v(ds4)*s13s.v(ds3)*s2141s.v() - me*s12s.v()*s143a.v(ds3)*s214a.v(ds4)
+       + me*me*s24s.v(ds4)*s12s.v()*s214a.v(ds4);
+      ampu = -s14s.v(ds4)*s243a.v(ds3)*s2421s.v() - s14s.v(ds4)*s243a.v(ds3)*s2121s.v() 
+       + me*s23s.v(ds3)*s14s.v(ds4)*s2421s.v() + me*s12s.v()*s243a.v(ds3)*s124a.v(ds4)
+       - me*me*s23s.v(ds3)*s12s.v()*s124a.v(ds4);
+      return -2.0*e*e*me*(ampt + ampu)/pDenS/pDenT/pDenU;
     }
     return cdouble(0,0);    
   }

@@ -28,7 +28,7 @@ namespace spinas {
     particle p1,p2,p3,p4;
     propagator prop;
     cdouble pDenS, pDenT, pDenU;
-    sproduct s34s, a34a, s12s, a12a, s13s, a13a, s24s, a24a, s23s, a23a, s14s, a14a, s132a, s231a, s321a, s421a, s432a, s342a, s4243s, s4323s, s4343s;
+    sproduct s34s, a34a, s12s, a12a, s13s, a13a, s24s, a24a, s23s, a23a, s14s, a14a, s132a, s231a, s143a, s243a, s214a, s124a, s2421s, s2141s, s2121s;
     ldouble sqrt2;
 
     
