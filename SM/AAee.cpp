@@ -146,7 +146,7 @@ namespace spinas {
       cdouble ampt, ampu;
       ampt = s24s.v(ds4)*s321a.v(ds3)*s4323s.v(ds3,ds4) + s24s.v(ds4)*s321a.v(ds3)*s4343s.v(ds3,ds4) 
        - me*s13s.v(ds3)*s24s.v(ds4)*s4323s.v(ds3,ds4) - me*s34s.v(ds3,ds4)*s321a.v(ds3)*s432a.v(ds4)
-       + me*me*s13s.v(ds3)*s34s.v(ds3,ds4);
+       + me*me*s13s.v(ds3)*s34s.v(ds3,ds4)*s432a.v(ds4);
       ampu = -s23s.v(ds3)*s421a.v(ds4)*s4243s.v(ds3,ds4) - s23s.v(ds3)*s421a.v(ds4)*s4343s.v(ds3,ds4) 
        + me*s14s.v(ds4)*s23s.v(ds3)*s4243s.v(ds3,ds4) + me*s34s.v(ds3,ds4)*s421a.v(ds4)*s342a.v(ds3)
        - me*me*s14s.v(ds4)*s34s.v(ds3,ds4)*s342a.v(ds3);
