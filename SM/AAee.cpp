@@ -95,7 +95,7 @@ namespace spinas {
     //Propagator Momentum
     ldouble propSP[4], propTP[4], propUP[4];
     for(int j=0;j<4;j++){
-      propSP[j] = mom1[j]-mom2[j];
+      propSP[j] = mom1[j]+mom2[j];
       propTP[j] = mom1[j]-mom3[j];
       propUP[j] = mom1[j]-mom4[j];
     }
