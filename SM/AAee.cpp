@@ -89,6 +89,7 @@ namespace spinas {
     s243a.update();
     s214a.update();
     s124a.update();
+    s2421s.update();
     s2141s.update();
     s2121s.update();
     //Propagator Momentum
