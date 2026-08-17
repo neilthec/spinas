@@ -85,12 +85,21 @@ namespace spinas {
     a14a.update();
     s132a.update();
     s231a.update();
+    s321a.update();
+    s421a.update();
+    s432a.update();
+    s342a.update();
+    s4243s.update();
+    s4323s.update();
+    s4343s.update();
     //Propagator Momentum
-    ldouble propTP[4], propUP[4];
+    ldouble propSP[4], propTP[4], propUP[4];
     for(int j=0;j<4;j++){
+      propSP[j] = mom1[j]-mom2[j];
       propTP[j] = mom1[j]-mom3[j];
       propUP[j] = mom1[j]-mom4[j];
     }
+    pDenS = prop.denominator(propSP);
     pDenT = prop.denominator(propTP);
     pDenU = prop.denominator(propUP);
 
@@ -135,9 +144,13 @@ namespace spinas {
     if(ds1>0&&ds2>0){
       cdouble zero(0,0);
       cdouble ampt, ampu;
-      ampt = zero/pDenT;
-      ampu = zero/pDenU;
-      return 2.0*e*e*me*(ampt + ampu);
+      ampt = s24s.v(ds4)*s321a.v(ds3)*s4323s.v(ds3,ds4) + s24s.v(ds4)*s321a.v(ds3)*s4343s.v(ds3,ds4) 
+       - me*s13s.v(ds3)*s24s.v(ds4)*s4323s.v() - me*s34s.v(ds3,ds4)*s321a.v(ds3)*s432a.v(ds4)
+       + me*me*s13s.v(ds3)*s34s.v(ds3,ds4);
+      ampu = -s23s.v(ds3)*s421a.v(ds4)*s4243s.v(ds3,ds4) - s23s.v(ds3)*s421a.v(ds4)*s4343s.v(ds3,ds4) 
+       + me*s14s.v(ds4)*s23s.v(ds3)*s4243s.v(ds3,ds4) + me*s34s.v(ds3,ds4)*s421a.v(ds4)*s342a.v(ds3)
+       - me*me*s14s.v(ds4)*s34s.v(ds3,ds4)*s342a.v(ds3);
+      return 2.0*e*e*me*(ampt + ampu)/pDenS/pDenT/pDenU;
     }
     return cdouble(0,0);    
   }

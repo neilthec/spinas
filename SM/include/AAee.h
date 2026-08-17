@@ -27,7 +27,7 @@ namespace spinas {
     ldouble me;//Mass of e
     particle p1,p2,p3,p4;
     propagator prop;
-    cdouble pDenT, pDenU;
+    cdouble pDenS, pDenT, pDenU;
     sproduct s34s, a34a, s12s, a12a, s13s, a13a, s24s, a24a, s23s, a23a, s14s, a14a, s132a, s231a, s321a, s421a, s432a, s342a, s4243s, s4323s, s4343s;
     ldouble sqrt2;
 
