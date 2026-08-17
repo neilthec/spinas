@@ -1,6 +1,7 @@
 : 
   #CALCHEP=/UserDisk1/christensen/CalcHEP/calchep_3.8.9 
-  CALCHEP=/home/nchris3/code/CalcHEP/calchep_3.8.9
+  #CALCHEP=/home/nchris3/code/CalcHEP/calchep_3.8.9
+  CALCHEP=/Users/moon_maestro/Documents/Graduate/Research/calchep_3.9.2 
 #---------------
 
 lib=$CALCHEP/lib
