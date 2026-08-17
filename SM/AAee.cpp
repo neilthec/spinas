@@ -149,7 +149,7 @@ namespace spinas {
       ampu = -s14s.v(ds4)*s243a.v(ds3)*s2421s.v() - s14s.v(ds4)*s243a.v(ds3)*s2121s.v() 
        + me*s23s.v(ds3)*s14s.v(ds4)*s2421s.v() + me*s12s.v()*s243a.v(ds3)*s124a.v(ds4)
        - me*me*s23s.v(ds3)*s12s.v()*s124a.v(ds4);
-      return -2.0*e*e*me*(ampt + ampu)/pDenS/pDenT/pDenU;
+      return -8.0*e*e*me*(ampt + ampu)/pDenS/pDenT/pDenU;
     }
     return cdouble(0,0);    
   }
