@@ -145,12 +145,14 @@ namespace spinas {
       //eeAA:
       cdouble zero(0,0);
       cdouble ampt, ampu;
-      ampt = -s24s.v(ds4)*s143a.v(ds3)*s2141s.v() + s24s.v(ds4)*s143a.v(ds3)*s2121s.v() 
+      ampt = s24s.v(ds4)*s143a.v(ds3)*s2141s.v() - s24s.v(ds4)*s143a.v(ds3)*s2121s.v() 
        + me*s24s.v(ds4)*s13s.v(ds3)*s2141s.v() + me*s12s.v()*s143a.v(ds3)*s214a.v(ds4)
-       - me*me*s24s.v(ds4)*s12s.v()*s214a.v(ds4);
-      ampu = s14s.v(ds4)*s243a.v(ds3)*s2421s.v() - s14s.v(ds4)*s243a.v(ds3)*s2121s.v() 
+       - me*me*s13s.v(ds3)*s12s.v()*s214a.v(ds4);
+
+
+      ampu = -s14s.v(ds4)*s243a.v(ds3)*s2421s.v() + s14s.v(ds4)*s243a.v(ds3)*s2121s.v() 
        - me*s23s.v(ds3)*s14s.v(ds4)*s2421s.v() - me*s12s.v()*s243a.v(ds3)*s124a.v(ds4)
-       + me*me*s23s.v(ds3)*s12s.v()*s124a.v(ds4);
+       - me*me*s23s.v(ds3)*s12s.v()*s124a.v(ds4);
       return -8.0*e*e*(ampt + ampu)/pDenS/pDenT/pDenU;
     }
     return cdouble(0,0);    
