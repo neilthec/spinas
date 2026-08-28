@@ -138,26 +138,6 @@ namespace spinas {
     return cdouble(0,0);    
   }
 
-    //Amplitude
-  //set_momenta(...) must be called before amp(...).
-  cdouble AAee::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4){
-    if(ds1>0&&ds2>0){
-      //eeAA:
-      cdouble zero(0,0);
-      cdouble ampt, ampu;
-      ampt = s24s.v(ds4)*s143a.v(ds3)*s2141s.v() + s24s.v(ds4)*s143a.v(ds3)*s2121s.v() 
-       - me*s24s.v(ds4)*s13s.v(ds3)*s2141s.v() - me*s12s.v()*s143a.v(ds3)*s214a.v(ds4)
-       + me*me*s13s.v(ds3)*s12s.v()*s214a.v(ds4);
-
-
-      ampu = -s14s.v(ds4)*s243a.v(ds3)*s2421s.v() + s14s.v(ds4)*s243a.v(ds3)*s2121s.v() 
-       + me*s23s.v(ds3)*s14s.v(ds4)*s2421s.v() + me*s12s.v()*s243a.v(ds3)*s124a.v(ds4)
-       - me*me*s23s.v(ds3)*s12s.v()*s124a.v(ds4);
-      return -8.0*e*e*(ampt + ampu)/pDenS/pDenT/pDenU;
-    }
-    return cdouble(0,0);    
-  }
-
  
   //set_momenta(...) must be called before amp2().
   ldouble AAee::amp2(){
@@ -185,20 +165,6 @@ namespace spinas {
     for(int j3=-1;j3<=1;j3+=2)
       for(int j4=-1;j4<=1;j4+=2){
 	M = amp(2,2,j3,j4);
-	amp2 += std::pow(std::abs(M),2);
-      }
-    return amp2;
-  }
-
-    //A+, A+ -> e, E
-  ldouble AAee::amp2_Aplus_Aplus_feynman(){
-    ldouble amp2 = 0;
-    cdouble M;
-
-    //Sum over spins
-    for(int j3=-1;j3<=1;j3+=2)
-      for(int j4=-1;j4<=1;j4+=2){
-	M = amp_feynman(2,2,j3,j4);
 	amp2 += std::pow(std::abs(M),2);
       }
     return amp2;
@@ -242,7 +208,6 @@ namespace spinas {
       i += AAeeAmp.test_2to2_amp2_rotations([&]() { return AAeeAmp.amp2_Aplus_Aplus(); }, 0,0,me,me,pspatial,dataCHpp);
       i += AAeeAmp.test_2to2_amp2_boosts([&]() { return AAeeAmp.amp2_Aplus_Aplus(); }, 0,0,me,me,pspatial,dataCHpp);
       i += AAeeAmp.test_2to2_amp2_boosts_and_rotations([&]() { return AAeeAmp.amp2_Aplus_Aplus(); }, 0,0,me,me,pspatial,dataCHpp);
-      i += AAeeAmp.test_2to2_amp2([&]() { return AAeeAmp.amp2_Aplus_Aplus_feynman(); }, 0,0,me,me,pspatial,dataCHpp);
       //std::cout<<"\n#  A+ , A- -> e , E\n";
       ldouble dataCHpm[20] = {1.504589239481454E+00,4.786236395481956E-01,2.753847397389338E-01,1.899320204996691E-01,1.439896983277081E-01,1.162658832238326E-01,9.863638028594214E-02,8.738875741155117E-02,8.065744346625718E-02,7.749423202579785E-02,7.749423202579785E-02,8.065744346625715E-02,8.738875741155112E-02,9.863638028594213E-02,1.162658832238326E-01,1.439896983277081E-01,1.899320204996689E-01,2.753847397389337E-01,4.786236395481949E-01,1.504589239481445E+00};
       i += AAeeAmp.test_2to2_amp2([&]() { return AAeeAmp.amp2_Aplus_Aminus(); }, 0,0,me,me,pspatial,dataCHpm);

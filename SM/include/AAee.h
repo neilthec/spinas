@@ -47,7 +47,6 @@ namespace spinas {
     cdouble amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4);
     ldouble amp2();
     ldouble amp2_Aplus_Aplus();
-    ldouble amp2_Aplus_Aplus_feynman();
     ldouble amp2_Aplus_Aminus();
     
 
