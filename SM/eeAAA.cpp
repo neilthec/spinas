@@ -277,20 +277,20 @@ namespace spinas {
       // me=0.0005, pspatial=250
       ldouble me=0.0005;
       ldouble EE=0.31333;
-      eeAAA eeAAAmp = eeAAA(EE,me);
+      eeAAA eeAAAAmp = eeAAA(EE,me);
       ldouble pspatial=250;
       ldouble dataCH[20] = {3.761473098865852E-01,1.196559098890515E-01,6.884618493553914E-02,4.748300512537967E-02,3.599742458224401E-02,2.906647080620063E-02,2.465909507168581E-02,2.184718935306326E-02,2.016436086672569E-02,1.937355800660445E-02,1.937355800660445E-02,2.016436086672569E-02,2.184718935306325E-02,2.465909507168581E-02,2.906647080620063E-02,3.599742458224402E-02,4.748300512537965E-02,6.884618493553911E-02,1.196559098890515E-01,3.761473098865843E-01};
-      i += eeAAAmp.test_2to2_amp2([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
-      i += eeAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
-      i += eeAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
-      i += eeAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      i += eeAAAAmp.test_2to2_amp2([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      i += eeAAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      i += eeAAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      i += eeAAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
       //Close to threshold
       pspatial = 0.0001;
       ldouble dataCH2[20] = {2.081251342993773E-02,2.079750983522615E-02,2.078115831044515E-02,2.076461266895772E-02,2.074882438042710E-02,2.073456777596373E-02,2.072246020291247E-02,2.071297785405228E-02,2.070646782725441E-02,2.070315683100089E-02,2.070315683100089E-02,2.070646782725441E-02,2.071297785405228E-02,2.072246020291247E-02,2.073456777596374E-02,2.074882438042710E-02,2.076461266895772E-02,2.078115831044515E-02,2.079750983522615E-02,2.081251342993773E-02};
-      i += eeAAAmp.test_2to2_amp2([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
-      i += eeAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
-      i += eeAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
-      i += eeAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      i += eeAAAAmp.test_2to2_amp2([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      i += eeAAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      i += eeAAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      i += eeAAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
       // Done
       if(i==0) std::cout<<"                                         Pass"<<std::endl;
       else std::cout<<"                                         Fail!"<<std::endl;

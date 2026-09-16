@@ -73,6 +73,7 @@ using namespace std;
 #include "include/eeZh.h"
 #include "include/eZeh.h"
 #include "include/eeAA.h"
+#include "include/eeAAA.h"
 #include "include/eAAe.h"
 #include "include/AAee.h"
 #include "include/AZee.h"
@@ -328,10 +329,10 @@ int main(){
   j = spinas::test_WWWW2(); if(j>0){message<<"    WWWW2   : "<<j<<" failed tests."<<endl;n++;}
   j = spinas::test_gggg(); if(j>0){message<<"    gggg   : "<<j<<" failed tests."<<endl;n++;}
   
-  // cout<<"==============================================================================\n";
-  // cout<<"Testing SM Processes with Les Houches events\n";
-  // cout<<"=============================================================================="<<endl;
-  // j = spinas::test_eemm_lhe(); if(j>0){message<<"    eemm   : "<<j<<" failed tests."<<endl;n++;}
+  cout<<"==============================================================================\n";
+  cout<<"Comparing Feynman and Permutation Sum Amplitudes\n";
+  cout<<"=============================================================================="<<endl;
+  j = spinas::test_eeAAA();
   
   cout<<"==============================================================================\n";
   cout<<"All Tests:     ";
