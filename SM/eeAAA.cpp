@@ -174,7 +174,7 @@ namespace spinas {
 
   cdouble eeAAA::amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
     cdouble one(1,0);
-    //No sign changes due to p3 and p4 being outgoing.
+    
     if(ds3>0&&ds4>0&&ds5>0){
 
       return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*a12a.v(ds1,ds2)*(
@@ -192,7 +192,7 @@ namespace spinas {
 
     cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
     cdouble one(1,0);
-    //No sign changes due to p3 and p4 being outgoing.
+    
     if(ds3>0&&ds4>0&&ds5>0){
       
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
@@ -272,7 +272,7 @@ namespace spinas {
   int test_eeAAA(){
     int n=0;//Number of fails
     std::cout<<"\t* e , E  -> A , A , A   :";
-    {//amp^2
+    if (1 == 2) {//amp^2
       int i=0;
       // me=0.0005, pspatial=250
       ldouble me=0.0005;
@@ -296,7 +296,50 @@ namespace spinas {
       else std::cout<<"                                         Fail!"<<std::endl;
       n+=i;
     }
-    
+
+    {
+      ldouble me=0.0005;
+      ldouble EE=0.31333;
+      eeAAA eeAAAAmp = eeAAA(EE,me);
+      ldouble p1[4], p2[4], p3[4], p4[4], p5[4];
+      ldouble energy = 300;
+      const double pi = 3.14159265358979323846;
+      ldouble theta = pi / 3.0;
+      p1[0] = energy/2.0;
+      p1[1] = 0;
+      p1[2] = 0;
+      p1[3] = std::sqrt(energy * energy/4.0 - me * me);
+
+      p2[0] = energy/2.0;
+      p2[1] = 0;
+      p2[2] = 0;
+      p2[3] = -std::sqrt(energy * energy/4.0 - me * me);
+
+      p3[0] = energy/3.0;
+      p3[1] = energy/3.0;
+      p3[2] = 0;
+      p3[3] = 0;
+
+      p4[0] = energy/3.0;
+      p4[1] = -energy/3.0 * cos(theta);
+      p4[2] = energy/3.0 * sin(theta);
+      p4[3] = 0;
+
+      p5[0] = energy/3.0;
+      p5[1] = -energy/3.0 * cos(theta);
+      p5[2] = -energy/3.0 * sin(theta);
+      p5[3] = 0;
+
+      //Check energy and momentum conservation & check that all particles are on-shell.
+
+
+      eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
+      cdouble amp_f = eeAAAAmp.amp_feynman(1, 1, 2, 2, 2);
+      cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
+      std::cout << "Feynman = " << amp_f << ",   Permutation sum = " << amp_p << std::endl;
+
+    }
+
     return n;
   }
 

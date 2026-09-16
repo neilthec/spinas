@@ -38,7 +38,7 @@ namespace spinas {
     //Set Masses
     void set_masses(const ldouble& masse);
     //Set Momenta
-    void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4], const ldouble mom5[5]);
+    void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4], const ldouble mom5[4]);
 
 
     //Amplitude
