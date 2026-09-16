@@ -48,18 +48,31 @@ namespace spinas {
     a24a = sproduct(ANGLE,&p2,&p4);
     s23s = sproduct(SQUARE,&p2,&p3);
     a23a = sproduct(ANGLE,&p2,&p3);
+    s25s = sproduct(SQUARE,&p3,&p5);
     s14s = sproduct(SQUARE,&p1,&p4);
     a14a = sproduct(ANGLE,&p1,&p4);
     s35s = sproduct(SQUARE,&p3,&p5);
     a35a = sproduct(ANGLE,&p3,&p5);
     s45s = sproduct(SQUARE,&p4,&p5);
     a45a = sproduct(ANGLE,&p4,&p5);
+    s315a = sproduct(SQUARE,&p3,&p1,&p5);
+    s423a = sproduct(SQUARE,&p4,&p2,&p3);
+    s453a = sproduct(SQUARE,&p4,&p5,&p3);
+    s414a = sproduct(SQUARE,&p4,&p1,&p4);
+    s434a = sproduct(SQUARE,&p4,&p3,&p4);
+    s525a = sproduct(SQUARE,&p5,&p2,&p5);
     s3123s = sproduct(SQUARE,&p3,&p1,&p2,&p3);
     a3123a = sproduct(ANGLE,&p3,&p1,&p2,&p3);
     s4124s = sproduct(SQUARE,&p4,&p1,&p2,&p4);
     a4124a = sproduct(ANGLE,&p4,&p1,&p2,&p4);
     s5125s = sproduct(SQUARE,&p5,&p1,&p2,&p5);
     a5125a = sproduct(ANGLE,&p5,&p1,&p2,&p5);
+    s3145s = sproduct(SQUARE,&p3,&p1,&p4,&p5);
+    s3154s = sproduct(SQUARE,&p3,&p1,&p5,&p4);
+    s4135s = sproduct(SQUARE,&p4,&p1,&p3,&p5);
+    s4153s = sproduct(SQUARE,&p4,&p1,&p5,&p3);
+    s5134s = sproduct(SQUARE,&p5,&p1,&p3,&p4);
+    s5143s = sproduct(SQUARE,&p5,&p1,&p4,&p3);
   }
   void eeAAA::set_masses(const ldouble& masse){
     me=masse;
@@ -84,18 +97,31 @@ namespace spinas {
     a24a.update();
     s23s.update();
     a23a.update();
+    s25s.update();
     s14s.update();
     a14a.update();
     s35s.update();
     a35a.update();
     s45s.update();
     a45a.update();
+    s315a.update();
+    s423a.update();
+    s453a.update();
+    s414a.update();
+    s434a.update();
+    s525a.update();
     s3123s.update();
     a3123a.update();
     s4124s.update();
     a4124a.update();
     s5125s.update();
     a5125a.update();
+    s3145s.update();
+    s3154s.update();
+    s4135s.update();
+    s4153s.update();
+    s5134s.update();
+    s5143s.update();
     //Propagator Momentum
     ldouble propS13P[4], propS14P[4], propS15P[4], propS23P[4], propS24P[4], propS25P[4];
     for(int j=0;j<4;j++){
@@ -125,10 +151,10 @@ namespace spinas {
     //No sign changes due to p3 and p4 being outgoing.
     if(ds3>0&&ds4>0&&ds5>0){
       //<12>([45]^2[3|p_1p_2|3](*2 denominators) + [35]^2)
-      return e*e*e*me*a12a.v(ds1,ds2)*(
-        s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)-(one/pDenS14/pDenS15)) +
-        s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)-(one/pDenS13/pDenS15)) +
-        s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)-(one/pDenS13/pDenS14))
+      return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
+        s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
+        s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)+(one/pDenS13/pDenS15)) +
+        s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)+(one/pDenS13/pDenS14))
       );
     }
     // else if(ds3<0&&ds4<0&&ds5<0){
@@ -145,6 +171,43 @@ namespace spinas {
     // }
     return cdouble(0,0);    
   }
+
+  cdouble eeAAA::amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
+    cdouble one(1,0);
+    //No sign changes due to p3 and p4 being outgoing.
+    if(ds3>0&&ds4>0&&ds5>0){
+
+      return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*a12a.v(ds1,ds2)*(
+        s3145s.v() / (pDenS13 * pDenS25 * a34a.v() * a45a.v())
+        - s3154s.v() / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
+        - s4135s.v() / (pDenS14 * pDenS25 * a34a.v() * a35a.v())
+        - s4153s.v() / (pDenS14 * pDenS23 * a35a.v() * a45a.v())
+        - s5134s.v() / (pDenS15 * pDenS24 * a35a.v() * a34a.v())
+        + s5143s.v() / (pDenS15 * pDenS23 * a45a.v() * a34a.v())
+      );
+    }
+
+    return cdouble(0,0);  
+  }
+
+    cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+    cdouble one(1,0);
+    //No sign changes due to p3 and p4 being outgoing.
+    if(ds3>0&&ds4>0&&ds5>0){
+      
+      return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
+      a23a.v(ds2)*s525a.v()*s414a.v()*s13s.v(ds1) + a23a.v(ds2)*s525a.v()*s434a.v()*s13s.v(ds1)
+      + me*a23a.v(ds2)*s525a.v()*s34s.v()*a14a.v(ds1) - me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
+      - me * a23a.v(ds2)*s45s.v()*s315a.v()*a14a.v(ds1) + me*s25s.v(ds2)*a35a.v()*s414a.v()*s13s.v(ds1) 
+      + me*s25s.v(ds2)*a35a.v()*s434a.v()*s13s.v(ds1) + me*me*s25s.v(ds2)*a35a.v()*s34s.v()*a14a.v(ds1) 
+      + me*s25s.v(ds2)*s423a.v()*a45a.v()*s13s.v(ds1) + me*s25s.v(ds2)*s453a.v()*a45a.v()*s13s.v(ds1) 
+      + s25s.v(ds2)*s423a.v()*s315a.v()*a14a.v(ds1) + s25s.v(ds2)*s453a.v()*s315a.v()*a14a.v(ds1)) / (
+        pDenS13 * pDenS25 * a34a.v()* a35a.v() * a45a.v()
+      );
+    }
+    return cdouble(0,0);    
+  }
+
   //set_momenta(...) must be called before amp2().
   ldouble eeAAA::amp2(){
     ldouble amp2 = 0;
@@ -164,7 +227,43 @@ namespace spinas {
     return amp2/24.0;
   }
 
+    //set_momenta(...) must be called before amp2().
+  ldouble eeAAA::amp2_feynman(){
+    ldouble amp2 = 0;
+    cdouble M;
 
+    //Sum over spins
+    for(int j1=-1;j1<=1;j1+=2)
+      for(int j2=-1;j2<=1;j2+=2)
+	for(int j3=-2;j3<=2;j3+=4)
+	  for(int j4=-2;j4<=2;j4+=4)
+    for(int j5=-2;j5<=2;j5+=4){
+	    M = amp_feynman(j1,j2,j3,j4,j5);
+	    amp2 += std::pow(std::abs(M),2);
+	  }
+    //Average over initial spins 1/2*1/2=1/4
+    //Symmetry factor for identical photons 1/6
+    return amp2/24.0;
+  }
+
+  //set_momenta(...) must be called before amp2().
+  ldouble eeAAA::amp2_permutation(){
+    ldouble amp2 = 0;
+    cdouble M;
+
+    //Sum over spins
+    for(int j1=-1;j1<=1;j1+=2)
+      for(int j2=-1;j2<=1;j2+=2)
+	for(int j3=-2;j3<=2;j3+=4)
+	  for(int j4=-2;j4<=2;j4+=4)
+    for(int j5=-2;j5<=2;j5+=4){
+	    M = amp_permutation(j1,j2,j3,j4,j5);
+	    amp2 += std::pow(std::abs(M),2);
+	  }
+    //Average over initial spins 1/2*1/2=1/4
+    //Symmetry factor for identical photons 1/6
+    return amp2/24.0;
+  }
   
 
 
@@ -173,30 +272,30 @@ namespace spinas {
   int test_eeAAA(){
     int n=0;//Number of fails
     std::cout<<"\t* e , E  -> A , A , A   :";
-    // {//amp^2
-    //   int i=0;
-    //   // me=0.0005, pspatial=250
-    //   ldouble me=0.0005;
-    //   ldouble EE=0.31333;
-    //   eeAA eeAAAmp = eeAA(EE,me);
-    //   ldouble pspatial=250;
-    //   ldouble dataCH[20] = {3.761473098865852E-01,1.196559098890515E-01,6.884618493553914E-02,4.748300512537967E-02,3.599742458224401E-02,2.906647080620063E-02,2.465909507168581E-02,2.184718935306326E-02,2.016436086672569E-02,1.937355800660445E-02,1.937355800660445E-02,2.016436086672569E-02,2.184718935306325E-02,2.465909507168581E-02,2.906647080620063E-02,3.599742458224402E-02,4.748300512537965E-02,6.884618493553911E-02,1.196559098890515E-01,3.761473098865843E-01};
-    //   i += eeAAAmp.test_2to2_amp2([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
-    //   i += eeAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
-    //   i += eeAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
-    //   i += eeAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
-    //   //Close to threshold
-    //   pspatial = 0.0001;
-    //   ldouble dataCH2[20] = {2.081251342993773E-02,2.079750983522615E-02,2.078115831044515E-02,2.076461266895772E-02,2.074882438042710E-02,2.073456777596373E-02,2.072246020291247E-02,2.071297785405228E-02,2.070646782725441E-02,2.070315683100089E-02,2.070315683100089E-02,2.070646782725441E-02,2.071297785405228E-02,2.072246020291247E-02,2.073456777596374E-02,2.074882438042710E-02,2.076461266895772E-02,2.078115831044515E-02,2.079750983522615E-02,2.081251342993773E-02};
-    //   i += eeAAAmp.test_2to2_amp2([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
-    //   i += eeAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
-    //   i += eeAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
-    //   i += eeAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
-    //   // Done
-    //   if(i==0) std::cout<<"                                         Pass"<<std::endl;
-    //   else std::cout<<"                                         Fail!"<<std::endl;
-    //   n+=i;
-    // }
+    {//amp^2
+      int i=0;
+      // me=0.0005, pspatial=250
+      ldouble me=0.0005;
+      ldouble EE=0.31333;
+      eeAAA eeAAAmp = eeAAA(EE,me);
+      ldouble pspatial=250;
+      ldouble dataCH[20] = {3.761473098865852E-01,1.196559098890515E-01,6.884618493553914E-02,4.748300512537967E-02,3.599742458224401E-02,2.906647080620063E-02,2.465909507168581E-02,2.184718935306326E-02,2.016436086672569E-02,1.937355800660445E-02,1.937355800660445E-02,2.016436086672569E-02,2.184718935306325E-02,2.465909507168581E-02,2.906647080620063E-02,3.599742458224402E-02,4.748300512537965E-02,6.884618493553911E-02,1.196559098890515E-01,3.761473098865843E-01};
+      i += eeAAAmp.test_2to2_amp2([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      i += eeAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      i += eeAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      i += eeAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH);
+      //Close to threshold
+      pspatial = 0.0001;
+      ldouble dataCH2[20] = {2.081251342993773E-02,2.079750983522615E-02,2.078115831044515E-02,2.076461266895772E-02,2.074882438042710E-02,2.073456777596373E-02,2.072246020291247E-02,2.071297785405228E-02,2.070646782725441E-02,2.070315683100089E-02,2.070315683100089E-02,2.070646782725441E-02,2.071297785405228E-02,2.072246020291247E-02,2.073456777596374E-02,2.074882438042710E-02,2.076461266895772E-02,2.078115831044515E-02,2.079750983522615E-02,2.081251342993773E-02};
+      i += eeAAAmp.test_2to2_amp2([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      i += eeAAAmp.test_2to2_amp2_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      i += eeAAAmp.test_2to2_amp2_boosts([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      i += eeAAAmp.test_2to2_amp2_boosts_and_rotations([&]() { return eeAAAmp.amp2(); }, me,me,0,0,pspatial,dataCH2);
+      // Done
+      if(i==0) std::cout<<"                                         Pass"<<std::endl;
+      else std::cout<<"                                         Fail!"<<std::endl;
+      n+=i;
+    }
     
     return n;
   }
