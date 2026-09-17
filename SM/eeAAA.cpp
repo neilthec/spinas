@@ -48,7 +48,7 @@ namespace spinas {
     a24a = sproduct(ANGLE,&p2,&p4);
     s23s = sproduct(SQUARE,&p2,&p3);
     a23a = sproduct(ANGLE,&p2,&p3);
-    s25s = sproduct(SQUARE,&p3,&p5);
+    s25s = sproduct(SQUARE,&p2,&p5);
     s14s = sproduct(SQUARE,&p1,&p4);
     a14a = sproduct(ANGLE,&p1,&p4);
     s35s = sproduct(SQUARE,&p3,&p5);
