@@ -334,9 +334,10 @@ namespace spinas {
 
 
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
+      cdouble amp_x = eeAAAAmp.amp(1, 1, 2, 2, 2);
       cdouble amp_f = eeAAAAmp.amp_feynman(1, 1, 2, 2, 2);
       cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
-      std::cout << "Feynman = " << amp_f << ",   Permutation sum = " << amp_p << std::endl;
+      std::cout << "x-factor = " << amp_x << ",   Permutation sum = " << amp_p << std::endl;
 
     }
 
