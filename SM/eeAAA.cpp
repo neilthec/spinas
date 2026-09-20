@@ -208,9 +208,8 @@ namespace spinas {
     if(ds3>0&&ds4>0&&ds5>0){
       
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
-      // a23a.v(ds2)*s525a.v()*s414a.v()*s13s.v(ds1) + a23a.v(ds2)*s525a.v()*s434a.v()*s13s.v(ds1)
-      // + me*a23a.v(ds2)*s525a.v()*s34s.v()*a14a.v(ds1) 
-      - me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
+      a23a.v(ds2)*s525a.v()*s414a.v()*s13s.v(ds1) + a23a.v(ds2)*s525a.v()*s434a.v()*s13s.v(ds1)
+      + me*a23a.v(ds2)*s525a.v()*s34s.v()*a14a.v(ds1) - me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
       - me * a23a.v(ds2)*s45s.v()*s315a.v()*a14a.v(ds1) + me*s25s.v(ds2)*a35a.v()*s414a.v()*s13s.v(ds1) 
       + me*s25s.v(ds2)*a35a.v()*s434a.v()*s13s.v(ds1) + me*me*s25s.v(ds2)*a35a.v()*s34s.v()*a14a.v(ds1) 
       + me*s25s.v(ds2)*s423a.v()*a45a.v()*s13s.v(ds1) + me*s25s.v(ds2)*s453a.v()*a45a.v()*s13s.v(ds1) 
@@ -366,6 +365,7 @@ namespace spinas {
       cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
       cdouble amp_fr = eeAAAAmp.amp_feynman_r(1, 1, 2, 2, 2);
       std::cout << " Feynman = " << amp_f << ",   Reduced = " << amp_fr << std::endl;
+      std::cout << " x-factor = " << amp_x << ", Permutation = " << amp_p << std::endl;
 
     }
 
