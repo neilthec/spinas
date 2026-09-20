@@ -26,7 +26,7 @@ namespace spinas {
     particle p1,p2,p3,p4,p5;
     propagator prop;
     cdouble pDenS13, pDenS14, pDenS15, pDenS23, pDenS24, pDenS25;
-    sproduct s34s, a34a, s12s, a12a, s13s, a13a, s24s, a24a, s23s, a23a, s25s, s14s, a14a, s35s, a35a, s45s, a45a, s315a, s423a, s453a, s414a, s434a, s525a, s3123s, a3123a, s4124s, a4124a, s5125s, a5125a;
+    sproduct s34s, a34a, s12s, a12a, s13s, a13a, a15a, s24s, a24a, s23s, a23a, s25s, a25a, s14s, a14a, s35s, a35a, s45s, a45a, s134a, s253a, s523a, s314a, s315a, s423a, s453a, s414a, s434a, s525a, s3123s, a3123a, s4124s, a4124a, s5125s, a5125a;
     sproduct s3145s, s3154s, s4135s, s4153s, s5134s, s5143s;
     ldouble sqrt2;
 
@@ -45,6 +45,7 @@ namespace spinas {
     cdouble amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);//Double the spins
     cdouble amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
+    cdouble amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     ldouble amp2();
     ldouble amp2_feynman();
     ldouble amp2_permutation();

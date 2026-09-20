@@ -49,13 +49,19 @@ namespace spinas {
     s23s = sproduct(SQUARE,&p2,&p3);
     a23a = sproduct(ANGLE,&p2,&p3);
     s25s = sproduct(SQUARE,&p2,&p5);
+    a25a = sproduct(ANGLE,&p2,&p5);
     s14s = sproduct(SQUARE,&p1,&p4);
     a14a = sproduct(ANGLE,&p1,&p4);
+    a15a = sproduct(ANGLE,&p1,&p5);
     s35s = sproduct(SQUARE,&p3,&p5);
     a35a = sproduct(ANGLE,&p3,&p5);
     s45s = sproduct(SQUARE,&p4,&p5);
     a45a = sproduct(ANGLE,&p4,&p5);
+    s134a = sproduct(SQUARE,&p1,&p3,&p4);
+    s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s315a = sproduct(SQUARE,&p3,&p1,&p5);
+    s253a = sproduct(SQUARE,&p2,&p5,&p3);
+    s523a = sproduct(SQUARE,&p5,&p2,&p3);
     s423a = sproduct(SQUARE,&p4,&p2,&p3);
     s453a = sproduct(SQUARE,&p4,&p5,&p3);
     s414a = sproduct(SQUARE,&p4,&p1,&p4);
@@ -93,18 +99,24 @@ namespace spinas {
     a12a.update();
     s13s.update();
     a13a.update();
+    a15a.update();
     s24s.update();
     a24a.update();
     s23s.update();
     a23a.update();
     s25s.update();
+    a25a.update();
     s14s.update();
     a14a.update();
     s35s.update();
     a35a.update();
     s45s.update();
     a45a.update();
+    s134a.update();
+    s314a.update();
     s315a.update();
+    s253a.update();
+    s523a.update();
     s423a.update();
     s453a.update();
     s414a.update();
@@ -202,6 +214,20 @@ namespace spinas {
       + me*s25s.v(ds2)*a35a.v()*s434a.v()*s13s.v(ds1) + me*me*s25s.v(ds2)*a35a.v()*s34s.v()*a14a.v(ds1) 
       + me*s25s.v(ds2)*s423a.v()*a45a.v()*s13s.v(ds1) + me*s25s.v(ds2)*s453a.v()*a45a.v()*s13s.v(ds1) 
       + s25s.v(ds2)*s423a.v()*s315a.v()*a14a.v(ds1) + s25s.v(ds2)*s453a.v()*s315a.v()*a14a.v(ds1)) / (
+        pDenS13 * pDenS25 * a34a.v()* a35a.v() * a45a.v()
+      );
+    }
+    return cdouble(0,0);    
+  }
+
+    cdouble eeAAA::amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+    cdouble one(1,0);
+    
+    if(ds3>0&&ds4>0&&ds5>0){
+      
+      return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
+      (-s134a.v(ds1)*s34s.v() + s14s.v(ds1)*s314a.v()) * a25a.v(ds2)*s523a.v() + 
+      a15a.v(ds1)*s314a.v()*(s45s.v()*s253a.v(ds2) + s24s.v(ds2)*s523a.v())) / (
         pDenS13 * pDenS25 * a34a.v()* a35a.v() * a45a.v()
       );
     }
@@ -337,7 +363,8 @@ namespace spinas {
       cdouble amp_x = eeAAAAmp.amp(1, 1, 2, 2, 2);
       cdouble amp_f = eeAAAAmp.amp_feynman(1, 1, 2, 2, 2);
       cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
-      std::cout << " Feynman = " << amp_f << ",   Permutation sum = " << amp_p << std::endl;
+      cdouble amp_fr = eeAAAAmp.amp_feynman_r(1, 1, 2, 2, 2);
+      std::cout << " Feynman = " << amp_f << ",   Reduced = " << amp_fr << std::endl;
 
     }
 
