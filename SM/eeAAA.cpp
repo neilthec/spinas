@@ -160,6 +160,7 @@ namespace spinas {
   //set_momenta(...) must be called before amp(...).
   cdouble eeAAA::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
     cdouble one(1,0);
+    cdouble two(2,0);
     //No sign changes due to p3 and p4 being outgoing.
     if(ds3>0&&ds4>0&&ds5>0){
       //<12>([45]^2[3|p_1p_2|3](*2 denominators) + [35]^2)
@@ -167,7 +168,7 @@ namespace spinas {
         s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
         s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)+(one/pDenS13/pDenS15)) +
         s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)+(one/pDenS13/pDenS14))
-      );
+      )/two;
     }
     // else if(ds3<0&&ds4<0&&ds5<0){
     //   //me<34>^2[12]
@@ -191,11 +192,11 @@ namespace spinas {
 
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
         s3145s.v() / (pDenS13 * pDenS25 * a34a.v() * a45a.v())
-        - s3154s.v() / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
-        - s4135s.v() / (pDenS14 * pDenS25 * a34a.v() * a35a.v())
-        - s4153s.v() / (pDenS14 * pDenS23 * a35a.v() * a45a.v())
-        - s5134s.v() / (pDenS15 * pDenS24 * a35a.v() * a34a.v())
-        + s5143s.v() / (pDenS15 * pDenS23 * a45a.v() * a34a.v())
+        // - s3154s.v() / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
+        // - s4135s.v() / (pDenS14 * pDenS25 * a34a.v() * a35a.v())
+        // - s4153s.v() / (pDenS14 * pDenS23 * a35a.v() * a45a.v())
+        // - s5134s.v() / (pDenS15 * pDenS24 * a35a.v() * a34a.v())
+        // + s5143s.v() / (pDenS15 * pDenS23 * a45a.v() * a34a.v())
       );
     }
 
