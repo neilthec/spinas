@@ -53,20 +53,23 @@ namespace spinas {
     a25a = sproduct(ANGLE,&p2,&p5);
     s14s = sproduct(SQUARE,&p1,&p4);
     a14a = sproduct(ANGLE,&p1,&p4);
+    s15s = sproduct(SQUARE,&p1,&p5);
     a15a = sproduct(ANGLE,&p1,&p5);
     s35s = sproduct(SQUARE,&p3,&p5);
     a35a = sproduct(ANGLE,&p3,&p5);
     s45s = sproduct(SQUARE,&p4,&p5);
     a45a = sproduct(ANGLE,&p4,&p5);
     s134a = sproduct(SQUARE,&p1,&p3,&p4);
+    s135a = sproduct(SQUARE,&p1,&p3,&p5);
+    s243a = sproduct(SQUARE,&p2,&p4,&p3);
+    s253a = sproduct(SQUARE,&p2,&p5,&p3);
     s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s315a = sproduct(SQUARE,&p3,&p1,&p5);
-    s253a = sproduct(SQUARE,&p2,&p5,&p3);
-    s523a = sproduct(SQUARE,&p5,&p2,&p3);
+    s414a = sproduct(SQUARE,&p4,&p1,&p4);
     s423a = sproduct(SQUARE,&p4,&p2,&p3);
     s453a = sproduct(SQUARE,&p4,&p5,&p3);
-    s414a = sproduct(SQUARE,&p4,&p1,&p4);
     s434a = sproduct(SQUARE,&p4,&p3,&p4);
+    s523a = sproduct(SQUARE,&p5,&p2,&p3);
     s525a = sproduct(SQUARE,&p5,&p2,&p5);
     s3123s = sproduct(SQUARE,&p3,&p1,&p2,&p3);
     a3123a = sproduct(ANGLE,&p3,&p1,&p2,&p3);
@@ -100,6 +103,7 @@ namespace spinas {
     a12a.update();
     s13s.update();
     a13a.update();
+    s15s.update();
     a15a.update();
     s24s.update();
     a24a.update();
@@ -114,14 +118,16 @@ namespace spinas {
     s45s.update();
     a45a.update();
     s134a.update();
+    s135a.update();
+    s243a.update();
+    s253a.update();
     s314a.update();
     s315a.update();
-    s253a.update();
-    s523a.update();
+    s414a.update();
     s423a.update();
     s453a.update();
-    s414a.update();
     s434a.update();
+    s523a.update();
     s525a.update();
     s3123s.update();
     a3123a.update();
@@ -222,10 +228,14 @@ namespace spinas {
     
     if(ds3>0&&ds4>0&&ds5>0){
       
-      return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
+      return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e / (a34a.v() * a35a.v() * a45a.v()) * ((
       (-s134a.v(ds1)*s34s.v() - s14s.v(ds1)*s314a.v()) * a25a.v(ds2)*s523a.v() + 
       a15a.v(ds1)*s314a.v()*(s45s.v()*s253a.v(ds2) - s24s.v(ds2)*s523a.v())) / (
-        pDenS13 * pDenS25 * a34a.v() * a35a.v() * a45a.v()
+        pDenS13 * pDenS25) 
+      
+      + ((-s135a.v(ds1) * s35s.v() + s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
+      a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) - s25s.v(ds2) * s423a.v())) / (
+        pDenS13 * pDenS24)
       );
     }
 
@@ -628,16 +638,16 @@ namespace spinas {
         eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
         cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
-        cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+        // cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
         cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
         cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-        std::cout << "  Feynman     = " << amp_f << "\n";
+        // std::cout << "  Feynman     = " << amp_f << "\n";
         std::cout << "  Reduced     = " << amp_fr << "\n";
         std::cout << "  x-factor    = " << amp_x << "\n";
         std::cout << "  Permutation = " << amp_p << "\n";
-        std::cout << "  |Feynman - Reduced| = " << std::abs(amp_f - amp_fr) << "\n";
+        // std::cout << "  |Feynman - Reduced| = " << std::abs(amp_f - amp_fr) << "\n";
       }
 
       std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
