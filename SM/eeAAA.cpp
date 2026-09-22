@@ -195,7 +195,7 @@ namespace spinas {
     return cdouble(0,0);  
   }
 
-    cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+  cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
     
     cdouble one(1,0);
     
@@ -215,7 +215,7 @@ namespace spinas {
     return cdouble(0,0);    
   }
 
-    cdouble eeAAA::amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+  cdouble eeAAA::amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
     
     cdouble one(1,0);
     
@@ -289,7 +289,53 @@ namespace spinas {
   }
   
 
+  bool check_phase_space(
+    const ldouble p1[4],
+    const ldouble p2[4],
+    const ldouble p3[4],
+    const ldouble p4[4],
+    const ldouble p5[4],
+    ldouble m1,
+    ldouble m2,
+    ldouble m3,
+    ldouble m4,
+    ldouble m5,
+    ldouble tol
+    ){
+      // Momentum conservation
+      for(int j=0; j<4; j++){
+          ldouble diff =
+              p1[j] + p2[j] - p3[j] - p4[j] - p5[j];
 
+          if(std::abs(diff) > tol)
+              return false;
+      }
+
+      auto p_squared = [](const ldouble p[4]){
+          return p[0]*p[0]
+              - p[1]*p[1]
+              - p[2]*p[2]
+              - p[3]*p[3];
+      };
+
+      // On-shell conditions
+      if(std::abs(p_squared(p1) - m1*m1) > tol)
+          return false;
+
+      if(std::abs(p_squared(p2) - m2*m2) > tol)
+          return false;
+
+      if(std::abs(p_squared(p3) - m3*m3) > tol)
+          return false;
+
+      if(std::abs(p_squared(p4) - m4*m4) > tol)
+          return false;
+
+      if(std::abs(p_squared(p5) - m5*m5) > tol)
+          return false;
+
+      return true;
+  }
 
   //  Tests
   int test_eeAAA(){
@@ -353,62 +399,17 @@ namespace spinas {
       p5[2] = -energy*std::sqrt(3.0)/6.0;
       p5[3] = 0;
 
-      // Check energy and momentum conservation
-      ldouble pTotIn[4], pTotOut[4];
-      ldouble conservation_error = 0;
-
-      for(int j=0; j<4; j++){
-        pTotIn[j]  = p1[j] + p2[j];
-        pTotOut[j] = p3[j] + p4[j] + p5[j];
-
-        conservation_error += std::abs(pTotIn[j] - pTotOut[j]);
-      }
-
-      std::cout << "\nEnergy-momentum conservation:\n";
-      std::cout << "  p1 + p2 = ("
-                << pTotIn[0] << ", "
-                << pTotIn[1] << ", "
-                << pTotIn[2] << ", "
-                << pTotIn[3] << ")\n";
-
-      std::cout << "  p3 + p4 + p5 = ("
-                << pTotOut[0] << ", "
-                << pTotOut[1] << ", "
-                << pTotOut[2] << ", "
-                << pTotOut[3] << ")\n";
-
-      std::cout << "  conservation error = "
-                << conservation_error << "\n";
-
-
-      // Check on-shell conditions
-      auto mass_squared = [](const ldouble p[4]) {
-        return p[0]*p[0]
-             - p[1]*p[1]
-             - p[2]*p[2]
-             - p[3]*p[3];
-      };
-
-      ldouble p1sq = mass_squared(p1);
-      ldouble p2sq = mass_squared(p2);
-      ldouble p3sq = mass_squared(p3);
-      ldouble p4sq = mass_squared(p4);
-      ldouble p5sq = mass_squared(p5);
-
-      std::cout << "\nOn-shell conditions:\n";
-      std::cout << "  p1^2 = " << p1sq
-                << "   expected = " << me*me << "\n";
-      std::cout << "  p2^2 = " << p2sq
-                << "   expected = " << me*me << "\n";
-      std::cout << "  p3^2 = " << p3sq
-                << "   expected = 0\n";
-      std::cout << "  p4^2 = " << p4sq
-                << "   expected = 0\n";
-      std::cout << "  p5^2 = " << p5sq
-                << "   expected = 0\n";
-
 
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
+
+      if(check_phase_space(
+       p1,p2,p3,p4,p5,
+       me,me,0,0,0,
+       1e-10))
+        std::cout << "Phase space: PASS\n";
+      else
+        std::cout << "Phase space: FAIL\n";
+        
       cdouble amp_x = eeAAAAmp.amp(1, 1, 2, 2, 2);
       cdouble amp_f = eeAAAAmp.amp_feynman(1, 1, 2, 2, 2);
       cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
