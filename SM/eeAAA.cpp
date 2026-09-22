@@ -601,112 +601,50 @@ namespace spinas {
 
       const int Npoints = 10;
 
-      std::cout << "\n";
-      std::cout << "==============================================================================\n";
-      std::cout << "\n";
-      std::cout << "Comparing Feynman and Permutation Sum Amplitudes\n";
-      std::cout << "\n";
-      std::cout << "==============================================================================\n";
-
       int point = 0;
       int attempts = 0;
 
       while(point < Npoints){
 
-          attempts++;
+        attempts++;
 
-          bool generated = make_random_phase_space(
-              energy,
-              me,
-              p1,p2,p3,p4,p5,
-              rng
-          );
+        bool generated = make_random_phase_space(energy, me, p1, p2, p3, p4, p5, rng);
 
-          if(!generated)
-              continue;
+        if(!generated)
+          continue;
 
-          // Check phase space
-          bool phase_space_ok = check_phase_space(
-              p1,p2,p3,p4,p5,
-              me,me,0,0,0,
-              1e-10
-          );
+        // Check phase space
+        bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
 
-          if(!phase_space_ok)
-              continue;
+        if(!phase_space_ok)
+          continue;
 
-          point++;
+        point++;
 
-          std::cout << "\nPhase-space point "
-                    << point << "\n";
+        std::cout << "\nPhase-space point " << point << "\n";
 
-          std::cout << "  Phase space: PASS\n";
+        std::cout << "  Phase space: PASS\n";
 
-          // --------------------------------------------------------
-          // Set momenta
-          // --------------------------------------------------------
+        eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
-          eeAAAAmp.set_momenta(
-              p1,p2,p3,p4,p5
-          );
+        cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
+        cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+        cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
+        cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
-          // --------------------------------------------------------
-          // Calculate amplitudes
-          // --------------------------------------------------------
 
-          cdouble amp_x =
-              eeAAAAmp.amp(1,1,2,2,2);
-
-          cdouble amp_f =
-              eeAAAAmp.amp_feynman(1,1,2,2,2);
-
-          cdouble amp_p =
-              eeAAAAmp.amp_permutation(1,1,2,2,2);
-
-          cdouble amp_fr =
-              eeAAAAmp.amp_feynman_r(1,1,2,2,2);
-
-          // --------------------------------------------------------
-          // Print results
-          // --------------------------------------------------------
-
-          std::cout
-              << "  Feynman     = "
-              << amp_f << "\n";
-
-          std::cout
-              << "  Reduced     = "
-              << amp_fr << "\n";
-
-          std::cout
-              << "  x-factor    = "
-              << amp_x << "\n";
-
-          std::cout
-              << "  Permutation = "
-              << amp_p << "\n";
-
-          // --------------------------------------------------------
-          // Compare Feynman and reduced expressions
-          // --------------------------------------------------------
-
-          std::cout
-              << "  |Feynman - Reduced| = "
-              << std::abs(amp_f - amp_fr)
-              << "\n";
+        std::cout << "  Feynman     = " << amp_f << "\n";
+        std::cout << "  Reduced     = " << amp_fr << "\n";
+        std::cout << "  x-factor    = " << amp_x << "\n";
+        std::cout << "  Permutation = " << amp_p << "\n";
+        std::cout << "  |Feynman - Reduced| = " << std::abs(amp_f - amp_fr) << "\n";
       }
 
-      std::cout << "\nGenerated "
-                << Npoints
-                << " valid phase-space points after "
-                << attempts
-                << " attempts.\n";
-    } 
+      std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
+    }
 
     return n;
   }
 
-  
-  
 
 }
