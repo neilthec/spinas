@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include <cmath>
 #include <complex>
+#include <random>
 
 #include "spinas.h"
 #include "include/eeAAA.h"
@@ -412,6 +413,150 @@ namespace spinas {
     );
   }
 
+  bool make_random_phase_space(
+    ldouble energy,
+    ldouble me,
+    ldouble p1[4],
+    ldouble p2[4],
+    ldouble p3[4],
+    ldouble p4[4],
+    ldouble p5[4],
+    std::mt19937& rng
+    ){
+    const ldouble pi = 3.14159265358979323846;
+
+    std::uniform_real_distribution<ldouble> U(0.0, 1.0);
+
+    // ------------------------------------------------------------
+    // Incoming e- and e+ in the CM frame
+    // ------------------------------------------------------------
+
+    p1[0] = energy/2.0;
+    p1[1] = 0.0;
+    p1[2] = 0.0;
+    p1[3] = std::sqrt(energy*energy/4.0 - me*me);
+
+    p2[0] = energy/2.0;
+    p2[1] = 0.0;
+    p2[2] = 0.0;
+    p2[3] = -p1[3];
+
+    // ------------------------------------------------------------
+    // Random photon 3 energy
+    //
+    // Keep away from the soft endpoint E3 = 0 and
+    // the endpoint E3 = energy/2.
+    // ------------------------------------------------------------
+
+    ldouble E3 =
+        energy * (0.05 + 0.40*U(rng));
+
+    // ------------------------------------------------------------
+    // Random direction for photon 3
+    //
+    // Uniform in solid angle:
+    // cos(theta), not theta, is sampled uniformly.
+    // ------------------------------------------------------------
+
+    ldouble cos_theta3 = 2.0*U(rng) - 1.0;
+    ldouble theta3 = std::acos(cos_theta3);
+    ldouble phi3 = 2.0*pi*U(rng);
+
+    // ------------------------------------------------------------
+    // Random direction for photon 4
+    // ------------------------------------------------------------
+
+    ldouble cos_theta4 = 2.0*U(rng) - 1.0;
+    ldouble theta4 = std::acos(cos_theta4);
+    ldouble phi4 = 2.0*pi*U(rng);
+
+    // ------------------------------------------------------------
+    // Construct photon directions
+    // ------------------------------------------------------------
+
+    ldouble n3[3] = {
+        std::sin(theta3)*std::cos(phi3),
+        std::sin(theta3)*std::sin(phi3),
+        std::cos(theta3)
+    };
+
+    ldouble n4[3] = {
+        std::sin(theta4)*std::cos(phi4),
+        std::sin(theta4)*std::sin(phi4),
+        std::cos(theta4)
+    };
+
+    // Dot product n3 . n4
+    ldouble c =
+        n3[0]*n4[0] +
+        n3[1]*n4[1] +
+        n3[2]*n4[2];
+
+    // ------------------------------------------------------------
+    // Solve energy conservation for E4
+    // ------------------------------------------------------------
+
+    ldouble denominator =
+        2.0*(energy - E3*(1.0-c));
+
+    if(std::abs(denominator) < 1e-14)
+        return false;
+
+    ldouble E4 =
+        (energy*energy - 2.0*energy*E3)
+        / denominator;
+
+    // Reject unphysical energies
+    if(!std::isfinite(E4) || E4 <= 0.0)
+        return false;
+
+    // ------------------------------------------------------------
+    // Photon 3
+    // ------------------------------------------------------------
+
+    p3[0] = E3;
+    p3[1] = E3*n3[0];
+    p3[2] = E3*n3[1];
+    p3[3] = E3*n3[2];
+
+    // ------------------------------------------------------------
+    // Photon 4
+    // ------------------------------------------------------------
+
+    p4[0] = E4;
+    p4[1] = E4*n4[0];
+    p4[2] = E4*n4[1];
+    p4[3] = E4*n4[2];
+
+    // ------------------------------------------------------------
+    // Photon 5 from spatial momentum conservation
+    // ------------------------------------------------------------
+
+    p5[1] = -(p3[1] + p4[1]);
+    p5[2] = -(p3[2] + p4[2]);
+    p5[3] = -(p3[3] + p4[3]);
+
+    p5[0] = std::sqrt(
+        p5[1]*p5[1] +
+        p5[2]*p5[2] +
+        p5[3]*p5[3]
+    );
+
+    // ------------------------------------------------------------
+    // Check all components are finite
+    // ------------------------------------------------------------
+
+    for(int i=0; i<4; i++){
+        if(!std::isfinite(p1[i])) return false;
+        if(!std::isfinite(p2[i])) return false;
+        if(!std::isfinite(p3[i])) return false;
+        if(!std::isfinite(p4[i])) return false;
+        if(!std::isfinite(p5[i])) return false;
+    }
+
+    return true;
+}
+
   //  Tests
   int test_eeAAA(){
     int n=0;//Number of fails
@@ -451,64 +596,112 @@ namespace spinas {
 
       ldouble p1[4], p2[4], p3[4], p4[4], p5[4];
 
-      const double pi = 3.14159265358979323846;
+      // Fixed seed makes the test reproducible.
+      std::mt19937 rng(12345);
 
-      // Generate 10 phase-space points
-      for(int point = 0; point < 10; point++){
+      const int Npoints = 10;
 
-        // Choose kinematic parameters for this point
-        ldouble E3 = 20.0 + point*20.0;
+      std::cout << "\n";
+      std::cout << "==============================================================================\n";
+      std::cout << "\n";
+      std::cout << "Comparing Feynman and Permutation Sum Amplitudes\n";
+      std::cout << "\n";
+      std::cout << "==============================================================================\n";
 
-        ldouble theta3 = 0.4 + 0.15*point;
-        ldouble phi3   = 0.3 + 0.4*point;
+      int point = 0;
+      int attempts = 0;
 
-        ldouble theta4 = 1.2 + 0.10*point;
-        ldouble phi4   = 1.0 + 0.5*point;
+      while(point < Npoints){
 
-        make_phase_space(
-            energy,
-            me,
-            E3,
-            theta3,
-            phi3,
-            theta4,
-            phi4,
-            p1,p2,p3,p4,p5
-        );
+          attempts++;
 
-        std::cout << "\nPhase-space point " << point+1 << "\n";
+          bool generated = make_random_phase_space(
+              energy,
+              me,
+              p1,p2,p3,p4,p5,
+              rng
+          );
 
-        // Check conservation and on-shell conditions
-        if(check_phase_space(
+          if(!generated)
+              continue;
+
+          // Check phase space
+          bool phase_space_ok = check_phase_space(
               p1,p2,p3,p4,p5,
               me,me,0,0,0,
-              1e-10))
+              1e-10
+          );
+
+          if(!phase_space_ok)
+              continue;
+
+          point++;
+
+          std::cout << "\nPhase-space point "
+                    << point << "\n";
+
           std::cout << "  Phase space: PASS\n";
-        else
-          std::cout << "  Phase space: FAIL\n";
 
-        // Set momenta
-        eeAAAAmp.set_momenta(p1,p2,p3,p4,p5);
+          // --------------------------------------------------------
+          // Set momenta
+          // --------------------------------------------------------
 
-        // Calculate amplitudes
-        cdouble amp_x =
-            eeAAAAmp.amp(1,1,2,2,2);
+          eeAAAAmp.set_momenta(
+              p1,p2,p3,p4,p5
+          );
 
-        cdouble amp_f =
-            eeAAAAmp.amp_feynman(1,1,2,2,2);
+          // --------------------------------------------------------
+          // Calculate amplitudes
+          // --------------------------------------------------------
 
-        cdouble amp_p =
-            eeAAAAmp.amp_permutation(1,1,2,2,2);
+          cdouble amp_x =
+              eeAAAAmp.amp(1,1,2,2,2);
 
-        cdouble amp_fr =
-            eeAAAAmp.amp_feynman_r(1,1,2,2,2);
+          cdouble amp_f =
+              eeAAAAmp.amp_feynman(1,1,2,2,2);
 
-        std::cout << "  Feynman = " << amp_f << "\n";
-        std::cout << "  Reduced  = " << amp_fr << "\n";
-        std::cout << "  x-factor = " << amp_x << "\n";
-        std::cout << "  Permutation = " << amp_p << "\n";
+          cdouble amp_p =
+              eeAAAAmp.amp_permutation(1,1,2,2,2);
+
+          cdouble amp_fr =
+              eeAAAAmp.amp_feynman_r(1,1,2,2,2);
+
+          // --------------------------------------------------------
+          // Print results
+          // --------------------------------------------------------
+
+          std::cout
+              << "  Feynman     = "
+              << amp_f << "\n";
+
+          std::cout
+              << "  Reduced     = "
+              << amp_fr << "\n";
+
+          std::cout
+              << "  x-factor    = "
+              << amp_x << "\n";
+
+          std::cout
+              << "  Permutation = "
+              << amp_p << "\n";
+
+          // --------------------------------------------------------
+          // Compare Feynman and reduced expressions
+          // --------------------------------------------------------
+
+          std::cout
+              << "  |Feynman - Reduced| = "
+              << std::abs(amp_f - amp_fr)
+              << "\n";
       }
-    }
+
+      std::cout << "\nGenerated "
+                << Npoints
+                << " valid phase-space points after "
+                << attempts
+                << " attempts.\n";
+    } 
 
     return n;
   }
