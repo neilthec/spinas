@@ -61,15 +61,19 @@ namespace spinas {
     a45a = sproduct(ANGLE,&p4,&p5);
     s134a = sproduct(SQUARE,&p1,&p3,&p4);
     s135a = sproduct(SQUARE,&p1,&p3,&p5);
+    s143a = sproduct(SQUARE,&p1,&p4,&p3);
     s243a = sproduct(SQUARE,&p2,&p4,&p3);
     s253a = sproduct(SQUARE,&p2,&p5,&p3);
+    s254a = sproduct(SQUARE,&p2,&p5,&p4);
     s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s315a = sproduct(SQUARE,&p3,&p1,&p5);
+    s413a = sproduct(SQUARE,&p4,&p1,&p3);
     s414a = sproduct(SQUARE,&p4,&p1,&p4);
     s423a = sproduct(SQUARE,&p4,&p2,&p3);
     s453a = sproduct(SQUARE,&p4,&p5,&p3);
     s434a = sproduct(SQUARE,&p4,&p3,&p4);
     s523a = sproduct(SQUARE,&p5,&p2,&p3);
+    s524a = sproduct(SQUARE,&p5,&p2,&p4);
     s525a = sproduct(SQUARE,&p5,&p2,&p5);
     s3123s = sproduct(SQUARE,&p3,&p1,&p2,&p3);
     a3123a = sproduct(ANGLE,&p3,&p1,&p2,&p3);
@@ -119,15 +123,19 @@ namespace spinas {
     a45a.update();
     s134a.update();
     s135a.update();
+    s143a.update();
     s243a.update();
     s253a.update();
+    s254a.update();
     s314a.update();
     s315a.update();
+    s413a.update();
     s414a.update();
     s423a.update();
     s453a.update();
     s434a.update();
     s523a.update();
+    s524a.update();
     s525a.update();
     s3123s.update();
     a3123a.update();
@@ -236,6 +244,10 @@ namespace spinas {
       + ((-s135a.v(ds1) * s35s.v() - s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
       a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) + s25s.v(ds2) * s423a.v())) / (
         pDenS13 * pDenS24)
+
+      + ((s143a.v(ds1)*s34s.v() - s13s.v(ds1)*s413a.v()) * a25a.v(ds2)*s524a.v() + 
+      a15a.v(ds1)*s413a.v()*(s35s.v()*s254a.v(ds2) - s23s.v(ds2)*s524a.v())) / (
+        pDenS14 * pDenS25) 
       );
     }
 
