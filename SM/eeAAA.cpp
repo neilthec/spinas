@@ -339,21 +339,73 @@ namespace spinas {
       p2[3] = -std::sqrt(energy * energy/4.0 - me * me);
 
       p3[0] = energy/3.0;
-      p3[1] = 0;
-      p3[2] = energy/3.0;
+      p3[1] = energy/3.0;
+      p3[2] = 0;
       p3[3] = 0;
 
       p4[0] = energy/3.0;
-      p4[1] = 0;
-      p4[2] = -energy/3.0 * cos(theta);
-      p4[3] = energy/3.0 * sin(theta);
+      p4[1] = -energy/6.0;
+      p4[2] =  energy*std::sqrt(3.0)/6.0;
+      p4[3] = 0;
 
       p5[0] = energy/3.0;
-      p5[1] = 0;
-      p5[2] = -energy/3.0 * cos(theta);
-      p5[3] = -energy/3.0 * sin(theta);
+      p5[1] = -energy/6.0;
+      p5[2] = -energy*std::sqrt(3.0)/6.0;
+      p5[3] = 0;
 
-      //Check energy and momentum conservation & check that all particles are on-shell.
+      // Check energy and momentum conservation
+      ldouble pTotIn[4], pTotOut[4];
+      ldouble conservation_error = 0;
+
+      for(int j=0; j<4; j++){
+        pTotIn[j]  = p1[j] + p2[j];
+        pTotOut[j] = p3[j] + p4[j] + p5[j];
+
+        conservation_error += std::abs(pTotIn[j] - pTotOut[j]);
+      }
+
+      std::cout << "\nEnergy-momentum conservation:\n";
+      std::cout << "  p1 + p2 = ("
+                << pTotIn[0] << ", "
+                << pTotIn[1] << ", "
+                << pTotIn[2] << ", "
+                << pTotIn[3] << ")\n";
+
+      std::cout << "  p3 + p4 + p5 = ("
+                << pTotOut[0] << ", "
+                << pTotOut[1] << ", "
+                << pTotOut[2] << ", "
+                << pTotOut[3] << ")\n";
+
+      std::cout << "  conservation error = "
+                << conservation_error << "\n";
+
+
+      // Check on-shell conditions
+      auto mass_squared = [](const ldouble p[4]) {
+        return p[0]*p[0]
+             - p[1]*p[1]
+             - p[2]*p[2]
+             - p[3]*p[3];
+      };
+
+      ldouble p1sq = mass_squared(p1);
+      ldouble p2sq = mass_squared(p2);
+      ldouble p3sq = mass_squared(p3);
+      ldouble p4sq = mass_squared(p4);
+      ldouble p5sq = mass_squared(p5);
+
+      std::cout << "\nOn-shell conditions:\n";
+      std::cout << "  p1^2 = " << p1sq
+                << "   expected = " << me*me << "\n";
+      std::cout << "  p2^2 = " << p2sq
+                << "   expected = " << me*me << "\n";
+      std::cout << "  p3^2 = " << p3sq
+                << "   expected = 0\n";
+      std::cout << "  p4^2 = " << p4sq
+                << "   expected = 0\n";
+      std::cout << "  p5^2 = " << p5sq
+                << "   expected = 0\n";
 
 
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
