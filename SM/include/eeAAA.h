@@ -53,7 +53,22 @@ namespace spinas {
       ldouble m5,
       ldouble tol
     );
-    
+
+    void make_phase_space(
+      ldouble energy,
+      ldouble me,
+      ldouble E3,
+      ldouble theta3,
+      ldouble phi3,
+      ldouble theta4,
+      ldouble phi4,
+      ldouble p1[4],
+      ldouble p2[4],
+      ldouble p3[4],
+      ldouble p4[4],
+      ldouble p5[4]
+    );
+
     //Amplitude
     cdouble amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);//Double the spins
     cdouble amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);

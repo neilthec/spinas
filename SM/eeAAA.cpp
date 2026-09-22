@@ -337,6 +337,81 @@ namespace spinas {
       return true;
   }
 
+  void make_phase_space(
+    ldouble energy,
+    ldouble me,
+    ldouble E3,
+    ldouble theta3,
+    ldouble phi3,
+    ldouble theta4,
+    ldouble phi4,
+    ldouble p1[4],
+    ldouble p2[4],
+    ldouble p3[4],
+    ldouble p4[4],
+    ldouble p5[4]
+    ){
+    // Incoming e- and e+ in CM frame
+    p1[0] = energy/2.0;
+    p1[1] = 0;
+    p1[2] = 0;
+    p1[3] = std::sqrt(energy*energy/4.0 - me*me);
+
+    p2[0] = energy/2.0;
+    p2[1] = 0;
+    p2[2] = 0;
+    p2[3] = -p1[3];
+
+    // Photon 3 direction
+    ldouble n3[3] = {
+        std::sin(theta3)*std::cos(phi3),
+        std::sin(theta3)*std::sin(phi3),
+        std::cos(theta3)
+    };
+
+    // Photon 4 direction
+    ldouble n4[3] = {
+        std::sin(theta4)*std::cos(phi4),
+        std::sin(theta4)*std::sin(phi4),
+        std::cos(theta4)
+    };
+
+    // n3 . n4
+    ldouble c =
+        n3[0]*n4[0] +
+        n3[1]*n4[1] +
+        n3[2]*n4[2];
+
+    // Determine E4 from energy-momentum conservation
+    ldouble E4 =
+        (energy*energy - 2.0*energy*E3) /
+        (2.0*(energy - E3*(1.0-c)));
+
+    // Photon 3
+    p3[0] = E3;
+    p3[1] = E3*n3[0];
+    p3[2] = E3*n3[1];
+    p3[3] = E3*n3[2];
+
+    // Photon 4
+    p4[0] = E4;
+    p4[1] = E4*n4[0];
+    p4[2] = E4*n4[1];
+    p4[3] = E4*n4[2];
+
+    // Photon 5 from momentum conservation
+    p5[1] = -(p3[1] + p4[1]);
+    p5[2] = -(p3[2] + p4[2]);
+    p5[3] = -(p3[3] + p4[3]);
+
+    // Since photon 5 is massless, E5 = |p5|
+    p5[0] = std::sqrt(
+        p5[1]*p5[1] +
+        p5[2]*p5[2] +
+        p5[3]*p5[3]
+    );
+  }
+
   //  Tests
   int test_eeAAA(){
     int n=0;//Number of fails
@@ -367,58 +442,72 @@ namespace spinas {
     }
 
     {
-      ldouble me=0.0005;
-      ldouble EE=0.31333;
-      eeAAA eeAAAAmp = eeAAA(EE,me);
+      ldouble me = 0.0005;
+      ldouble EE = 0.31333;
+
+      eeAAA eeAAAAmp = eeAAA(EE, me);
+
+      ldouble energy = 300.0;
+
       ldouble p1[4], p2[4], p3[4], p4[4], p5[4];
-      ldouble energy = 300;
+
       const double pi = 3.14159265358979323846;
-      ldouble theta = pi / 3.0;
-      p1[0] = energy/2.0;
-      p1[1] = 0;
-      p1[2] = 0;
-      p1[3] = std::sqrt(energy * energy/4.0 - me * me);
 
-      p2[0] = energy/2.0;
-      p2[1] = 0;
-      p2[2] = 0;
-      p2[3] = -std::sqrt(energy * energy/4.0 - me * me);
+      // Generate 10 phase-space points
+      for(int point = 0; point < 10; point++){
 
-      p3[0] = energy/3.0;
-      p3[1] = energy/3.0;
-      p3[2] = 0;
-      p3[3] = 0;
+        // Choose kinematic parameters for this point
+        ldouble E3 = 20.0 + point*20.0;
 
-      p4[0] = energy/3.0;
-      p4[1] = -energy/6.0;
-      p4[2] =  energy*std::sqrt(3.0)/6.0;
-      p4[3] = 0;
+        ldouble theta3 = 0.4 + 0.15*point;
+        ldouble phi3   = 0.3 + 0.4*point;
 
-      p5[0] = energy/3.0;
-      p5[1] = -energy/6.0;
-      p5[2] = -energy*std::sqrt(3.0)/6.0;
-      p5[3] = 0;
+        ldouble theta4 = 1.2 + 0.10*point;
+        ldouble phi4   = 1.0 + 0.5*point;
 
+        make_phase_space(
+            energy,
+            me,
+            E3,
+            theta3,
+            phi3,
+            theta4,
+            phi4,
+            p1,p2,p3,p4,p5
+        );
 
-      if(check_phase_space(
-       p1,p2,p3,p4,p5,
-       me,me,0,0,0,
-       1e-10))
-        std::cout << " Phase space: PASS\n";
-      else
-        std::cout << " Phase space: FAIL\n";
+        std::cout << "\nPhase-space point " << point+1 << "\n";
 
-      eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
-      cdouble amp_x = eeAAAAmp.amp(1, 1, 2, 2, 2);
-      cdouble amp_f = eeAAAAmp.amp_feynman(1, 1, 2, 2, 2);
-      cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
-      cdouble amp_fr = eeAAAAmp.amp_feynman_r(1, 1, 2, 2, 2);
-      std::cout << " Feynman = " << amp_f
-                << ",   Reduced = " << amp_fr << std::endl;
+        // Check conservation and on-shell conditions
+        if(check_phase_space(
+              p1,p2,p3,p4,p5,
+              me,me,0,0,0,
+              1e-10))
+          std::cout << "  Phase space: PASS\n";
+        else
+          std::cout << "  Phase space: FAIL\n";
 
-      std::cout << " x-factor = " << amp_x
-                << ",             Permutation = " << amp_p << std::endl;
+        // Set momenta
+        eeAAAAmp.set_momenta(p1,p2,p3,p4,p5);
 
+        // Calculate amplitudes
+        cdouble amp_x =
+            eeAAAAmp.amp(1,1,2,2,2);
+
+        cdouble amp_f =
+            eeAAAAmp.amp_feynman(1,1,2,2,2);
+
+        cdouble amp_p =
+            eeAAAAmp.amp_permutation(1,1,2,2,2);
+
+        cdouble amp_fr =
+            eeAAAAmp.amp_feynman_r(1,1,2,2,2);
+
+        std::cout << "  Feynman = " << amp_f << "\n";
+        std::cout << "  Reduced  = " << amp_fr << "\n";
+        std::cout << "  x-factor = " << amp_x << "\n";
+        std::cout << "  Permutation = " << amp_p << "\n";
+      }
     }
 
     return n;
