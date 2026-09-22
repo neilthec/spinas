@@ -416,7 +416,7 @@ namespace spinas {
   int test_eeAAA(){
     int n=0;//Number of fails
     std::cout<<"\t* e , E  -> A , A , A   :";
-    if (1 == 2) {//amp^2
+    if (2 == 2) {//amp^2
       int i=0;
       // me=0.0005, pspatial=250
       ldouble me=0.0005;
