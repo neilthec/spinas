@@ -40,7 +40,20 @@ namespace spinas {
     //Set Momenta
     void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4], const ldouble mom5[4]);
 
-
+    bool check_phase_space(
+      const ldouble p1[4],
+      const ldouble p2[4],
+      const ldouble p3[4],
+      const ldouble p4[4],
+      const ldouble p5[4],
+      ldouble m1,
+      ldouble m2,
+      ldouble m3,
+      ldouble m4,
+      ldouble m5,
+      ldouble tol
+    );
+    
     //Amplitude
     cdouble amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);//Double the spins
     cdouble amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);

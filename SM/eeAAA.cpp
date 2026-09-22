@@ -290,18 +290,18 @@ namespace spinas {
   
 
   bool check_phase_space(
-    const ldouble p1[4],
-    const ldouble p2[4],
-    const ldouble p3[4],
-    const ldouble p4[4],
-    const ldouble p5[4],
-    ldouble m1,
-    ldouble m2,
-    ldouble m3,
-    ldouble m4,
-    ldouble m5,
-    ldouble tol
-    ){
+      const ldouble p1[4],
+      const ldouble p2[4],
+      const ldouble p3[4],
+      const ldouble p4[4],
+      const ldouble p5[4],
+      ldouble m1,
+      ldouble m2,
+      ldouble m3,
+      ldouble m4,
+      ldouble m5,
+      ldouble tol
+      ){
       // Momentum conservation
       for(int j=0; j<4; j++){
           ldouble diff =
@@ -400,16 +400,15 @@ namespace spinas {
       p5[3] = 0;
 
 
-      eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
-
       if(check_phase_space(
        p1,p2,p3,p4,p5,
        me,me,0,0,0,
        1e-10))
-        std::cout << "Phase space: PASS\n";
+        std::cout << " Phase space: PASS\n";
       else
-        std::cout << "Phase space: FAIL\n";
-        
+        std::cout << " Phase space: FAIL\n";
+
+      eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
       cdouble amp_x = eeAAAAmp.amp(1, 1, 2, 2, 2);
       cdouble amp_f = eeAAAAmp.amp_feynman(1, 1, 2, 2, 2);
       cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
