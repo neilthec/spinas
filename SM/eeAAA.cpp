@@ -159,10 +159,12 @@ namespace spinas {
   //Amplitude
   //set_momenta(...) must be called before amp(...).
   cdouble eeAAA::amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+    
     cdouble one(1,0);
     cdouble two(2,0);
-    //No sign changes due to p3 and p4 being outgoing.
+
     if(ds3>0&&ds4>0&&ds5>0){
+
       //<12>([45]^2[3|p_1p_2|3](*2 denominators) + [35]^2)
       return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
         s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
@@ -170,22 +172,12 @@ namespace spinas {
         s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)+(one/pDenS13/pDenS14))
       )/two;
     }
-    // else if(ds3<0&&ds4<0&&ds5<0){
-    //   //me<34>^2[12]
-    //   return 2.0*e*e*me*a34a.v()*a34a.v()*s12s.v(ds1,ds2)/pDenS13/pDenS14;
-    // }
-    // else if(ds3>0&&ds4<0){
-    //   //([13]<24>+[23]<14>)[314>
-    //   return 2.0*e*e*(s13s.v(ds1)*a24a.v(ds2)+s23s.v(ds2)*a14a.v(ds1))*s314a.v()/pDenT/pDenU;
-    // }
-    // else if(ds3<0&&ds4>0){
-    //   //(<13>[24]+<23>[14])*[413>
-    //   return 2.0*e*e*(a13a.v(ds1)*s24s.v(ds2)+a23a.v(ds2)*s14s.v(ds1))*s413a.v()/pDenT/pDenU;
-    // }
+
     return cdouble(0,0);    
   }
 
   cdouble eeAAA::amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
+    
     cdouble one(1,0);
     
     if(ds3>0&&ds4>0&&ds5>0){
@@ -204,6 +196,7 @@ namespace spinas {
   }
 
     cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+    
     cdouble one(1,0);
     
     if(ds3>0&&ds4>0&&ds5>0){
@@ -211,17 +204,19 @@ namespace spinas {
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
       - a23a.v(ds2)*s525a.v()*s414a.v()*s13s.v(ds1) + a23a.v(ds2)*s525a.v()*s434a.v()*s13s.v(ds1)
       - me*a23a.v(ds2)*s525a.v()*s34s.v()*a14a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
-      + me * a23a.v(ds2)*s45s.v()*s315a.v()*a14a.v(ds1) - me*s25s.v(ds2)*a35a.v()*s414a.v()*s13s.v(ds1) 
+      + me*a23a.v(ds2)*s45s.v()*s315a.v()*a14a.v(ds1) - me*s25s.v(ds2)*a35a.v()*s414a.v()*s13s.v(ds1) 
       + me*s25s.v(ds2)*a35a.v()*s434a.v()*s13s.v(ds1) - me*me*s25s.v(ds2)*a35a.v()*s34s.v()*a14a.v(ds1) 
       - me*s25s.v(ds2)*s423a.v()*a45a.v()*s13s.v(ds1) + me*s25s.v(ds2)*s453a.v()*a45a.v()*s13s.v(ds1) 
       - s25s.v(ds2)*s423a.v()*s315a.v()*a14a.v(ds1) + s25s.v(ds2)*s453a.v()*s315a.v()*a14a.v(ds1)) / (
         pDenS13 * pDenS25 * a34a.v() * a35a.v() * a45a.v()
       );
     }
+
     return cdouble(0,0);    
   }
 
     cdouble eeAAA::amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+    
     cdouble one(1,0);
     
     if(ds3>0&&ds4>0&&ds5>0){
@@ -232,6 +227,7 @@ namespace spinas {
         pDenS13 * pDenS25 * a34a.v() * a35a.v() * a45a.v()
       );
     }
+
     return cdouble(0,0);    
   }
 
@@ -343,19 +339,19 @@ namespace spinas {
       p2[3] = -std::sqrt(energy * energy/4.0 - me * me);
 
       p3[0] = energy/3.0;
-      p3[1] = energy/3.0;
-      p3[2] = 0;
+      p3[1] = 0;
+      p3[2] = energy/3.0;
       p3[3] = 0;
 
       p4[0] = energy/3.0;
-      p4[1] = -energy/3.0 * cos(theta);
-      p4[2] = energy/3.0 * sin(theta);
-      p4[3] = 0;
+      p4[1] = 0;
+      p4[2] = -energy/3.0 * cos(theta);
+      p4[3] = energy/3.0 * sin(theta);
 
       p5[0] = energy/3.0;
-      p5[1] = -energy/3.0 * cos(theta);
-      p5[2] = -energy/3.0 * sin(theta);
-      p5[3] = 0;
+      p5[1] = 0;
+      p5[2] = -energy/3.0 * cos(theta);
+      p5[3] = -energy/3.0 * sin(theta);
 
       //Check energy and momentum conservation & check that all particles are on-shell.
 
