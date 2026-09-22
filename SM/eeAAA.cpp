@@ -233,8 +233,8 @@ namespace spinas {
       a15a.v(ds1)*s314a.v()*(s45s.v()*s253a.v(ds2) - s24s.v(ds2)*s523a.v())) / (
         pDenS13 * pDenS25) 
       
-      + ((-s135a.v(ds1) * s35s.v() + s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
-      a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) - s25s.v(ds2) * s423a.v())) / (
+      + ((-s135a.v(ds1) * s35s.v() - s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
+      a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) + s25s.v(ds2) * s423a.v())) / (
         pDenS13 * pDenS24)
       );
     }
