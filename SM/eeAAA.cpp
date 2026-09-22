@@ -365,8 +365,11 @@ namespace spinas {
       cdouble amp_f = eeAAAAmp.amp_feynman(1, 1, 2, 2, 2);
       cdouble amp_p = eeAAAAmp.amp_permutation(1, 1, 2, 2, 2);
       cdouble amp_fr = eeAAAAmp.amp_feynman_r(1, 1, 2, 2, 2);
-      std::cout << " Feynman = " << amp_f << ",   Reduced = " << amp_fr << std::endl;
-      std::cout << " x-factor = " << amp_x << ", Permutation = " << amp_p << std::endl;
+      std::cout << " Feynman = " << amp_f
+                << ",   Reduced = " << amp_fr << std::endl;
+
+      std::cout << " x-factor = " << amp_x
+                << ",             Permutation = " << amp_p << std::endl;
 
     }
 
