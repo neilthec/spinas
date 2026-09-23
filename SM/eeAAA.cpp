@@ -685,16 +685,16 @@ namespace spinas {
         eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
         cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
-        // cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+        cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
         cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
         cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-        // std::cout << "  Feynman     = " << amp_f << "\n";
+        std::cout << "  Feynman     = " << amp_f << "\n";
         std::cout << "  Reduced     = " << amp_fr << "\n";
         std::cout << "  x-factor    = " << amp_x << "\n";
         std::cout << "  Permutation = " << amp_p << "\n";
-        // std::cout << "  |Feynman - Reduced| = " << std::abs(amp_f - amp_fr) << "\n";
+        std::cout << "  |Feynman - Reduced| = " << std::abs(amp_f - amp_fr) << "\n";
       }
 
       std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
