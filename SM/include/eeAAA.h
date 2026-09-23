@@ -30,10 +30,9 @@ namespace spinas {
     particle p1,p2,p3,p4,p5;
     propagator prop;
     cdouble pDenS13, pDenS14, pDenS15, pDenS23, pDenS24, pDenS25;
-    sproduct s34s, a34a, s12s, a12a, s13s, a13a, s15s, a15a, s24s, a24a, s23s, a23a, s25s, a25a, s14s, a14a, s35s, a35a, s45s, a45a,
-     s134a, s135a, s143a, s145a, s234a, s243a, s253a, s254a, s314a, s315a, s324a, s413a, s414a, s415a, s423a, s453a, s434a, s523a, s524a, s525a,
-     s3123s, a3123a, s4124s, a4124a, s5125s, a5125a;
-    sproduct s3145s, s3154s, s4135s, s4153s, s5134s, s5143s;
+    sproduct s34s, a34a, s12s, a12a, s13s, a13a, s15s, a15a, s24s, a24a, s23s, a23a, s25s, a25a, s14s, a14a, s35s, a35a, s45s, a45a;
+    sproduct s134a, s135a, s143a, s145a, s153a, s234a, s243a, s245a, s253a, s254a, s314a, s315a, s324a, s413a, s414a, s415a, s423a, s425a, s453a, s434a, s513a, s523a, s524a, s525a;
+    sproduct s3145s, s3154s, s3123s, a3123a, s4124s, a4124a, s5125s, a5125a, s4135s, s4153s, s5134s, s5143s;
     ldouble sqrt2;
 
     
