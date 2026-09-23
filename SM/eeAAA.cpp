@@ -62,13 +62,17 @@ namespace spinas {
     s134a = sproduct(SQUARE,&p1,&p3,&p4);
     s135a = sproduct(SQUARE,&p1,&p3,&p5);
     s143a = sproduct(SQUARE,&p1,&p4,&p3);
+    s145a = sproduct(SQUARE,&p1,&p4,&p5);
+    s234a = sproduct(SQUARE,&p2,&p3,&p4);
     s243a = sproduct(SQUARE,&p2,&p4,&p3);
     s253a = sproduct(SQUARE,&p2,&p5,&p3);
     s254a = sproduct(SQUARE,&p2,&p5,&p4);
     s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s315a = sproduct(SQUARE,&p3,&p1,&p5);
+    s324a = sproduct(SQUARE,&p3,&p2,&p4);
     s413a = sproduct(SQUARE,&p4,&p1,&p3);
     s414a = sproduct(SQUARE,&p4,&p1,&p4);
+    s415a = sproduct(SQUARE,&p4,&p1,&p5);
     s423a = sproduct(SQUARE,&p4,&p2,&p3);
     s453a = sproduct(SQUARE,&p4,&p5,&p3);
     s434a = sproduct(SQUARE,&p4,&p3,&p4);
@@ -124,13 +128,17 @@ namespace spinas {
     s134a.update();
     s135a.update();
     s143a.update();
+    s145a.update();
+    s234a.update();
     s243a.update();
     s253a.update();
     s254a.update();
     s314a.update();
     s315a.update();
+    s324a.update();
     s413a.update();
     s414a.update();
+    s415a.update();
     s423a.update();
     s453a.update();
     s434a.update();
@@ -248,6 +256,10 @@ namespace spinas {
       + ((s143a.v(ds1)*s34s.v() - s13s.v(ds1)*s413a.v()) * a25a.v(ds2)*s524a.v() + 
       a15a.v(ds1)*s413a.v()*(s35s.v()*s254a.v(ds2) - s23s.v(ds2)*s524a.v())) / (
         pDenS14 * pDenS25) 
+
+      - ((-s145a.v(ds1)*s35s.v() - s15s.v(ds1)*s415a.v()) * a23a.v(ds2)*s324a.v() - 
+      a13a.v(ds1)*s415a.v()*(s35s.v()*s234a.v(ds2) + s25s.v(ds2)*s324a.v())) / (
+        pDenS14 * pDenS23) 
       );
     }
 
@@ -327,35 +339,34 @@ namespace spinas {
       ){
       // Momentum conservation
       for(int j=0; j<4; j++){
-          ldouble diff =
-              p1[j] + p2[j] - p3[j] - p4[j] - p5[j];
+          ldouble diff = p1[j] + p2[j] - p3[j] - p4[j] - p5[j];
 
           if(std::abs(diff) > tol)
-              return false;
+            return false;
       }
 
       auto p_squared = [](const ldouble p[4]){
-          return p[0]*p[0]
-              - p[1]*p[1]
-              - p[2]*p[2]
-              - p[3]*p[3];
+        return p[0]*p[0]
+          - p[1]*p[1]
+          - p[2]*p[2]
+          - p[3]*p[3];
       };
 
       // On-shell conditions
       if(std::abs(p_squared(p1) - m1*m1) > tol)
-          return false;
+        return false;
 
       if(std::abs(p_squared(p2) - m2*m2) > tol)
-          return false;
+        return false;
 
       if(std::abs(p_squared(p3) - m3*m3) > tol)
-          return false;
+        return false;
 
       if(std::abs(p_squared(p4) - m4*m4) > tol)
-          return false;
+        return false;
 
       if(std::abs(p_squared(p5) - m5*m5) > tol)
-          return false;
+        return false;
 
       return true;
   }
