@@ -695,7 +695,8 @@ namespace spinas {
         std::cout << "  Reduced     = " << amp_fr << "\n";
         std::cout << "  x-factor    = " << amp_x << "\n";
         std::cout << "  Permutation = " << amp_p << "\n";
-        std::cout << "  |Feynman - Reduced| = " << std::abs(amp_f - amp_fr) << "\n";
+        std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
+        std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
       }
 
       std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
