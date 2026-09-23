@@ -223,7 +223,7 @@ namespace spinas {
 
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
         s3145s.v() / (pDenS13 * pDenS25 * a34a.v() * a45a.v())
-        - (-one) * s3154s.v() / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
+        - s3154s.v() / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
         - s4135s.v() / (pDenS14 * pDenS25 * a34a.v() * a35a.v())
         - s4153s.v() / (pDenS14 * pDenS23 * a35a.v() * a45a.v())
         - s5134s.v() / (pDenS15 * pDenS24 * a35a.v() * a34a.v())
@@ -652,7 +652,49 @@ namespace spinas {
 
       ldouble energy = 300.0;
 
+      const ldouble pi = 3.14159265358979323846;
+
       ldouble p1[4], p2[4], p3[4], p4[4], p5[4];
+
+      p1[0] = energy/2.0;
+      p1[1] = 0.0;
+      p1[2] = 0.0;
+      p1[3] = std::sqrt(energy*energy/4.0 - me*me);
+
+      p2[0] = energy/2.0;
+      p2[1] = 0.0;
+      p2[2] = 0.0;
+      p2[3] = -p1[3];
+
+      p3[0] = energy/3.0;
+      p3[1] = energy/3.0;
+      p3[2] = 0;
+      p3[3] = 0;
+
+      p4[0] = energy/3.0;
+      p4[1] = -energy/3.0 * std::cos(pi/3.0);
+      p4[2] = energy/3.0 * std::sin(pi/3.0);
+      p4[3] = 0;
+
+      p5[0] = energy/3.0;
+      p5[1] = -energy/3.0 * std::cos(pi/3.0);
+      p5[2] = -energy/3.0 * std::sin(pi/3.0);
+      p5[3] = 0;
+
+      eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
+
+      cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
+      cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+      cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
+      cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
+
+
+      std::cout << "  Feynman     = " << amp_f << "\n";
+      std::cout << "  Reduced     = " << amp_fr << "\n";
+      std::cout << "  x-factor    = " << amp_x << "\n";
+      std::cout << "  Permutation = " << amp_p << "\n";
+      std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
+      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
 
       // Fixed seed makes the test reproducible.
       std::mt19937 rng(12345);
