@@ -223,7 +223,7 @@ namespace spinas {
 
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
         s3145s.v() / (pDenS13 * pDenS25 * a34a.v() * a45a.v())
-        - s3154s.v() / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
+        - (-one) * s3154s.v() / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
         - s4135s.v() / (pDenS14 * pDenS25 * a34a.v() * a35a.v())
         - s4153s.v() / (pDenS14 * pDenS23 * a35a.v() * a45a.v())
         - s5134s.v() / (pDenS15 * pDenS24 * a35a.v() * a34a.v())
