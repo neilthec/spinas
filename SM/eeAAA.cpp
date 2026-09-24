@@ -342,30 +342,30 @@ namespace spinas {
       a15a.v(ds1)*s314a.v()*(s45s.v()*s253a.v(ds2) - s24s.v(ds2)*s523a.v())) / (
         pDenS13 * pDenS25) 
       
-      // // M_354
-      // - ((-s135a.v(ds1) * s35s.v() - s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
-      // a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) + s25s.v(ds2) * s423a.v())) / (
-      //   pDenS13 * pDenS24)
+      // M_354
+      - ((-s135a.v(ds1) * s35s.v() - s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
+      a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) + s25s.v(ds2) * s423a.v())) / (
+        pDenS13 * pDenS24)
 
-      // // M_435
-      // - ((s143a.v(ds1)*s34s.v() - s13s.v(ds1)*s413a.v()) * a25a.v(ds2)*s524a.v() + 
-      // a15a.v(ds1)*s413a.v()*(s35s.v()*s254a.v(ds2) - s23s.v(ds2)*s524a.v())) / (
-      //   pDenS14 * pDenS25) 
+      // M_435
+      - ((s143a.v(ds1)*s34s.v() - s13s.v(ds1)*s413a.v()) * a25a.v(ds2)*s524a.v() + 
+      a15a.v(ds1)*s413a.v()*(s35s.v()*s254a.v(ds2) - s23s.v(ds2)*s524a.v())) / (
+        pDenS14 * pDenS25) 
 
-      // // M_453
-      // + ((-s145a.v(ds1)*s45s.v() - s15s.v(ds1)*s415a.v()) * a23a.v(ds2)*s324a.v() - 
-      // a13a.v(ds1)*s415a.v()*(s35s.v()*s234a.v(ds2) + s25s.v(ds2)*s324a.v())) / (
-      //   pDenS14 * pDenS23)
+      // M_453
+      + ((-s145a.v(ds1)*s45s.v() - s15s.v(ds1)*s415a.v()) * a23a.v(ds2)*s324a.v() - 
+      a13a.v(ds1)*s415a.v()*(s35s.v()*s234a.v(ds2) + s25s.v(ds2)*s324a.v())) / (
+        pDenS14 * pDenS23)
 
-      // // M_534
-      // + ((s153a.v(ds1)*s35s.v() - s13s.v(ds1)*s513a.v()) * a24a.v(ds2)*s425a.v() + 
-      // a14a.v(ds1)*s513a.v()*(s34s.v()*s245a.v(ds2) - s23s.v(ds2)*s425a.v())) / (
-      //   pDenS15 * pDenS24)
+      // M_534
+      + ((s153a.v(ds1)*s35s.v() - s13s.v(ds1)*s513a.v()) * a24a.v(ds2)*s425a.v() + 
+      a14a.v(ds1)*s513a.v()*(s34s.v()*s245a.v(ds2) - s23s.v(ds2)*s425a.v())) / (
+        pDenS15 * pDenS24)
 
-      // // M_543
-      // - ((s154a.v(ds1)*s45s.v() - s14s.v(ds1)*s514a.v()) * a23a.v(ds2)*s325a.v() - 
-      // a13a.v(ds1)*s514a.v()*(s34s.v()*s235a.v(ds2) + s24s.v(ds2)*s325a.v())) / (
-      //   pDenS15 * pDenS23)
+      // M_543
+      - ((s154a.v(ds1)*s45s.v() - s14s.v(ds1)*s514a.v()) * a23a.v(ds2)*s325a.v() - 
+      a13a.v(ds1)*s514a.v()*(s34s.v()*s235a.v(ds2) + s24s.v(ds2)*s325a.v())) / (
+        pDenS15 * pDenS23)
       );
     }
 
@@ -762,6 +762,7 @@ namespace spinas {
       p5[2] = -energy/3.0 * std::sin(pi/3.0);
       p5[3] = 0;
 
+      bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
       cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
