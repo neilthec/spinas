@@ -748,17 +748,17 @@ namespace spinas {
       p2[3] = -p1[3];
 
       p3[0] = energy/3.0;
-      p3[1] = energy/3.0;
+      p3[1] = -energy/3.0;
       p3[2] = 0;
       p3[3] = 0;
 
       p4[0] = energy/3.0;
-      p4[1] = -energy/3.0 * std::cos(pi/3.0);
+      p4[1] = energy/3.0 * std::cos(pi/3.0);
       p4[2] = energy/3.0 * std::sin(pi/3.0);
       p4[3] = 0;
 
       p5[0] = energy/3.0;
-      p5[1] = -energy/3.0 * std::cos(pi/3.0);
+      p5[1] = energy/3.0 * std::cos(pi/3.0);
       p5[2] = -energy/3.0 * std::sin(pi/3.0);
       p5[3] = 0;
 
