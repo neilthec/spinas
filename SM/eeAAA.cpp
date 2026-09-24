@@ -74,6 +74,7 @@ namespace spinas {
     s313a = sproduct(SQUARE,&p3,&p1,&p3);
     s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s315a = sproduct(SQUARE,&p3,&p1,&p5);
+    s323a = sproduct(SQUARE,&p3,&p2,&p3);
     s324a = sproduct(SQUARE,&p3,&p2,&p4);
     s325a = sproduct(SQUARE,&p3,&p2,&p5);
     s343a = sproduct(SQUARE,&p3,&p4,&p3);
@@ -92,8 +93,10 @@ namespace spinas {
     s523a = sproduct(SQUARE,&p5,&p2,&p3);
     s524a = sproduct(SQUARE,&p5,&p2,&p4);
     s525a = sproduct(SQUARE,&p5,&p2,&p5);
+    s534a = sproduct(SQUARE,&p5,&p3,&p4);
     s535a = sproduct(SQUARE,&p5,&p3,&p5);
     s543a = sproduct(SQUARE,&p5,&p4,&p3);
+    s545a = sproduct(SQUARE,&p5,&p4,&p5);
     s3123s = sproduct(SQUARE,&p3,&p1,&p2,&p3);
     a3123a = sproduct(ANGLE,&p3,&p1,&p2,&p3);
     s4124s = sproduct(SQUARE,&p4,&p1,&p2,&p4);
@@ -155,6 +158,7 @@ namespace spinas {
     s313a.update();
     s314a.update();
     s315a.update();
+    s323a.update();
     s324a.update();
     s325a.update();
     s343a.update();
@@ -173,8 +177,10 @@ namespace spinas {
     s523a.update();
     s524a.update();
     s525a.update();
+    s534a.update();
     s535a.update();
     s543a.update();
+    s545a.update();
     s3123s.update();
     a3123a.update();
     s4124s.update();
@@ -278,6 +284,14 @@ namespace spinas {
       - me*s25s.v(ds2)*s324a.v()*a35a.v()*s14s.v(ds1) + me*s25s.v(ds2)*s354a.v()*a35a.v()*s14s.v(ds1) 
       - s25s.v(ds2)*s324a.v()*s415a.v()*a13a.v(ds1) + s25s.v(ds2)*s354a.v()*s415a.v()*a13a.v(ds1)) / (
         pDenS14 * pDenS25)
+
+      + (- a24a.v(ds2)*s323a.v()*s515a.v()*s14s.v(ds1) + a24a.v(ds2)*s323a.v()*s545a.v()*s14s.v(ds1)
+      - me*a24a.v(ds2)*s323a.v()*s45s.v()*a15a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
+      - me*a24a.v(ds2)*s35s.v()*s413a.v()*a15a.v(ds1) + me*s23s.v(ds2)*a34a.v()*s515a.v()*s14s.v(ds1) 
+      - me*s23s.v(ds2)*a34a.v()*s545a.v()*s14s.v(ds1) + me*me*s23s.v(ds2)*a34a.v()*s45s.v()*a15a.v(ds1) 
+      + me*s23s.v(ds2)*s524a.v()*a35a.v()*s14s.v(ds1) - me*s23s.v(ds2)*s534a.v()*a35a.v()*s14s.v(ds1) 
+      - s23s.v(ds2)*s524a.v()*s413a.v()*a15a.v(ds1) + s23s.v(ds2)*s534a.v()*s413a.v()*a15a.v(ds1)) / (
+        pDenS14 * pDenS23)
       );
     }
 
