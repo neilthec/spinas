@@ -763,7 +763,8 @@ namespace spinas {
       p5[3] = 0;
 
       bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
-      std::cout << "\n" << phase_space_ok;
+      if (phase_space_ok)
+        std::cout << "\nPhase-space point " << "PASS";
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
       cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
