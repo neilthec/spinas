@@ -763,7 +763,7 @@ namespace spinas {
       p5[3] = 0;
 
       bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
-      std::cout << phase_space_ok;
+      std::cout << "\n" << phase_space_ok;
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
       cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
@@ -779,54 +779,55 @@ namespace spinas {
       std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
       std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
 
-      // Fixed seed makes the test reproducible.
-      std::mt19937 rng(12345);
+      if (1 == 2) {
+        // Fixed seed makes the test reproducible.
+        std::mt19937 rng(12345);
 
-      const int Npoints = 10;
+        const int Npoints = 10;
 
-      int point = 0;
-      int attempts = 0;
+        int point = 0;
+        int attempts = 0;
 
-      while(point < Npoints){
+        while(point < Npoints){
 
-        attempts++;
+          attempts++;
 
-        bool generated = make_random_phase_space(energy, me, p1, p2, p3, p4, p5, rng);
+          bool generated = make_random_phase_space(energy, me, p1, p2, p3, p4, p5, rng);
 
-        if(!generated)
-          continue;
+          if(!generated)
+            continue;
 
-        // Check phase space
-        bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
+          // Check phase space
+          bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
 
-        if(!phase_space_ok)
-          continue;
+          if(!phase_space_ok)
+            continue;
 
-        point++;
+          point++;
 
-        std::cout << "\nPhase-space point " << point << "\n";
+          std::cout << "\nPhase-space point " << point << "\n";
 
-        std::cout << "  Phase space: PASS\n";
+          std::cout << "  Phase space: PASS\n";
 
-        eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
+          eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
-        cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
-        cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
-        cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
-        cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
+          cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
+          cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+          cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
+          cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-        std::cout << "  Feynman     = " << amp_f << "\n";
-        std::cout << "  Reduced     = " << amp_fr << "\n";
-        std::cout << "  x-factor    = " << amp_x << "\n";
-        std::cout << "  Permutation = " << amp_p << "\n";
-        std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
-        std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
+          std::cout << "  Feynman     = " << amp_f << "\n";
+          std::cout << "  Reduced     = " << amp_fr << "\n";
+          std::cout << "  x-factor    = " << amp_x << "\n";
+          std::cout << "  Permutation = " << amp_p << "\n";
+          std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
+          std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
+        }
+
+        std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
       }
-
-      std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
     }
-
     return n;
   }
 
