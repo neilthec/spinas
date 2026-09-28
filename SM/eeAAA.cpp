@@ -807,15 +807,15 @@ namespace spinas {
       p5[1] = -energy/3.0 * std::sin(pi/3.0);
       p5[3] = 0;
 
-      bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
+      phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
       if (phase_space_ok)
         std::cout << "\nPhase-space point " << "PASS";
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
 
-      cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
-      cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
-      cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
-      cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
+      amp_x = eeAAAAmp.amp(1,1,2,2,2);
+      amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+      amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
+      amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
       std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
