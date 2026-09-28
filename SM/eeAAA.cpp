@@ -782,7 +782,7 @@ namespace spinas {
       std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
       std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
 
-      // energy = 600.0;
+      energy = 600.0;
 
       p1[0] = energy/2.0;
       p1[1] = 0.0;
