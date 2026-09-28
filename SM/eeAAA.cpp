@@ -782,6 +782,51 @@ namespace spinas {
       std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
       std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
 
+      p1[0] = energy/2.0;
+      p1[1] = 0.0;
+      p1[2] = 0.0;
+      p1[3] = std::sqrt(energy*energy/4.0 - me*me);
+
+      p2[0] = energy/2.0;
+      p2[1] = 0.0;
+      p2[2] = 0.0;
+      p2[3] = -p1[3];
+
+      p3[0] = energy/3.0;
+      p3[2] = -energy/3.0;
+      p3[1] = 0;
+      p3[3] = 0;
+
+      p4[0] = energy/3.0;
+      p4[2] = energy/3.0 * std::cos(pi/3.0);
+      p4[1] = energy/3.0 * std::sin(pi/3.0);
+      p4[3] = 0;
+
+      p5[0] = energy/3.0;
+      p5[2] = energy/3.0 * std::cos(pi/3.0);
+      p5[1] = -energy/3.0 * std::sin(pi/3.0);
+      p5[3] = 0;
+
+      bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
+      if (phase_space_ok)
+        std::cout << "\nPhase-space point " << "PASS";
+      eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
+
+      cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
+      cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+      cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
+      cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
+
+
+      std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
+      std::cout << "  Reduced     = " << amp_fr << "\n";
+      std::cout << "  x-factor    = " << amp_x << "\n";
+      std::cout << "  Permutation = " << amp_p << "\n";
+      std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
+      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
+      std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
+      std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
+
       if (2 == 2) {
         // Fixed seed makes the test reproducible.
         std::mt19937 rng(12345);
