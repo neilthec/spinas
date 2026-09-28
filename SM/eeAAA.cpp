@@ -280,7 +280,7 @@ namespace spinas {
         pDenS13 * pDenS25)
       
       // M_354
-      + (- a23a.v(ds2)*s424a.v()*s515a.v()*s13s.v(ds1) + a23a.v(ds2)*s424a.v()*s535a.v()*s13s.v(ds1)
+      - (- a23a.v(ds2)*s424a.v()*s515a.v()*s13s.v(ds1) + a23a.v(ds2)*s424a.v()*s535a.v()*s13s.v(ds1)
       - me*a23a.v(ds2)*s424a.v()*s35s.v()*a15a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
       - me*a23a.v(ds2)*s45s.v()*s314a.v()*a15a.v(ds1) - me*s24s.v(ds2)*a34a.v()*s515a.v()*s13s.v(ds1) 
       + me*s24s.v(ds2)*a34a.v()*s535a.v()*s13s.v(ds1) - me*me*s24s.v(ds2)*a34a.v()*s35s.v()*a15a.v(ds1) 
