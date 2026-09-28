@@ -779,6 +779,8 @@ namespace spinas {
       std::cout << "  Permutation = " << amp_p << "\n";
       std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
       std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
+      std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
+      std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
 
       if (2 == 2) {
         // Fixed seed makes the test reproducible.
@@ -824,6 +826,8 @@ namespace spinas {
           std::cout << "  Permutation = " << amp_p << "\n";
           std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
           std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
+          std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
+          std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
         }
 
         std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
