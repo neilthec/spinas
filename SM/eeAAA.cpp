@@ -780,7 +780,7 @@ namespace spinas {
       std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
       std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
 
-      if (1 == 2) {
+      if (2 == 2) {
         // Fixed seed makes the test reproducible.
         std::mt19937 rng(12345);
 
