@@ -810,7 +810,7 @@ namespace spinas {
 
       std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
       std::cout << "  Reduced     = " << amp_fr << "\n";
-      std::cout << "  Massive Feynman     = " << amp_fx << "\n";
+      std::cout << "  Feynman_x   = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
       std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
@@ -859,7 +859,7 @@ namespace spinas {
 
       std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
       std::cout << "  Reduced     = " << amp_fr << "\n";
-      std::cout << "  Massive Feynman     = " << amp_fx << "\n";
+      std::cout << "  Feynman_x   = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
       std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
@@ -908,7 +908,7 @@ namespace spinas {
 
           std::cout << "  Feynman     = " << amp_f << "\n";
           std::cout << "  Reduced     = " << amp_fr << "\n";
-          std::cout << "  Massive Feynman     = " << amp_fx << "\n";
+          std::cout << "  Feynman_x   = " << amp_fx << "\n";
           std::cout << "  x-factor    = " << amp_x << "\n";
           std::cout << "  Permutation = " << amp_p << "\n";
           std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
