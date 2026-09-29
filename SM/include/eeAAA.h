@@ -90,6 +90,7 @@ namespace spinas {
     cdouble amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
+    cdouble amp_feynman_x(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     ldouble amp2();
     ldouble amp2_feynman();
     ldouble amp2_permutation();
