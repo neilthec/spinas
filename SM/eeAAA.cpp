@@ -803,12 +803,14 @@ namespace spinas {
 
       cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
       cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+      cdouble amp_fx = eeAAAAmp.amp_feynman_x(1,1,2,2,2);
       cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
       cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
       std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
       std::cout << "  Reduced     = " << amp_fr << "\n";
+      std::cout << "  Massive Feynman     = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
       std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
@@ -850,12 +852,14 @@ namespace spinas {
 
       amp_x = eeAAAAmp.amp(1,1,2,2,2);
       amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+      amp_fx = eeAAAAmp.amp_feynman_x(1,1,2,2,2);
       amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
       amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
       std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
       std::cout << "  Reduced     = " << amp_fr << "\n";
+      std::cout << "  Massive Feynman     = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
       std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
@@ -897,12 +901,14 @@ namespace spinas {
 
           cdouble amp_x = eeAAAAmp.amp(1,1,2,2,2);
           cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
+          cdouble amp_fx = eeAAAAmp.amp_feynman_x(1,1,2,2,2);
           cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
           cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
           std::cout << "  Feynman     = " << amp_f << "\n";
           std::cout << "  Reduced     = " << amp_fr << "\n";
+          std::cout << "  Massive Feynman     = " << amp_fx << "\n";
           std::cout << "  x-factor    = " << amp_x << "\n";
           std::cout << "  Permutation = " << amp_p << "\n";
           std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
