@@ -82,6 +82,7 @@ namespace spinas {
     s345a = sproduct(SQUARE,&p3,&p4,&p5);
     s353a = sproduct(SQUARE,&p3,&p5,&p3);
     s354a = sproduct(SQUARE,&p3,&p5,&p4);
+    s412a = sproduct(SQUARE,&p4,&p1,&p2);
     s413a = sproduct(SQUARE,&p4,&p1,&p3);
     s414a = sproduct(SQUARE,&p4,&p1,&p4);
     s415a = sproduct(SQUARE,&p4,&p1,&p5);
@@ -108,6 +109,9 @@ namespace spinas {
     s4123s = sproduct(SQUARE,&p4,&p1,&p2,&p3);
     s4124s = sproduct(SQUARE,&p4,&p1,&p2,&p4);
     a4124a = sproduct(ANGLE,&p4,&p1,&p2,&p4);
+    s4125s = sproduct(SQUARE,&p4,&p1,&p2,&p5);
+    s4145s = sproduct(SQUARE,&p4,&p1,&p4,&p5);
+    s4215s = sproduct(SQUARE,&p4,&p2,&p1,&p5);
     s4323s = sproduct(SQUARE,&p4,&p3,&p2,&p3);
     s5124s = sproduct(SQUARE,&p5,&p1,&p2,&p4);
     s5125s = sproduct(SQUARE,&p5,&p1,&p2,&p5);
@@ -117,9 +121,11 @@ namespace spinas {
     s3154s = sproduct(SQUARE,&p3,&p1,&p5,&p4);
     s4135s = sproduct(SQUARE,&p4,&p1,&p3,&p5);
     s4153s = sproduct(SQUARE,&p4,&p1,&p5,&p3);
+    s5123s = sproduct(SQUARE,&p5,&p1,&p2,&p3);
     s5134s = sproduct(SQUARE,&p5,&p1,&p3,&p4);
     s5214s = sproduct(SQUARE,&p5,&p2,&p1,&p4);
     s5143s = sproduct(SQUARE,&p5,&p1,&p4,&p3);
+    s5323s = sproduct(SQUARE,&p5,&p3,&p2,&p3);
   }
   void eeAAA::set_masses(const ldouble& masse){
     me=masse;
@@ -177,6 +183,7 @@ namespace spinas {
     s345a.update();
     s353a.update();
     s354a.update();
+    s412a.update();
     s413a.update();
     s414a.update();
     s415a.update();
@@ -202,8 +209,12 @@ namespace spinas {
     a3123a.update();
     s4123s.update();
     s4124s.update();
+    s4125s.update();
     a4124a.update();
+    s4145s.update();
+    s4215s.update();
     s4323s.update();
+    s5123s.update();
     s5125s.update();
     a5125a.update();
     s3145s.update();
@@ -215,6 +226,7 @@ namespace spinas {
     s5143s.update();
     s5214s.update();
     s5154s.update();
+    s5323s.update();
     //Propagator Momentum
     ldouble propS13P[4], propS14P[4], propS15P[4], propS23P[4], propS24P[4], propS25P[4];
     for(int j=0;j<4;j++){
@@ -394,13 +406,24 @@ namespace spinas {
 
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
 
-        s512a.v(ds2)*s5214s.v()*s4123s.v()*s13s.v(ds1) - s512a.v(ds2)*s5214s.v()*s4323s.v()*s13s.v(ds1)
+        // 345
+        (s512a.v(ds2)*s5214s.v()*s4123s.v()*s13s.v(ds1) - s512a.v(ds2)*s5214s.v()*s4323s.v()*s13s.v(ds1)
         - me*s512a.v(ds2) * s5214s.v() * s34s.v() + me*me*s512a.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
         - me*me*me*s512a.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1) - me*me*me*s25s.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
         + me*me*me*s25s.v(ds2)*s45s.v()*s4323s.v()*s13s.v(ds1) + me*me*me*me*s25s.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1)
         - me*s25s.v(ds2)*s5124s.v()*s4123s.v()*s13s.v(ds1) + me*s25s.v(ds2)*s5154s.v()*s4123s.v()*s13s.v(ds1)
-        + me*me*s25s.v(ds2)*s5124s.v()*s34s.v()*s321a.v(ds1) - me*me*s25s.v(ds2)*s5154s.v()*s34s.v()*s321a.v(ds1)
-      ) / (pDenS13 * pDenS14 * pDenS15 * pDenS23 * pDenS25);
+        + me*me*s25s.v(ds2)*s5124s.v()*s34s.v()*s321a.v(ds1) - me*me*s25s.v(ds2)*s5154s.v()*s34s.v()*s321a.v(ds1))
+        / (pDenS13 * pDenS14 * pDenS15 * pDenS23 * pDenS25)
+
+        // 435
+        + (s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) - s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
+        - me*s412a.v(ds2) * s4215s.v() * s35s.v() - me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
+        + me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
+        - me*me*me*s24s.v(ds2)*s45s.v()*s5323s.v()*s13s.v(ds1) - me*me*me*me*s24s.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1)
+        - me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) + me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
+        + me*me*s24s.v(ds2)*s4125s.v()*s35s.v()*s321a.v(ds1) - me*me*s24s.v(ds2)*s4145s.v()*s35s.v()*s321a.v(ds1))
+        / (pDenS13 * pDenS15 * pDenS14 * pDenS23 * pDenS24)
+      );
     }
 
     return cdouble(0,0);
