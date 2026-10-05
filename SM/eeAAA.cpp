@@ -71,6 +71,7 @@ namespace spinas {
     s245a = sproduct(SQUARE,&p2,&p4,&p5);
     s253a = sproduct(SQUARE,&p2,&p5,&p3);
     s254a = sproduct(SQUARE,&p2,&p5,&p4);
+    s312a = sproduct(SQUARE,&p3,&p1,&p2);
     s313a = sproduct(SQUARE,&p3,&p1,&p3);
     s314a = sproduct(SQUARE,&p3,&p1,&p4);
     s315a = sproduct(SQUARE,&p3,&p1,&p5);
@@ -86,6 +87,7 @@ namespace spinas {
     s413a = sproduct(SQUARE,&p4,&p1,&p3);
     s414a = sproduct(SQUARE,&p4,&p1,&p4);
     s415a = sproduct(SQUARE,&p4,&p1,&p5);
+    s421a = sproduct(SQUARE,&p4,&p2,&p1);
     s423a = sproduct(SQUARE,&p4,&p2,&p3);
     s424a = sproduct(SQUARE,&p4,&p2,&p4);
     s425a = sproduct(SQUARE,&p4,&p2,&p5);
@@ -106,6 +108,11 @@ namespace spinas {
     s545a = sproduct(SQUARE,&p5,&p4,&p5);
     s3123s = sproduct(SQUARE,&p3,&p1,&p2,&p3);
     a3123a = sproduct(ANGLE,&p3,&p1,&p2,&p3);
+    s3124s = sproduct(SQUARE,&p3,&p1,&p2,&p4);
+    s3125s = sproduct(SQUARE,&p3,&p1,&p2,&p5);
+    s3135s = sproduct(SQUARE,&p3,&p1,&p3,&p5);
+    s3215s = sproduct(SQUARE,&p3,&p2,&p1,&p5);
+    s3424s = sproduct(SQUARE,&p3,&p4,&p2,&p4);
     s4123s = sproduct(SQUARE,&p4,&p1,&p2,&p3);
     s4124s = sproduct(SQUARE,&p4,&p1,&p2,&p4);
     a4124a = sproduct(ANGLE,&p4,&p1,&p2,&p4);
@@ -123,9 +130,12 @@ namespace spinas {
     s4153s = sproduct(SQUARE,&p4,&p1,&p5,&p3);
     s5123s = sproduct(SQUARE,&p5,&p1,&p2,&p3);
     s5134s = sproduct(SQUARE,&p5,&p1,&p3,&p4);
+    s5153s = sproduct(SQUARE,&p5,&p1,&p5,&p3);
+    s5213s = sproduct(SQUARE,&p5,&p2,&p1,&p3);
     s5214s = sproduct(SQUARE,&p5,&p2,&p1,&p4);
     s5143s = sproduct(SQUARE,&p5,&p1,&p4,&p3);
     s5323s = sproduct(SQUARE,&p5,&p3,&p2,&p3);
+    s5424s = sproduct(SQUARE,&p5,&p4,&p2,&p4);
   }
   void eeAAA::set_masses(const ldouble& masse){
     me=masse;
@@ -172,6 +182,7 @@ namespace spinas {
     s245a.update();
     s253a.update();
     s254a.update();
+    s312a.update();
     s313a.update();
     s314a.update();
     s315a.update();
@@ -187,6 +198,7 @@ namespace spinas {
     s413a.update();
     s414a.update();
     s415a.update();
+    s421a.update();
     s423a.update();
     s424a.update();
     s425a.update();
@@ -206,7 +218,12 @@ namespace spinas {
     s543a.update();
     s545a.update();
     s3123s.update();
+    s3124s.update();
     a3123a.update();
+    s3125s.update();
+    s3135s.update();
+    s3215s.update();
+    s3424s.update();
     s4123s.update();
     s4124s.update();
     s4125s.update();
@@ -224,9 +241,12 @@ namespace spinas {
     s5124s.update();
     s5134s.update();
     s5143s.update();
+    s5153s.update();
+    s5213s.update();
     s5214s.update();
     s5154s.update();
     s5323s.update();
+    s5424s.update();
     //Propagator Momentum
     ldouble propS13P[4], propS14P[4], propS15P[4], propS23P[4], propS24P[4], propS25P[4];
     for(int j=0;j<4;j++){
@@ -305,50 +325,50 @@ namespace spinas {
       - s25s.v(ds2)*s423a.v()*s315a.v()*a14a.v(ds1) + s25s.v(ds2)*s453a.v()*s315a.v()*a14a.v(ds1)) / (
         pDenS13 * pDenS25)
       
-      // // M_354
-      // - (- a23a.v(ds2)*s424a.v()*s515a.v()*s13s.v(ds1) + a23a.v(ds2)*s424a.v()*s535a.v()*s13s.v(ds1)
-      // - me*a23a.v(ds2)*s424a.v()*s35s.v()*a15a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
-      // - me*a23a.v(ds2)*s45s.v()*s314a.v()*a15a.v(ds1) - me*s24s.v(ds2)*a34a.v()*s515a.v()*s13s.v(ds1) 
-      // + me*s24s.v(ds2)*a34a.v()*s535a.v()*s13s.v(ds1) - me*me*s24s.v(ds2)*a34a.v()*s35s.v()*a15a.v(ds1) 
-      // + me*s24s.v(ds2)*s523a.v()*a45a.v()*s13s.v(ds1) - me*s24s.v(ds2)*s543a.v()*a45a.v()*s13s.v(ds1) 
-      // - s24s.v(ds2)*s523a.v()*s314a.v()*a15a.v(ds1) + s24s.v(ds2)*s543a.v()*s314a.v()*a15a.v(ds1)) / (
-      //   pDenS13 * pDenS24)
+      // M_354
+      - (- a23a.v(ds2)*s424a.v()*s515a.v()*s13s.v(ds1) + a23a.v(ds2)*s424a.v()*s535a.v()*s13s.v(ds1)
+      - me*a23a.v(ds2)*s424a.v()*s35s.v()*a15a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
+      - me*a23a.v(ds2)*s45s.v()*s314a.v()*a15a.v(ds1) - me*s24s.v(ds2)*a34a.v()*s515a.v()*s13s.v(ds1) 
+      + me*s24s.v(ds2)*a34a.v()*s535a.v()*s13s.v(ds1) - me*me*s24s.v(ds2)*a34a.v()*s35s.v()*a15a.v(ds1) 
+      + me*s24s.v(ds2)*s523a.v()*a45a.v()*s13s.v(ds1) - me*s24s.v(ds2)*s543a.v()*a45a.v()*s13s.v(ds1) 
+      - s24s.v(ds2)*s523a.v()*s314a.v()*a15a.v(ds1) + s24s.v(ds2)*s543a.v()*s314a.v()*a15a.v(ds1)) / (
+        pDenS13 * pDenS24)
       
-      // // M_435
-      // - (- a24a.v(ds2)*s525a.v()*s313a.v()*s14s.v(ds1) + a24a.v(ds2)*s525a.v()*s343a.v()*s14s.v(ds1)
-      // + me*a24a.v(ds2)*s525a.v()*s34s.v()*a13a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
-      // + me*a24a.v(ds2)*s35s.v()*s415a.v()*a13a.v(ds1) - me*s25s.v(ds2)*a45a.v()*s313a.v()*s14s.v(ds1) 
-      // + me*s25s.v(ds2)*a45a.v()*s343a.v()*s14s.v(ds1) + me*me*s25s.v(ds2)*a45a.v()*s34s.v()*a13a.v(ds1) 
-      // - me*s25s.v(ds2)*s324a.v()*a35a.v()*s14s.v(ds1) + me*s25s.v(ds2)*s354a.v()*a35a.v()*s14s.v(ds1) 
-      // - s25s.v(ds2)*s324a.v()*s415a.v()*a13a.v(ds1) + s25s.v(ds2)*s354a.v()*s415a.v()*a13a.v(ds1)) / (
-      //   pDenS14 * pDenS25)
+      // M_435
+      - (- a24a.v(ds2)*s525a.v()*s313a.v()*s14s.v(ds1) + a24a.v(ds2)*s525a.v()*s343a.v()*s14s.v(ds1)
+      + me*a24a.v(ds2)*s525a.v()*s34s.v()*a13a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
+      + me*a24a.v(ds2)*s35s.v()*s415a.v()*a13a.v(ds1) - me*s25s.v(ds2)*a45a.v()*s313a.v()*s14s.v(ds1) 
+      + me*s25s.v(ds2)*a45a.v()*s343a.v()*s14s.v(ds1) + me*me*s25s.v(ds2)*a45a.v()*s34s.v()*a13a.v(ds1) 
+      - me*s25s.v(ds2)*s324a.v()*a35a.v()*s14s.v(ds1) + me*s25s.v(ds2)*s354a.v()*a35a.v()*s14s.v(ds1) 
+      - s25s.v(ds2)*s324a.v()*s415a.v()*a13a.v(ds1) + s25s.v(ds2)*s354a.v()*s415a.v()*a13a.v(ds1)) / (
+        pDenS14 * pDenS25)
       
-      // // M_453
-      // + (- a24a.v(ds2)*s323a.v()*s515a.v()*s14s.v(ds1) + a24a.v(ds2)*s323a.v()*s545a.v()*s14s.v(ds1)
-      // - me*a24a.v(ds2)*s323a.v()*s45s.v()*a15a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
-      // - me*a24a.v(ds2)*s35s.v()*s413a.v()*a15a.v(ds1) + me*s23s.v(ds2)*a34a.v()*s515a.v()*s14s.v(ds1) 
-      // - me*s23s.v(ds2)*a34a.v()*s545a.v()*s14s.v(ds1) + me*me*s23s.v(ds2)*a34a.v()*s45s.v()*a15a.v(ds1) 
-      // + me*s23s.v(ds2)*s524a.v()*a35a.v()*s14s.v(ds1) - me*s23s.v(ds2)*s534a.v()*a35a.v()*s14s.v(ds1) 
-      // - s23s.v(ds2)*s524a.v()*s413a.v()*a15a.v(ds1) + s23s.v(ds2)*s534a.v()*s413a.v()*a15a.v(ds1)) / (
-      //   pDenS14 * pDenS23)
+      // M_453
+      + (- a24a.v(ds2)*s323a.v()*s515a.v()*s14s.v(ds1) + a24a.v(ds2)*s323a.v()*s545a.v()*s14s.v(ds1)
+      - me*a24a.v(ds2)*s323a.v()*s45s.v()*a15a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
+      - me*a24a.v(ds2)*s35s.v()*s413a.v()*a15a.v(ds1) + me*s23s.v(ds2)*a34a.v()*s515a.v()*s14s.v(ds1) 
+      - me*s23s.v(ds2)*a34a.v()*s545a.v()*s14s.v(ds1) + me*me*s23s.v(ds2)*a34a.v()*s45s.v()*a15a.v(ds1) 
+      + me*s23s.v(ds2)*s524a.v()*a35a.v()*s14s.v(ds1) - me*s23s.v(ds2)*s534a.v()*a35a.v()*s14s.v(ds1) 
+      - s23s.v(ds2)*s524a.v()*s413a.v()*a15a.v(ds1) + s23s.v(ds2)*s534a.v()*s413a.v()*a15a.v(ds1)) / (
+        pDenS14 * pDenS23)
       
-      // // M_534
-      // + (- a25a.v(ds2)*s424a.v()*s313a.v()*s15s.v(ds1) + a25a.v(ds2)*s424a.v()*s353a.v()*s15s.v(ds1)
-      // + me*a25a.v(ds2)*s424a.v()*s35s.v()*a13a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
-      // + me*a25a.v(ds2)*s34s.v()*s514a.v()*a13a.v(ds1) + me*s24s.v(ds2)*a45a.v()*s313a.v()*s15s.v(ds1) 
-      // - me*s24s.v(ds2)*a45a.v()*s353a.v()*s15s.v(ds1) - me*me*s24s.v(ds2)*a45a.v()*s35s.v()*a13a.v(ds1) 
-      // - me*s24s.v(ds2)*s325a.v()*a34a.v()*s15s.v(ds1) + me*s24s.v(ds2)*s345a.v()*a34a.v()*s15s.v(ds1) 
-      // - s24s.v(ds2)*s325a.v()*s514a.v()*a13a.v(ds1) + s24s.v(ds2)*s345a.v()*s514a.v()*a13a.v(ds1)) / (
-      //   pDenS15 * pDenS24)
+      // M_534
+      + (- a25a.v(ds2)*s424a.v()*s313a.v()*s15s.v(ds1) + a25a.v(ds2)*s424a.v()*s353a.v()*s15s.v(ds1)
+      + me*a25a.v(ds2)*s424a.v()*s35s.v()*a13a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
+      + me*a25a.v(ds2)*s34s.v()*s514a.v()*a13a.v(ds1) + me*s24s.v(ds2)*a45a.v()*s313a.v()*s15s.v(ds1) 
+      - me*s24s.v(ds2)*a45a.v()*s353a.v()*s15s.v(ds1) - me*me*s24s.v(ds2)*a45a.v()*s35s.v()*a13a.v(ds1) 
+      - me*s24s.v(ds2)*s325a.v()*a34a.v()*s15s.v(ds1) + me*s24s.v(ds2)*s345a.v()*a34a.v()*s15s.v(ds1) 
+      - s24s.v(ds2)*s325a.v()*s514a.v()*a13a.v(ds1) + s24s.v(ds2)*s345a.v()*s514a.v()*a13a.v(ds1)) / (
+        pDenS15 * pDenS24)
 
-      // // M_543
-      // - (- a25a.v(ds2)*s323a.v()*s414a.v()*s15s.v(ds1) + a25a.v(ds2)*s323a.v()*s454a.v()*s15s.v(ds1)
-      // + me*a25a.v(ds2)*s323a.v()*s45s.v()*a14a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
-      // - me*a25a.v(ds2)*s34s.v()*s513a.v()*a14a.v(ds1) + me*s23s.v(ds2)*a35a.v()*s414a.v()*s15s.v(ds1) 
-      // - me*s23s.v(ds2)*a35a.v()*s454a.v()*s15s.v(ds1) - me*me*s23s.v(ds2)*a35a.v()*s45s.v()*a14a.v(ds1) 
-      // + me*s23s.v(ds2)*s425a.v()*a34a.v()*s15s.v(ds1) - me*s23s.v(ds2)*s435a.v()*a34a.v()*s15s.v(ds1) 
-      // - s23s.v(ds2)*s425a.v()*s513a.v()*a14a.v(ds1) + s23s.v(ds2)*s435a.v()*s513a.v()*a14a.v(ds1)) / (
-      //   pDenS15 * pDenS23)
+      // M_543
+      - (- a25a.v(ds2)*s323a.v()*s414a.v()*s15s.v(ds1) + a25a.v(ds2)*s323a.v()*s454a.v()*s15s.v(ds1)
+      + me*a25a.v(ds2)*s323a.v()*s45s.v()*a14a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
+      - me*a25a.v(ds2)*s34s.v()*s513a.v()*a14a.v(ds1) + me*s23s.v(ds2)*a35a.v()*s414a.v()*s15s.v(ds1) 
+      - me*s23s.v(ds2)*a35a.v()*s454a.v()*s15s.v(ds1) - me*me*s23s.v(ds2)*a35a.v()*s45s.v()*a14a.v(ds1) 
+      + me*s23s.v(ds2)*s425a.v()*a34a.v()*s15s.v(ds1) - me*s23s.v(ds2)*s435a.v()*a34a.v()*s15s.v(ds1) 
+      - s23s.v(ds2)*s425a.v()*s513a.v()*a14a.v(ds1) + s23s.v(ds2)*s435a.v()*s513a.v()*a14a.v(ds1)) / (
+        pDenS15 * pDenS23)
       );
     }
 
@@ -415,7 +435,7 @@ namespace spinas {
         + me*me*s25s.v(ds2)*s5124s.v()*s34s.v()*s321a.v(ds1) - me*me*s25s.v(ds2)*s5154s.v()*s34s.v()*s321a.v(ds1))
         / (pDenS13 * pDenS14 * pDenS15 * pDenS23 * pDenS25)
 
-        // 435
+        // 354
         + (s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) - s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
         - me*s412a.v(ds2) * s4215s.v() * s35s.v() - me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
         + me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
@@ -423,6 +443,24 @@ namespace spinas {
         - me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) + me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
         + me*me*s24s.v(ds2)*s4125s.v()*s35s.v()*s321a.v(ds1) - me*me*s24s.v(ds2)*s4145s.v()*s35s.v()*s321a.v(ds1))
         / (pDenS13 * pDenS15 * pDenS14 * pDenS23 * pDenS24)
+
+        // 435
+        + (s512a.v(ds2)*s5213s.v()*s3124s.v()*s14s.v(ds1) - s512a.v(ds2)*s5213s.v()*s3424s.v()*s14s.v(ds1)
+        + me*s512a.v(ds2) * s5213s.v() * s34s.v() + me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
+        + me*me*me*s512a.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1) - me*me*me*s25s.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
+        + me*me*me*s25s.v(ds2)*s35s.v()*s3424s.v()*s14s.v(ds1) - me*me*me*me*s25s.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1)
+        - me*s25s.v(ds2)*s5123s.v()*s3124s.v()*s14s.v(ds1) + me*s25s.v(ds2)*s5153s.v()*s3124s.v()*s14s.v(ds1)
+        - me*me*s25s.v(ds2)*s5123s.v()*s34s.v()*s421a.v(ds1) + me*me*s25s.v(ds2)*s5153s.v()*s34s.v()*s421a.v(ds1))
+        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS25)
+
+        // 453
+        + (s312a.v(ds2)*s3215s.v()*s5124s.v()*s15s.v(ds1) - s312a.v(ds2)*s3215s.v()*s5424s.v()*s14s.v(ds1)
+        - me*s312a.v(ds2) * s3215s.v() * s45s.v() - me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
+        + me*me*me*s312a.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1) + me*me*me*s23s.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
+        - me*me*me*s23s.v(ds2)*s35s.v()*s5424s.v()*s14s.v(ds1) - me*me*me*me*s23s.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1)
+        - me*s23s.v(ds2)*s3125s.v()*s5124s.v()*s14s.v(ds1) + me*s23s.v(ds2)*s3135s.v()*s5124s.v()*s14s.v(ds1)
+        + me*me*s23s.v(ds2)*s3125s.v()*s45s.v()*s421a.v(ds1) - me*me*s23s.v(ds2)*s3135s.v()*s45s.v()*s421a.v(ds1))
+        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
       );
     }
 

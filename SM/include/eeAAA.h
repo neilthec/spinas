@@ -31,11 +31,11 @@ namespace spinas {
     propagator prop;
     cdouble pDenS13, pDenS14, pDenS15, pDenS23, pDenS24, pDenS25;
     sproduct s34s, a34a, s12s, a12a, s13s, a13a, s15s, a15a, s24s, a24a, s23s, a23a, s25s, a25a, s14s, a14a, s35s, a35a, s45s, a45a;
-    sproduct s134a, s135a, s143a, s145a, s153a, s154a, s234a, s243a, s235a, s245a, s253a, s254a, s313a, s314a, s315a, s321a, s323a,
-     s324a, s325a, s343a, s345a, s353a, s354a, s412a, s413a, s414a, s415a, s423a, s424a, s425a, s434a, s435a, s453a, s454a, s512a, s513a,
+    sproduct s134a, s135a, s143a, s145a, s153a, s154a, s234a, s243a, s235a, s245a, s253a, s254a, s312a, s313a, s314a, s315a, s321a, s323a,
+     s324a, s325a, s343a, s345a, s353a, s354a, s412a, s413a, s414a, s415a, s421a, s423a, s424a, s425a, s434a, s435a, s453a, s454a, s512a, s513a,
      s514a, s515a, s523a, s524a, s525a, s534a, s535a, s543a, s545a;
-    sproduct s3145s, s3154s, s3123s, a3123a, s4123s, s4124s, a4124a, s4125s, s4145s, s4215s, s4323s, s5125s, a5125a, s4135s, s4153s, s5123s, s5124s, s5134s, s5143s,
-     s5154s, s5214s, s5323s;
+    sproduct s3145s, s3154s, s3123s, s3124s, s3125s, a3123a, s3135s, s3215s, s3424s, s4123s, s4124s, a4124a, s4125s, s4145s, s4215s, s4323s, s5125s, a5125a, s4135s, s4153s, s5123s, s5124s, s5134s, s5143s,
+     s5153s, s5154s, s5213s, s5214s, s5323s, s5424s;
     ldouble sqrt2;
 
     
