@@ -294,10 +294,10 @@ namespace spinas {
 
       //<12>([45]^2[3|p_1p_2|3](*2 denominators) + [35]^2)
       return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
-        s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)/*+(one/pDenS14/pDenS15)*/) +
-        s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)/*+(one/pDenS13/pDenS15)*/) +
-        s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)/*+(one/pDenS13/pDenS14)*/)
-      );
+        s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
+        s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)+(one/pDenS13/pDenS15)) +
+        s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)+(one/pDenS13/pDenS14))
+      )/two;
     }
 
     return cdouble(0,0);    
@@ -964,7 +964,7 @@ namespace spinas {
         // Fixed seed makes the test reproducible.
         std::mt19937 rng(12345);
 
-        const int Npoints = 10;
+        const int Npoints = 100;
 
         int point = 0;
         int attempts = 0;
