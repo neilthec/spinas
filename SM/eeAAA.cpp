@@ -293,12 +293,11 @@ namespace spinas {
     if(ds3>0&&ds4>0&&ds5>0){
 
       //<12>([45]^2[3|p_1p_2|3](*2 denominators) + [35]^2)
-      // return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
-      //   s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
-      //   s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)+(one/pDenS13/pDenS15)) +
-      //   s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)+(one/pDenS13/pDenS14))
-      // )/two;
-      return pDenS24 * pDenS25 - pDenS14 * pDenS15;
+      return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
+        s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
+        s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)+(one/pDenS13/pDenS15)) +
+        s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)+(one/pDenS13/pDenS14))
+      )/two;
     }
 
     return cdouble(0,0);    
@@ -340,50 +339,50 @@ namespace spinas {
       - s25s.v(ds2)*s423a.v()*s315a.v()*a14a.v(ds1) + s25s.v(ds2)*s453a.v()*s315a.v()*a14a.v(ds1)) / (
         pDenS13 * pDenS25)
       
-      // M_354
-      - (- a23a.v(ds2)*s424a.v()*s515a.v()*s13s.v(ds1) + a23a.v(ds2)*s424a.v()*s535a.v()*s13s.v(ds1)
-      - me*a23a.v(ds2)*s424a.v()*s35s.v()*a15a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
-      - me*a23a.v(ds2)*s45s.v()*s314a.v()*a15a.v(ds1) - me*s24s.v(ds2)*a34a.v()*s515a.v()*s13s.v(ds1) 
-      + me*s24s.v(ds2)*a34a.v()*s535a.v()*s13s.v(ds1) - me*me*s24s.v(ds2)*a34a.v()*s35s.v()*a15a.v(ds1) 
-      + me*s24s.v(ds2)*s523a.v()*a45a.v()*s13s.v(ds1) - me*s24s.v(ds2)*s543a.v()*a45a.v()*s13s.v(ds1) 
-      - s24s.v(ds2)*s523a.v()*s314a.v()*a15a.v(ds1) + s24s.v(ds2)*s543a.v()*s314a.v()*a15a.v(ds1)) / (
-        pDenS13 * pDenS24)
+      // // M_354
+      // - (- a23a.v(ds2)*s424a.v()*s515a.v()*s13s.v(ds1) + a23a.v(ds2)*s424a.v()*s535a.v()*s13s.v(ds1)
+      // - me*a23a.v(ds2)*s424a.v()*s35s.v()*a15a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
+      // - me*a23a.v(ds2)*s45s.v()*s314a.v()*a15a.v(ds1) - me*s24s.v(ds2)*a34a.v()*s515a.v()*s13s.v(ds1) 
+      // + me*s24s.v(ds2)*a34a.v()*s535a.v()*s13s.v(ds1) - me*me*s24s.v(ds2)*a34a.v()*s35s.v()*a15a.v(ds1) 
+      // + me*s24s.v(ds2)*s523a.v()*a45a.v()*s13s.v(ds1) - me*s24s.v(ds2)*s543a.v()*a45a.v()*s13s.v(ds1) 
+      // - s24s.v(ds2)*s523a.v()*s314a.v()*a15a.v(ds1) + s24s.v(ds2)*s543a.v()*s314a.v()*a15a.v(ds1)) / (
+      //   pDenS13 * pDenS24)
       
-      // M_435
-      - (- a24a.v(ds2)*s525a.v()*s313a.v()*s14s.v(ds1) + a24a.v(ds2)*s525a.v()*s343a.v()*s14s.v(ds1)
-      + me*a24a.v(ds2)*s525a.v()*s34s.v()*a13a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
-      + me*a24a.v(ds2)*s35s.v()*s415a.v()*a13a.v(ds1) - me*s25s.v(ds2)*a45a.v()*s313a.v()*s14s.v(ds1) 
-      + me*s25s.v(ds2)*a45a.v()*s343a.v()*s14s.v(ds1) + me*me*s25s.v(ds2)*a45a.v()*s34s.v()*a13a.v(ds1) 
-      - me*s25s.v(ds2)*s324a.v()*a35a.v()*s14s.v(ds1) + me*s25s.v(ds2)*s354a.v()*a35a.v()*s14s.v(ds1) 
-      - s25s.v(ds2)*s324a.v()*s415a.v()*a13a.v(ds1) + s25s.v(ds2)*s354a.v()*s415a.v()*a13a.v(ds1)) / (
-        pDenS14 * pDenS25)
+      // // M_435
+      // - (- a24a.v(ds2)*s525a.v()*s313a.v()*s14s.v(ds1) + a24a.v(ds2)*s525a.v()*s343a.v()*s14s.v(ds1)
+      // + me*a24a.v(ds2)*s525a.v()*s34s.v()*a13a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
+      // + me*a24a.v(ds2)*s35s.v()*s415a.v()*a13a.v(ds1) - me*s25s.v(ds2)*a45a.v()*s313a.v()*s14s.v(ds1) 
+      // + me*s25s.v(ds2)*a45a.v()*s343a.v()*s14s.v(ds1) + me*me*s25s.v(ds2)*a45a.v()*s34s.v()*a13a.v(ds1) 
+      // - me*s25s.v(ds2)*s324a.v()*a35a.v()*s14s.v(ds1) + me*s25s.v(ds2)*s354a.v()*a35a.v()*s14s.v(ds1) 
+      // - s25s.v(ds2)*s324a.v()*s415a.v()*a13a.v(ds1) + s25s.v(ds2)*s354a.v()*s415a.v()*a13a.v(ds1)) / (
+      //   pDenS14 * pDenS25)
       
-      // M_453
-      + (- a24a.v(ds2)*s323a.v()*s515a.v()*s14s.v(ds1) + a24a.v(ds2)*s323a.v()*s545a.v()*s14s.v(ds1)
-      - me*a24a.v(ds2)*s323a.v()*s45s.v()*a15a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
-      - me*a24a.v(ds2)*s35s.v()*s413a.v()*a15a.v(ds1) + me*s23s.v(ds2)*a34a.v()*s515a.v()*s14s.v(ds1) 
-      - me*s23s.v(ds2)*a34a.v()*s545a.v()*s14s.v(ds1) + me*me*s23s.v(ds2)*a34a.v()*s45s.v()*a15a.v(ds1) 
-      + me*s23s.v(ds2)*s524a.v()*a35a.v()*s14s.v(ds1) - me*s23s.v(ds2)*s534a.v()*a35a.v()*s14s.v(ds1) 
-      - s23s.v(ds2)*s524a.v()*s413a.v()*a15a.v(ds1) + s23s.v(ds2)*s534a.v()*s413a.v()*a15a.v(ds1)) / (
-        pDenS14 * pDenS23)
+      // // M_453
+      // + (- a24a.v(ds2)*s323a.v()*s515a.v()*s14s.v(ds1) + a24a.v(ds2)*s323a.v()*s545a.v()*s14s.v(ds1)
+      // - me*a24a.v(ds2)*s323a.v()*s45s.v()*a15a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
+      // - me*a24a.v(ds2)*s35s.v()*s413a.v()*a15a.v(ds1) + me*s23s.v(ds2)*a34a.v()*s515a.v()*s14s.v(ds1) 
+      // - me*s23s.v(ds2)*a34a.v()*s545a.v()*s14s.v(ds1) + me*me*s23s.v(ds2)*a34a.v()*s45s.v()*a15a.v(ds1) 
+      // + me*s23s.v(ds2)*s524a.v()*a35a.v()*s14s.v(ds1) - me*s23s.v(ds2)*s534a.v()*a35a.v()*s14s.v(ds1) 
+      // - s23s.v(ds2)*s524a.v()*s413a.v()*a15a.v(ds1) + s23s.v(ds2)*s534a.v()*s413a.v()*a15a.v(ds1)) / (
+      //   pDenS14 * pDenS23)
       
-      // M_534
-      + (- a25a.v(ds2)*s424a.v()*s313a.v()*s15s.v(ds1) + a25a.v(ds2)*s424a.v()*s353a.v()*s15s.v(ds1)
-      + me*a25a.v(ds2)*s424a.v()*s35s.v()*a13a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
-      + me*a25a.v(ds2)*s34s.v()*s514a.v()*a13a.v(ds1) + me*s24s.v(ds2)*a45a.v()*s313a.v()*s15s.v(ds1) 
-      - me*s24s.v(ds2)*a45a.v()*s353a.v()*s15s.v(ds1) - me*me*s24s.v(ds2)*a45a.v()*s35s.v()*a13a.v(ds1) 
-      - me*s24s.v(ds2)*s325a.v()*a34a.v()*s15s.v(ds1) + me*s24s.v(ds2)*s345a.v()*a34a.v()*s15s.v(ds1) 
-      - s24s.v(ds2)*s325a.v()*s514a.v()*a13a.v(ds1) + s24s.v(ds2)*s345a.v()*s514a.v()*a13a.v(ds1)) / (
-        pDenS15 * pDenS24)
+      // // M_534
+      // + (- a25a.v(ds2)*s424a.v()*s313a.v()*s15s.v(ds1) + a25a.v(ds2)*s424a.v()*s353a.v()*s15s.v(ds1)
+      // + me*a25a.v(ds2)*s424a.v()*s35s.v()*a13a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
+      // + me*a25a.v(ds2)*s34s.v()*s514a.v()*a13a.v(ds1) + me*s24s.v(ds2)*a45a.v()*s313a.v()*s15s.v(ds1) 
+      // - me*s24s.v(ds2)*a45a.v()*s353a.v()*s15s.v(ds1) - me*me*s24s.v(ds2)*a45a.v()*s35s.v()*a13a.v(ds1) 
+      // - me*s24s.v(ds2)*s325a.v()*a34a.v()*s15s.v(ds1) + me*s24s.v(ds2)*s345a.v()*a34a.v()*s15s.v(ds1) 
+      // - s24s.v(ds2)*s325a.v()*s514a.v()*a13a.v(ds1) + s24s.v(ds2)*s345a.v()*s514a.v()*a13a.v(ds1)) / (
+      //   pDenS15 * pDenS24)
 
-      // M_543
-      - (- a25a.v(ds2)*s323a.v()*s414a.v()*s15s.v(ds1) + a25a.v(ds2)*s323a.v()*s454a.v()*s15s.v(ds1)
-      + me*a25a.v(ds2)*s323a.v()*s45s.v()*a14a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
-      - me*a25a.v(ds2)*s34s.v()*s513a.v()*a14a.v(ds1) + me*s23s.v(ds2)*a35a.v()*s414a.v()*s15s.v(ds1) 
-      - me*s23s.v(ds2)*a35a.v()*s454a.v()*s15s.v(ds1) - me*me*s23s.v(ds2)*a35a.v()*s45s.v()*a14a.v(ds1) 
-      + me*s23s.v(ds2)*s425a.v()*a34a.v()*s15s.v(ds1) - me*s23s.v(ds2)*s435a.v()*a34a.v()*s15s.v(ds1) 
-      - s23s.v(ds2)*s425a.v()*s513a.v()*a14a.v(ds1) + s23s.v(ds2)*s435a.v()*s513a.v()*a14a.v(ds1)) / (
-        pDenS15 * pDenS23)
+      // // M_543
+      // - (- a25a.v(ds2)*s323a.v()*s414a.v()*s15s.v(ds1) + a25a.v(ds2)*s323a.v()*s454a.v()*s15s.v(ds1)
+      // + me*a25a.v(ds2)*s323a.v()*s45s.v()*a14a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
+      // - me*a25a.v(ds2)*s34s.v()*s513a.v()*a14a.v(ds1) + me*s23s.v(ds2)*a35a.v()*s414a.v()*s15s.v(ds1) 
+      // - me*s23s.v(ds2)*a35a.v()*s454a.v()*s15s.v(ds1) - me*me*s23s.v(ds2)*a35a.v()*s45s.v()*a14a.v(ds1) 
+      // + me*s23s.v(ds2)*s425a.v()*a34a.v()*s15s.v(ds1) - me*s23s.v(ds2)*s435a.v()*a34a.v()*s15s.v(ds1) 
+      // - s23s.v(ds2)*s425a.v()*s513a.v()*a14a.v(ds1) + s23s.v(ds2)*s435a.v()*s513a.v()*a14a.v(ds1)) / (
+      //   pDenS15 * pDenS23)
       );
     }
 
@@ -403,30 +402,30 @@ namespace spinas {
       a15a.v(ds1)*s314a.v()*(s45s.v()*s253a.v(ds2) - s24s.v(ds2)*s523a.v())) / (
         pDenS13 * pDenS25) 
       
-      // M_354
-      - ((-s135a.v(ds1) * s35s.v() - s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
-      a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) + s25s.v(ds2) * s423a.v())) / (
-        pDenS13 * pDenS24)
+      // // M_354
+      // - ((-s135a.v(ds1) * s35s.v() - s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
+      // a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) + s25s.v(ds2) * s423a.v())) / (
+      //   pDenS13 * pDenS24)
 
-      // M_435
-      - ((s143a.v(ds1)*s34s.v() - s13s.v(ds1)*s413a.v()) * a25a.v(ds2)*s524a.v() + 
-      a15a.v(ds1)*s413a.v()*(s35s.v()*s254a.v(ds2) - s23s.v(ds2)*s524a.v())) / (
-        pDenS14 * pDenS25) 
+      // // M_435
+      // - ((s143a.v(ds1)*s34s.v() - s13s.v(ds1)*s413a.v()) * a25a.v(ds2)*s524a.v() + 
+      // a15a.v(ds1)*s413a.v()*(s35s.v()*s254a.v(ds2) - s23s.v(ds2)*s524a.v())) / (
+      //   pDenS14 * pDenS25) 
 
-      // M_453
-      + ((-s145a.v(ds1)*s45s.v() - s15s.v(ds1)*s415a.v()) * a23a.v(ds2)*s324a.v() - 
-      a13a.v(ds1)*s415a.v()*(s35s.v()*s234a.v(ds2) + s25s.v(ds2)*s324a.v())) / (
-        pDenS14 * pDenS23)
+      // // M_453
+      // + ((-s145a.v(ds1)*s45s.v() - s15s.v(ds1)*s415a.v()) * a23a.v(ds2)*s324a.v() - 
+      // a13a.v(ds1)*s415a.v()*(s35s.v()*s234a.v(ds2) + s25s.v(ds2)*s324a.v())) / (
+      //   pDenS14 * pDenS23)
 
-      // M_534
-      + ((s153a.v(ds1)*s35s.v() - s13s.v(ds1)*s513a.v()) * a24a.v(ds2)*s425a.v() + 
-      a14a.v(ds1)*s513a.v()*(s34s.v()*s245a.v(ds2) - s23s.v(ds2)*s425a.v())) / (
-        pDenS15 * pDenS24)
+      // // M_534
+      // + ((s153a.v(ds1)*s35s.v() - s13s.v(ds1)*s513a.v()) * a24a.v(ds2)*s425a.v() + 
+      // a14a.v(ds1)*s513a.v()*(s34s.v()*s245a.v(ds2) - s23s.v(ds2)*s425a.v())) / (
+      //   pDenS15 * pDenS24)
 
-      // M_543
-      - ((s154a.v(ds1)*s45s.v() - s14s.v(ds1)*s514a.v()) * a23a.v(ds2)*s325a.v() - 
-      a13a.v(ds1)*s514a.v()*(s34s.v()*s235a.v(ds2) + s24s.v(ds2)*s325a.v())) / (
-        pDenS15 * pDenS23)
+      // // M_543
+      // - ((s154a.v(ds1)*s45s.v() - s14s.v(ds1)*s514a.v()) * a23a.v(ds2)*s325a.v() - 
+      // a13a.v(ds1)*s514a.v()*(s34s.v()*s235a.v(ds2) + s24s.v(ds2)*s325a.v())) / (
+      //   pDenS15 * pDenS23)
       );
     }
 
@@ -442,58 +441,58 @@ namespace spinas {
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
 
         // 345
-        (s512a.v(ds2)*s5214s.v()*s4123s.v()*s13s.v(ds1) - s512a.v(ds2)*s5214s.v()*s4323s.v()*s13s.v(ds1)
-        - me*s512a.v(ds2) * s5214s.v() * s34s.v() + me*me*s512a.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
-        - me*me*me*s512a.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1) - me*me*me*s25s.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
-        + me*me*me*s25s.v(ds2)*s45s.v()*s4323s.v()*s13s.v(ds1) + me*me*me*me*s25s.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1)
-        - me*s25s.v(ds2)*s5124s.v()*s4123s.v()*s13s.v(ds1) + me*s25s.v(ds2)*s5154s.v()*s4123s.v()*s13s.v(ds1)
+        (-s512a.v(ds2)*s5214s.v()*s4123s.v()*s13s.v(ds1) + s512a.v(ds2)*s5214s.v()*s4323s.v()*s13s.v(ds1)
+        - me*s512a.v(ds2) * s5214s.v() * s34s.v() - me*me*s512a.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
+        + me*me*me*s512a.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1) - me*me*me*s25s.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
+        + me*me*me*s25s.v(ds2)*s45s.v()*s4323s.v()*s13s.v(ds1) - me*me*me*me*s25s.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1)
+        + me*s25s.v(ds2)*s5124s.v()*s4123s.v()*s13s.v(ds1) - me*s25s.v(ds2)*s5154s.v()*s4123s.v()*s13s.v(ds1)
         + me*me*s25s.v(ds2)*s5124s.v()*s34s.v()*s321a.v(ds1) - me*me*s25s.v(ds2)*s5154s.v()*s34s.v()*s321a.v(ds1))
         / (pDenS13 * pDenS14 * pDenS15 * pDenS23 * pDenS25)
 
-        // 354
-        + (s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) - s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
-        - me*s412a.v(ds2) * s4215s.v() * s35s.v() - me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
-        + me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
-        - me*me*me*s24s.v(ds2)*s45s.v()*s5323s.v()*s13s.v(ds1) - me*me*me*me*s24s.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1)
-        - me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) + me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
-        + me*me*s24s.v(ds2)*s4125s.v()*s35s.v()*s321a.v(ds1) - me*me*s24s.v(ds2)*s4145s.v()*s35s.v()*s321a.v(ds1))
-        / (pDenS13 * pDenS15 * pDenS14 * pDenS23 * pDenS24)
+        // // 354
+        // + (s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) - s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
+        // - me*s412a.v(ds2) * s4215s.v() * s35s.v() - me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
+        // + me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
+        // - me*me*me*s24s.v(ds2)*s45s.v()*s5323s.v()*s13s.v(ds1) - me*me*me*me*s24s.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1)
+        // - me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) + me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
+        // + me*me*s24s.v(ds2)*s4125s.v()*s35s.v()*s321a.v(ds1) - me*me*s24s.v(ds2)*s4145s.v()*s35s.v()*s321a.v(ds1))
+        // / (pDenS13 * pDenS15 * pDenS14 * pDenS23 * pDenS24)
 
-        // 435
-        + (s512a.v(ds2)*s5213s.v()*s3124s.v()*s14s.v(ds1) - s512a.v(ds2)*s5213s.v()*s3424s.v()*s14s.v(ds1)
-        + me*s512a.v(ds2) * s5213s.v() * s34s.v() + me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
-        + me*me*me*s512a.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1) - me*me*me*s25s.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
-        + me*me*me*s25s.v(ds2)*s35s.v()*s3424s.v()*s14s.v(ds1) - me*me*me*me*s25s.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1)
-        - me*s25s.v(ds2)*s5123s.v()*s3124s.v()*s14s.v(ds1) + me*s25s.v(ds2)*s5153s.v()*s3124s.v()*s14s.v(ds1)
-        - me*me*s25s.v(ds2)*s5123s.v()*s34s.v()*s421a.v(ds1) + me*me*s25s.v(ds2)*s5153s.v()*s34s.v()*s421a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS25)
+        // // 435
+        // + (s512a.v(ds2)*s5213s.v()*s3124s.v()*s14s.v(ds1) - s512a.v(ds2)*s5213s.v()*s3424s.v()*s14s.v(ds1)
+        // + me*s512a.v(ds2) * s5213s.v() * s34s.v() + me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
+        // + me*me*me*s512a.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1) - me*me*me*s25s.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
+        // + me*me*me*s25s.v(ds2)*s35s.v()*s3424s.v()*s14s.v(ds1) - me*me*me*me*s25s.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1)
+        // - me*s25s.v(ds2)*s5123s.v()*s3124s.v()*s14s.v(ds1) + me*s25s.v(ds2)*s5153s.v()*s3124s.v()*s14s.v(ds1)
+        // - me*me*s25s.v(ds2)*s5123s.v()*s34s.v()*s421a.v(ds1) + me*me*s25s.v(ds2)*s5153s.v()*s34s.v()*s421a.v(ds1))
+        // / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS25)
 
-        // 453
-        + (s312a.v(ds2)*s3215s.v()*s5124s.v()*s15s.v(ds1) - s312a.v(ds2)*s3215s.v()*s5424s.v()*s14s.v(ds1)
-        - me*s312a.v(ds2) * s3215s.v() * s45s.v() - me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
-        + me*me*me*s312a.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1) + me*me*me*s23s.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
-        - me*me*me*s23s.v(ds2)*s35s.v()*s5424s.v()*s14s.v(ds1) - me*me*me*me*s23s.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1)
-        - me*s23s.v(ds2)*s3125s.v()*s5124s.v()*s14s.v(ds1) + me*s23s.v(ds2)*s3135s.v()*s5124s.v()*s14s.v(ds1)
-        + me*me*s23s.v(ds2)*s3125s.v()*s45s.v()*s421a.v(ds1) - me*me*s23s.v(ds2)*s3135s.v()*s45s.v()*s421a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
+        // // 453
+        // + (s312a.v(ds2)*s3215s.v()*s5124s.v()*s15s.v(ds1) - s312a.v(ds2)*s3215s.v()*s5424s.v()*s14s.v(ds1)
+        // - me*s312a.v(ds2) * s3215s.v() * s45s.v() - me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
+        // + me*me*me*s312a.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1) + me*me*me*s23s.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
+        // - me*me*me*s23s.v(ds2)*s35s.v()*s5424s.v()*s14s.v(ds1) - me*me*me*me*s23s.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1)
+        // - me*s23s.v(ds2)*s3125s.v()*s5124s.v()*s14s.v(ds1) + me*s23s.v(ds2)*s3135s.v()*s5124s.v()*s14s.v(ds1)
+        // + me*me*s23s.v(ds2)*s3125s.v()*s45s.v()*s421a.v(ds1) - me*me*s23s.v(ds2)*s3135s.v()*s45s.v()*s421a.v(ds1))
+        // / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
 
-        // 534
-        + (s412a.v(ds2)*s4213s.v()*s3125s.v()*s15s.v(ds1) - s412a.v(ds2)*s4213s.v()*s3525s.v()*s15s.v(ds1)
-        + me*s412a.v(ds2) * s4213s.v() * s35s.v() + me*me*s412a.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
-        + me*me*me*s412a.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1) - me*me*me*s24s.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
-        + me*me*me*s24s.v(ds2)*s34s.v()*s3525s.v()*s15s.v(ds1) - me*me*me*me*s24s.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1)
-        - me*s24s.v(ds2)*s4123s.v()*s3125s.v()*s15s.v(ds1) + me*s24s.v(ds2)*s4143s.v()*s3125s.v()*s15s.v(ds1)
-        - me*me*s24s.v(ds2)*s4123s.v()*s35s.v()*s521a.v(ds1) + me*me*s24s.v(ds2)*s4143s.v()*s35s.v()*s521a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS25 * pDenS24)
+        // // 534
+        // + (s412a.v(ds2)*s4213s.v()*s3125s.v()*s15s.v(ds1) - s412a.v(ds2)*s4213s.v()*s3525s.v()*s15s.v(ds1)
+        // + me*s412a.v(ds2) * s4213s.v() * s35s.v() + me*me*s412a.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
+        // + me*me*me*s412a.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1) - me*me*me*s24s.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
+        // + me*me*me*s24s.v(ds2)*s34s.v()*s3525s.v()*s15s.v(ds1) - me*me*me*me*s24s.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1)
+        // - me*s24s.v(ds2)*s4123s.v()*s3125s.v()*s15s.v(ds1) + me*s24s.v(ds2)*s4143s.v()*s3125s.v()*s15s.v(ds1)
+        // - me*me*s24s.v(ds2)*s4123s.v()*s35s.v()*s521a.v(ds1) + me*me*s24s.v(ds2)*s4143s.v()*s35s.v()*s521a.v(ds1))
+        // / (pDenS13 * pDenS14 * pDenS15 * pDenS25 * pDenS24)
 
-        // 543
-        + (s312a.v(ds2)*s3214s.v()*s4125s.v()*s15s.v(ds1) - s312a.v(ds2)*s3214s.v()*s4525s.v()*s15s.v(ds1)
-        + me*s312a.v(ds2) * s3214s.v() * s45s.v() - me*me*s312a.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
-        - me*me*me*s312a.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1) + me*me*me*s23s.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
-        - me*me*me*s23s.v(ds2)*s34s.v()*s4525s.v()*s15s.v(ds1) + me*me*me*me*s23s.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1)
-        - me*s23s.v(ds2)*s3124s.v()*s4125s.v()*s15s.v(ds1) + me*s23s.v(ds2)*s3134s.v()*s4125s.v()*s15s.v(ds1)
-        - me*me*s23s.v(ds2)*s3124s.v()*s45s.v()*s521a.v(ds1) + me*me*s23s.v(ds2)*s3134s.v()*s45s.v()*s521a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
+        // // 543
+        // + (s312a.v(ds2)*s3214s.v()*s4125s.v()*s15s.v(ds1) - s312a.v(ds2)*s3214s.v()*s4525s.v()*s15s.v(ds1)
+        // + me*s312a.v(ds2) * s3214s.v() * s45s.v() - me*me*s312a.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
+        // - me*me*me*s312a.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1) + me*me*me*s23s.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
+        // - me*me*me*s23s.v(ds2)*s34s.v()*s4525s.v()*s15s.v(ds1) + me*me*me*me*s23s.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1)
+        // - me*s23s.v(ds2)*s3124s.v()*s4125s.v()*s15s.v(ds1) + me*s23s.v(ds2)*s3134s.v()*s4125s.v()*s15s.v(ds1)
+        // - me*me*s23s.v(ds2)*s3124s.v()*s45s.v()*s521a.v(ds1) + me*me*s23s.v(ds2)*s3134s.v()*s45s.v()*s521a.v(ds1))
+        // / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
       );
     }
 
@@ -822,7 +821,7 @@ namespace spinas {
     }
 
     return true;
-}
+  }
 
   //  Tests
   int test_eeAAA(){
