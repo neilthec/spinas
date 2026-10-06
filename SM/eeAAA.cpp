@@ -901,7 +901,7 @@ namespace spinas {
       cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-      std::cout << "\n " << "Feynman_s   = " << amp_f << "\n";
+      std::cout << "\n " << " Feynman_s   = " << amp_f << "\n";
       std::cout << "  Reduced_s   = " << amp_fr << "\n";
       std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
