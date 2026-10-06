@@ -294,9 +294,9 @@ namespace spinas {
 
       //<12>([45]^2[3|p_1p_2|3](*2 denominators) + [35]^2)
       return sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
-        // s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
-        // s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)+(one/pDenS13/pDenS15)) +
-        s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS13/pDenS14))
+        s45s.v()*s45s.v()*s3123s.v()/pDenS13/pDenS23*((one/pDenS24/pDenS25)+(one/pDenS14/pDenS15)) +
+        s35s.v()*s35s.v()*s4124s.v()/pDenS14/pDenS24*((one/pDenS23/pDenS25)+(one/pDenS13/pDenS15)) +
+        s34s.v()*s34s.v()*s5125s.v()/pDenS15/pDenS25*((one/pDenS23/pDenS24)+(one/pDenS13/pDenS14))
       )/two;
     }
 
@@ -449,50 +449,50 @@ namespace spinas {
         + me*me*s25s.v(ds2)*s5124s.v()*s34s.v()*s321a.v(ds1) - me*me*s25s.v(ds2)*s5154s.v()*s34s.v()*s321a.v(ds1))
         / (pDenS13 * pDenS14 * pDenS15 * pDenS23 * pDenS25)
 
-        // // 354
-        // + (-s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) + s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
-        // - me*s412a.v(ds2) * s4215s.v() * s35s.v() + me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
-        // - me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
-        // - me*me*me*s24s.v(ds2)*s45s.v()*s5323s.v()*s13s.v(ds1) + me*me*me*me*s24s.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1)
-        // + me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) - me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
-        // + me*me*s24s.v(ds2)*s4125s.v()*s35s.v()*s321a.v(ds1) - me*me*s24s.v(ds2)*s4145s.v()*s35s.v()*s321a.v(ds1))
-        // / (pDenS13 * pDenS15 * pDenS14 * pDenS23 * pDenS24)
+        // 354
+        + (-s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) + s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
+        - me*s412a.v(ds2) * s4215s.v() * s35s.v() + me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
+        - me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
+        - me*me*me*s24s.v(ds2)*s45s.v()*s5323s.v()*s13s.v(ds1) + me*me*me*me*s24s.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1)
+        + me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) - me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
+        + me*me*s24s.v(ds2)*s4125s.v()*s35s.v()*s321a.v(ds1) - me*me*s24s.v(ds2)*s4145s.v()*s35s.v()*s321a.v(ds1))
+        / (pDenS13 * pDenS15 * pDenS14 * pDenS23 * pDenS24)
 
-        // // 435
-        // + (-s512a.v(ds2)*s5213s.v()*s3124s.v()*s14s.v(ds1) + s512a.v(ds2)*s5213s.v()*s3424s.v()*s14s.v(ds1)
-        // + me*s512a.v(ds2) * s5213s.v() * s34s.v() - me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
-        // - me*me*me*s512a.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1) - me*me*me*s25s.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
-        // + me*me*me*s25s.v(ds2)*s35s.v()*s3424s.v()*s14s.v(ds1) + me*me*me*me*s25s.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1)
-        // + me*s25s.v(ds2)*s5123s.v()*s3124s.v()*s14s.v(ds1) - me*s25s.v(ds2)*s5153s.v()*s3124s.v()*s14s.v(ds1)
-        // - me*me*s25s.v(ds2)*s5123s.v()*s34s.v()*s421a.v(ds1) + me*me*s25s.v(ds2)*s5153s.v()*s34s.v()*s421a.v(ds1))
-        // / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS25)
+        // 435
+        + (-s512a.v(ds2)*s5213s.v()*s3124s.v()*s14s.v(ds1) + s512a.v(ds2)*s5213s.v()*s3424s.v()*s14s.v(ds1)
+        + me*s512a.v(ds2) * s5213s.v() * s34s.v() - me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
+        - me*me*me*s512a.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1) - me*me*me*s25s.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
+        + me*me*me*s25s.v(ds2)*s35s.v()*s3424s.v()*s14s.v(ds1) + me*me*me*me*s25s.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1)
+        + me*s25s.v(ds2)*s5123s.v()*s3124s.v()*s14s.v(ds1) - me*s25s.v(ds2)*s5153s.v()*s3124s.v()*s14s.v(ds1)
+        - me*me*s25s.v(ds2)*s5123s.v()*s34s.v()*s421a.v(ds1) + me*me*s25s.v(ds2)*s5153s.v()*s34s.v()*s421a.v(ds1))
+        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS25)
 
-        // // 453
-        // + (-s312a.v(ds2)*s3215s.v()*s5124s.v()*s15s.v(ds1) + s312a.v(ds2)*s3215s.v()*s5424s.v()*s14s.v(ds1)
-        // - me*s312a.v(ds2) * s3215s.v() * s45s.v() + me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
-        // - me*me*me*s312a.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1) + me*me*me*s23s.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
-        // - me*me*me*s23s.v(ds2)*s35s.v()*s5424s.v()*s14s.v(ds1) - me*me*me*me*s23s.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1)
-        // + me*s23s.v(ds2)*s3125s.v()*s5124s.v()*s14s.v(ds1) - me*s23s.v(ds2)*s3135s.v()*s5124s.v()*s14s.v(ds1)
-        // + me*me*s23s.v(ds2)*s3125s.v()*s45s.v()*s421a.v(ds1) - me*me*s23s.v(ds2)*s3135s.v()*s45s.v()*s421a.v(ds1))
-        // / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
+        // 453
+        + (-s312a.v(ds2)*s3215s.v()*s5124s.v()*s15s.v(ds1) + s312a.v(ds2)*s3215s.v()*s5424s.v()*s14s.v(ds1)
+        - me*s312a.v(ds2) * s3215s.v() * s45s.v() + me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
+        - me*me*me*s312a.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1) + me*me*me*s23s.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
+        - me*me*me*s23s.v(ds2)*s35s.v()*s5424s.v()*s14s.v(ds1) - me*me*me*me*s23s.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1)
+        + me*s23s.v(ds2)*s3125s.v()*s5124s.v()*s14s.v(ds1) - me*s23s.v(ds2)*s3135s.v()*s5124s.v()*s14s.v(ds1)
+        + me*me*s23s.v(ds2)*s3125s.v()*s45s.v()*s421a.v(ds1) - me*me*s23s.v(ds2)*s3135s.v()*s45s.v()*s421a.v(ds1))
+        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
 
-        // // 534
-        // + (-s412a.v(ds2)*s4213s.v()*s3125s.v()*s15s.v(ds1) + s412a.v(ds2)*s4213s.v()*s3525s.v()*s15s.v(ds1)
-        // + me*s412a.v(ds2) * s4213s.v() * s35s.v() - me*me*s412a.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
-        // - me*me*me*s412a.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1) - me*me*me*s24s.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
-        // + me*me*me*s24s.v(ds2)*s34s.v()*s3525s.v()*s15s.v(ds1) + me*me*me*me*s24s.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1)
-        // + me*s24s.v(ds2)*s4123s.v()*s3125s.v()*s15s.v(ds1) - me*s24s.v(ds2)*s4143s.v()*s3125s.v()*s15s.v(ds1)
-        // - me*me*s24s.v(ds2)*s4123s.v()*s35s.v()*s521a.v(ds1) + me*me*s24s.v(ds2)*s4143s.v()*s35s.v()*s521a.v(ds1))
-        // / (pDenS13 * pDenS14 * pDenS15 * pDenS25 * pDenS24)
+        // 534
+        + (-s412a.v(ds2)*s4213s.v()*s3125s.v()*s15s.v(ds1) + s412a.v(ds2)*s4213s.v()*s3525s.v()*s15s.v(ds1)
+        + me*s412a.v(ds2) * s4213s.v() * s35s.v() - me*me*s412a.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
+        - me*me*me*s412a.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1) - me*me*me*s24s.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
+        + me*me*me*s24s.v(ds2)*s34s.v()*s3525s.v()*s15s.v(ds1) + me*me*me*me*s24s.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1)
+        + me*s24s.v(ds2)*s4123s.v()*s3125s.v()*s15s.v(ds1) - me*s24s.v(ds2)*s4143s.v()*s3125s.v()*s15s.v(ds1)
+        - me*me*s24s.v(ds2)*s4123s.v()*s35s.v()*s521a.v(ds1) + me*me*s24s.v(ds2)*s4143s.v()*s35s.v()*s521a.v(ds1))
+        / (pDenS13 * pDenS14 * pDenS15 * pDenS25 * pDenS24)
 
-        // // 543
-        // + (-s312a.v(ds2)*s3214s.v()*s4125s.v()*s15s.v(ds1) + s312a.v(ds2)*s3214s.v()*s4525s.v()*s15s.v(ds1)
-        // + me*s312a.v(ds2) * s3214s.v() * s45s.v() + me*me*s312a.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
-        // + me*me*me*s312a.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1) - me*me*me*s23s.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
-        // + me*me*me*s23s.v(ds2)*s34s.v()*s4525s.v()*s15s.v(ds1) - me*me*me*me*s23s.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1)
-        // + me*s23s.v(ds2)*s3124s.v()*s4125s.v()*s15s.v(ds1) - me*s23s.v(ds2)*s3134s.v()*s4125s.v()*s15s.v(ds1)
-        // - me*me*s23s.v(ds2)*s3124s.v()*s45s.v()*s521a.v(ds1) + me*me*s23s.v(ds2)*s3134s.v()*s45s.v()*s521a.v(ds1))
-        // / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
+        // 543
+        + (-s312a.v(ds2)*s3214s.v()*s4125s.v()*s15s.v(ds1) + s312a.v(ds2)*s3214s.v()*s4525s.v()*s15s.v(ds1)
+        + me*s312a.v(ds2) * s3214s.v() * s45s.v() + me*me*s312a.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
+        + me*me*me*s312a.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1) - me*me*me*s23s.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
+        + me*me*me*s23s.v(ds2)*s34s.v()*s4525s.v()*s15s.v(ds1) - me*me*me*me*s23s.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1)
+        + me*s23s.v(ds2)*s3124s.v()*s4125s.v()*s15s.v(ds1) - me*s23s.v(ds2)*s3134s.v()*s4125s.v()*s15s.v(ds1)
+        - me*me*s23s.v(ds2)*s3124s.v()*s45s.v()*s521a.v(ds1) + me*me*s23s.v(ds2)*s3134s.v()*s45s.v()*s521a.v(ds1))
+        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
       );
     }
 
@@ -901,15 +901,15 @@ namespace spinas {
       cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-      std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
-      std::cout << "  Reduced     = " << amp_fr << "\n";
-      std::cout << "  Feynman_x   = " << amp_fx << "\n";
+      std::cout << "\n " << "Feynman_s   = " << amp_f << "\n";
+      std::cout << "  Reduced_s   = " << amp_fr << "\n";
+      std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
+      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
       std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
-      std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
-      std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
+      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
+      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
 
       energy = 600.0;
 
@@ -950,16 +950,15 @@ namespace spinas {
       amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-      std::cout << "\n" << "  Feynman     = " << amp_f << "\n";
-      std::cout << "  Reduced     = " << amp_fr << "\n";
-      std::cout << "  Feynman_x   = " << amp_fx << "\n";
+      std::cout << "  Feynman_s   = " << amp_f << "\n";
+      std::cout << "  Reduced_s   = " << amp_fr << "\n";
+      std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
+      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
       std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
-      std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
-      std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
-
+      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
+      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
       if (2 == 2) {
         // Fixed seed makes the test reproducible.
         std::mt19937 rng(12345);
@@ -999,15 +998,15 @@ namespace spinas {
           cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-          std::cout << "  Feynman     = " << amp_f << "\n";
-          std::cout << "  Reduced     = " << amp_fr << "\n";
-          std::cout << "  Feynman_x   = " << amp_fx << "\n";
+          std::cout << "  Feynman_s   = " << amp_f << "\n";
+          std::cout << "  Reduced_s   = " << amp_fr << "\n";
+          std::cout << "  Feynman_ns  = " << amp_fx << "\n";
           std::cout << "  x-factor    = " << amp_x << "\n";
           std::cout << "  Permutation = " << amp_p << "\n";
-          std::cout << "  Feynman / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
+          std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
           std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
-          std::cout << "  Feynman / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
-          std::cout << "  Feynman / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
+          std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
+          std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
         }
 
         std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
