@@ -906,10 +906,12 @@ namespace spinas {
       std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
-      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
-      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
-      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
+      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ") |Feynman_s / Reduced| = " << std::abs(amp_f) / std::abs(amp_fr) << "\n";
+      std::cout << "  Feynman_ns / Feynman_s = (" << (amp_fx.real() / amp_f.real()) << " , " << (amp_fx.imag() / amp_f.imag()) << ") |Feynman_ns / Feynman_s| = " << std::abs(amp_fx) / std::abs(amp_f) << "\n";
+      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ") |x-factor / Permutation| = " << std::abs(amp_x) / std::abs(amp_p) << "\n";
+      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
+      std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
+      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
 
       energy = 600.0;
 
@@ -950,15 +952,17 @@ namespace spinas {
       amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-      std::cout << "  Feynman_s   = " << amp_f << "\n";
+      std::cout << "\n " << " Feynman_s   = " << amp_f << "\n";
       std::cout << "  Reduced_s   = " << amp_fr << "\n";
       std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
-      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
-      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
-      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
+      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ") |Feynman_s / Reduced| = " << std::abs(amp_f) / std::abs(amp_fr) << "\n";
+      std::cout << "  Feynman_ns / Feynman_s = (" << (amp_fx.real() / amp_f.real()) << " , " << (amp_fx.imag() / amp_f.imag()) << ") |Feynman_ns / Feynman_s| = " << std::abs(amp_fx) / std::abs(amp_f) << "\n";
+      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ") |x-factor / Permutation| = " << std::abs(amp_x) / std::abs(amp_p) << "\n";
+      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
+      std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
+      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
       if (2 == 2) {
         // Fixed seed makes the test reproducible.
         std::mt19937 rng(12345);
@@ -998,15 +1002,17 @@ namespace spinas {
           cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
-          std::cout << "  Feynman_s   = " << amp_f << "\n";
+          std::cout << "\n " << " Feynman_s   = " << amp_f << "\n";
           std::cout << "  Reduced_s   = " << amp_fr << "\n";
           std::cout << "  Feynman_ns  = " << amp_fx << "\n";
           std::cout << "  x-factor    = " << amp_x << "\n";
           std::cout << "  Permutation = " << amp_p << "\n";
-          std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ")\n";
-          std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ")\n";
-          std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ")\n";
-          std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ")\n";
+          std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ") |Feynman_s / Reduced| = " << std::abs(amp_f) / std::abs(amp_fr) << "\n";
+          std::cout << "  Feynman_ns / Feynman_s = (" << (amp_fx.real() / amp_f.real()) << " , " << (amp_fx.imag() / amp_f.imag()) << ") |Feynman_ns / Feynman_s| = " << std::abs(amp_fx) / std::abs(amp_f) << "\n";
+          std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ") |x-factor / Permutation| = " << std::abs(amp_x) / std::abs(amp_p) << "\n";
+          std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
+          std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
+          std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
         }
 
         std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
