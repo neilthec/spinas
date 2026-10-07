@@ -442,7 +442,7 @@ namespace spinas {
 
         // 345
         (-s512a.v(ds2)*s5214s.v()*s4123s.v()*s13s.v(ds1) + s512a.v(ds2)*s5214s.v()*s4323s.v()*s13s.v(ds1)
-        - me*s512a.v(ds2) * s5214s.v() * s34s.v() - me*me*s512a.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
+        - me*s512a.v(ds2)*s5214s.v()*s34s.v()*s321a.v(ds1) - me*me*s512a.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
         + me*me*me*s512a.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1) - me*me*me*s25s.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
         + me*me*me*s25s.v(ds2)*s45s.v()*s4323s.v()*s13s.v(ds1) - me*me*me*me*s25s.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1)
         + me*s25s.v(ds2)*s5124s.v()*s4123s.v()*s13s.v(ds1) - me*s25s.v(ds2)*s5154s.v()*s4123s.v()*s13s.v(ds1)
@@ -451,7 +451,7 @@ namespace spinas {
 
         // 354
         + (-s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) + s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
-        - me*s412a.v(ds2) * s4215s.v() * s35s.v() + me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
+        - me*s412a.v(ds2)*s4215s.v()*s35s.v()*s321a.v(ds1) + me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
         - me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
         - me*me*me*s24s.v(ds2)*s45s.v()*s5323s.v()*s13s.v(ds1) + me*me*me*me*s24s.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1)
         + me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) - me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
@@ -460,7 +460,7 @@ namespace spinas {
 
         // 435
         + (-s512a.v(ds2)*s5213s.v()*s3124s.v()*s14s.v(ds1) + s512a.v(ds2)*s5213s.v()*s3424s.v()*s14s.v(ds1)
-        + me*s512a.v(ds2) * s5213s.v() * s34s.v() - me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
+        + me*s512a.v(ds2)*s5213s.v()*s34s.v()*s421a.v(ds1) - me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
         - me*me*me*s512a.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1) - me*me*me*s25s.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
         + me*me*me*s25s.v(ds2)*s35s.v()*s3424s.v()*s14s.v(ds1) + me*me*me*me*s25s.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1)
         + me*s25s.v(ds2)*s5123s.v()*s3124s.v()*s14s.v(ds1) - me*s25s.v(ds2)*s5153s.v()*s3124s.v()*s14s.v(ds1)
@@ -469,7 +469,7 @@ namespace spinas {
 
         // 453
         + (-s312a.v(ds2)*s3215s.v()*s5124s.v()*s15s.v(ds1) + s312a.v(ds2)*s3215s.v()*s5424s.v()*s14s.v(ds1)
-        - me*s312a.v(ds2) * s3215s.v() * s45s.v() + me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
+        - me*s312a.v(ds2)*s3215s.v()*s45s.v()*s421a.v(ds1) + me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
         - me*me*me*s312a.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1) + me*me*me*s23s.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
         - me*me*me*s23s.v(ds2)*s35s.v()*s5424s.v()*s14s.v(ds1) - me*me*me*me*s23s.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1)
         + me*s23s.v(ds2)*s3125s.v()*s5124s.v()*s14s.v(ds1) - me*s23s.v(ds2)*s3135s.v()*s5124s.v()*s14s.v(ds1)
@@ -478,7 +478,7 @@ namespace spinas {
 
         // 534
         + (-s412a.v(ds2)*s4213s.v()*s3125s.v()*s15s.v(ds1) + s412a.v(ds2)*s4213s.v()*s3525s.v()*s15s.v(ds1)
-        + me*s412a.v(ds2) * s4213s.v() * s35s.v() - me*me*s412a.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
+        + me*s412a.v(ds2)*s4213s.v()*s35s.v()*s521a.v(ds1) - me*me*s412a.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
         - me*me*me*s412a.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1) - me*me*me*s24s.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
         + me*me*me*s24s.v(ds2)*s34s.v()*s3525s.v()*s15s.v(ds1) + me*me*me*me*s24s.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1)
         + me*s24s.v(ds2)*s4123s.v()*s3125s.v()*s15s.v(ds1) - me*s24s.v(ds2)*s4143s.v()*s3125s.v()*s15s.v(ds1)
@@ -487,7 +487,7 @@ namespace spinas {
 
         // 543
         + (-s312a.v(ds2)*s3214s.v()*s4125s.v()*s15s.v(ds1) + s312a.v(ds2)*s3214s.v()*s4525s.v()*s15s.v(ds1)
-        + me*s312a.v(ds2) * s3214s.v() * s45s.v() + me*me*s312a.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
+        + me*s312a.v(ds2)*s3214s.v()*s45s.v()*s521a.v(ds1) + me*me*s312a.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
         + me*me*me*s312a.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1) - me*me*me*s23s.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
         + me*me*me*s23s.v(ds2)*s34s.v()*s4525s.v()*s15s.v(ds1) - me*me*me*me*s23s.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1)
         + me*s23s.v(ds2)*s3124s.v()*s4125s.v()*s15s.v(ds1) - me*s23s.v(ds2)*s3134s.v()*s4125s.v()*s15s.v(ds1)
