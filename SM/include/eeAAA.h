@@ -90,6 +90,9 @@ namespace spinas {
 
     //Amplitude
     cdouble amp(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);//Double the spins
+    // All-plus H and S2 with the same 2 sqrt(2) e^3 me <12> coefficient.
+    cdouble amp_nonspurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
+    cdouble amp_spurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);

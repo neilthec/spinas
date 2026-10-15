@@ -24,6 +24,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <cmath>
 #include <complex>
 #include <random>
+#include <algorithm>
+#include <iomanip>
+#include <limits>
 
 #include "spinas.h"
 #include "include/eeAAA.h"
@@ -301,6 +304,35 @@ namespace spinas {
     }
 
     return cdouble(0,0);    
+  }
+
+  // H in the PDF, with only electron propagator poles. Photons are outgoing.
+  cdouble eeAAA::amp_nonspurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+    if(ds3>0&&ds4>0&&ds5>0){
+      return 2*sqrt2*e*e*e*me*a12a.v(ds1,ds2)
+        / (pDenS13*pDenS14*pDenS15) * (
+          s45s.v()*s45s.v()*s3123s.v()/pDenS23
+          + s35s.v()*s35s.v()*s4124s.v()/pDenS24
+          + s34s.v()*s34s.v()*s5125s.v()/pDenS25
+        );
+    }
+    return cdouble(0,0);
+  }
+
+  // S2 in the PDF, not amp_permutation's different S1 expression.
+  // The signs include crossing each photon angle spinor to an outgoing photon.
+  cdouble eeAAA::amp_spurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
+    if(ds3>0&&ds4>0&&ds5>0){
+      return 2*sqrt2*e*e*e*me*a12a.v(ds1,ds2) * (
+          - s34s.v()*s523a.v()/(a34a.v()*a35a.v()*pDenS13*pDenS25)
+          - s35s.v()*s423a.v()/(a35a.v()*a34a.v()*pDenS13*pDenS24)
+          - s34s.v()*s524a.v()/(a34a.v()*a45a.v()*pDenS14*pDenS25)
+          + s45s.v()*s324a.v()/(a45a.v()*a34a.v()*pDenS14*pDenS23)
+          + s35s.v()*s425a.v()/(a35a.v()*a45a.v()*pDenS15*pDenS24)
+          + s45s.v()*s325a.v()/(a45a.v()*a35a.v()*pDenS15*pDenS23)
+        );
+    }
+    return cdouble(0,0);
   }
 
   cdouble eeAAA::amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
@@ -826,6 +858,29 @@ namespace spinas {
   //  Tests
   int test_eeAAA(){
     int n=0;//Number of fails
+    const ldouble relative_tolerance=1e-9L;
+    auto relative_error=[](const cdouble& a, const cdouble& b){
+      const ldouble scale=std::max(std::abs(a),std::abs(b));
+      return scale>0 ? std::abs(a-b)/scale : ldouble(0);
+    };
+    auto agrees=[&](const cdouble& a, const cdouble& b){
+      return std::isfinite(a.real()) && std::isfinite(a.imag())
+        && std::isfinite(b.real()) && std::isfinite(b.imag())
+        && relative_error(a,b)<=relative_tolerance;
+    };
+    auto print_reference_comparison=[&](eeAAA& amplitude){
+      const cdouble h=amplitude.amp_nonspurious(1,1,2,2,2);
+      const cdouble s2=amplitude.amp_spurious(1,1,2,2,2);
+      const bool pass=agrees(h,s2);
+      const std::streamsize precision=std::cout.precision();
+      std::cout << std::setprecision(12)
+        << "  H  (nonspurious) = " << h << "\n"
+        << "  S2 (spurious)    = " << s2 << "\n"
+        << "  H = S2: " << (pass ? "PASS" : "FAIL")
+        << "; relative complex difference = " << relative_error(h,s2) << "\n";
+      std::cout.precision(precision);
+      if(!pass) n++;
+    };
     std::cout<<"\t* e , E  -> A , A , A   :";
     if (1 == 2) {//amp^2
       int i=0;
@@ -912,6 +967,7 @@ namespace spinas {
       std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
       std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
       std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
+      print_reference_comparison(eeAAAAmp);
 
       energy = 600.0;
 
@@ -963,6 +1019,7 @@ namespace spinas {
       std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
       std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
       std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
+      print_reference_comparison(eeAAAAmp);
       if (2 == 2) {
         // Fixed seed makes the test reproducible.
         std::mt19937 rng(12345);
@@ -972,7 +1029,7 @@ namespace spinas {
         int point = 0;
         int attempts = 0;
 
-        while(point < Npoints){
+        while(point < Npoints && attempts < 100*Npoints){
 
           attempts++;
 
@@ -1013,10 +1070,96 @@ namespace spinas {
           std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
           std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
           std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
+          print_reference_comparison(eeAAAAmp);
         }
 
-        std::cout << "\nGenerated " << Npoints << " valid phase-space points after " << attempts << " attempts.\n";
+        std::cout << "\nGenerated " << point << " valid phase-space points after " << attempts << " attempts.\n";
+        if(point != Npoints) n++;
       }
+    }
+
+    {
+      // Exercise the complex identity beyond one spin, photon order, or CM frame.
+      std::mt19937 rng(20261015);
+      const ldouble mass_energy[][2]={{0.0005L,600.0L},{1.0L,6.0L},{1.0L,2.1L}};
+      const int Npoints=40;
+      int checks=0, permutation_checks=0, failures=0, reported_failures=0;
+      ldouble max_relative_error=0, max_permutation_error=0;
+      for(const auto& configuration : mass_energy){
+        const ldouble mass=configuration[0], energy=configuration[1];
+        const ldouble phase_tolerance=128*std::numeric_limits<ldouble>::epsilon()*energy*energy;
+        eeAAA amplitude(0.31333L,mass);
+        int point=0, attempts=0;
+        while(point<Npoints && attempts<100*Npoints){
+          attempts++;
+          ldouble p1[4],p2[4],p3[4],p4[4],p5[4];
+          if(!make_random_phase_space(energy,mass,p1,p2,p3,p4,p5,rng)
+              || !check_phase_space(p1,p2,p3,p4,p5,mass,mass,0,0,0,phase_tolerance))
+            continue;
+          point++;
+          for(int frame=0;frame<3;frame++){
+            ldouble* momenta[]={p1,p2,p3,p4,p5};
+            if(frame==1){
+              const ldouble axis[]={1.0L/3,2.0L/3,2.0L/3};
+              for(auto momentum : momenta) rotate_momentum(momentum,axis,0.7L);
+            }
+            if(frame==2){
+              const ldouble velocity[]={0.21L,-0.13L,0.17L};
+              for(auto momentum : momenta) boost_momentum(momentum,velocity);
+            }
+            if(!check_phase_space(p1,p2,p3,p4,p5,mass,mass,0,0,0,phase_tolerance)){
+              failures++;
+              continue;
+            }
+            amplitude.set_momenta(p1,p2,p3,p4,p5);
+            cdouble reference[2][2];
+            for(int i=0;i<2;i++)
+              for(int j=0;j<2;j++)
+                reference[i][j]=amplitude.amp_nonspurious(2*i-1,2*j-1,2,2,2);
+            const ldouble* photons[]={p3,p4,p5};
+            int order[]={0,1,2};
+            do{
+              amplitude.set_momenta(p1,p2,photons[order[0]],photons[order[1]],photons[order[2]]);
+              for(int i=0;i<2;i++){
+                for(int j=0;j<2;j++){
+                  const cdouble h=amplitude.amp_nonspurious(2*i-1,2*j-1,2,2,2);
+                  const cdouble s2=amplitude.amp_spurious(2*i-1,2*j-1,2,2,2);
+                  checks++;
+                  max_relative_error=std::max(max_relative_error,relative_error(h,s2));
+                  if(!agrees(h,s2)){
+                    failures++;
+                    if(reported_failures++<5)
+                      std::cout << "  H/S2 FAIL: m=" << mass << ", energy=" << energy
+                        << ", point=" << point << ", frame=" << frame
+                        << ", order=" << order[0]+3 << order[1]+3 << order[2]+3
+                        << ", spins=" << 2*i-1 << "," << 2*j-1
+                        << ", H=" << h << ", S2=" << s2 << "\n";
+                  }
+                  permutation_checks++;
+                  max_permutation_error=std::max(max_permutation_error,relative_error(h,reference[i][j]));
+                  if(!agrees(h,reference[i][j])) failures++;
+                }
+              }
+            }while(std::next_permutation(order,order+3));
+            for(int ds3=-2;ds3<=2;ds3+=4)
+              for(int ds4=-2;ds4<=2;ds4+=4)
+                for(int ds5=-2;ds5<=2;ds5+=4)
+                  if(ds3<0 || ds4<0 || ds5<0)
+                    if(amplitude.amp_nonspurious(1,1,ds3,ds4,ds5)!=cdouble(0,0)
+                        || amplitude.amp_spurious(1,1,ds3,ds4,ds5)!=cdouble(0,0))
+                      failures++;
+          }
+        }
+        if(point!=Npoints) failures++;
+      }
+      n+=failures;
+      std::cout << "\n  H = S2 regression: " << (failures==0 ? "PASS" : "FAIL")
+        << " (" << checks << " complex amplitude pairs; all fermion spins,\n"
+        << "    all 6 photon orders, CM/rotated/boosted frames, 3 mass/energy choices)\n"
+        << "    Maximum relative H/S2 difference: " << max_relative_error << "\n"
+        << "    Photon permutation checks: " << permutation_checks
+        << "; maximum relative difference: " << max_permutation_error << "\n"
+        << "    Failures: " << failures << "\n";
     }
     return n;
   }
