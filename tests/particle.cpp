@@ -57,6 +57,22 @@ BOOST_AUTO_TEST_CASE(constructor_test) {
   }
 }
 
+BOOST_AUTO_TEST_CASE(ultrarelativistic_small_spinor_test) {
+  // E-|p| rounds to zero here in double precision; m/sqrt(E+|p|) does not.
+  const ldouble mass=1e-9L, energy=1.L;
+  const ldouble momentum[]={energy,0,0,std::sqrt(energy*energy-mass*mass)};
+  particle p(momentum,mass);
+  const cvector small=p.rsquare(-1), large=p.rangle(-1);
+  const ldouble ratio=mass/(energy+momentum[3]);
+  BOOST_CHECK(std::abs(small.get(0))>0);
+  BOOST_CHECK_SMALL(std::abs(small.get(0)+ratio*large.get(0)),
+    16*std::numeric_limits<ldouble>::epsilon()*mass);
+  // A zero-energy massless particle remains finite after the stable rewrite.
+  const ldouble zero[]={0,0,0,0};
+  particle photon(zero,0);
+  BOOST_CHECK(std::isfinite(photon.rangle().get(0).real()));
+}
+
 BOOST_AUTO_TEST_CASE(momentum_matrices_test) {
   BOOST_TEST_MESSAGE("\t* Momentum Matrices");
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;

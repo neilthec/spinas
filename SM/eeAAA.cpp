@@ -27,8 +27,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <iomanip>
 #include <limits>
+#include <stdexcept>
 
-#include "spinas.h"
 #include "include/eeAAA.h"
 
 namespace spinas {
@@ -337,8 +337,6 @@ namespace spinas {
 
   cdouble eeAAA::amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
     
-    cdouble one(1,0);
-    
     if(ds3>0&&ds4>0&&ds5>0){
 
       return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*me*a12a.v(ds1,ds2)*(
@@ -354,181 +352,172 @@ namespace spinas {
     return cdouble(0,0);  
   }
 
-  cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
-    
-    cdouble one(1,0);
-    
-    if(ds3>0&&ds4>0&&ds5>0){
-      
-      return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e / (a34a.v() * a35a.v() * a45a.v()) * (
-      
-      // M_345
-      (- a23a.v(ds2)*s525a.v()*s414a.v()*s13s.v(ds1) + a23a.v(ds2)*s525a.v()*s434a.v()*s13s.v(ds1)
-      - me*a23a.v(ds2)*s525a.v()*s34s.v()*a14a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
-      + me*a23a.v(ds2)*s45s.v()*s315a.v()*a14a.v(ds1) - me*s25s.v(ds2)*a35a.v()*s414a.v()*s13s.v(ds1) 
-      + me*s25s.v(ds2)*a35a.v()*s434a.v()*s13s.v(ds1) - me*me*s25s.v(ds2)*a35a.v()*s34s.v()*a14a.v(ds1) 
-      - me*s25s.v(ds2)*s423a.v()*a45a.v()*s13s.v(ds1) + me*s25s.v(ds2)*s453a.v()*a45a.v()*s13s.v(ds1) 
-      - s25s.v(ds2)*s423a.v()*s315a.v()*a14a.v(ds1) + s25s.v(ds2)*s453a.v()*s315a.v()*a14a.v(ds1)) / (
-        pDenS13 * pDenS25)
-      
-      // M_354
-      - (- a23a.v(ds2)*s424a.v()*s515a.v()*s13s.v(ds1) + a23a.v(ds2)*s424a.v()*s535a.v()*s13s.v(ds1)
-      - me*a23a.v(ds2)*s424a.v()*s35s.v()*a15a.v(ds1) + me*me*a23a.v(ds2)*s45s.v()*a45a.v()*s13s.v(ds1) 
-      - me*a23a.v(ds2)*s45s.v()*s314a.v()*a15a.v(ds1) - me*s24s.v(ds2)*a34a.v()*s515a.v()*s13s.v(ds1) 
-      + me*s24s.v(ds2)*a34a.v()*s535a.v()*s13s.v(ds1) - me*me*s24s.v(ds2)*a34a.v()*s35s.v()*a15a.v(ds1) 
-      + me*s24s.v(ds2)*s523a.v()*a45a.v()*s13s.v(ds1) - me*s24s.v(ds2)*s543a.v()*a45a.v()*s13s.v(ds1) 
-      - s24s.v(ds2)*s523a.v()*s314a.v()*a15a.v(ds1) + s24s.v(ds2)*s543a.v()*s314a.v()*a15a.v(ds1)) / (
-        pDenS13 * pDenS24)
-      
-      // M_435
-      - (- a24a.v(ds2)*s525a.v()*s313a.v()*s14s.v(ds1) + a24a.v(ds2)*s525a.v()*s343a.v()*s14s.v(ds1)
-      + me*a24a.v(ds2)*s525a.v()*s34s.v()*a13a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
-      + me*a24a.v(ds2)*s35s.v()*s415a.v()*a13a.v(ds1) - me*s25s.v(ds2)*a45a.v()*s313a.v()*s14s.v(ds1) 
-      + me*s25s.v(ds2)*a45a.v()*s343a.v()*s14s.v(ds1) + me*me*s25s.v(ds2)*a45a.v()*s34s.v()*a13a.v(ds1) 
-      - me*s25s.v(ds2)*s324a.v()*a35a.v()*s14s.v(ds1) + me*s25s.v(ds2)*s354a.v()*a35a.v()*s14s.v(ds1) 
-      - s25s.v(ds2)*s324a.v()*s415a.v()*a13a.v(ds1) + s25s.v(ds2)*s354a.v()*s415a.v()*a13a.v(ds1)) / (
-        pDenS14 * pDenS25)
-      
-      // M_453
-      + (- a24a.v(ds2)*s323a.v()*s515a.v()*s14s.v(ds1) + a24a.v(ds2)*s323a.v()*s545a.v()*s14s.v(ds1)
-      - me*a24a.v(ds2)*s323a.v()*s45s.v()*a15a.v(ds1) + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*s14s.v(ds1) 
-      - me*a24a.v(ds2)*s35s.v()*s413a.v()*a15a.v(ds1) + me*s23s.v(ds2)*a34a.v()*s515a.v()*s14s.v(ds1) 
-      - me*s23s.v(ds2)*a34a.v()*s545a.v()*s14s.v(ds1) + me*me*s23s.v(ds2)*a34a.v()*s45s.v()*a15a.v(ds1) 
-      + me*s23s.v(ds2)*s524a.v()*a35a.v()*s14s.v(ds1) - me*s23s.v(ds2)*s534a.v()*a35a.v()*s14s.v(ds1) 
-      - s23s.v(ds2)*s524a.v()*s413a.v()*a15a.v(ds1) + s23s.v(ds2)*s534a.v()*s413a.v()*a15a.v(ds1)) / (
-        pDenS14 * pDenS23)
-      
-      // M_534
-      + (- a25a.v(ds2)*s424a.v()*s313a.v()*s15s.v(ds1) + a25a.v(ds2)*s424a.v()*s353a.v()*s15s.v(ds1)
-      + me*a25a.v(ds2)*s424a.v()*s35s.v()*a13a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
-      + me*a25a.v(ds2)*s34s.v()*s514a.v()*a13a.v(ds1) + me*s24s.v(ds2)*a45a.v()*s313a.v()*s15s.v(ds1) 
-      - me*s24s.v(ds2)*a45a.v()*s353a.v()*s15s.v(ds1) - me*me*s24s.v(ds2)*a45a.v()*s35s.v()*a13a.v(ds1) 
-      - me*s24s.v(ds2)*s325a.v()*a34a.v()*s15s.v(ds1) + me*s24s.v(ds2)*s345a.v()*a34a.v()*s15s.v(ds1) 
-      - s24s.v(ds2)*s325a.v()*s514a.v()*a13a.v(ds1) + s24s.v(ds2)*s345a.v()*s514a.v()*a13a.v(ds1)) / (
-        pDenS15 * pDenS24)
+  namespace {
+    struct PhotonReferenceSpinor { cvector column, row; };
+    struct WeylVector { cvector angle, square; };
+    struct WeylPolarization { cmatrix lower, upper; };
 
-      // M_543
-      - (- a25a.v(ds2)*s323a.v()*s414a.v()*s15s.v(ds1) + a25a.v(ds2)*s323a.v()*s454a.v()*s15s.v(ds1)
-      + me*a25a.v(ds2)*s323a.v()*s45s.v()*a14a.v(ds1) + me*me*a25a.v(ds2)*s34s.v()*a34a.v()*s15s.v(ds1) 
-      - me*a25a.v(ds2)*s34s.v()*s513a.v()*a14a.v(ds1) + me*s23s.v(ds2)*a35a.v()*s414a.v()*s15s.v(ds1) 
-      - me*s23s.v(ds2)*a35a.v()*s454a.v()*s15s.v(ds1) - me*me*s23s.v(ds2)*a35a.v()*s45s.v()*a14a.v(ds1) 
-      + me*s23s.v(ds2)*s425a.v()*a34a.v()*s15s.v(ds1) - me*s23s.v(ds2)*s435a.v()*a34a.v()*s15s.v(ds1) 
-      - s23s.v(ds2)*s425a.v()*s513a.v()*a14a.v(ds1) + s23s.v(ds2)*s435a.v()*s513a.v()*a14a.v(ds1)) / (
-        pDenS15 * pDenS23)
-      );
+    cvector vector_sum(const cvector& a, const cvector& b) {
+      return cvector(a.get(0)+b.get(0),a.get(1)+b.get(1));
     }
 
-    return cdouble(0,0);    
+    WeylVector apply_polarization(const WeylPolarization& epsilon,
+                                 const WeylVector& v) {
+      return {epsilon.lower*v.square, epsilon.upper*v.angle};
+    }
+
+    WeylVector apply_propagator(const cmatrix& lower, const cmatrix& upper,
+                               const ldouble mass, const int sign,
+                               const WeylVector& v) {
+      return {vector_sum(mass*v.angle, sign*(lower*v.square)),
+              vector_sum(sign*(upper*v.angle), mass*v.square)};
+    }
+
+    using AbsoluteVector=std::array<ldouble,2>;
+    struct AbsoluteWeylVector { AbsoluteVector angle,square; };
+    AbsoluteVector absolute_vector(const cvector& v) {
+      return {{std::abs(v.get(0)),std::abs(v.get(1))}};
+    }
+    AbsoluteVector absolute_product(const cmatrix& m,const AbsoluteVector& v) {
+      return {{std::abs(m.get(0,0))*v[0]+std::abs(m.get(0,1))*v[1],
+               std::abs(m.get(1,0))*v[0]+std::abs(m.get(1,1))*v[1]}};
+    }
+    AbsoluteVector absolute_sum(const AbsoluteVector& a,const AbsoluteVector& b) {
+      return {{a[0]+b[0],a[1]+b[1]}};
+    }
+    AbsoluteVector absolute_scale(ldouble x,AbsoluteVector v) {
+      v[0]*=std::abs(x);v[1]*=std::abs(x);return v;
+    }
+    AbsoluteWeylVector absolute_polarization(const WeylPolarization& e,const AbsoluteWeylVector& v) {
+      return {absolute_product(e.lower,v.square),absolute_product(e.upper,v.angle)};
+    }
+    AbsoluteWeylVector absolute_propagator(const cmatrix& lo,const cmatrix& up,
+                                         ldouble m,const AbsoluteWeylVector& v) {
+      return {absolute_sum(absolute_scale(m,v.angle),absolute_product(lo,v.square)),
+              absolute_sum(absolute_product(up,v.angle),absolute_scale(m,v.square))};
+    }
+    ldouble absolute_contraction(const cvector& row,const AbsoluteVector& v) {
+      return std::abs(row.get(0))*v[0]+std::abs(row.get(1))*v[1];
+    }
+
+    // Compensate accumulation, but do not hide loss of precision within a diagram.
+    cdouble sum_feynman_diagrams(const std::array<cdouble,6>& diagrams) {
+      cdouble sum(0,0), correction(0,0);
+      for(const auto& term : diagrams) {
+        const cdouble adjusted=term-correction, next=sum+adjusted;
+        correction=(next-sum)-adjusted;
+        sum=next;
+      }
+      return sum;
+    }
   }
 
-  cdouble eeAAA::amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
-    
-    cdouble one(1,0);
-    
-    if(ds3>0&&ds4>0&&ds5>0){
-      
-      return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e / (a34a.v() * a35a.v() * a45a.v()) * (
-      
-      // M_345
-      ((-s134a.v(ds1)*s34s.v() - s14s.v(ds1)*s314a.v()) * a25a.v(ds2)*s523a.v() + 
-      a15a.v(ds1)*s314a.v()*(s45s.v()*s253a.v(ds2) - s24s.v(ds2)*s523a.v())) / (
-        pDenS13 * pDenS25) 
-      
-      // M_354
-      - ((-s135a.v(ds1) * s35s.v() - s15s.v(ds1) * s315a.v()) * a24a.v(ds2) * s423a.v() -
-      a14a.v(ds1) * s315a.v() * (s45s.v() * s243a.v(ds2) + s25s.v(ds2) * s423a.v())) / (
-        pDenS13 * pDenS24)
-
-      // M_435
-      - ((s143a.v(ds1)*s34s.v() - s13s.v(ds1)*s413a.v()) * a25a.v(ds2)*s524a.v() + 
-      a15a.v(ds1)*s413a.v()*(s35s.v()*s254a.v(ds2) - s23s.v(ds2)*s524a.v())) / (
-        pDenS14 * pDenS25) 
-
-      // M_453
-      + ((-s145a.v(ds1)*s45s.v() - s15s.v(ds1)*s415a.v()) * a23a.v(ds2)*s324a.v() - 
-      a13a.v(ds1)*s415a.v()*(s35s.v()*s234a.v(ds2) + s25s.v(ds2)*s324a.v())) / (
-        pDenS14 * pDenS23)
-
-      // M_534
-      + ((s153a.v(ds1)*s35s.v() - s13s.v(ds1)*s513a.v()) * a24a.v(ds2)*s425a.v() + 
-      a14a.v(ds1)*s513a.v()*(s34s.v()*s245a.v(ds2) - s23s.v(ds2)*s425a.v())) / (
-        pDenS15 * pDenS24)
-
-      // M_543
-      - ((s154a.v(ds1)*s45s.v() - s14s.v(ds1)*s514a.v()) * a23a.v(ds2)*s325a.v() - 
-      a13a.v(ds1)*s514a.v()*(s34s.v()*s235a.v(ds2) + s24s.v(ds2)*s325a.v())) / (
-        pDenS15 * pDenS23)
-      );
+  // Photon references belong to external labels, never to positions in an order.
+  // The order of the returned entries is 345, 354, 435, 453, 534, 543.
+  // All stored momenta are physical: p1+p2=k3+k4+k5, Qa=p1-ka, Qc=p2-kc.
+  std::array<cdouble,6> eeAAA::feynman_diagrams(
+      const int ds1, const int ds2,
+      const std::array<feynman_reference,3>& references,
+      const bool expanded, const int ward_leg,
+      std::array<ldouble,6>* evaluation_scales) {
+    if(ward_leg!=0 && (ward_leg<3 || ward_leg>5 || expanded))
+      throw std::invalid_argument("eeAAA: Ward replacement requires the matrix evaluation and leg 3, 4 or 5");
+    particle* photon[]={&p3,&p4,&p5};
+    particle* legs[]={nullptr,&p1,&p2,&p3,&p4,&p5};
+    PhotonReferenceSpinor q[3];
+    WeylPolarization epsilon[3];
+    cdouble reference_denominator(1,0);
+    for(int i=0;i<3;i++) {
+      const auto& reference=references[i];
+      if(reference.leg<1 || reference.leg>5
+          || (!reference.momentum_insertion &&
+              (reference.leg<3 || reference.leg==i+3)))
+        throw std::invalid_argument("eeAAA: invalid photon reference");
+      particle& r=*legs[reference.leg];
+      if(reference.momentum_insertion) {
+        // <qi|=[i|pr, |qi>=-pr|i] in SPINAS index conventions.
+        q[i]={-(r.lmat()*photon[i]->rsquare()),photon[i]->lsquare()*r.umat()};
+      } else {
+        q[i]={r.rangle(),r.langle()};
+      }
+      const cdouble denominator=q[i].row*photon[i]->rangle();
+      if(std::abs(denominator)==0)
+        throw std::domain_error("eeAAA: singular photon reference");
+      reference_denominator*=denominator;
+      epsilon[i]={sqrt2*outer(q[i].column,photon[i]->lsquare())/denominator,
+                  sqrt2*outer(photon[i]->rsquare(),q[i].row)/denominator};
+      if(ward_leg==i+3)
+        epsilon[i]={photon[i]->lmat(),photon[i]->umat()};
     }
-
-    return cdouble(0,0);    
+    const cdouble first_denominator[]={pDenS13,pDenS14,pDenS15};
+    const cdouble last_denominator[]={pDenS23,pDenS24,pDenS25};
+    const WeylVector external={p1.rangle(ds1),p1.rsquare(ds1)};
+    std::array<cdouble,6> result;
+    int order[]={0,1,2}, index=0;
+    do {
+      const int a=order[0],b=order[1],c=order[2];
+      const cmatrix qa_lower=p1.lmat()-photon[a]->lmat();
+      const cmatrix qa_upper=p1.umat()-photon[a]->umat();
+      const cmatrix qc_lower=p2.lmat()-photon[c]->lmat();
+      const cmatrix qc_upper=p2.umat()-photon[c]->umat();
+      const cdouble denominator=first_denominator[a]*last_denominator[c];
+      if(evaluation_scales) {
+        // Sum of magnitudes before cancellations inside each matrix product.
+        AbsoluteWeylVector bound={absolute_vector(external.angle),absolute_vector(external.square)};
+        bound=absolute_polarization(epsilon[a],bound);
+        bound=absolute_propagator(qa_lower,qa_upper,me,bound);
+        bound=absolute_polarization(epsilon[b],bound);
+        bound=absolute_propagator(qc_lower,qc_upper,me,bound);
+        bound=absolute_polarization(epsilon[c],bound);
+        (*evaluation_scales)[index]=std::abs(e*e*e/denominator)*(
+          absolute_contraction(p2.langle(ds2),bound.angle)+absolute_contraction(p2.lsquare(ds2),bound.square));
+      }
+      if(!expanded) {
+        // Exact Weyl blocks of Ec (slash(Qc)+m) Eb (-slash(Qa)+m) Ea.
+        WeylVector v=apply_polarization(epsilon[a],external);
+        v=apply_propagator(qa_lower,qa_upper,me,-1,v);
+        v=apply_polarization(epsilon[b],v);
+        v=apply_propagator(qc_lower,qc_upper,me,+1,v);
+        v=apply_polarization(epsilon[c],v);
+        result[index++]=-e*e*e*(p2.langle(ds2)*v.angle+p2.lsquare(ds2)*v.square)/denominator;
+      } else {
+        // Eight scalar terms obtained by expanding the two propagator blocks.
+        const cdouble L=p2.langle(ds2)*q[c].column;
+        const cdouble S=p2.lsquare(ds2)*photon[c]->rsquare();
+        const cdouble T=photon[a]->lsquare()*p1.rsquare(ds1);
+        const cdouble C=q[a].row*p1.rangle(ds1);
+        const cdouble U=photon[c]->lsquare()*qc_upper*q[b].column;
+        const cdouble V=photon[b]->lsquare()*qa_upper*q[a].column;
+        const cdouble W=q[b].row*qa_lower*photon[a]->rsquare();
+        const cdouble Z=q[c].row*qc_lower*photon[b]->rsquare();
+        const cdouble cb=photon[c]->lsquare()*photon[b]->rsquare();
+        const cdouble ba=photon[b]->lsquare()*photon[a]->rsquare();
+        const cdouble rr=q[b].row*q[a].column;
+        const cdouble rc=q[c].row*q[b].column;
+        const cdouble numerator=-L*U*V*T+me*L*U*ba*C+me*me*L*cb*rr*T-me*L*cb*W*C
+          -me*S*rc*V*T+me*me*S*rc*ba*C+me*S*Z*rr*T-S*Z*W*C;
+        result[index++]=-2*sqrt2*e*e*e*numerator/(reference_denominator*denominator);
+      }
+    } while(std::next_permutation(order,order+3));
+    return result;
   }
 
-  cdouble eeAAA::amp_feynman_x(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
-    
-    cdouble one(1,0);
-    
-    if(ds3>0&&ds4>0&&ds5>0){
+  cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
+    if(ds3<=0 || ds4<=0 || ds5<=0) return cdouble(0,0);
+    const std::array<feynman_reference,3> references={{{4,false},{5,false},{3,false}}};
+    return sum_feynman_diagrams(feynman_diagrams(ds1,ds2,references));
+  }
 
-      return -sqrt(2)*sqrt(2)*sqrt(2)*e*e*e*(
+  cdouble eeAAA::amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
+    if(ds3<=0 || ds4<=0 || ds5<=0) return cdouble(0,0);
+    const std::array<feynman_reference,3> references={{{4,false},{5,false},{3,false}}};
+    return sum_feynman_diagrams(feynman_diagrams(ds1,ds2,references,true));
+  }
 
-        // 345
-        (-s512a.v(ds2)*s5214s.v()*s4123s.v()*s13s.v(ds1) + s512a.v(ds2)*s5214s.v()*s4323s.v()*s13s.v(ds1)
-        - me*s512a.v(ds2)*s5214s.v()*s34s.v()*s321a.v(ds1) - me*me*s512a.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
-        + me*me*me*s512a.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1) - me*me*me*s25s.v(ds2)*s45s.v()*s4123s.v()*s13s.v(ds1)
-        + me*me*me*s25s.v(ds2)*s45s.v()*s4323s.v()*s13s.v(ds1) - me*me*me*me*s25s.v(ds2)*s45s.v()*s34s.v()*s321a.v(ds1)
-        + me*s25s.v(ds2)*s5124s.v()*s4123s.v()*s13s.v(ds1) - me*s25s.v(ds2)*s5154s.v()*s4123s.v()*s13s.v(ds1)
-        + me*me*s25s.v(ds2)*s5124s.v()*s34s.v()*s321a.v(ds1) - me*me*s25s.v(ds2)*s5154s.v()*s34s.v()*s321a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS23 * pDenS25)
-
-        // 354
-        + (-s412a.v(ds2)*s4215s.v()*s5123s.v()*s13s.v(ds1) + s412a.v(ds2)*s4215s.v()*s5323s.v()*s13s.v(ds1)
-        - me*s412a.v(ds2)*s4215s.v()*s35s.v()*s321a.v(ds1) + me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
-        - me*me*me*s412a.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1) + me*me*me*s24s.v(ds2)*s45s.v()*s5123s.v()*s13s.v(ds1)
-        - me*me*me*s24s.v(ds2)*s45s.v()*s5323s.v()*s13s.v(ds1) + me*me*me*me*s24s.v(ds2)*s45s.v()*s35s.v()*s321a.v(ds1)
-        + me*s24s.v(ds2)*s4125s.v()*s5123s.v()*s13s.v(ds1) - me*s24s.v(ds2)*s4145s.v()*s5123s.v()*s13s.v(ds1)
-        + me*me*s24s.v(ds2)*s4125s.v()*s35s.v()*s321a.v(ds1) - me*me*s24s.v(ds2)*s4145s.v()*s35s.v()*s321a.v(ds1))
-        / (pDenS13 * pDenS15 * pDenS14 * pDenS23 * pDenS24)
-
-        // 435
-        + (-s512a.v(ds2)*s5213s.v()*s3124s.v()*s14s.v(ds1) + s512a.v(ds2)*s5213s.v()*s3424s.v()*s14s.v(ds1)
-        + me*s512a.v(ds2)*s5213s.v()*s34s.v()*s421a.v(ds1) - me*me*s512a.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
-        - me*me*me*s512a.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1) - me*me*me*s25s.v(ds2)*s35s.v()*s3124s.v()*s14s.v(ds1)
-        + me*me*me*s25s.v(ds2)*s35s.v()*s3424s.v()*s14s.v(ds1) + me*me*me*me*s25s.v(ds2)*s35s.v()*s34s.v()*s421a.v(ds1)
-        + me*s25s.v(ds2)*s5123s.v()*s3124s.v()*s14s.v(ds1) - me*s25s.v(ds2)*s5153s.v()*s3124s.v()*s14s.v(ds1)
-        - me*me*s25s.v(ds2)*s5123s.v()*s34s.v()*s421a.v(ds1) + me*me*s25s.v(ds2)*s5153s.v()*s34s.v()*s421a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS25)
-
-        // 453
-        + (-s312a.v(ds2)*s3215s.v()*s5124s.v()*s15s.v(ds1) + s312a.v(ds2)*s3215s.v()*s5424s.v()*s14s.v(ds1)
-        - me*s312a.v(ds2)*s3215s.v()*s45s.v()*s421a.v(ds1) + me*me*s312a.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
-        - me*me*me*s312a.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1) + me*me*me*s23s.v(ds2)*s35s.v()*s5124s.v()*s14s.v(ds1)
-        - me*me*me*s23s.v(ds2)*s35s.v()*s5424s.v()*s14s.v(ds1) - me*me*me*me*s23s.v(ds2)*s35s.v()*s45s.v()*s421a.v(ds1)
-        + me*s23s.v(ds2)*s3125s.v()*s5124s.v()*s14s.v(ds1) - me*s23s.v(ds2)*s3135s.v()*s5124s.v()*s14s.v(ds1)
-        + me*me*s23s.v(ds2)*s3125s.v()*s45s.v()*s421a.v(ds1) - me*me*s23s.v(ds2)*s3135s.v()*s45s.v()*s421a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
-
-        // 534
-        + (-s412a.v(ds2)*s4213s.v()*s3125s.v()*s15s.v(ds1) + s412a.v(ds2)*s4213s.v()*s3525s.v()*s15s.v(ds1)
-        + me*s412a.v(ds2)*s4213s.v()*s35s.v()*s521a.v(ds1) - me*me*s412a.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
-        - me*me*me*s412a.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1) - me*me*me*s24s.v(ds2)*s34s.v()*s3125s.v()*s15s.v(ds1)
-        + me*me*me*s24s.v(ds2)*s34s.v()*s3525s.v()*s15s.v(ds1) + me*me*me*me*s24s.v(ds2)*s34s.v()*s35s.v()*s521a.v(ds1)
-        + me*s24s.v(ds2)*s4123s.v()*s3125s.v()*s15s.v(ds1) - me*s24s.v(ds2)*s4143s.v()*s3125s.v()*s15s.v(ds1)
-        - me*me*s24s.v(ds2)*s4123s.v()*s35s.v()*s521a.v(ds1) + me*me*s24s.v(ds2)*s4143s.v()*s35s.v()*s521a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS25 * pDenS24)
-
-        // 543
-        + (-s312a.v(ds2)*s3214s.v()*s4125s.v()*s15s.v(ds1) + s312a.v(ds2)*s3214s.v()*s4525s.v()*s15s.v(ds1)
-        + me*s312a.v(ds2)*s3214s.v()*s45s.v()*s521a.v(ds1) + me*me*s312a.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
-        + me*me*me*s312a.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1) - me*me*me*s23s.v(ds2)*s34s.v()*s4125s.v()*s15s.v(ds1)
-        + me*me*me*s23s.v(ds2)*s34s.v()*s4525s.v()*s15s.v(ds1) - me*me*me*me*s23s.v(ds2)*s34s.v()*s45s.v()*s521a.v(ds1)
-        + me*s23s.v(ds2)*s3124s.v()*s4125s.v()*s15s.v(ds1) - me*s23s.v(ds2)*s3134s.v()*s4125s.v()*s15s.v(ds1)
-        - me*me*s23s.v(ds2)*s3124s.v()*s45s.v()*s521a.v(ds1) + me*me*s23s.v(ds2)*s3134s.v()*s45s.v()*s521a.v(ds1))
-        / (pDenS13 * pDenS14 * pDenS15 * pDenS24 * pDenS23)
-      );
-    }
-
-    return cdouble(0,0);
+  cdouble eeAAA::amp_feynman_x(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
+    if(ds3<=0 || ds4<=0 || ds5<=0) return cdouble(0,0);
+    const std::array<feynman_reference,3> references={{{2,true},{1,true},{1,true}}};
+    return sum_feynman_diagrams(feynman_diagrams(ds1,ds2,references));
   }
 
   //set_momenta(...) must be called before amp2().
@@ -548,6 +537,13 @@ namespace spinas {
     //Average over initial spins 1/2*1/2=1/4
     //Symmetry factor for identical photons 1/6
     return amp2/24.0;
+  }
+
+  ldouble eeAAA::amp2(const ldouble mom1[4], const ldouble mom2[4],
+                      const ldouble mom3[4], const ldouble mom4[4],
+                      const ldouble mom5[4]) {
+    set_momenta(mom1,mom2,mom3,mom4,mom5);
+    return amp2();
   }
 
     //set_momenta(...) must be called before amp2().
@@ -589,7 +585,7 @@ namespace spinas {
   }
   
 
-  bool check_phase_space(
+  bool eeAAA::check_phase_space(
       const ldouble p1[4],
       const ldouble p2[4],
       const ldouble p3[4],
@@ -636,7 +632,7 @@ namespace spinas {
       return true;
   }
 
-  void make_phase_space(
+  void eeAAA::make_phase_space(
     ldouble energy,
     ldouble me,
     ldouble E3,
@@ -711,7 +707,7 @@ namespace spinas {
     );
   }
 
-  bool make_random_phase_space(
+  bool eeAAA::make_random_phase_space(
     ldouble energy,
     ldouble me,
     ldouble p1[4],
@@ -881,7 +877,29 @@ namespace spinas {
       std::cout.precision(precision);
       if(!pass) n++;
     };
+    auto print_ratio=[](const char* label,const cdouble& a,const cdouble& b){
+      std::cout << "  " << label << " = ";
+      if(std::abs(b)==0) std::cout << "undefined (zero denominator)";
+      else std::cout << a/b << "; magnitude = " << std::abs(a/b);
+      std::cout << "\n";
+    };
     std::cout<<"\t* e , E  -> A , A , A   :";
+    {
+      eeAAA amplitude(0.31333L,1.L);
+      ldouble p[5][4];
+      const ldouble pi=std::acos(-1.L);
+      amplitude.make_phase_space(6.L,1.L,2.L,pi/2,pi,pi/2,pi/3,
+        p[0],p[1],p[2],p[3],p[4]);
+      bool pass=amplitude.check_phase_space(p[0],p[1],p[2],p[3],p[4],1,1,0,0,0,1e-10L);
+      std::mt19937 rng(12345);
+      pass=eeAAA::make_random_phase_space(6.L,1.L,p[0],p[1],p[2],p[3],p[4],rng) && pass;
+      const ldouble squared=amplitude.amp2(p[0],p[1],p[2],p[3],p[4]);
+      pass=std::isfinite(squared) && squared==amplitude.amp2() && pass;
+      if(!pass) n++;
+      std::cout << "\n  Declared phase-space helpers and momentum amp2 overload: "
+                << (pass ? "PASS" : "FAIL") << "\n";
+    }
+
     if (1 == 2) {//amp^2
       int i=0;
       // me=0.0005, pspatial=250
@@ -944,7 +962,7 @@ namespace spinas {
       p5[2] = -energy/3.0 * std::sin(pi/3.0);
       p5[3] = 0;
 
-      bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
+      bool phase_space_ok = eeAAA::check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
       if (phase_space_ok)
         std::cout << "\nPhase-space point " << "PASS";
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
@@ -961,12 +979,12 @@ namespace spinas {
       std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ") |Feynman_s / Reduced| = " << std::abs(amp_f) / std::abs(amp_fr) << "\n";
-      std::cout << "  Feynman_ns / Feynman_s = (" << (amp_fx.real() / amp_f.real()) << " , " << (amp_fx.imag() / amp_f.imag()) << ") |Feynman_ns / Feynman_s| = " << std::abs(amp_fx) / std::abs(amp_f) << "\n";
-      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ") |x-factor / Permutation| = " << std::abs(amp_x) / std::abs(amp_p) << "\n";
-      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
-      std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
-      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
+      print_ratio("Feynman_s / Reduced",amp_f,amp_fr);
+      print_ratio("Feynman_ns / Feynman_s",amp_fx,amp_f);
+      print_ratio("x-factor / Permutation",amp_x,amp_p);
+      print_ratio("Feynman_s / x-factor",amp_f,amp_x);
+      print_ratio("Feynman_ns / x-factor",amp_fx,amp_x);
+      print_ratio("Feynman_s / Permutation",amp_f,amp_p);
       print_reference_comparison(eeAAAAmp);
 
       energy = 600.0;
@@ -996,7 +1014,7 @@ namespace spinas {
       p5[1] = -energy/3.0 * std::sin(pi/3.0);
       p5[3] = 0;
 
-      phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
+      phase_space_ok = eeAAA::check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
       if (phase_space_ok)
         std::cout << "\nPhase-space point " << "PASS";
       eeAAAAmp.set_momenta(p1, p2, p3, p4, p5);
@@ -1013,12 +1031,12 @@ namespace spinas {
       std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ") |Feynman_s / Reduced| = " << std::abs(amp_f) / std::abs(amp_fr) << "\n";
-      std::cout << "  Feynman_ns / Feynman_s = (" << (amp_fx.real() / amp_f.real()) << " , " << (amp_fx.imag() / amp_f.imag()) << ") |Feynman_ns / Feynman_s| = " << std::abs(amp_fx) / std::abs(amp_f) << "\n";
-      std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ") |x-factor / Permutation| = " << std::abs(amp_x) / std::abs(amp_p) << "\n";
-      std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
-      std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
-      std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
+      print_ratio("Feynman_s / Reduced",amp_f,amp_fr);
+      print_ratio("Feynman_ns / Feynman_s",amp_fx,amp_f);
+      print_ratio("x-factor / Permutation",amp_x,amp_p);
+      print_ratio("Feynman_s / x-factor",amp_f,amp_x);
+      print_ratio("Feynman_ns / x-factor",amp_fx,amp_x);
+      print_ratio("Feynman_s / Permutation",amp_f,amp_p);
       print_reference_comparison(eeAAAAmp);
       if (2 == 2) {
         // Fixed seed makes the test reproducible.
@@ -1033,13 +1051,13 @@ namespace spinas {
 
           attempts++;
 
-          bool generated = make_random_phase_space(energy, me, p1, p2, p3, p4, p5, rng);
+          bool generated = eeAAA::make_random_phase_space(energy, me, p1, p2, p3, p4, p5, rng);
 
           if(!generated)
             continue;
 
           // Check phase space
-          bool phase_space_ok = check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
+          bool phase_space_ok = eeAAA::check_phase_space(p1, p2, p3, p4, p5, me, me, 0, 0, 0, 1e-10);
 
           if(!phase_space_ok)
             continue;
@@ -1064,12 +1082,12 @@ namespace spinas {
           std::cout << "  Feynman_ns  = " << amp_fx << "\n";
           std::cout << "  x-factor    = " << amp_x << "\n";
           std::cout << "  Permutation = " << amp_p << "\n";
-          std::cout << "  Feynman_s / Reduced = (" << (amp_f.real() / amp_fr.real()) << " , " << (amp_f.imag() / amp_fr.imag()) << ") |Feynman_s / Reduced| = " << std::abs(amp_f) / std::abs(amp_fr) << "\n";
-          std::cout << "  Feynman_ns / Feynman_s = (" << (amp_fx.real() / amp_f.real()) << " , " << (amp_fx.imag() / amp_f.imag()) << ") |Feynman_ns / Feynman_s| = " << std::abs(amp_fx) / std::abs(amp_f) << "\n";
-          std::cout << "  x-factor / Permutation = (" << (amp_x.real() / amp_p.real()) << " , " << (amp_x.imag() / amp_p.imag()) << ") |x-factor / Permutation| = " << std::abs(amp_x) / std::abs(amp_p) << "\n";
-          std::cout << "  Feynman_s / x-factor = (" << (amp_f.real() / amp_x.real()) << " , " << (amp_f.imag() / amp_x.imag()) << ") |Feynman_s / x-factor| = " << std::abs(amp_f) / std::abs(amp_x) << "\n";
-          std::cout << "  Feynman_ns / x-factor = (" << (amp_fx.real() / amp_x.real()) << " , " << (amp_fx.imag() / amp_x.imag()) << ") |Feynman_ns / x-factor| = " << std::abs(amp_fx) / std::abs(amp_x) << "\n";
-          std::cout << "  Feynman_s / Permutation = (" << (amp_f.real() / amp_p.real()) << " , " << (amp_f.imag() / amp_p.imag()) << ") |Feynman_s / Permutation| = " << std::abs(amp_f) / std::abs(amp_p) << "\n";
+      print_ratio("Feynman_s / Reduced",amp_f,amp_fr);
+      print_ratio("Feynman_ns / Feynman_s",amp_fx,amp_f);
+      print_ratio("x-factor / Permutation",amp_x,amp_p);
+      print_ratio("Feynman_s / x-factor",amp_f,amp_x);
+      print_ratio("Feynman_ns / x-factor",amp_fx,amp_x);
+      print_ratio("Feynman_s / Permutation",amp_f,amp_p);
           print_reference_comparison(eeAAAAmp);
         }
 
@@ -1093,8 +1111,8 @@ namespace spinas {
         while(point<Npoints && attempts<100*Npoints){
           attempts++;
           ldouble p1[4],p2[4],p3[4],p4[4],p5[4];
-          if(!make_random_phase_space(energy,mass,p1,p2,p3,p4,p5,rng)
-              || !check_phase_space(p1,p2,p3,p4,p5,mass,mass,0,0,0,phase_tolerance))
+          if(!eeAAA::make_random_phase_space(energy,mass,p1,p2,p3,p4,p5,rng)
+              || !eeAAA::check_phase_space(p1,p2,p3,p4,p5,mass,mass,0,0,0,phase_tolerance))
             continue;
           point++;
           for(int frame=0;frame<3;frame++){
@@ -1107,7 +1125,7 @@ namespace spinas {
               const ldouble velocity[]={0.21L,-0.13L,0.17L};
               for(auto momentum : momenta) boost_momentum(momentum,velocity);
             }
-            if(!check_phase_space(p1,p2,p3,p4,p5,mass,mass,0,0,0,phase_tolerance)){
+            if(!eeAAA::check_phase_space(p1,p2,p3,p4,p5,mass,mass,0,0,0,phase_tolerance)){
               failures++;
               continue;
             }
@@ -1160,6 +1178,105 @@ namespace spinas {
         << "    Photon permutation checks: " << permutation_checks
         << "; maximum relative difference: " << max_permutation_error << "\n"
         << "    Failures: " << failures << "\n";
+    }
+    {
+      // Direct off-shell Feynman diagrams: fixed references, expanded numerators,
+      // mixed choices, and Ward identities. The error budget tracks cancellation
+      // of individual diagrams instead of dividing by an almost-zero amplitude.
+      using Reference=eeAAA::feynman_reference;
+      const std::array<Reference,3> choices[]={
+        {{{4,false},{5,false},{3,false}}},
+        {{{2,true},{1,true},{1,true}}},
+        {{{2,true},{5,false},{1,true}}},
+        {{{5,false},{3,false},{4,false}}}
+      };
+      const ldouble settings[][2]={{0.0005L,600.L},{1.L,6.L},{1.L,2.1L}};
+      const ldouble epsilon=std::numeric_limits<ldouble>::epsilon();
+      std::mt19937 rng(20261026);
+      int failures=0, comparisons=0, ward_checks=0, diagram_checks=0;
+      int resolved=0, cancellation_limited=0, reported=0;
+      ldouble max_resolved_error=0, max_roundoff_units=0;
+      auto compare=[&](cdouble actual,cdouble expected,ldouble scale,const char* label){
+        const ldouble error=std::abs(actual-expected);
+        const ldouble bound=1e-9L*std::abs(expected)+256*epsilon*scale;
+        if(!std::isfinite(error) || error>bound){
+          failures++;
+          if(reported++<5) std::cout << "  Feynman " << label << " FAIL: actual=" << actual
+            << ", expected=" << expected << ", error=" << error << ", bound=" << bound << "\n";
+        }
+      };
+      for(const auto& setting:settings){
+        const ldouble mass=setting[0],energy=setting[1];
+        eeAAA amplitude(0.31333L,mass);
+        int points=0,attempts=0;
+        while(points<8 && attempts++<800){
+          ldouble p1[4],p2[4],p3[4],p4[4],p5[4];
+          if(!eeAAA::make_random_phase_space(energy,mass,p1,p2,p3,p4,p5,rng)) continue;
+          points++;
+          for(int frame=0;frame<3;frame++){
+            ldouble* momenta[]={p1,p2,p3,p4,p5};
+            if(frame==1){
+              const ldouble axis[]={1.L/3,2.L/3,2.L/3};
+              for(auto p:momenta) rotate_momentum(p,axis,0.7L);
+            }
+            if(frame==2){
+              const ldouble velocity[]={0.21L,-0.13L,0.17L};
+              for(auto p:momenta) boost_momentum(p,velocity);
+            }
+            const ldouble* photons[]={p3,p4,p5};
+            int order[]={0,1,2};
+            do{
+              amplitude.set_momenta(p1,p2,photons[order[0]],photons[order[1]],photons[order[2]]);
+              for(int s1:{-1,1}) for(int s2:{-1,1}){
+                const cdouble target=amplitude.amp_nonspurious(s1,s2,2,2,2);
+                for(const auto& choice:choices){
+                  std::array<ldouble,6> evaluation_scales;
+                  const auto diagrams=amplitude.feynman_diagrams(s1,s2,choice,false,0,&evaluation_scales);
+                  const auto expanded=amplitude.feynman_diagrams(s1,s2,choice,true);
+                  ldouble scale=0;
+                  for(int i=0;i<6;i++){
+                    scale+=evaluation_scales[i];
+                    compare(diagrams[i],expanded[i],evaluation_scales[i],"diagram expansion");
+                    diagram_checks++;
+                  }
+                  const cdouble value=sum_feynman_diagrams(diagrams);
+                  compare(value,target,scale,"sum/H");
+                  comparisons++;
+                  if(std::abs(target)>1e6L*epsilon*scale){
+                    resolved++;
+                    max_resolved_error=std::max(max_resolved_error,std::abs(value-target)/std::abs(target));
+                  } else cancellation_limited++;
+                  if(scale>0) max_roundoff_units=std::max(max_roundoff_units,std::abs(value-target)/(epsilon*scale));
+                  for(int leg=3;leg<=5;leg++){
+                    std::array<ldouble,6> ward_scales;
+                    const auto ward=amplitude.feynman_diagrams(s1,s2,choice,false,leg,&ward_scales);
+                    ldouble ward_scale=0;
+                    for(const auto& term:ward_scales) ward_scale+=term;
+                    compare(sum_feynman_diagrams(ward),cdouble(0,0),ward_scale,"Ward");
+                    ward_checks++;
+                  }
+                }
+              }
+            }while(std::next_permutation(order,order+3));
+          }
+        }
+        if(points!=8) failures++;
+      }
+      // Guard the all-plus-only interface, including its compatibility names.
+      eeAAA guard(0.31333L,1.L);
+      for(int a:{-2,2}) for(int b:{-2,2}) for(int c:{-2,2})
+        if(a<0 || b<0 || c<0)
+          if(guard.amp_feynman(1,1,a,b,c)!=cdouble(0,0)
+              || guard.amp_feynman_r(1,1,a,b,c)!=cdouble(0,0)
+              || guard.amp_feynman_x(1,1,a,b,c)!=cdouble(0,0)) failures++;
+      n+=failures;
+      std::cout << "\n  Fixed-reference Feynman regression: " << (failures==0?"PASS":"FAIL")
+        << "\n    Sum/H comparisons: " << comparisons << "; diagram expansion checks: " << diagram_checks
+        << "; Ward checks: " << ward_checks
+        << "\n    Resolved comparisons: " << resolved << "; cancellation-limited comparisons: " << cancellation_limited
+        << "\n    Maximum resolved relative error: " << max_resolved_error
+        << "; maximum error / (epsilon * uncanceled evaluation scale): " << max_roundoff_units
+        << "\n    Failures: " << failures << "\n";
     }
     return n;
   }

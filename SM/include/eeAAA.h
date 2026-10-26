@@ -18,7 +18,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#pragma once
+
+#include "spinas.h"
+
 #include <random>
+#include <array>
 
 
 namespace spinas {
@@ -48,7 +53,8 @@ namespace spinas {
     //Set Momenta
     void set_momenta(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4], const ldouble mom5[4]);
 
-    bool check_phase_space(
+    // Stateless helpers are callable through either the class or an instance.
+    static bool check_phase_space(
       const ldouble p1[4],
       const ldouble p2[4],
       const ldouble p3[4],
@@ -62,7 +68,7 @@ namespace spinas {
       ldouble tol
     );
 
-    void make_phase_space(
+    static void make_phase_space(
       ldouble energy,
       ldouble me,
       ldouble E3,
@@ -77,7 +83,7 @@ namespace spinas {
       ldouble p5[4]
     );
 
-    bool make_random_phase_space(
+    static bool make_random_phase_space(
       ldouble energy,
       ldouble me,
       ldouble p1[4],
@@ -94,13 +100,20 @@ namespace spinas {
     cdouble amp_nonspurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_spurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
+    // Per-photon references: a massless leg, or <qi|=[i|p_leg for an insertion.
+    struct feynman_reference { int leg; bool momentum_insertion; };
+    // Entries: 345, 354, 435, 453, 534, 543. ward_leg=3..5 replaces epsilon by k.
+    std::array<cdouble,6> feynman_diagrams(int ds1, int ds2,
+      const std::array<feynman_reference,3>& references,
+      bool expanded=false, int ward_leg=0,
+      std::array<ldouble,6>* evaluation_scales=nullptr);
     cdouble amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman_x(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     ldouble amp2();
     ldouble amp2_feynman();
     ldouble amp2_permutation();
-    ldouble amp2(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4], const ldouble mom5[5]);
+    ldouble amp2(const ldouble mom1[4], const ldouble mom2[4], const ldouble mom3[4], const ldouble mom4[4], const ldouble mom5[4]);
     
 
     

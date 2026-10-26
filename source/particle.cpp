@@ -85,7 +85,8 @@ namespace spinas {
     s = std::polar(std::sin(theta/2.),phi);
     sc = std::conj(s);
     sqrtEpP = cdouble(std::sqrt(p[0]+pmag),0);
-    sqrtEmP = cdouble(std::sqrt(p[0]-pmag),0);
+    // On shell, (E-|p|)(E+|p|)=m^2. Avoid cancellation for E >> m.
+    sqrtEmP = m==0 ? cdouble(0,0) : cdouble(m/std::sqrt(p[0]+pmag),0);
     
     //Reset all the calcs.
     //The matrices and spinors
