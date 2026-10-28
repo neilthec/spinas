@@ -319,7 +319,7 @@ namespace spinas {
     return cdouble(0,0);
   }
 
-  // S2 in the PDF, not amp_permutation's different S1 expression.
+  // S2 in the PDF, equivalent to the full permutation sum below.
   // The signs include crossing each photon angle spinor to an outgoing photon.
   cdouble eeAAA::amp_spurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5){
     if(ds3>0&&ds4>0&&ds5>0){
@@ -335,6 +335,9 @@ namespace spinas {
     return cdouble(0,0);
   }
 
+  // Full total-photon-momentum numerator [a|p1 (k3+k4+k5)|c].
+  // The kc insertion vanishes at the massless endpoint; the ka insertion
+  // must remain off shell. In particular, order 453 needs [4|p1 k4|3].
   cdouble eeAAA::amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
     
     if(ds3>0&&ds4>0&&ds5>0){
@@ -343,7 +346,7 @@ namespace spinas {
         (s3145s.v() + s3135s.v()) / (pDenS13 * pDenS25 * a34a.v() * a45a.v())
         - (s3154s.v() + s3134s.v()) / (pDenS13 * pDenS24 * a35a.v() * a45a.v())
         - (s4135s.v() + s4145s.v()) / (pDenS14 * pDenS25 * a34a.v() * a35a.v())
-        - (s4153s.v() + s4145s.v()) / (pDenS14 * pDenS23 * a35a.v() * a45a.v())
+        - (s4153s.v() + s4143s.v()) / (pDenS14 * pDenS23 * a35a.v() * a45a.v())
         - (s5134s.v() + s5154s.v()) / (pDenS15 * pDenS24 * a35a.v() * a34a.v())
         + (s5143s.v() + s5153s.v()) / (pDenS15 * pDenS23 * a45a.v() * a34a.v())
       );
@@ -1101,8 +1104,8 @@ namespace spinas {
       std::mt19937 rng(20261015);
       const ldouble mass_energy[][2]={{0.0005L,600.0L},{1.0L,6.0L},{1.0L,2.1L}};
       const int Npoints=40;
-      int checks=0, permutation_checks=0, failures=0, reported_failures=0;
-      ldouble max_relative_error=0, max_permutation_error=0;
+      int checks=0, permutation_checks=0, permutation_sum_checks=0, failures=0, reported_failures=0;
+      ldouble max_relative_error=0, max_permutation_error=0, max_permutation_sum_error=0;
       for(const auto& configuration : mass_energy){
         const ldouble mass=configuration[0], energy=configuration[1];
         const ldouble phase_tolerance=128*std::numeric_limits<ldouble>::epsilon()*energy*energy;
@@ -1153,6 +1156,18 @@ namespace spinas {
                         << ", spins=" << 2*i-1 << "," << 2*j-1
                         << ", H=" << h << ", S2=" << s2 << "\n";
                   }
+                  const cdouble permutation_sum=amplitude.amp_permutation(2*i-1,2*j-1,2,2,2);
+                  permutation_sum_checks++;
+                  max_permutation_sum_error=std::max(max_permutation_sum_error,relative_error(h,permutation_sum));
+                  if(!agrees(h,permutation_sum)){
+                    failures++;
+                    if(reported_failures++<5)
+                      std::cout << "  H/permutation FAIL: m=" << mass << ", energy=" << energy
+                        << ", point=" << point << ", frame=" << frame
+                        << ", order=" << order[0]+3 << order[1]+3 << order[2]+3
+                        << ", spins=" << 2*i-1 << "," << 2*j-1
+                        << ", H=" << h << ", permutation=" << permutation_sum << "\n";
+                  }
                   permutation_checks++;
                   max_permutation_error=std::max(max_permutation_error,relative_error(h,reference[i][j]));
                   if(!agrees(h,reference[i][j])) failures++;
@@ -1164,19 +1179,22 @@ namespace spinas {
                 for(int ds5=-2;ds5<=2;ds5+=4)
                   if(ds3<0 || ds4<0 || ds5<0)
                     if(amplitude.amp_nonspurious(1,1,ds3,ds4,ds5)!=cdouble(0,0)
-                        || amplitude.amp_spurious(1,1,ds3,ds4,ds5)!=cdouble(0,0))
+                        || amplitude.amp_spurious(1,1,ds3,ds4,ds5)!=cdouble(0,0)
+                        || amplitude.amp_permutation(1,1,ds3,ds4,ds5)!=cdouble(0,0))
                       failures++;
           }
         }
         if(point!=Npoints) failures++;
       }
       n+=failures;
-      std::cout << "\n  H = S2 regression: " << (failures==0 ? "PASS" : "FAIL")
+      std::cout << "\n  H = S2 = permutation regression: " << (failures==0 ? "PASS" : "FAIL")
         << " (" << checks << " complex amplitude pairs; all fermion spins,\n"
         << "    all 6 photon orders, CM/rotated/boosted frames, 3 mass/energy choices)\n"
         << "    Maximum relative H/S2 difference: " << max_relative_error << "\n"
         << "    Photon permutation checks: " << permutation_checks
         << "; maximum relative difference: " << max_permutation_error << "\n"
+        << "    Permutation-sum/H checks: " << permutation_sum_checks
+        << "; maximum relative difference: " << max_permutation_sum_error << "\n"
         << "    Failures: " << failures << "\n";
     }
     {
