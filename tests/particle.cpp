@@ -4,6 +4,7 @@
 //File:  SPINAS/boost/particle.cpp
 
 #include <boost/test/unit_test.hpp>
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <cmath>
@@ -55,6 +56,71 @@ BOOST_AUTO_TEST_CASE(constructor_test) {
     p1.set_momentum(mom2);
     BOOST_CHECK(p1.test_angles());
   }
+}
+
+// A boosted light particle must retain its declared mass in spinor products.
+// Rounding external momenta to double is normal when exchanging phase-space
+// points with another numerical code; subtracting E-|p| loses this information.
+BOOST_AUTO_TEST_CASE(boosted_spinor_mass_normalization) {
+  const ldouble mass = ldouble(0.0005L);
+  const ldouble relativeTolerance = 64*std::numeric_limits<ldouble>::epsilon();
+  const ldouble energies[] = {mass, ldouble(1), ldouble(50), ldouble(200)};
+  for(const ldouble energy : energies){
+    const ldouble magnitude = static_cast<ldouble>(
+      std::sqrt(static_cast<double>(energy*energy-mass*mass)));
+    for(int direction=0; direction<2; ++direction){
+      const ldouble momenta[4] = {energy,
+        direction==0 ? ldouble(0) : static_cast<ldouble>(static_cast<double>(ldouble(0.6L)*magnitude)),
+        ldouble(0),
+        direction==0 ? magnitude : static_cast<ldouble>(static_cast<double>(ldouble(0.8L)*magnitude))};
+      particle boosted(momenta,mass);
+      // <pp>^{-+}=-m and [pp]^{-+}=m at every boost and direction.
+      BOOST_CHECK_SMALL(std::abs((boosted.langle(-1)*boosted.rangle(1))/mass+ldouble(1)), relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs((boosted.lsquare(-1)*boosted.rsquare(1))/mass-ldouble(1)), relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs((boosted.langle(1)*boosted.rangle(-1))/mass-ldouble(1)), relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs((boosted.lsquare(1)*boosted.rsquare(-1))/mass+ldouble(1)), relativeTolerance);
+      if(direction==0){
+        // Raising/lowering must use the same stable boost ratio as the spinors.
+        const cmatrix angleActual = boosted.lorentz_jm_lu()*boosted.rangle_matrix();
+        const cmatrix angleExpected = boosted.rangle_matrix()*boosted.spin_jm_lu();
+        const cmatrix squareActual = boosted.lorentz_jp_lu_dot()*boosted.lsquare_matrix();
+        const cmatrix squareExpected = boosted.lsquare_matrix()*boosted.spin_jp_lu();
+        for(int row=0; row<2; ++row)
+          for(int column=0; column<2; ++column){
+            const ldouble angleScale = std::max(ldouble(1),std::abs(angleExpected.get(row,column)));
+            const ldouble squareScale = std::max(ldouble(1),std::abs(squareExpected.get(row,column)));
+            BOOST_CHECK_SMALL(std::abs(angleActual.get(row,column)-angleExpected.get(row,column))/angleScale,
+              relativeTolerance);
+            BOOST_CHECK_SMALL(std::abs(squareActual.get(row,column)-squareExpected.get(row,column))/squareScale,
+              relativeTolerance);
+          }
+      }
+    }
+  }
+}
+
+BOOST_AUTO_TEST_CASE(stable_spinor_zero_mass_and_mass_sign) {
+  const ldouble zero[4] = {0,0,0,0};
+  particle zeroParticle(zero,ldouble(0));
+  for(int component=0; component<2; ++component){
+    BOOST_CHECK_EQUAL(zeroParticle.rangle().get(component),cdouble(0,0));
+    BOOST_CHECK_EQUAL(zeroParticle.lsquare().get(component),cdouble(0,0));
+  }
+  const ldouble photon[4] = {50,0,0,50};
+  particle massless(photon,ldouble(0));
+  for(int component=0; component<2; ++component){
+    BOOST_CHECK(std::isfinite(std::real(massless.rangle().get(component))));
+    BOOST_CHECK(std::isfinite(std::imag(massless.lsquare().get(component))));
+  }
+  const ldouble mass = ldouble(0.0005L);
+  const ldouble massive[4] = {50,0,0,static_cast<ldouble>(49.9999999975)};
+  particle positiveMass(massive,mass), negativeMass(massive,-mass);
+  for(int spin=-1; spin<=1; spin+=2){
+    BOOST_CHECK_EQUAL(positiveMass.rangle(spin),negativeMass.rangle(spin));
+    BOOST_CHECK_EQUAL(positiveMass.lsquare(spin),negativeMass.lsquare(spin));
+  }
+  const ldouble offShell[4] = {2,0,0,0};
+  BOOST_CHECK_THROW(particle(offShell,ldouble(1)),std::runtime_error);
 }
 
 BOOST_AUTO_TEST_CASE(momentum_matrices_test) {

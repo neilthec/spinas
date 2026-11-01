@@ -78,7 +78,15 @@ namespace spinas {
     s = std::polar(std::sin(theta/2.),phi);
     sc = std::conj(s);
     sqrtEpP = cdouble(std::sqrt(p[0]+pmag),0);
-    sqrtEmP = cdouble(std::sqrt(p[0]-pmag),0);
+    // On shell, (E-|p|)(E+|p|)=m^2. Avoid losing the small component
+    // when E and |p| are nearly equal, including double-rounded momenta.
+    if(p[0]>=0){
+      sqrtEmP = cdouble(m==0 ? ldouble(0) : std::abs(m)/std::real(sqrtEpP),0);
+    }
+    else{
+      // Preserve the existing treatment of negative-energy input.
+      sqrtEmP = cdouble(std::sqrt(p[0]-pmag),0);
+    }
     
     //Reset all the calcs.
     //The matrices and spinors
@@ -474,6 +482,7 @@ namespace spinas {
   
 
   //Generators of Lorentz Rotations with no dot (acting on left chiral angle brackets)
+  // Use the cached stable spinor ratios in their boost prefactors as well.
   //LU acts on |j> (from the left)
   cmatrix particle::lorentz_j3_lu() const{
     constexpr ldouble half=0.5;
@@ -485,7 +494,7 @@ namespace spinas {
   cmatrix particle::lorentz_jp_lu() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
-    if(m!=0) pre = half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+    if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
 
     return pre*cmatrix(
 		       std::sin(theta), -std::polar(-one+std::cos(theta),-phi) ,
@@ -494,7 +503,7 @@ namespace spinas {
   cmatrix particle::lorentz_jm_lu() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
-    if(m!=0) pre=half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+    if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
     return pre*cmatrix(
 		       std::sin(theta), -std::polar(one+std::cos(theta),-phi) ,
 		       -std::polar(-one+std::cos(theta),phi), -std::sin(theta));
@@ -510,7 +519,7 @@ namespace spinas {
   cmatrix particle::lorentz_jp_ul() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
-    if(m!=0) pre = half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+    if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
 
     return pre*cmatrix(
 		       -std::sin(theta), std::polar(one+std::cos(theta),phi) ,
@@ -519,7 +528,7 @@ namespace spinas {
   cmatrix particle::lorentz_jm_ul() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
-    if(m!=0) pre=half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+    if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
     return pre*cmatrix(
 		       -std::sin(theta), std::polar(-one+std::cos(theta),phi) ,
 		       std::polar(one+std::cos(theta),-phi), std::sin(theta));
@@ -538,7 +547,7 @@ namespace spinas {
   cmatrix particle::lorentz_jp_lu_dot() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
-    if(m!=0) pre = half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+    if(m!=0) pre = half*(std::real(sqrtEpP)/std::real(sqrtEmP));
 
     return pre*cmatrix(
 		       -std::sin(theta), std::polar(one+std::cos(theta),phi) ,
@@ -547,7 +556,7 @@ namespace spinas {
   cmatrix particle::lorentz_jm_lu_dot() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
-    if(m!=0) pre=half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+    if(m!=0) pre=half*(std::real(sqrtEmP)/std::real(sqrtEpP));
     return pre*cmatrix(
 		       -std::sin(theta), std::polar(-one+std::cos(theta),phi) ,
 		       std::polar(one+std::cos(theta),-phi), std::sin(theta));
@@ -563,7 +572,7 @@ namespace spinas {
   cmatrix particle::lorentz_jp_ul_dot() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
-    if(m!=0) pre=half*std::sqrt((p[0]+pmag)/(p[0]-pmag));
+    if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
 
     return pre*cmatrix(
 		       std::sin(theta), -std::polar(-one+std::cos(theta),-phi) ,
@@ -572,7 +581,7 @@ namespace spinas {
   cmatrix particle::lorentz_jm_ul_dot() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
-    if(m!=0) pre = half*std::sqrt((p[0]-pmag)/(p[0]+pmag));
+    if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
     
     return pre*cmatrix(
 		       std::sin(theta), -std::polar(one+std::cos(theta),-phi) ,
