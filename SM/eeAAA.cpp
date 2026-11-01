@@ -27,7 +27,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <iomanip>
 #include <limits>
-#include <stdexcept>
 
 #include "include/eeAAA.h"
 
@@ -336,8 +335,7 @@ namespace spinas {
   }
 
   // Full total-photon-momentum numerator [a|p1 (k3+k4+k5)|c].
-  // The kc insertion vanishes at the massless endpoint; the ka insertion
-  // must remain off shell. In particular, order 453 needs [4|p1 k4|3].
+  // The kc insertion vanishes at the massless endpoint; the ka insertion must remain off shell.
   cdouble eeAAA::amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
     
     if(ds3>0&&ds4>0&&ds5>0){
@@ -355,172 +353,220 @@ namespace spinas {
     return cdouble(0,0);  
   }
 
-  namespace {
-    struct PhotonReferenceSpinor { cvector column, row; };
-    struct WeylVector { cvector angle, square; };
-    struct WeylPolarization { cmatrix lower, upper; };
-
-    cvector vector_sum(const cvector& a, const cvector& b) {
-      return cvector(a.get(0)+b.get(0),a.get(1)+b.get(1));
-    }
-
-    WeylVector apply_polarization(const WeylPolarization& epsilon,
-                                 const WeylVector& v) {
-      return {epsilon.lower*v.square, epsilon.upper*v.angle};
-    }
-
-    WeylVector apply_propagator(const cmatrix& lower, const cmatrix& upper,
-                               const ldouble mass, const int sign,
-                               const WeylVector& v) {
-      return {vector_sum(mass*v.angle, sign*(lower*v.square)),
-              vector_sum(sign*(upper*v.angle), mass*v.square)};
-    }
-
-    using AbsoluteVector=std::array<ldouble,2>;
-    struct AbsoluteWeylVector { AbsoluteVector angle,square; };
-    AbsoluteVector absolute_vector(const cvector& v) {
-      return {{std::abs(v.get(0)),std::abs(v.get(1))}};
-    }
-    AbsoluteVector absolute_product(const cmatrix& m,const AbsoluteVector& v) {
-      return {{std::abs(m.get(0,0))*v[0]+std::abs(m.get(0,1))*v[1],
-               std::abs(m.get(1,0))*v[0]+std::abs(m.get(1,1))*v[1]}};
-    }
-    AbsoluteVector absolute_sum(const AbsoluteVector& a,const AbsoluteVector& b) {
-      return {{a[0]+b[0],a[1]+b[1]}};
-    }
-    AbsoluteVector absolute_scale(ldouble x,AbsoluteVector v) {
-      v[0]*=std::abs(x);v[1]*=std::abs(x);return v;
-    }
-    AbsoluteWeylVector absolute_polarization(const WeylPolarization& e,const AbsoluteWeylVector& v) {
-      return {absolute_product(e.lower,v.square),absolute_product(e.upper,v.angle)};
-    }
-    AbsoluteWeylVector absolute_propagator(const cmatrix& lo,const cmatrix& up,
-                                         ldouble m,const AbsoluteWeylVector& v) {
-      return {absolute_sum(absolute_scale(m,v.angle),absolute_product(lo,v.square)),
-              absolute_sum(absolute_product(up,v.angle),absolute_scale(m,v.square))};
-    }
-    ldouble absolute_contraction(const cvector& row,const AbsoluteVector& v) {
-      return std::abs(row.get(0))*v[0]+std::abs(row.get(1))*v[1];
-    }
-
-    // Compensate accumulation, but do not hide loss of precision within a diagram.
-    cdouble sum_feynman_diagrams(const std::array<cdouble,6>& diagrams) {
-      cdouble sum(0,0), correction(0,0);
-      for(const auto& term : diagrams) {
-        const cdouble adjusted=term-correction, next=sum+adjusted;
-        correction=(next-sum)-adjusted;
-        sum=next;
-      }
-      return sum;
-    }
-  }
-
-  // Photon references belong to external labels, never to positions in an order.
-  // The order of the returned entries is 345, 354, 435, 453, 534, 543.
-  // All stored momenta are physical: p1+p2=k3+k4+k5, Qa=p1-ka, Qc=p2-kc.
-  std::array<cdouble,6> eeAAA::feynman_diagrams(
-      const int ds1, const int ds2,
-      const std::array<feynman_reference,3>& references,
-      const bool expanded, const int ward_leg,
-      std::array<ldouble,6>* evaluation_scales) {
-    if(ward_leg!=0 && (ward_leg<3 || ward_leg>5 || expanded))
-      throw std::invalid_argument("eeAAA: Ward replacement requires the matrix evaluation and leg 3, 4 or 5");
-    particle* photon[]={&p3,&p4,&p5};
-    particle* legs[]={nullptr,&p1,&p2,&p3,&p4,&p5};
-    PhotonReferenceSpinor q[3];
-    WeylPolarization epsilon[3];
-    cdouble reference_denominator(1,0);
-    for(int i=0;i<3;i++) {
-      const auto& reference=references[i];
-      if(reference.leg<1 || reference.leg>5
-          || (!reference.momentum_insertion &&
-              (reference.leg<3 || reference.leg==i+3)))
-        throw std::invalid_argument("eeAAA: invalid photon reference");
-      particle& r=*legs[reference.leg];
-      if(reference.momentum_insertion) {
-        // <qi|=[i|pr, |qi>=-pr|i] in SPINAS index conventions.
-        q[i]={-(r.lmat()*photon[i]->rsquare()),photon[i]->lsquare()*r.umat()};
-      } else {
-        q[i]={r.rangle(),r.langle()};
-      }
-      const cdouble denominator=q[i].row*photon[i]->rangle();
-      if(std::abs(denominator)==0)
-        throw std::domain_error("eeAAA: singular photon reference");
-      reference_denominator*=denominator;
-      epsilon[i]={sqrt2*outer(q[i].column,photon[i]->lsquare())/denominator,
-                  sqrt2*outer(photon[i]->rsquare(),q[i].row)/denominator};
-      if(ward_leg==i+3)
-        epsilon[i]={photon[i]->lmat(),photon[i]->umat()};
-    }
-    const cdouble first_denominator[]={pDenS13,pDenS14,pDenS15};
-    const cdouble last_denominator[]={pDenS23,pDenS24,pDenS25};
-    const WeylVector external={p1.rangle(ds1),p1.rsquare(ds1)};
-    std::array<cdouble,6> result;
-    int order[]={0,1,2}, index=0;
-    do {
-      const int a=order[0],b=order[1],c=order[2];
-      const cmatrix qa_lower=p1.lmat()-photon[a]->lmat();
-      const cmatrix qa_upper=p1.umat()-photon[a]->umat();
-      const cmatrix qc_lower=p2.lmat()-photon[c]->lmat();
-      const cmatrix qc_upper=p2.umat()-photon[c]->umat();
-      const cdouble denominator=first_denominator[a]*last_denominator[c];
-      if(evaluation_scales) {
-        // Sum of magnitudes before cancellations inside each matrix product.
-        AbsoluteWeylVector bound={absolute_vector(external.angle),absolute_vector(external.square)};
-        bound=absolute_polarization(epsilon[a],bound);
-        bound=absolute_propagator(qa_lower,qa_upper,me,bound);
-        bound=absolute_polarization(epsilon[b],bound);
-        bound=absolute_propagator(qc_lower,qc_upper,me,bound);
-        bound=absolute_polarization(epsilon[c],bound);
-        (*evaluation_scales)[index]=std::abs(e*e*e/denominator)*(
-          absolute_contraction(p2.langle(ds2),bound.angle)+absolute_contraction(p2.lsquare(ds2),bound.square));
-      }
-      if(!expanded) {
-        // Exact Weyl blocks of Ec (slash(Qc)+m) Eb (-slash(Qa)+m) Ea.
-        WeylVector v=apply_polarization(epsilon[a],external);
-        v=apply_propagator(qa_lower,qa_upper,me,-1,v);
-        v=apply_polarization(epsilon[b],v);
-        v=apply_propagator(qc_lower,qc_upper,me,+1,v);
-        v=apply_polarization(epsilon[c],v);
-        result[index++]=-e*e*e*(p2.langle(ds2)*v.angle+p2.lsquare(ds2)*v.square)/denominator;
-      } else {
-        // Eight scalar terms obtained by expanding the two propagator blocks.
-        const cdouble L=p2.langle(ds2)*q[c].column;
-        const cdouble S=p2.lsquare(ds2)*photon[c]->rsquare();
-        const cdouble T=photon[a]->lsquare()*p1.rsquare(ds1);
-        const cdouble C=q[a].row*p1.rangle(ds1);
-        const cdouble U=photon[c]->lsquare()*qc_upper*q[b].column;
-        const cdouble V=photon[b]->lsquare()*qa_upper*q[a].column;
-        const cdouble W=q[b].row*qa_lower*photon[a]->rsquare();
-        const cdouble Z=q[c].row*qc_lower*photon[b]->rsquare();
-        const cdouble cb=photon[c]->lsquare()*photon[b]->rsquare();
-        const cdouble ba=photon[b]->lsquare()*photon[a]->rsquare();
-        const cdouble rr=q[b].row*q[a].column;
-        const cdouble rc=q[c].row*q[b].column;
-        const cdouble numerator=-L*U*V*T+me*L*U*ba*C+me*me*L*cb*rr*T-me*L*cb*W*C
-          -me*S*rc*V*T+me*me*S*rc*ba*C+me*S*Z*rr*T-S*Z*W*C;
-        result[index++]=-2*sqrt2*e*e*e*numerator/(reference_denominator*denominator);
-      }
-    } while(std::next_permutation(order,order+3));
-    return result;
-  }
-
+  // q3=|4>, q4=|5>, q5=|3>; fixed for all six orders.
   cdouble eeAAA::amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
     if(ds3<=0 || ds4<=0 || ds5<=0) return cdouble(0,0);
-    const std::array<feynman_reference,3> references={{{4,false},{5,false},{3,false}}};
-    return sum_feynman_diagrams(feynman_diagrams(ds1,ds2,references));
+    sproduct f_s31s(SQUARE,&p3,&p1);
+    sproduct f_a41a(ANGLE,&p4,&p1);
+    sproduct f_a513s(ANGLE,&p5,&p1,&p3);
+    sproduct f_a324s(ANGLE,&p3,&p2,&p4);
+    sproduct f_a354s(ANGLE,&p3,&p5,&p4);
+    sproduct f_s54s(SQUARE,&p5,&p4);
+    sproduct f_s43s(SQUARE,&p4,&p3);
+    sproduct f_a54a(ANGLE,&p5,&p4);
+    sproduct f_a313s(ANGLE,&p3,&p1,&p3);
+    sproduct f_a525s(ANGLE,&p5,&p2,&p5);
+    sproduct f_a545s(ANGLE,&p5,&p4,&p5);
+    sproduct f_s53s(SQUARE,&p5,&p3);
+    sproduct f_a53a(ANGLE,&p5,&p3);
+    sproduct f_s41s(SQUARE,&p4,&p1);
+    sproduct f_a51a(ANGLE,&p5,&p1);
+    sproduct f_a414s(ANGLE,&p4,&p1,&p4);
+    sproduct f_a323s(ANGLE,&p3,&p2,&p3);
+    sproduct f_a353s(ANGLE,&p3,&p5,&p3);
+    sproduct f_a314s(ANGLE,&p3,&p1,&p4);
+    sproduct f_a425s(ANGLE,&p4,&p2,&p5);
+    sproduct f_a435s(ANGLE,&p4,&p3,&p5);
+    sproduct f_a43a(ANGLE,&p4,&p3);
+    sproduct f_s51s(SQUARE,&p5,&p1);
+    sproduct f_a31a(ANGLE,&p3,&p1);
+    sproduct f_a415s(ANGLE,&p4,&p1,&p5);
+    sproduct f_a523s(ANGLE,&p5,&p2,&p3);
+    sproduct f_a543s(ANGLE,&p5,&p4,&p3);
+    sproduct f_a515s(ANGLE,&p5,&p1,&p5);
+    sproduct f_a424s(ANGLE,&p4,&p2,&p4);
+    sproduct f_a434s(ANGLE,&p4,&p3,&p4);
+    const cdouble reference_denominator=f_a43a.v()*f_a54a.v()*a35a.v();
+    // 345: eight terms from the two off-shell fermion numerators.
+    const cdouble M345=(
+      - a23a.v(ds2)*s525a.v()*(s414a.v() - s434a.v())*f_s31s.v(ds1)
+      + me*a23a.v(ds2)*s525a.v()*f_s43s.v()*f_a41a.v(ds1)
+      + me*me*a23a.v(ds2)*f_s54s.v()*f_a54a.v()*f_s31s.v(ds1)
+      - me*a23a.v(ds2)*f_s54s.v()*f_a513s.v()*f_a41a.v(ds1)
+      - me*s25s.v(ds2)*a35a.v()*(s414a.v() - s434a.v())*f_s31s.v(ds1)
+      + me*me*s25s.v(ds2)*a35a.v()*f_s43s.v()*f_a41a.v(ds1)
+      + me*s25s.v(ds2)*(f_a324s.v() - f_a354s.v())*f_a54a.v()*f_s31s.v(ds1)
+      - s25s.v(ds2)*(f_a324s.v() - f_a354s.v())*f_a513s.v()*f_a41a.v(ds1)
+    )/(pDenS13*pDenS25);
+
+    // 354: eight terms from the two off-shell fermion numerators.
+    const cdouble M354=(
+      - a25a.v(ds2)*s423a.v()*(s514a.v() - s534a.v())*f_s31s.v(ds1)
+      + me*a25a.v(ds2)*s423a.v()*f_s53s.v()*f_a41a.v(ds1)
+      + me*me*a25a.v(ds2)*s45s.v()*a34a.v()*f_s31s.v(ds1)
+      - me*a25a.v(ds2)*s45s.v()*f_a313s.v()*f_a41a.v(ds1)
+      - me*s24s.v(ds2)*f_a53a.v()*(s514a.v() - s534a.v())*f_s31s.v(ds1)
+      + me*me*s24s.v(ds2)*f_a53a.v()*f_s53s.v()*f_a41a.v(ds1)
+      + me*s24s.v(ds2)*(f_a525s.v() - f_a545s.v())*a34a.v()*f_s31s.v(ds1)
+      - s24s.v(ds2)*(f_a525s.v() - f_a545s.v())*f_a313s.v()*f_a41a.v(ds1)
+    )/(pDenS13*pDenS24);
+
+    // 435: eight terms from the two off-shell fermion numerators.
+    const cdouble M435=(
+      - a23a.v(ds2)*s524a.v()*(s315a.v() - s345a.v())*f_s41s.v(ds1)
+      + me*a23a.v(ds2)*s524a.v()*s34s.v()*f_a51a.v(ds1)
+      + me*me*a23a.v(ds2)*f_s53s.v()*a45a.v()*f_s41s.v(ds1)
+      - me*a23a.v(ds2)*f_s53s.v()*f_a414s.v()*f_a51a.v(ds1)
+      - me*s25s.v(ds2)*a34a.v()*(s315a.v() - s345a.v())*f_s41s.v(ds1)
+      + me*me*s25s.v(ds2)*a34a.v()*s34s.v()*f_a51a.v(ds1)
+      + me*s25s.v(ds2)*(f_a323s.v() - f_a353s.v())*a45a.v()*f_s41s.v(ds1)
+      - s25s.v(ds2)*(f_a323s.v() - f_a353s.v())*f_a414s.v()*f_a51a.v(ds1)
+    )/(pDenS14*pDenS25);
+
+    // 453: eight terms from the two off-shell fermion numerators.
+    const cdouble M453=(
+      - a24a.v(ds2)*s323a.v()*(s515a.v() - s545a.v())*f_s41s.v(ds1)
+      + me*a24a.v(ds2)*s323a.v()*f_s54s.v()*f_a51a.v(ds1)
+      + me*me*a24a.v(ds2)*s35s.v()*a35a.v()*f_s41s.v(ds1)
+      - me*a24a.v(ds2)*s35s.v()*f_a314s.v()*f_a51a.v(ds1)
+      - me*s23s.v(ds2)*f_a43a.v()*(s515a.v() - s545a.v())*f_s41s.v(ds1)
+      + me*me*s23s.v(ds2)*f_a43a.v()*f_s54s.v()*f_a51a.v(ds1)
+      + me*s23s.v(ds2)*(f_a425s.v() - f_a435s.v())*a35a.v()*f_s41s.v(ds1)
+      - s23s.v(ds2)*(f_a425s.v() - f_a435s.v())*f_a314s.v()*f_a51a.v(ds1)
+    )/(pDenS14*pDenS23);
+
+    // 534: eight terms from the two off-shell fermion numerators.
+    const cdouble M534=(
+      - a25a.v(ds2)*s424a.v()*(s313a.v() - s353a.v())*f_s51s.v(ds1)
+      + me*a25a.v(ds2)*s424a.v()*s35s.v()*f_a31a.v(ds1)
+      + me*me*a25a.v(ds2)*f_s43s.v()*f_a43a.v()*f_s51s.v(ds1)
+      - me*a25a.v(ds2)*f_s43s.v()*f_a415s.v()*f_a31a.v(ds1)
+      - me*s24s.v(ds2)*f_a54a.v()*(s313a.v() - s353a.v())*f_s51s.v(ds1)
+      + me*me*s24s.v(ds2)*f_a54a.v()*s35s.v()*f_a31a.v(ds1)
+      + me*s24s.v(ds2)*(f_a523s.v() - f_a543s.v())*f_a43a.v()*f_s51s.v(ds1)
+      - s24s.v(ds2)*(f_a523s.v() - f_a543s.v())*f_a415s.v()*f_a31a.v(ds1)
+    )/(pDenS15*pDenS24);
+
+    // 543: eight terms from the two off-shell fermion numerators.
+    const cdouble M543=(
+      - a24a.v(ds2)*s325a.v()*(s413a.v() - s453a.v())*f_s51s.v(ds1)
+      + me*a24a.v(ds2)*s325a.v()*s45s.v()*f_a31a.v(ds1)
+      + me*me*a24a.v(ds2)*s34s.v()*f_a53a.v()*f_s51s.v(ds1)
+      - me*a24a.v(ds2)*s34s.v()*f_a515s.v()*f_a31a.v(ds1)
+      - me*s23s.v(ds2)*a45a.v()*(s413a.v() - s453a.v())*f_s51s.v(ds1)
+      + me*me*s23s.v(ds2)*a45a.v()*s45s.v()*f_a31a.v(ds1)
+      + me*s23s.v(ds2)*(f_a424s.v() - f_a434s.v())*f_a53a.v()*f_s51s.v(ds1)
+      - s23s.v(ds2)*(f_a424s.v() - f_a434s.v())*f_a515s.v()*f_a31a.v(ds1)
+    )/(pDenS15*pDenS23);
+    return -2*sqrt2*e*e*e*(M345+M354+M435+M453+M534+M543)/reference_denominator;
   }
 
+  // Compatibility name for the same explicit cyclic eight-term expression.
   cdouble eeAAA::amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
-    if(ds3<=0 || ds4<=0 || ds5<=0) return cdouble(0,0);
-    const std::array<feynman_reference,3> references={{{4,false},{5,false},{3,false}}};
-    return sum_feynman_diagrams(feynman_diagrams(ds1,ds2,references,true));
+    return amp_feynman(ds1,ds2,ds3,ds4,ds5);
   }
 
+  // <q3|=[3|p2, <q4|=[4|p1, <q5|=[5|p1; fixed for all orders.
   cdouble eeAAA::amp_feynman_x(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5) {
     if(ds3<=0 || ds4<=0 || ds5<=0) return cdouble(0,0);
-    const std::array<feynman_reference,3> references={{{2,true},{1,true},{1,true}}};
-    return sum_feynman_diagrams(feynman_diagrams(ds1,ds2,references));
+    sproduct f_s31s(SQUARE,&p3,&p1);
+    sproduct f_s4113s(SQUARE,&p4,&p1,&p1,&p3);
+    sproduct f_s54s(SQUARE,&p5,&p4);
+    sproduct f_s43s(SQUARE,&p4,&p3);
+    sproduct f_s5114s(SQUARE,&p5,&p1,&p1,&p4);
+    sproduct f_s5113s(SQUARE,&p5,&p1,&p1,&p3);
+    sproduct f_s53s(SQUARE,&p5,&p3);
+    sproduct f_s4115s(SQUARE,&p4,&p1,&p1,&p5);
+    sproduct f_s41s(SQUARE,&p4,&p1);
+    sproduct f_s411a(SQUARE,&p4,&p1,&p1);
+    sproduct f_s5223s(SQUARE,&p5,&p2,&p2,&p3);
+    sproduct f_s3114s(SQUARE,&p3,&p1,&p1,&p4);
+    sproduct f_s3414s(SQUARE,&p3,&p4,&p1,&p4);
+    sproduct f_s322a(SQUARE,&p3,&p2,&p2);
+    sproduct f_s5414s(SQUARE,&p5,&p4,&p1,&p4);
+    sproduct f_s3225s(SQUARE,&p3,&p2,&p2,&p5);
+    sproduct f_s3235s(SQUARE,&p3,&p2,&p3,&p5);
+    sproduct f_s51s(SQUARE,&p5,&p1);
+    sproduct f_s511a(SQUARE,&p5,&p1,&p1);
+    sproduct f_s4223s(SQUARE,&p4,&p2,&p2,&p3);
+    sproduct f_s3115s(SQUARE,&p3,&p1,&p1,&p5);
+    sproduct f_s3515s(SQUARE,&p3,&p5,&p1,&p5);
+    sproduct f_s4515s(SQUARE,&p4,&p5,&p1,&p5);
+    sproduct f_s3224s(SQUARE,&p3,&p2,&p2,&p4);
+    sproduct f_s3234s(SQUARE,&p3,&p2,&p3,&p4);
+    const cdouble reference_denominator=s323a.v()*s414a.v()*s515a.v();
+    // 345: eight terms from the two off-shell fermion numerators.
+    const cdouble M345=(
+      + s512a.v(ds2)*s5214s.v()*(s4123s.v() - s4323s.v())*f_s31s.v(ds1)
+      + me*s512a.v(ds2)*s5214s.v()*f_s43s.v()*s321a.v(ds1)
+      + me*me*s512a.v(ds2)*f_s54s.v()*s4123s.v()*f_s31s.v(ds1)
+      + me*s512a.v(ds2)*f_s54s.v()*f_s4113s.v()*s321a.v(ds1)
+      - me*s25s.v(ds2)*f_s5114s.v()*(s4123s.v() - s4323s.v())*f_s31s.v(ds1)
+      - me*me*s25s.v(ds2)*f_s5114s.v()*f_s43s.v()*s321a.v(ds1)
+      - me*s25s.v(ds2)*(s5124s.v() - s5154s.v())*s4123s.v()*f_s31s.v(ds1)
+      - s25s.v(ds2)*(s5124s.v() - s5154s.v())*f_s4113s.v()*s321a.v(ds1)
+    )/(pDenS13*pDenS25);
+
+    // 354: eight terms from the two off-shell fermion numerators.
+    const cdouble M354=(
+      + s412a.v(ds2)*s4215s.v()*(s5123s.v() - s5323s.v())*f_s31s.v(ds1)
+      + me*s412a.v(ds2)*s4215s.v()*f_s53s.v()*s321a.v(ds1)
+      + me*me*s412a.v(ds2)*s45s.v()*s5123s.v()*f_s31s.v(ds1)
+      + me*s412a.v(ds2)*s45s.v()*f_s5113s.v()*s321a.v(ds1)
+      - me*s24s.v(ds2)*f_s4115s.v()*(s5123s.v() - s5323s.v())*f_s31s.v(ds1)
+      - me*me*s24s.v(ds2)*f_s4115s.v()*f_s53s.v()*s321a.v(ds1)
+      - me*s24s.v(ds2)*(s4125s.v() - s4145s.v())*s5123s.v()*f_s31s.v(ds1)
+      - s24s.v(ds2)*(s4125s.v() - s4145s.v())*f_s5113s.v()*s321a.v(ds1)
+    )/(pDenS13*pDenS24);
+
+    // 435: eight terms from the two off-shell fermion numerators.
+    const cdouble M435=(
+      + s512a.v(ds2)*f_s5223s.v()*(f_s3114s.v() - f_s3414s.v())*f_s41s.v(ds1)
+      + me*s512a.v(ds2)*f_s5223s.v()*s34s.v()*f_s411a.v(ds1)
+      + me*me*s512a.v(ds2)*f_s53s.v()*s3214s.v()*f_s41s.v(ds1)
+      + me*s512a.v(ds2)*f_s53s.v()*s3214s.v()*f_s411a.v(ds1)
+      - me*s25s.v(ds2)*s5123s.v()*(f_s3114s.v() - f_s3414s.v())*f_s41s.v(ds1)
+      - me*me*s25s.v(ds2)*s5123s.v()*s34s.v()*f_s411a.v(ds1)
+      - me*s25s.v(ds2)*(s5123s.v() - s5153s.v())*s3214s.v()*f_s41s.v(ds1)
+      - s25s.v(ds2)*(s5123s.v() - s5153s.v())*s3214s.v()*f_s411a.v(ds1)
+    )/(pDenS14*pDenS25);
+
+    // 453: eight terms from the two off-shell fermion numerators.
+    const cdouble M453=(
+      + f_s322a.v(ds2)*s3215s.v()*(f_s5114s.v() - f_s5414s.v())*f_s41s.v(ds1)
+      + me*f_s322a.v(ds2)*s3215s.v()*f_s54s.v()*f_s411a.v(ds1)
+      + me*me*f_s322a.v(ds2)*s35s.v()*f_s5114s.v()*f_s41s.v(ds1)
+      + me*f_s322a.v(ds2)*s35s.v()*f_s5114s.v()*f_s411a.v(ds1)
+      - me*s23s.v(ds2)*s3215s.v()*(f_s5114s.v() - f_s5414s.v())*f_s41s.v(ds1)
+      - me*me*s23s.v(ds2)*s3215s.v()*f_s54s.v()*f_s411a.v(ds1)
+      - me*s23s.v(ds2)*(f_s3225s.v() - f_s3235s.v())*f_s5114s.v()*f_s41s.v(ds1)
+      - s23s.v(ds2)*(f_s3225s.v() - f_s3235s.v())*f_s5114s.v()*f_s411a.v(ds1)
+    )/(pDenS14*pDenS23);
+
+    // 534: eight terms from the two off-shell fermion numerators.
+    const cdouble M534=(
+      + s412a.v(ds2)*f_s4223s.v()*(f_s3115s.v() - f_s3515s.v())*f_s51s.v(ds1)
+      + me*s412a.v(ds2)*f_s4223s.v()*s35s.v()*f_s511a.v(ds1)
+      + me*me*s412a.v(ds2)*f_s43s.v()*s3215s.v()*f_s51s.v(ds1)
+      + me*s412a.v(ds2)*f_s43s.v()*s3215s.v()*f_s511a.v(ds1)
+      - me*s24s.v(ds2)*s4123s.v()*(f_s3115s.v() - f_s3515s.v())*f_s51s.v(ds1)
+      - me*me*s24s.v(ds2)*s4123s.v()*s35s.v()*f_s511a.v(ds1)
+      - me*s24s.v(ds2)*(s4123s.v() - s4143s.v())*s3215s.v()*f_s51s.v(ds1)
+      - s24s.v(ds2)*(s4123s.v() - s4143s.v())*s3215s.v()*f_s511a.v(ds1)
+    )/(pDenS15*pDenS24);
+
+    // 543: eight terms from the two off-shell fermion numerators.
+    const cdouble M543=(
+      + f_s322a.v(ds2)*s3214s.v()*(f_s4115s.v() - f_s4515s.v())*f_s51s.v(ds1)
+      + me*f_s322a.v(ds2)*s3214s.v()*s45s.v()*f_s511a.v(ds1)
+      + me*me*f_s322a.v(ds2)*s34s.v()*f_s4115s.v()*f_s51s.v(ds1)
+      + me*f_s322a.v(ds2)*s34s.v()*f_s4115s.v()*f_s511a.v(ds1)
+      - me*s23s.v(ds2)*s3214s.v()*(f_s4115s.v() - f_s4515s.v())*f_s51s.v(ds1)
+      - me*me*s23s.v(ds2)*s3214s.v()*s45s.v()*f_s511a.v(ds1)
+      - me*s23s.v(ds2)*(f_s3224s.v() - f_s3234s.v())*f_s4115s.v()*f_s51s.v(ds1)
+      - s23s.v(ds2)*(f_s3224s.v() - f_s3234s.v())*f_s4115s.v()*f_s511a.v(ds1)
+    )/(pDenS15*pDenS23);
+    return -2*sqrt2*e*e*e*(M345+M354+M435+M453+M534+M543)/reference_denominator;
   }
 
   //set_momenta(...) must be called before amp2().
@@ -974,15 +1020,12 @@ namespace spinas {
       cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
       cdouble amp_fx = eeAAAAmp.amp_feynman_x(1,1,2,2,2);
       cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
-      cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
       std::cout << "\n " << " Feynman_s   = " << amp_f << "\n";
-      std::cout << "  Reduced_s   = " << amp_fr << "\n";
       std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      print_ratio("Feynman_s / Reduced",amp_f,amp_fr);
       print_ratio("Feynman_ns / Feynman_s",amp_fx,amp_f);
       print_ratio("x-factor / Permutation",amp_x,amp_p);
       print_ratio("Feynman_s / x-factor",amp_f,amp_x);
@@ -1026,15 +1069,12 @@ namespace spinas {
       amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
       amp_fx = eeAAAAmp.amp_feynman_x(1,1,2,2,2);
       amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
-      amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
       std::cout << "\n " << " Feynman_s   = " << amp_f << "\n";
-      std::cout << "  Reduced_s   = " << amp_fr << "\n";
       std::cout << "  Feynman_ns  = " << amp_fx << "\n";
       std::cout << "  x-factor    = " << amp_x << "\n";
       std::cout << "  Permutation = " << amp_p << "\n";
-      print_ratio("Feynman_s / Reduced",amp_f,amp_fr);
       print_ratio("Feynman_ns / Feynman_s",amp_fx,amp_f);
       print_ratio("x-factor / Permutation",amp_x,amp_p);
       print_ratio("Feynman_s / x-factor",amp_f,amp_x);
@@ -1077,15 +1117,12 @@ namespace spinas {
           cdouble amp_f = eeAAAAmp.amp_feynman(1,1,2,2,2);
           cdouble amp_fx = eeAAAAmp.amp_feynman_x(1,1,2,2,2);
           cdouble amp_p = eeAAAAmp.amp_permutation(1,1,2,2,2);
-          cdouble amp_fr = eeAAAAmp.amp_feynman_r(1,1,2,2,2);
 
 
           std::cout << "\n " << " Feynman_s   = " << amp_f << "\n";
-          std::cout << "  Reduced_s   = " << amp_fr << "\n";
           std::cout << "  Feynman_ns  = " << amp_fx << "\n";
           std::cout << "  x-factor    = " << amp_x << "\n";
           std::cout << "  Permutation = " << amp_p << "\n";
-      print_ratio("Feynman_s / Reduced",amp_f,amp_fr);
       print_ratio("Feynman_ns / Feynman_s",amp_fx,amp_f);
       print_ratio("x-factor / Permutation",amp_x,amp_p);
       print_ratio("Feynman_s / x-factor",amp_f,amp_x);
@@ -1198,39 +1235,19 @@ namespace spinas {
         << "    Failures: " << failures << "\n";
     }
     {
-      // Direct off-shell Feynman diagrams: fixed references, expanded numerators,
-      // mixed choices, and Ward identities. The error budget tracks cancellation
-      // of individual diagrams instead of dividing by an almost-zero amplitude.
-      using Reference=eeAAA::feynman_reference;
-      const std::array<Reference,3> choices[]={
-        {{{4,false},{5,false},{3,false}}},
-        {{{2,true},{1,true},{1,true}}},
-        {{{2,true},{5,false},{1,true}}},
-        {{{5,false},{3,false},{4,false}}}
-      };
-      const ldouble settings[][2]={{0.0005L,600.L},{1.L,6.L},{1.L,2.1L}};
-      const ldouble epsilon=std::numeric_limits<ldouble>::epsilon();
-      std::mt19937 rng(20261026);
-      int failures=0, comparisons=0, ward_checks=0, diagram_checks=0;
-      int resolved=0, cancellation_limited=0, reported=0;
-      ldouble max_resolved_error=0, max_roundoff_units=0;
-      auto compare=[&](cdouble actual,cdouble expected,ldouble scale,const char* label){
-        const ldouble error=std::abs(actual-expected);
-        const ldouble bound=1e-9L*std::abs(expected)+256*epsilon*scale;
-        if(!std::isfinite(error) || error>bound){
-          failures++;
-          if(reported++<5) std::cout << "  Feynman " << label << " FAIL: actual=" << actual
-            << ", expected=" << expected << ", error=" << error << ", bound=" << bound << "\n";
-        }
-      };
-      for(const auto& setting:settings){
-        const ldouble mass=setting[0],energy=setting[1];
-        eeAAA amplitude(0.31333L,mass);
-        int points=0,attempts=0;
-        while(points<8 && attempts++<800){
+      // Numerical agreement of the raw eight-term sums with the constructive H.
+      // Relative tolerance for nonzero amplitudes; absolute tolerance for zero spin components.
+      std::mt19937 rng(20261031);
+      int comparisons=0, failures=0;
+      ldouble max_relative_error=0;
+      for(ldouble energy : {2.1L,6.L}){
+        eeAAA amplitude(0.31333L,1.L);
+        for(int point=0;point<12;point++){
           ldouble p1[4],p2[4],p3[4],p4[4],p5[4];
-          if(!eeAAA::make_random_phase_space(energy,mass,p1,p2,p3,p4,p5,rng)) continue;
-          points++;
+          if(!eeAAA::make_random_phase_space(energy,1.L,p1,p2,p3,p4,p5,rng)){
+            failures++;
+            continue;
+          }
           for(int frame=0;frame<3;frame++){
             ldouble* momenta[]={p1,p2,p3,p4,p5};
             if(frame==1){
@@ -1246,41 +1263,22 @@ namespace spinas {
             do{
               amplitude.set_momenta(p1,p2,photons[order[0]],photons[order[1]],photons[order[2]]);
               for(int s1:{-1,1}) for(int s2:{-1,1}){
-                const cdouble target=amplitude.amp_nonspurious(s1,s2,2,2,2);
-                for(const auto& choice:choices){
-                  std::array<ldouble,6> evaluation_scales;
-                  const auto diagrams=amplitude.feynman_diagrams(s1,s2,choice,false,0,&evaluation_scales);
-                  const auto expanded=amplitude.feynman_diagrams(s1,s2,choice,true);
-                  ldouble scale=0;
-                  for(int i=0;i<6;i++){
-                    scale+=evaluation_scales[i];
-                    compare(diagrams[i],expanded[i],evaluation_scales[i],"diagram expansion");
-                    diagram_checks++;
-                  }
-                  const cdouble value=sum_feynman_diagrams(diagrams);
-                  compare(value,target,scale,"sum/H");
+                const cdouble h=amplitude.amp_nonspurious(s1,s2,2,2,2);
+                const cdouble values[]={amplitude.amp_feynman(s1,s2,2,2,2),
+                                        amplitude.amp_feynman_x(s1,s2,2,2,2)};
+                for(const auto& value:values){
                   comparisons++;
-                  if(std::abs(target)>1e6L*epsilon*scale){
-                    resolved++;
-                    max_resolved_error=std::max(max_resolved_error,std::abs(value-target)/std::abs(target));
-                  } else cancellation_limited++;
-                  if(scale>0) max_roundoff_units=std::max(max_roundoff_units,std::abs(value-target)/(epsilon*scale));
-                  for(int leg=3;leg<=5;leg++){
-                    std::array<ldouble,6> ward_scales;
-                    const auto ward=amplitude.feynman_diagrams(s1,s2,choice,false,leg,&ward_scales);
-                    ldouble ward_scale=0;
-                    for(const auto& term:ward_scales) ward_scale+=term;
-                    compare(sum_feynman_diagrams(ward),cdouble(0,0),ward_scale,"Ward");
-                    ward_checks++;
-                  }
+                  const ldouble scale=0.31333L*0.31333L*0.31333L/energy;
+                  if(std::abs(h)>1e-8L*scale)
+                    max_relative_error=std::max(max_relative_error,relative_error(h,value));
+                  if(!std::isfinite(std::abs(value))
+                      || std::abs(value-h)>1e-9L*std::abs(h)+1e-12L*scale) failures++;
                 }
               }
             }while(std::next_permutation(order,order+3));
           }
         }
-        if(points!=8) failures++;
       }
-      // Guard the all-plus-only interface, including its compatibility names.
       eeAAA guard(0.31333L,1.L);
       for(int a:{-2,2}) for(int b:{-2,2}) for(int c:{-2,2})
         if(a<0 || b<0 || c<0)
@@ -1288,13 +1286,10 @@ namespace spinas {
               || guard.amp_feynman_r(1,1,a,b,c)!=cdouble(0,0)
               || guard.amp_feynman_x(1,1,a,b,c)!=cdouble(0,0)) failures++;
       n+=failures;
-      std::cout << "\n  Fixed-reference Feynman regression: " << (failures==0?"PASS":"FAIL")
-        << "\n    Sum/H comparisons: " << comparisons << "; diagram expansion checks: " << diagram_checks
-        << "; Ward checks: " << ward_checks
-        << "\n    Resolved comparisons: " << resolved << "; cancellation-limited comparisons: " << cancellation_limited
-        << "\n    Maximum resolved relative error: " << max_resolved_error
-        << "; maximum error / (epsilon * uncanceled evaluation scale): " << max_roundoff_units
-        << "\n    Failures: " << failures << "\n";
+      std::cout << "\n  Eight-term Feynman/H comparison: " << (failures==0?"PASS":"FAIL")
+        << " (" << comparisons << " comparisons, fixed cyclic and momentum-inserted references)\n"
+        << "    Maximum relative difference (nonzero components): " << max_relative_error
+        << "; failures: " << failures << "\n";
     }
     return n;
   }

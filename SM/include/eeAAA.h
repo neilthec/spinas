@@ -23,7 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "spinas.h"
 
 #include <random>
-#include <array>
 
 
 namespace spinas {
@@ -100,13 +99,6 @@ namespace spinas {
     cdouble amp_nonspurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_spurious(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_permutation(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
-    // Per-photon references: a massless leg, or <qi|=[i|p_leg for an insertion.
-    struct feynman_reference { int leg; bool momentum_insertion; };
-    // Entries: 345, 354, 435, 453, 534, 543. ward_leg=3..5 replaces epsilon by k.
-    std::array<cdouble,6> feynman_diagrams(int ds1, int ds2,
-      const std::array<feynman_reference,3>& references,
-      bool expanded=false, int ward_leg=0,
-      std::array<ldouble,6>* evaluation_scales=nullptr);
     cdouble amp_feynman(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman_r(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
     cdouble amp_feynman_x(const int& ds1, const int& ds2, const int& ds3, const int& ds4, const int& ds5);
