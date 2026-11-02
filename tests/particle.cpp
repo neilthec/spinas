@@ -10,6 +10,7 @@
 #include <cmath>
 #include <complex>
 #include <limits>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include "types.h"
 //#include "aliases.h"
@@ -121,6 +122,147 @@ BOOST_AUTO_TEST_CASE(stable_spinor_zero_mass_and_mass_sign) {
   }
   const ldouble offShell[4] = {2,0,0,0};
   BOOST_CHECK_THROW(particle(offShell,ldouble(1)),std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(extreme_boost_shell_and_lightcone_matrices) {
+  const ldouble mass = 1;
+  const ldouble relativeTolerance = 128*std::numeric_limits<ldouble>::epsilon();
+  for(const ldouble energy : {ldouble(1),ldouble(1000),ldouble(1e120L)}){
+    const ldouble magnitude = std::sqrt(energy-mass)*std::sqrt(energy+mass);
+    for(const int direction : {-1,1}){
+      const ldouble momentum[4] = {energy,0,0,direction*magnitude};
+      particle p(momentum,mass);
+      const ldouble large = energy+magnitude;
+      const ldouble small = mass*(mass/energy)/(1+magnitude/energy);
+      const cmatrix upper = p.umat(), lower = p.lmat();
+      const int smallUpper = direction>0 ? 0 : 1;
+      BOOST_CHECK_SMALL(std::abs(upper.get(smallUpper,smallUpper)/small-cdouble(1,0)),relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs(lower.get(1-smallUpper,1-smallUpper)/small-cdouble(1,0)),relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs(upper.get(1-smallUpper,1-smallUpper)/large-cdouble(1,0)),relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs(lower.get(smallUpper,smallUpper)/large-cdouble(1,0)),relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs((p.langle(-1)*p.rangle(1))/mass+ldouble(1)),relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs((p.lsquare(-1)*p.rsquare(1))/mass-ldouble(1)),relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs(upper.get_det()/mass/mass-ldouble(1)),relativeTolerance);
+      BOOST_CHECK_SMALL(std::abs(lower.get_det()/mass/mass-ldouble(1)),relativeTolerance);
+      const ldouble materiallyOffShell[4] = {energy*ldouble(1.000001L),0,0,direction*magnitude};
+      BOOST_CHECK_THROW(particle(materiallyOffShell,mass),std::runtime_error);
+    }
+  }
+}
+
+BOOST_AUTO_TEST_CASE(stable_transverse_mass_and_exact_massless_axes) {
+  const ldouble mass = ldouble(0.0005L), energy = 1000;
+  const ldouble transverse = 2*mass;
+  const ldouble longitudinal = std::sqrt(energy*energy-mass*mass-transverse*transverse);
+  const ldouble tolerance = 128*std::numeric_limits<ldouble>::epsilon();
+  for(const int direction : {-1,1}){
+    const ldouble momentum[4] = {energy,transverse,0,direction*longitudinal};
+    particle p(momentum,mass), signedMass(momentum,-mass);
+    const ldouble small = (mass*mass+transverse*transverse)/(energy+longitudinal);
+    const int index = direction>0 ? 0 : 1;
+    BOOST_CHECK_SMALL(std::abs(p.umat().get(index,index)/small-cdouble(1,0)),tolerance);
+    BOOST_CHECK_EQUAL(p.umat(),signedMass.umat());
+    BOOST_CHECK_EQUAL(p.lmat(),signedMass.lmat());
+    const ldouble photonMomentum[4] = {energy,0,0,direction*energy};
+    particle photon(photonMomentum,0);
+    BOOST_CHECK_EQUAL(photon.umat().get(index,index),cdouble(0,0));
+    BOOST_CHECK_EQUAL(photon.rangle().get(direction>0 ? 1 : 0),cdouble(0,0));
+  }
+}
+
+BOOST_AUTO_TEST_CASE(finite_spinor_roots_when_energy_sum_overflows) {
+  const ldouble energy = std::numeric_limits<ldouble>::max()/ldouble(1.5);
+  const ldouble mass = 1;
+  const ldouble tolerance = 128*std::numeric_limits<ldouble>::epsilon();
+  BOOST_CHECK(std::isinf(energy+energy));
+  for(const int direction : {-1,1}){
+    const ldouble momentum[4] = {energy,0,0,direction*energy};
+    particle p(momentum,mass);
+    for(const int spin : {-1,1})
+      for(int component=0; component<2; component++){
+        BOOST_CHECK(std::isfinite(std::real(p.rangle(spin).get(component))));
+        BOOST_CHECK(std::isfinite(std::imag(p.lsquare(spin).get(component))));
+      }
+    BOOST_CHECK_SMALL(std::abs((p.langle(-1)*p.rangle(1))/mass+ldouble(1)),tolerance);
+    BOOST_CHECK_SMALL(std::abs((p.lsquare(-1)*p.rsquare(1))/mass-ldouble(1)),tolerance);
+  }
+}
+
+BOOST_AUTO_TEST_CASE(signed_energy_and_off_shell_matrix_conventions) {
+  const ldouble energy = 1000, mass = 1;
+  const ldouble magnitude = std::sqrt(energy-mass)*std::sqrt(energy+mass);
+  const ldouble negative[4] = {-energy,0,0,magnitude};
+  particle signedParticle(negative,mass);
+  BOOST_CHECK_EQUAL(signedParticle.umat().get(0,0),cdouble(negative[0]-negative[3],0));
+  BOOST_CHECK_EQUAL(signedParticle.umat().get(1,1),cdouble(negative[0]+negative[3],0));
+  BOOST_CHECK_EQUAL(signedParticle.lmat().get(0,0),cdouble(negative[0]+negative[3],0));
+  BOOST_CHECK(std::isnan(std::real(signedParticle.rangle(-1).get(0))));
+  const ldouble virtualMomentum[4] = {2,0,0,1};
+  const cmatrix genericUpper(virtualMomentum,true), genericLower(virtualMomentum,false);
+  BOOST_CHECK_EQUAL(genericUpper.get(0,0),cdouble(1,0));
+  BOOST_CHECK_EQUAL(genericLower.get(1,1),cdouble(1,0));
+  BOOST_CHECK_EQUAL(genericUpper.get_det(),ldouble(3));
+  BOOST_CHECK_THROW(particle(virtualMomentum,ldouble(1)),std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(stable_on_shell_scalar_products) {
+  // Reconstruct both on-shell energies independently at 800 decimal digits.
+  // This resolves mass terms even beside momenta near the floating-point limit.
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<800>> high_precision;
+  const ldouble tolerance = 256*std::numeric_limits<ldouble>::epsilon();
+  auto compare = [&](const ldouble a[4], const ldouble ma,
+                     const ldouble b[4], const ldouble mb){
+    high_precision energyA = high_precision(ma)*ma, energyB = high_precision(mb)*mb, spatial = 0;
+    for(int i=1;i<4;i++){
+      energyA += high_precision(a[i])*a[i];
+      energyB += high_precision(b[i])*b[i];
+      spatial += high_precision(a[i])*b[i];
+    }
+    const ldouble expected = static_cast<ldouble>(sqrt(energyA)*sqrt(energyB)-spatial);
+    particle first(a,ma), second(b,mb);
+    const ldouble actual = first.dot(second), reversed = second.dot(first);
+    BOOST_CHECK(std::isfinite(actual));
+    if(expected==0){ BOOST_CHECK_EQUAL(actual,ldouble(0)); }
+    else{
+      BOOST_CHECK_SMALL(std::abs(actual/expected-ldouble(1)),tolerance);
+      BOOST_CHECK_SMALL(std::abs(reversed/expected-ldouble(1)),tolerance);
+    }
+  };
+  // Keep the independent decimal oracle within its 800-digit resolving range
+  // also on platforms whose long double has an exponent range near 10^4932.
+  const ldouble huge = std::min(std::numeric_limits<ldouble>::max()/ldouble(2),ldouble(1e300L));
+  const ldouble same[4] = {huge,0,0,huge};
+  particle sameInstance(same,1);
+  BOOST_CHECK_SMALL(std::abs(sameInstance.dot(sameInstance)-ldouble(1)),tolerance);
+  const ldouble maximumEnergy = std::numeric_limits<ldouble>::max()/ldouble(2);
+  const ldouble maximumMomentum[4] = {maximumEnergy,0,0,maximumEnergy};
+  particle maximumFirst(maximumMomentum,1), maximumSecond(maximumMomentum,1);
+  BOOST_CHECK_SMALL(std::abs(maximumFirst.dot(maximumSecond)-ldouble(1)),tolerance);
+  compare(same,1,same,1);
+  compare(same,1,same,3);
+  const ldouble firstCollinear[4] = {1e120L,0,0,1e120L};
+  const ldouble secondCollinear[4] = {3e120L,0,0,3e120L};
+  compare(firstCollinear,1,secondCollinear,2);
+  const ldouble close[4] = {huge,huge*ldouble(1e-160L),0,huge};
+  compare(same,1,close,2);
+  const ldouble ordinaryA[4] = {std::hypot(ldouble(1.5),std::hypot(std::hypot(ldouble(0.7),ldouble(-0.3)),ldouble(2))),ldouble(0.7),ldouble(-0.3),2};
+  const ldouble ordinaryB[4] = {std::hypot(ldouble(0.2),std::hypot(std::hypot(ldouble(-0.4),ldouble(0.9)),ldouble(1))),ldouble(-0.4),ldouble(0.9),1};
+  compare(ordinaryA,ldouble(1.5),ordinaryB,ldouble(0.2));
+  compare(ordinaryA,ldouble(-1.5),ordinaryB,ldouble(-0.2));
+  const ldouble rest[4] = {2,0,0,0};
+  compare(rest,2,ordinaryB,ldouble(0.2));
+  const ldouble zero[4] = {0,0,0,0};
+  particle nullParticle(zero,0);
+  BOOST_CHECK_EQUAL(nullParticle.dot(sameInstance),ldouble(0));
+  particle masslessFirst(same,0), masslessSecond(same,0);
+  BOOST_CHECK_EQUAL(masslessFirst.dot(masslessSecond),ldouble(0));
+  const ldouble temporarilyUnchecked[4] = {2,0,0,1};
+  particle changedMass(temporarilyUnchecked,std::sqrt(ldouble(3)));
+  changedMass.set_mass(ldouble(0.25));
+  BOOST_CHECK_EQUAL(changedMass.dot(changedMass),ldouble(3));
+  const ldouble past[4] = {-5,1,2,3}, future[4] = {5,-1,-2,-3};
+  particle negativeEnergy(past,std::sqrt(ldouble(11))), positiveEnergy(future,std::sqrt(ldouble(11)));
+  BOOST_CHECK_EQUAL(negativeEnergy.dot(positiveEnergy),ldouble(-11));
 }
 
 BOOST_AUTO_TEST_CASE(momentum_matrices_test) {

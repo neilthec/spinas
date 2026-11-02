@@ -33,6 +33,7 @@ namespace spinas {
     ldouble theta, phi;//Spherical angles
     cdouble c, s, sc;//cos(theta/2), sin(theta/2)*exp(i*phi), s*
     cdouble sqrtEpP, sqrtEmP; //sqrt(E+p), sqrt(E-p)
+    ldouble longitudinal_component(const bool& plus) const;
 
     //The matrices and spinors
     bool upMatCalculated = false, loMatCalculated = false;

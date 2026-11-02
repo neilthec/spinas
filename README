@@ -6,7 +6,7 @@ SPINAS (Spinor Amplitudes) is a software package for calculating constructive sc
 
 SPINAS requires:
 * CMake (version 3.5 or higher)
-* C++ compiler
+* C++11 compiler for the library, with C++14 support for the Boost test target
 * Boost (version 1.71 or higher)
 
 ## Unix-like Systems (Linux, macOS, WSL, Cygwin, etc.)
@@ -102,6 +102,21 @@ g++ -I/path/to/spinas/include -L/path/to/spinas/lib -lspinas your_source_file.cp
 Replace /path/to/spinas with the location where you installed SPINAS. On Windows, you would
 modify the include and library directories in your project settings if you're using an IDE
 like Visual Studio.
+
+## Numerical evaluation
+
+A `particle` carries an external on-shell mass together with its momentum.
+Positive-energy spinors and momentum matrices use that mass to evaluate small
+components without subtracting nearly equal energy and momentum values. For
+example, `sqrt(E-|p|)` is evaluated as `abs(m)/sqrt(E+|p|)`. The declared mass
+remains important even when floating-point energy and momentum round to the
+same number. The momentum check allows arithmetic roundoff and still rejects
+resolved off-shell inputs; it does not modify the supplied four-vector.
+
+The general momentum-matrix constructor and propagator denominator also accept
+virtual momenta and do not apply this external mass-shell substitution. Rebuild
+SPINAS after changing its source and relink executables using the static library
+to use the updated numerical routines.
 
 ## Examples
 

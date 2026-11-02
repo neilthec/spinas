@@ -56,11 +56,13 @@ namespace spinas {
   //Rotate a Momentum by theta around axis given by normalized u[3]={ux,uy,uz}.
   void rotate_momentum(ldouble mom[4], const ldouble u[3], const ldouble& theta){
     ldouble cost = std::cos(theta), ux=u[0], uy=u[1], uz=u[2];
-    ldouble sint = std::sqrt(1.0-cost*cost);
+    ldouble sint = std::sin(theta);
+    const ldouble halfSine = std::sin(theta/2);
+    const ldouble versine = 2*halfSine*halfSine;
     ldouble R[4][4] = {{1,0,0,0},
-		       {0, cost + ux*ux*(1 - cost), ux*uy*(1 - cost) - uz*sint, ux*uz*(1 - cost) + uy*sint},
-		       {0, ux*uy*(1 - cost) + uz*sint, cost + uy*uy*(1 - cost), uy*uz*(1 - cost) - ux*sint},
-		       {0, uz*ux*(1 - cost) - uy*sint, uz*uy*(1 - cost) + ux*sint,    cost + uz*uz*(1 - cost)}};
+		       {0, cost + ux*ux*versine, ux*uy*versine - uz*sint, ux*uz*versine + uy*sint},
+		       {0, ux*uy*versine + uz*sint, cost + uy*uy*versine, uy*uz*versine - ux*sint},
+		       {0, uz*ux*versine - uy*sint, uz*uy*versine + ux*sint, cost + uz*uz*versine}};
     ldouble nMom[4] = {0,0,0,0};
     for(int i=0;i<4;i++)
       for(int j=0;j<4;j++)
@@ -71,16 +73,18 @@ namespace spinas {
   //Boost a momentum by v[3]={vx,vy,vz};
   void boost_momentum(ldouble mom[4], const ldouble v[3]){
     ldouble vx=v[0], vy=v[1], vz=v[2];
-    ldouble v2=vx*vx+vy*vy+vz*vz;
-    ldouble gamma = 1./std::sqrt(1-v2);
-    ldouble B[4][4] = {{gamma, -gamma*vx, -gamma*vy, -gamma*vz},
-		       {-gamma*vx, 1 + (gamma - 1)*vx*vx/v2, (gamma - 1)*vx*vy/v2, (gamma - 1)*vx*vz/v2},
-		       {-gamma*vy, (gamma - 1)*vx*vy/v2, 1 + (gamma - 1)*vy*vy/v2, (gamma - 1)*vy*vz/v2},
-		       {-gamma*vz, (gamma - 1)*vx*vz/v2, (gamma - 1)*vz*vy/v2, 1 + (gamma - 1)*vz*vz/v2}};
-    ldouble nMom[4] = {0,0,0,0};
-    for(int i=0;i<4;i++)
-      for(int j=0;j<4;j++)
-	nMom[i] += B[i][j]*mom[j];
+    const ldouble oneMinusV2 = std::fma(-vx,vx,std::fma(-vy,vy,std::fma(-vz,vz,ldouble(1))));
+    ldouble gamma = 1./std::sqrt(oneMinusV2);
+    // (gamma-1)/v^2 = gamma^2/(gamma+1), including its finite v=0 limit.
+    // Reusing E'=gamma(E-v.p) also avoids subtracting two gamma-sized
+    // products when the input particle is already moving with the boost.
+    const ldouble dot = std::fma(vx,mom[1],std::fma(vy,mom[2],vz*mom[3]));
+    const ldouble energyDifference = std::fma(-vx,mom[1],
+      std::fma(-vy,mom[2],std::fma(-vz,mom[3],mom[0])));
+    ldouble nMom[4];
+    nMom[0] = gamma*energyDifference;
+    const ldouble shift = std::fma(gamma/(gamma+1),dot,nMom[0]);
+    for(int i=1;i<4;i++) nMom[i] = std::fma(-v[i-1],shift,mom[i]);
 
     for(int i=0;i<4;i++) mom[i]=nMom[i];
   }

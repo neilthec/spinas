@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include <cmath>
 #include <limits>
+#include <algorithm>
 
 #include "types.h"
 //#include "aliases.h"
@@ -31,6 +32,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "particle.h"
 
 namespace spinas {
+  namespace {
+    bool on_shell_energy(const ldouble energy, const ldouble magnitude, const ldouble mass){
+      const ldouble expected = std::hypot(magnitude,mass), absolute = std::abs(energy);
+      const ldouble sum = absolute+expected;
+      const ldouble epsilon = std::numeric_limits<ldouble>::epsilon();
+      const ldouble tolerance = (sum==0 ? ldouble(0) : epsilon*1000000000/sum)
+        + 8*epsilon*std::max(absolute,expected);
+      return std::isfinite(expected) && std::isfinite(absolute) &&
+        std::abs(absolute-expected)<=tolerance;
+    }
+
+    // m^2*scale/(E+|p|), with exponents separated so a tiny gap is not
+    // rounded to zero before multiplication by a large second energy.
+    ldouble mass_gap_product(const ldouble mass, const ldouble energy,
+                             const ldouble magnitude, const ldouble scale){
+      if(mass==0 || scale==0) return 0;
+      int massExponent, scaleExponent, energyExponent;
+      const ldouble mm = std::frexp(std::abs(mass),&massExponent);
+      const ldouble ms = std::frexp(scale,&scaleExponent);
+      const ldouble me = std::frexp(energy,&energyExponent);
+      return std::ldexp(mm*mm*ms/(me*(1+magnitude/energy)),
+        2*massExponent+scaleExponent-energyExponent);
+    }
+
+    ldouble angular_dot_product(const ldouble first, const ldouble second, const ldouble distance){
+      if(first==0 || second==0 || distance==0) return 0;
+      int firstExponent, secondExponent, distanceExponent;
+      const ldouble mf = std::frexp(first,&firstExponent);
+      const ldouble ms = std::frexp(second,&secondExponent);
+      const ldouble md = std::frexp(distance,&distanceExponent);
+      return std::ldexp(mf*ms*md*md/2,
+        firstExponent+secondExponent+2*distanceExponent);
+    }
+  }
+
   //Constructors
   particle::particle()
   {}
@@ -65,19 +101,31 @@ namespace spinas {
 
   //Calc particle properties
   void particle::update(){
-    constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000;
-    pxymag = std::sqrt(p[1]*p[1]+p[2]*p[2]);
-    pmag = std::sqrt(pxymag*pxymag+p[3]*p[3]);
-    if(std::abs(p[0]*p[0]-pmag*pmag-m*m) > epsilon){
+    pxymag = std::hypot(p[1],p[2]);
+    pmag = std::hypot(pxymag,p[3]);
+    // Compare energies before squaring. At a large boost, the represented
+    // E and |p| can coincide even though the declared mass is nonzero.
+    if(!on_shell_energy(p[0],pmag,m)){
       throw std::runtime_error("Momentum and mass don't match:  p^2 = " + std::to_string(p[0]*p[0]-pmag*pmag) + " != " + std::to_string(m*m));
     }
     theta = atan2(pxymag,p[3]);
     phi = atan2(p[2],p[1]);
     //if(phi<0) phi+=2.*PI;
-    c = cdouble(std::cos(theta/2.),0.);
-    s = std::polar(std::sin(theta/2.),phi);
+    // Rationalize the small half-angle component too, including exact zeros
+    // on both axes. cos(pi/2) otherwise leaves a boosted spurious component.
+    ldouble cosineHalf = 1, sineHalf = 0;
+    if(pmag!=0){
+      const ldouble largeHalf = std::sqrt((1+std::abs(p[3])/pmag)/2);
+      const ldouble smallHalf = (pxymag/pmag)/(2*largeHalf);
+      cosineHalf = p[3]>=0 ? largeHalf : smallHalf;
+      sineHalf = p[3]>=0 ? smallHalf : largeHalf;
+    }
+    c = cdouble(cosineHalf,0.);
+    s = std::polar(sineHalf,phi);
     sc = std::conj(s);
-    sqrtEpP = cdouble(std::sqrt(p[0]+pmag),0);
+    // Scale the large root so E+|p| need not itself be representable.
+    sqrtEpP = cdouble(p[0]>0 ? std::sqrt(p[0])*std::sqrt(1+pmag/p[0]) :
+      std::sqrt(p[0]+pmag),0);
     // On shell, (E-|p|)(E+|p|)=m^2. Avoid losing the small component
     // when E and |p| are nearly equal, including double-rounded momenta.
     if(p[0]>=0){
@@ -131,6 +179,24 @@ namespace spinas {
 
   //dot: p1.p2
   ldouble particle::dot(const particle& p2) const{
+    const ldouble firstMagnitude = std::hypot(std::hypot(p[1],p[2]),p[3]);
+    const ldouble secondMagnitude = std::hypot(std::hypot(p2.p[1],p2.p[2]),p2.p[3]);
+    if(p[0]>0 && p2.p[0]>0 && on_shell_energy(p[0],firstMagnitude,m) &&
+       on_shell_energy(p2.p[0],secondMagnitude,p2.m)){
+      ldouble distance = 0;
+      if(firstMagnitude!=0 && secondMagnitude!=0){
+        const ldouble dx = p[1]/firstMagnitude-p2.p[1]/secondMagnitude;
+        const ldouble dy = p[2]/firstMagnitude-p2.p[2]/secondMagnitude;
+        const ldouble dz = p[3]/firstMagnitude-p2.p[3]/secondMagnitude;
+        distance = std::hypot(std::hypot(dx,dy),dz);
+      }
+      // E1 E2-P1.P2 = (E1-|P1|)E2+|P1|(E2-|P2|)
+      //                 + |P1||P2| |n1-n2|^2/2.
+      return mass_gap_product(m,p[0],firstMagnitude,p2.p[0])
+        + mass_gap_product(p2.m,p2.p[0],secondMagnitude,firstMagnitude)
+        + angular_dot_product(firstMagnitude,secondMagnitude,distance);
+    }
+    // Do not apply future-energy shell substitutions to signed or unchecked inputs.
     return p[0]*p2.p[0]-p[1]*p2.p[1]-p[2]*p2.p[2]-p[3]*p2.p[3];
   }
 
@@ -138,11 +204,20 @@ namespace spinas {
 
 
   //Matrices
+  ldouble particle::longitudinal_component(const bool& plus) const {
+    const ldouble direct = plus ? p[0]+p[3] : p[0]-p[3];
+    // These particle matrices know the on-shell mass. Generic cmatrix inputs
+    // and signed negative-energy momenta retain their literal components.
+    if(p[0]<=0 || (plus ? p[3]>=0 : p[3]<=0)) return direct;
+    const ldouble transverseMass = std::hypot(m,pxymag);
+    return transverseMass*(transverseMass/p[0])/(1+std::abs(p[3])/p[0]);
+  }
+
   //Upper indices
   cmatrix particle::umat() {
     if(!upMatCalculated) {
-      upMat = cmatrix(cdouble(p[0]-p[3],0),-std::polar(pxymag,-phi),
-		      -std::polar(pxymag,+phi),cdouble(p[0]+p[3],0));
+      upMat = cmatrix(cdouble(longitudinal_component(false),0),cdouble(-p[1],p[2]),
+		      cdouble(-p[1],-p[2]),cdouble(longitudinal_component(true),0));
       upMatCalculated = true;
     }
     return upMat;
@@ -150,8 +225,8 @@ namespace spinas {
   //Lower indices
   cmatrix particle::lmat() {
     if(!loMatCalculated) {
-      loMat = cmatrix(cdouble(p[0]+p[3],0),std::polar(pxymag,-phi),
-		      std::polar(pxymag,phi),cdouble(p[0]-p[3],0));
+      loMat = cmatrix(cdouble(longitudinal_component(true),0),cdouble(p[1],-p[2]),
+		      cdouble(p[1],p[2]),cdouble(longitudinal_component(false),0));
       loMatCalculated = true;
     }
     return loMat;

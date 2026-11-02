@@ -53,6 +53,9 @@ file(GLOB TEST_SRCS tests/*.cpp)
 
 # Add test executables
 add_executable(test_spinas ${TEST_SRCS})
+# The independent multiprecision test oracle follows Boost.Math's C++14 minimum.
+# The libraries and process code keep the project-wide C++11 setting above.
+set_target_properties(test_spinas PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
 
 # Link test executables to Boost Unit Test Framework
 target_link_libraries(test_spinas spinas_static Boost::unit_test_framework)
