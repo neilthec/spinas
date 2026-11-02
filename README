@@ -5,9 +5,10 @@ SPINAS (Spinor Amplitudes) is a software package for calculating constructive sc
 ## Prerequisites
 
 SPINAS requires:
-* CMake (version 3.5 or higher)
-* C++11 compiler for the library, with C++14 support for the Boost test target
-* Boost (version 1.71 or higher)
+* CMake (version 3.10 or higher)
+* A C++11 compiler and its standard library
+
+The library and its validation tests require no additional packages.
 
 ## Unix-like Systems (Linux, macOS, WSL, Cygwin, etc.)
 
@@ -28,6 +29,22 @@ After installation, you can run the provided tests:
 ./test_spinas
 ./test_SM
 ```
+
+To run both validation suites together and show details if a test fails:
+```
+ctest --output-on-failure
+```
+
+Each test executable prints its random seed. To replay a run, supply that seed:
+```
+./test_spinas --seed 12345
+./test_SM --seed 12345
+```
+
+The shared testing utility is kept in `tests/test_utils.h` and
+`tests/test_utils.cpp`. Failed checks report their location and return a
+nonzero exit status, including in optimized builds. To build only the libraries,
+configure with `cmake -DBUILD_TESTING=OFF ..`.
 
 ### Installation
 

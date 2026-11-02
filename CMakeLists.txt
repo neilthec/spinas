@@ -2,7 +2,8 @@
 # mkdir build
 # cd build
 # cmake ..
-# clear;make -j64  && ./test_spinas --log_level=message && ./test_SM
+# cmake --build . --parallel
+# ctest --output-on-failure
 
 # Minimum required version of CMake
 cmake_minimum_required(VERSION 3.10) 
@@ -13,6 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Project name
 project(SPINAS)
+include(CTest)
+include(GNUInstallDirs)
 
 # Set precision type
 set(PRECISION_TYPE "LONG_DOUBLE" CACHE STRING "The precision type to be used: LONG_DOUBLE")
@@ -43,39 +46,30 @@ set_target_properties(spinas_static PROPERTIES OUTPUT_NAME spinas)
 
 
 ####################################################
-#                      Boost Tests
+#                      Core Tests
 ####################################################
-#find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-find_package(Boost REQUIRED COMPONENTS unit_test_framework CONFIG)
-
-# Collect all source files in the tests directory
-file(GLOB TEST_SRCS tests/*.cpp)
-
-# Add test executables
-add_executable(test_spinas ${TEST_SRCS})
-# The independent multiprecision test oracle follows Boost.Math's C++14 minimum.
-# The libraries and process code keep the project-wide C++11 setting above.
-set_target_properties(test_spinas PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
-
-# Link test executables to Boost Unit Test Framework
-target_link_libraries(test_spinas spinas_static Boost::unit_test_framework)
-
-# Enable testing
-enable_testing()
-
-# Add tests
-add_test(NAME test_spinas COMMAND test_spinas)
+if(BUILD_TESTING)
+    file(GLOB TEST_SRCS tests/*.cpp)
+    add_executable(test_spinas ${TEST_SRCS})
+    target_link_libraries(test_spinas spinas_static)
+    add_test(NAME test_spinas COMMAND test_spinas)
+endif()
 
 ####################################################
 #                      SM Tests
 ####################################################
 set(SM_DIR SM)
 file(GLOB_RECURSE SM_SRC_FILES "${SM_DIR}/*.cpp")
+list(REMOVE_ITEM SM_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/SM/test.cpp")
 add_library(spinas_SM_Obj OBJECT ${SM_SRC_FILES})  # create object library
 add_library(spinas_SM SHARED $<TARGET_OBJECTS:spinas_SM_Obj>)  # create shared library from object files
-add_executable(test_SM $<TARGET_OBJECTS:spinas_SM_Obj>)  # create executable from object files
 target_link_libraries(spinas_SM spinas_static)  # link the shared library
-target_link_libraries(test_SM spinas_static)  # link the executable
+if(BUILD_TESTING)
+    add_executable(test_SM SM/test.cpp tests/test_utils.cpp $<TARGET_OBJECTS:spinas_SM_Obj>)
+    target_include_directories(test_SM PRIVATE tests)
+    target_link_libraries(test_SM spinas_static)
+    add_test(NAME test_SM COMMAND test_SM)
+endif()
 
 
 ####################################################

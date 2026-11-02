@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include<iostream>
 #include <sstream>
 #include <complex>
+#include "test_utils.h"
 using namespace std;
 
 #include "spinas.h"
@@ -169,7 +170,9 @@ using namespace std;
 
 
 
-int main(){
+SPINAS_TEST_SUITE(sm_tests)
+
+SPINAS_TEST_CASE(standard_model){
  
   
   stringstream message;
@@ -339,5 +342,7 @@ int main(){
   else    cout<<"                                                           Pass\n";
   cout<<"=============================================================================="<<endl;
 
-  
+  SPINAS_CHECK(n == 0);
 }
+
+SPINAS_TEST_SUITE_END()

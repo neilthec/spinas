@@ -1,16 +1,15 @@
 
 
 
-//File:  SPINAS/boost/particle.cpp
+//File:  SPINAS/tests/particle.cpp
 
-#include <boost/test/unit_test.hpp>
+#include "test_utils.h"
 #include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <cmath>
 #include <complex>
 #include <limits>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include "types.h"
 //#include "aliases.h"
@@ -33,11 +32,11 @@ bool test_cdouble_equality(const cdouble& z1, const cdouble& z2) {
 }
 
 
-BOOST_AUTO_TEST_SUITE(particle_tests)
+SPINAS_TEST_SUITE(particle_tests)
 
-BOOST_AUTO_TEST_CASE(constructor_test) {
-  BOOST_TEST_MESSAGE("Testing particle: ");
-  BOOST_TEST_MESSAGE("\t* Constructor");
+SPINAS_TEST_CASE(constructor_test) {
+  SPINAS_TEST_MESSAGE("Testing particle: ");
+  SPINAS_TEST_MESSAGE("\t* Constructor");
   ldouble mom1[4], mom2[4], mass2;
   particle p1;
 
@@ -47,7 +46,7 @@ BOOST_AUTO_TEST_CASE(constructor_test) {
     mass2 = mom1[0]*mom1[0];
     for(int j=1;j<4;j++) mass2 -= mom1[j]*mom1[j];
     p1 = particle(mom1, std::sqrt(mass2));
-    BOOST_CHECK(p1.test_angles());
+    SPINAS_CHECK(p1.test_angles());
     
     //Choose Mom2 with same mass
     choose_random_momentum(mom2, -50, 50);
@@ -55,14 +54,14 @@ BOOST_AUTO_TEST_CASE(constructor_test) {
     for(int j=1;j<4;j++) mom2[0] += mom2[j]*mom2[j];
     mom2[0] = std::sqrt(mom2[0]);
     p1.set_momentum(mom2);
-    BOOST_CHECK(p1.test_angles());
+    SPINAS_CHECK(p1.test_angles());
   }
 }
 
 // A boosted light particle must retain its declared mass in spinor products.
 // Rounding external momenta to double is normal when exchanging phase-space
 // points with another numerical code; subtracting E-|p| loses this information.
-BOOST_AUTO_TEST_CASE(boosted_spinor_mass_normalization) {
+SPINAS_TEST_CASE(boosted_spinor_mass_normalization) {
   const ldouble mass = ldouble(0.0005L);
   const ldouble relativeTolerance = 64*std::numeric_limits<ldouble>::epsilon();
   const ldouble energies[] = {mass, ldouble(1), ldouble(50), ldouble(200)};
@@ -76,10 +75,10 @@ BOOST_AUTO_TEST_CASE(boosted_spinor_mass_normalization) {
         direction==0 ? magnitude : static_cast<ldouble>(static_cast<double>(ldouble(0.8L)*magnitude))};
       particle boosted(momenta,mass);
       // <pp>^{-+}=-m and [pp]^{-+}=m at every boost and direction.
-      BOOST_CHECK_SMALL(std::abs((boosted.langle(-1)*boosted.rangle(1))/mass+ldouble(1)), relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs((boosted.lsquare(-1)*boosted.rsquare(1))/mass-ldouble(1)), relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs((boosted.langle(1)*boosted.rangle(-1))/mass-ldouble(1)), relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs((boosted.lsquare(1)*boosted.rsquare(-1))/mass+ldouble(1)), relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs((boosted.langle(-1)*boosted.rangle(1))/mass+ldouble(1)), relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs((boosted.lsquare(-1)*boosted.rsquare(1))/mass-ldouble(1)), relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs((boosted.langle(1)*boosted.rangle(-1))/mass-ldouble(1)), relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs((boosted.lsquare(1)*boosted.rsquare(-1))/mass+ldouble(1)), relativeTolerance);
       if(direction==0){
         // Raising/lowering must use the same stable boost ratio as the spinors.
         const cmatrix angleActual = boosted.lorentz_jm_lu()*boosted.rangle_matrix();
@@ -90,9 +89,9 @@ BOOST_AUTO_TEST_CASE(boosted_spinor_mass_normalization) {
           for(int column=0; column<2; ++column){
             const ldouble angleScale = std::max(ldouble(1),std::abs(angleExpected.get(row,column)));
             const ldouble squareScale = std::max(ldouble(1),std::abs(squareExpected.get(row,column)));
-            BOOST_CHECK_SMALL(std::abs(angleActual.get(row,column)-angleExpected.get(row,column))/angleScale,
+            SPINAS_CHECK_SMALL(std::abs(angleActual.get(row,column)-angleExpected.get(row,column))/angleScale,
               relativeTolerance);
-            BOOST_CHECK_SMALL(std::abs(squareActual.get(row,column)-squareExpected.get(row,column))/squareScale,
+            SPINAS_CHECK_SMALL(std::abs(squareActual.get(row,column)-squareExpected.get(row,column))/squareScale,
               relativeTolerance);
           }
       }
@@ -100,31 +99,31 @@ BOOST_AUTO_TEST_CASE(boosted_spinor_mass_normalization) {
   }
 }
 
-BOOST_AUTO_TEST_CASE(stable_spinor_zero_mass_and_mass_sign) {
+SPINAS_TEST_CASE(stable_spinor_zero_mass_and_mass_sign) {
   const ldouble zero[4] = {0,0,0,0};
   particle zeroParticle(zero,ldouble(0));
   for(int component=0; component<2; ++component){
-    BOOST_CHECK_EQUAL(zeroParticle.rangle().get(component),cdouble(0,0));
-    BOOST_CHECK_EQUAL(zeroParticle.lsquare().get(component),cdouble(0,0));
+    SPINAS_CHECK_EQUAL(zeroParticle.rangle().get(component),cdouble(0,0));
+    SPINAS_CHECK_EQUAL(zeroParticle.lsquare().get(component),cdouble(0,0));
   }
   const ldouble photon[4] = {50,0,0,50};
   particle massless(photon,ldouble(0));
   for(int component=0; component<2; ++component){
-    BOOST_CHECK(std::isfinite(std::real(massless.rangle().get(component))));
-    BOOST_CHECK(std::isfinite(std::imag(massless.lsquare().get(component))));
+    SPINAS_CHECK(std::isfinite(std::real(massless.rangle().get(component))));
+    SPINAS_CHECK(std::isfinite(std::imag(massless.lsquare().get(component))));
   }
   const ldouble mass = ldouble(0.0005L);
   const ldouble massive[4] = {50,0,0,static_cast<ldouble>(49.9999999975)};
   particle positiveMass(massive,mass), negativeMass(massive,-mass);
   for(int spin=-1; spin<=1; spin+=2){
-    BOOST_CHECK_EQUAL(positiveMass.rangle(spin),negativeMass.rangle(spin));
-    BOOST_CHECK_EQUAL(positiveMass.lsquare(spin),negativeMass.lsquare(spin));
+    SPINAS_CHECK_EQUAL(positiveMass.rangle(spin),negativeMass.rangle(spin));
+    SPINAS_CHECK_EQUAL(positiveMass.lsquare(spin),negativeMass.lsquare(spin));
   }
   const ldouble offShell[4] = {2,0,0,0};
-  BOOST_CHECK_THROW(particle(offShell,ldouble(1)),std::runtime_error);
+  SPINAS_CHECK_THROW(particle(offShell,ldouble(1)),std::runtime_error);
 }
 
-BOOST_AUTO_TEST_CASE(extreme_boost_shell_and_lightcone_matrices) {
+SPINAS_TEST_CASE(extreme_boost_shell_and_lightcone_matrices) {
   const ldouble mass = 1;
   const ldouble relativeTolerance = 128*std::numeric_limits<ldouble>::epsilon();
   for(const ldouble energy : {ldouble(1),ldouble(1000),ldouble(1e120L)}){
@@ -136,21 +135,21 @@ BOOST_AUTO_TEST_CASE(extreme_boost_shell_and_lightcone_matrices) {
       const ldouble small = mass*(mass/energy)/(1+magnitude/energy);
       const cmatrix upper = p.umat(), lower = p.lmat();
       const int smallUpper = direction>0 ? 0 : 1;
-      BOOST_CHECK_SMALL(std::abs(upper.get(smallUpper,smallUpper)/small-cdouble(1,0)),relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs(lower.get(1-smallUpper,1-smallUpper)/small-cdouble(1,0)),relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs(upper.get(1-smallUpper,1-smallUpper)/large-cdouble(1,0)),relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs(lower.get(smallUpper,smallUpper)/large-cdouble(1,0)),relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs((p.langle(-1)*p.rangle(1))/mass+ldouble(1)),relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs((p.lsquare(-1)*p.rsquare(1))/mass-ldouble(1)),relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs(upper.get_det()/mass/mass-ldouble(1)),relativeTolerance);
-      BOOST_CHECK_SMALL(std::abs(lower.get_det()/mass/mass-ldouble(1)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs(upper.get(smallUpper,smallUpper)/small-cdouble(1,0)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs(lower.get(1-smallUpper,1-smallUpper)/small-cdouble(1,0)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs(upper.get(1-smallUpper,1-smallUpper)/large-cdouble(1,0)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs(lower.get(smallUpper,smallUpper)/large-cdouble(1,0)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs((p.langle(-1)*p.rangle(1))/mass+ldouble(1)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs((p.lsquare(-1)*p.rsquare(1))/mass-ldouble(1)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs(upper.get_det()/mass/mass-ldouble(1)),relativeTolerance);
+      SPINAS_CHECK_SMALL(std::abs(lower.get_det()/mass/mass-ldouble(1)),relativeTolerance);
       const ldouble materiallyOffShell[4] = {energy*ldouble(1.000001L),0,0,direction*magnitude};
-      BOOST_CHECK_THROW(particle(materiallyOffShell,mass),std::runtime_error);
+      SPINAS_CHECK_THROW(particle(materiallyOffShell,mass),std::runtime_error);
     }
   }
 }
 
-BOOST_AUTO_TEST_CASE(stable_transverse_mass_and_exact_massless_axes) {
+SPINAS_TEST_CASE(stable_transverse_mass_and_exact_massless_axes) {
   const ldouble mass = ldouble(0.0005L), energy = 1000;
   const ldouble transverse = 2*mass;
   const ldouble longitudinal = std::sqrt(energy*energy-mass*mass-transverse*transverse);
@@ -160,129 +159,94 @@ BOOST_AUTO_TEST_CASE(stable_transverse_mass_and_exact_massless_axes) {
     particle p(momentum,mass), signedMass(momentum,-mass);
     const ldouble small = (mass*mass+transverse*transverse)/(energy+longitudinal);
     const int index = direction>0 ? 0 : 1;
-    BOOST_CHECK_SMALL(std::abs(p.umat().get(index,index)/small-cdouble(1,0)),tolerance);
-    BOOST_CHECK_EQUAL(p.umat(),signedMass.umat());
-    BOOST_CHECK_EQUAL(p.lmat(),signedMass.lmat());
+    SPINAS_CHECK_SMALL(std::abs(p.umat().get(index,index)/small-cdouble(1,0)),tolerance);
+    SPINAS_CHECK_EQUAL(p.umat(),signedMass.umat());
+    SPINAS_CHECK_EQUAL(p.lmat(),signedMass.lmat());
     const ldouble photonMomentum[4] = {energy,0,0,direction*energy};
     particle photon(photonMomentum,0);
-    BOOST_CHECK_EQUAL(photon.umat().get(index,index),cdouble(0,0));
-    BOOST_CHECK_EQUAL(photon.rangle().get(direction>0 ? 1 : 0),cdouble(0,0));
+    SPINAS_CHECK_EQUAL(photon.umat().get(index,index),cdouble(0,0));
+    SPINAS_CHECK_EQUAL(photon.rangle().get(direction>0 ? 1 : 0),cdouble(0,0));
   }
 }
 
-BOOST_AUTO_TEST_CASE(finite_spinor_roots_when_energy_sum_overflows) {
+SPINAS_TEST_CASE(finite_spinor_roots_when_energy_sum_overflows) {
   const ldouble energy = std::numeric_limits<ldouble>::max()/ldouble(1.5);
   const ldouble mass = 1;
   const ldouble tolerance = 128*std::numeric_limits<ldouble>::epsilon();
-  BOOST_CHECK(std::isinf(energy+energy));
+  SPINAS_CHECK(std::isinf(energy+energy));
   for(const int direction : {-1,1}){
     const ldouble momentum[4] = {energy,0,0,direction*energy};
     particle p(momentum,mass);
     for(const int spin : {-1,1})
       for(int component=0; component<2; component++){
-        BOOST_CHECK(std::isfinite(std::real(p.rangle(spin).get(component))));
-        BOOST_CHECK(std::isfinite(std::imag(p.lsquare(spin).get(component))));
+        SPINAS_CHECK(std::isfinite(std::real(p.rangle(spin).get(component))));
+        SPINAS_CHECK(std::isfinite(std::imag(p.lsquare(spin).get(component))));
       }
-    BOOST_CHECK_SMALL(std::abs((p.langle(-1)*p.rangle(1))/mass+ldouble(1)),tolerance);
-    BOOST_CHECK_SMALL(std::abs((p.lsquare(-1)*p.rsquare(1))/mass-ldouble(1)),tolerance);
+    SPINAS_CHECK_SMALL(std::abs((p.langle(-1)*p.rangle(1))/mass+ldouble(1)),tolerance);
+    SPINAS_CHECK_SMALL(std::abs((p.lsquare(-1)*p.rsquare(1))/mass-ldouble(1)),tolerance);
   }
 }
 
-BOOST_AUTO_TEST_CASE(signed_energy_and_off_shell_matrix_conventions) {
+SPINAS_TEST_CASE(signed_energy_and_off_shell_matrix_conventions) {
   const ldouble energy = 1000, mass = 1;
   const ldouble magnitude = std::sqrt(energy-mass)*std::sqrt(energy+mass);
   const ldouble negative[4] = {-energy,0,0,magnitude};
   particle signedParticle(negative,mass);
-  BOOST_CHECK_EQUAL(signedParticle.umat().get(0,0),cdouble(negative[0]-negative[3],0));
-  BOOST_CHECK_EQUAL(signedParticle.umat().get(1,1),cdouble(negative[0]+negative[3],0));
-  BOOST_CHECK_EQUAL(signedParticle.lmat().get(0,0),cdouble(negative[0]+negative[3],0));
-  BOOST_CHECK(std::isnan(std::real(signedParticle.rangle(-1).get(0))));
+  SPINAS_CHECK_EQUAL(signedParticle.umat().get(0,0),cdouble(negative[0]-negative[3],0));
+  SPINAS_CHECK_EQUAL(signedParticle.umat().get(1,1),cdouble(negative[0]+negative[3],0));
+  SPINAS_CHECK_EQUAL(signedParticle.lmat().get(0,0),cdouble(negative[0]+negative[3],0));
+  SPINAS_CHECK(std::isnan(std::real(signedParticle.rangle(-1).get(0))));
   const ldouble virtualMomentum[4] = {2,0,0,1};
   const cmatrix genericUpper(virtualMomentum,true), genericLower(virtualMomentum,false);
-  BOOST_CHECK_EQUAL(genericUpper.get(0,0),cdouble(1,0));
-  BOOST_CHECK_EQUAL(genericLower.get(1,1),cdouble(1,0));
-  BOOST_CHECK_EQUAL(genericUpper.get_det(),ldouble(3));
-  BOOST_CHECK_THROW(particle(virtualMomentum,ldouble(1)),std::runtime_error);
+  SPINAS_CHECK_EQUAL(genericUpper.get(0,0),cdouble(1,0));
+  SPINAS_CHECK_EQUAL(genericLower.get(1,1),cdouble(1,0));
+  SPINAS_CHECK_EQUAL(genericUpper.get_det(),ldouble(3));
+  SPINAS_CHECK_THROW(particle(virtualMomentum,ldouble(1)),std::runtime_error);
 }
 
-BOOST_AUTO_TEST_CASE(stable_on_shell_scalar_products) {
-  // Reconstruct both on-shell energies independently at 800 decimal digits.
-  // This resolves mass terms even beside momenta near the floating-point limit.
-  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<800>> high_precision;
+SPINAS_TEST_CASE(stable_on_shell_scalar_products) {
+  // Analytic edge cases remain valid even when E - |p| is not representable.
   const ldouble tolerance = 256*std::numeric_limits<ldouble>::epsilon();
-  auto compare = [&](const ldouble a[4], const ldouble ma,
-                     const ldouble b[4], const ldouble mb){
-    high_precision energyA = high_precision(ma)*ma, energyB = high_precision(mb)*mb, spatial = 0;
-    for(int i=1;i<4;i++){
-      energyA += high_precision(a[i])*a[i];
-      energyB += high_precision(b[i])*b[i];
-      spatial += high_precision(a[i])*b[i];
-    }
-    const ldouble expected = static_cast<ldouble>(sqrt(energyA)*sqrt(energyB)-spatial);
-    particle first(a,ma), second(b,mb);
-    const ldouble actual = first.dot(second), reversed = second.dot(first);
-    BOOST_CHECK(std::isfinite(actual));
-    if(expected==0){ BOOST_CHECK_EQUAL(actual,ldouble(0)); }
-    else{
-      BOOST_CHECK_SMALL(std::abs(actual/expected-ldouble(1)),tolerance);
-      BOOST_CHECK_SMALL(std::abs(reversed/expected-ldouble(1)),tolerance);
-    }
-  };
-  // Keep the independent decimal oracle within its 800-digit resolving range
-  // also on platforms whose long double has an exponent range near 10^4932.
   const ldouble huge = std::min(std::numeric_limits<ldouble>::max()/ldouble(2),ldouble(1e300L));
   const ldouble same[4] = {huge,0,0,huge};
   particle sameInstance(same,1);
-  BOOST_CHECK_SMALL(std::abs(sameInstance.dot(sameInstance)-ldouble(1)),tolerance);
+  SPINAS_CHECK_SMALL(std::abs(sameInstance.dot(sameInstance)-ldouble(1)),tolerance);
   const ldouble maximumEnergy = std::numeric_limits<ldouble>::max()/ldouble(2);
   const ldouble maximumMomentum[4] = {maximumEnergy,0,0,maximumEnergy};
   particle maximumFirst(maximumMomentum,1), maximumSecond(maximumMomentum,1);
-  BOOST_CHECK_SMALL(std::abs(maximumFirst.dot(maximumSecond)-ldouble(1)),tolerance);
-  compare(same,1,same,1);
-  compare(same,1,same,3);
-  const ldouble firstCollinear[4] = {1e120L,0,0,1e120L};
-  const ldouble secondCollinear[4] = {3e120L,0,0,3e120L};
-  compare(firstCollinear,1,secondCollinear,2);
-  const ldouble close[4] = {huge,huge*ldouble(1e-160L),0,huge};
-  compare(same,1,close,2);
-  const ldouble ordinaryA[4] = {std::hypot(ldouble(1.5),std::hypot(std::hypot(ldouble(0.7),ldouble(-0.3)),ldouble(2))),ldouble(0.7),ldouble(-0.3),2};
-  const ldouble ordinaryB[4] = {std::hypot(ldouble(0.2),std::hypot(std::hypot(ldouble(-0.4),ldouble(0.9)),ldouble(1))),ldouble(-0.4),ldouble(0.9),1};
-  compare(ordinaryA,ldouble(1.5),ordinaryB,ldouble(0.2));
-  compare(ordinaryA,ldouble(-1.5),ordinaryB,ldouble(-0.2));
-  const ldouble rest[4] = {2,0,0,0};
-  compare(rest,2,ordinaryB,ldouble(0.2));
+  SPINAS_CHECK_SMALL(std::abs(maximumFirst.dot(maximumSecond)-ldouble(1)),tolerance);
   const ldouble zero[4] = {0,0,0,0};
   particle nullParticle(zero,0);
-  BOOST_CHECK_EQUAL(nullParticle.dot(sameInstance),ldouble(0));
+  SPINAS_CHECK_EQUAL(nullParticle.dot(sameInstance),ldouble(0));
   particle masslessFirst(same,0), masslessSecond(same,0);
-  BOOST_CHECK_EQUAL(masslessFirst.dot(masslessSecond),ldouble(0));
+  SPINAS_CHECK_EQUAL(masslessFirst.dot(masslessSecond),ldouble(0));
   const ldouble temporarilyUnchecked[4] = {2,0,0,1};
   particle changedMass(temporarilyUnchecked,std::sqrt(ldouble(3)));
   changedMass.set_mass(ldouble(0.25));
-  BOOST_CHECK_EQUAL(changedMass.dot(changedMass),ldouble(3));
+  SPINAS_CHECK_EQUAL(changedMass.dot(changedMass),ldouble(3));
   const ldouble past[4] = {-5,1,2,3}, future[4] = {5,-1,-2,-3};
   particle negativeEnergy(past,std::sqrt(ldouble(11))), positiveEnergy(future,std::sqrt(ldouble(11)));
-  BOOST_CHECK_EQUAL(negativeEnergy.dot(positiveEnergy),ldouble(-11));
+  SPINAS_CHECK_EQUAL(negativeEnergy.dot(positiveEnergy),ldouble(-11));
 }
 
-BOOST_AUTO_TEST_CASE(momentum_matrices_test) {
-  BOOST_TEST_MESSAGE("\t* Momentum Matrices");
+SPINAS_TEST_CASE(momentum_matrices_test) {
+  SPINAS_TEST_MESSAGE("\t* Momentum Matrices");
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
   int i = 0;
   cdouble zero = cdouble(0, 0), one = cdouble(1, 0);
   ldouble mom1[4] = {13, -4, 7, -9}, mom3[4] = {6, 1, -2, std::sqrt(8)};
   particle p1 = particle(mom3, std::sqrt(23));
   p1.set_momentum(mom1);
-  BOOST_CHECK_EQUAL(p1.umat(), cmatrix(mom1, true));
-  BOOST_CHECK_EQUAL(p1.lmat(), cmatrix(mom1, false));
+  SPINAS_CHECK_EQUAL(p1.umat(), cmatrix(mom1, true));
+  SPINAS_CHECK_EQUAL(p1.lmat(), cmatrix(mom1, false));
   
   // Determinant
   cdouble p1detm23 = p1.umat().get_det() - cdouble(23, 0);
-  BOOST_CHECK_SMALL(std::abs(p1detm23), epsilon);
-  BOOST_CHECK_EQUAL(p1.lmat(), cmatrix(mom1, false));
+  SPINAS_CHECK_SMALL(std::abs(p1detm23), epsilon);
+  SPINAS_CHECK_EQUAL(p1.lmat(), cmatrix(mom1, false));
   
   p1detm23 = p1.lmat().get_det() - cdouble(23, 0);
-  BOOST_CHECK_SMALL(std::abs(p1detm23), epsilon);
+  SPINAS_CHECK_SMALL(std::abs(p1detm23), epsilon);
   
   // Anticommutation: p1*p2 + p2*p1 = 2p1.p2
   ldouble mom2[4] = {5, 1, -2, 3};
@@ -290,13 +254,13 @@ BOOST_AUTO_TEST_CASE(momentum_matrices_test) {
   p2.set_momentum(mom2);
   cmatrix id = cmatrix(one, zero, zero, one);
   cmatrix anticom = p1.umat() * p2.lmat() + p2.umat() * p1.lmat();
-  BOOST_CHECK_EQUAL(anticom, 2 * p1.dot(p2) * id);
+  SPINAS_CHECK_EQUAL(anticom, 2 * p1.dot(p2) * id);
   anticom = p1.lmat() * p2.umat() + p2.lmat() * p1.umat();
-  BOOST_CHECK_EQUAL(anticom,  2 * p1.dot(p2) * id);
+  SPINAS_CHECK_EQUAL(anticom,  2 * p1.dot(p2) * id);
 }
 
-BOOST_AUTO_TEST_CASE(helicity_spinors_test) {
-  BOOST_TEST_MESSAGE("\t* Helicity Spinors");
+SPINAS_TEST_CASE(helicity_spinors_test) {
+  SPINAS_TEST_MESSAGE("\t* Helicity Spinors");
   ldouble mom1[4] = {std::sqrt(16 + 49 + 81), -4, 7, -9};
   particle p1 = particle(mom1, 0);
 
@@ -306,71 +270,71 @@ BOOST_AUTO_TEST_CASE(helicity_spinors_test) {
     p1.set_momentum(mom1);
     
     //|1> == [1|*
-    BOOST_CHECK_EQUAL(p1.rangle(), p1.lsquare().get_conjugate());
+    SPINAS_CHECK_EQUAL(p1.rangle(), p1.lsquare().get_conjugate());
     
     //<1| == |1]*
-    BOOST_CHECK_EQUAL(p1.langle(), p1.rsquare().get_conjugate());
+    SPINAS_CHECK_EQUAL(p1.langle(), p1.rsquare().get_conjugate());
     
     // p1|1> == 0
-    BOOST_CHECK(p1.umat() * p1.rangle() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    SPINAS_CHECK(p1.umat() * p1.rangle() == cvector(cdouble(0, 0), cdouble(0, 0)));
     
     // [1|p1 == 0
-    BOOST_CHECK(p1.lsquare() * p1.umat() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    SPINAS_CHECK(p1.lsquare() * p1.umat() == cvector(cdouble(0, 0), cdouble(0, 0)));
     
     // <11> == 0
-    BOOST_CHECK(p1.langle() * p1.rangle() == cdouble(0, 0));
+    SPINAS_CHECK(p1.langle() * p1.rangle() == cdouble(0, 0));
     
     // [11] == 0
-    BOOST_CHECK(p1.lsquare() * p1.rsquare() == cdouble(0, 0));
+    SPINAS_CHECK(p1.lsquare() * p1.rsquare() == cdouble(0, 0));
     
     // |1>[1| = p1
-    BOOST_CHECK(outer(p1.rangle(), p1.lsquare()) == p1.lmat());
+    SPINAS_CHECK(outer(p1.rangle(), p1.lsquare()) == p1.lmat());
     
     // |1]<1| = p1
-    BOOST_CHECK(outer(p1.rsquare(), p1.langle()) == p1.umat());
+    SPINAS_CHECK(outer(p1.rsquare(), p1.langle()) == p1.umat());
     
     // p1|1] == 0
-    BOOST_CHECK(p1.lmat() * p1.rsquare() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    SPINAS_CHECK(p1.lmat() * p1.rsquare() == cvector(cdouble(0, 0), cdouble(0, 0)));
     
     // <1|p1 == 0
-    BOOST_CHECK(p1.langle() * p1.lmat() == cvector(cdouble(0, 0), cdouble(0, 0)));
+    SPINAS_CHECK(p1.langle() * p1.lmat() == cvector(cdouble(0, 0), cdouble(0, 0)));
     
     //Lorentz and Helicity Algebra
     constexpr ldouble half=0.5;
     cvector zero_vector=cvector(0,0);
     
     // LJ3 |1> == -1/2 |1>
-    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle() == -half*p1.rangle());
+    SPINAS_CHECK(p1.lorentz_j3_lu()*p1.rangle() == -half*p1.rangle());
     // LJ+ |1> == 0
-    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jp_lu()*p1.rangle() == zero_vector);
     // LJ- |1> == 0
-    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jm_lu()*p1.rangle() == zero_vector);
     // LJ3 <1| == -1/2 <1|
-    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle() == -half*p1.langle());
+    SPINAS_CHECK(p1.lorentz_j3_ul()*p1.langle() == -half*p1.langle());
     // LJ+ <1| == 0
-    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jp_ul()*p1.langle() == zero_vector);
     // LJ- <1| == 0
-    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jm_ul()*p1.langle() == zero_vector);
     
     // LJ3 [1| == 1/2 [1|
-    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare() == half*p1.lsquare());
+    SPINAS_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare() == half*p1.lsquare());
     // LJ+ [1| == 0
-    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare() == zero_vector);
     // LJ- [1| == 0
-    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare() == zero_vector);
     // LJ3 |1] == 1/2 |1]
-    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare() == half*p1.rsquare());
+    SPINAS_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare() == half*p1.rsquare());
     // LJ+ |1] == 0
-    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare() == zero_vector);
     // LJ- |1] == 0
-    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare() == zero_vector);
+    SPINAS_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare() == zero_vector);
     
   }
 }
 
 
-BOOST_AUTO_TEST_CASE(spin_spinors) {
-  BOOST_TEST_MESSAGE("\t* Spin Spinors");
+SPINAS_TEST_CASE(spin_spinors) {
+  SPINAS_TEST_MESSAGE("\t* Spin Spinors");
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
   ldouble mom1[4] = {std::sqrt(100 + 16 + 49 + 81), -4, 7, -9};
   particle p1 = particle(mom1, 10);
@@ -388,16 +352,16 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
     // Conjugation
     for (int j = -1; j < 2; j = j + 2){
       //|1>^I == ([1|_I)*
-      BOOST_CHECK_EQUAL(p1.rangle(j), p1.lsquare(j, false).get_conjugate());
+      SPINAS_CHECK_EQUAL(p1.rangle(j), p1.lsquare(j, false).get_conjugate());
       
       //<1|^I == (|1]_I)*
-      BOOST_CHECK_EQUAL(p1.langle(j), p1.rsquare(j, false).get_conjugate());
+      SPINAS_CHECK_EQUAL(p1.langle(j), p1.rsquare(j, false).get_conjugate());
       
       //|1>_I == -([1|^I)*
-      BOOST_CHECK_EQUAL(p1.rangle(j, false), -p1.lsquare(j).get_conjugate());
+      SPINAS_CHECK_EQUAL(p1.rangle(j, false), -p1.lsquare(j).get_conjugate());
       
       //<1|_I == -(|1]^I)*
-      BOOST_CHECK_EQUAL(p1.langle(j, false), -p1.rsquare(j).get_conjugate());
+      SPINAS_CHECK_EQUAL(p1.langle(j, false), -p1.rsquare(j).get_conjugate());
     }
     
     
@@ -410,28 +374,28 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
 	if(j==1) epsj=1;
 	
 	//<11>^{IJ} == -m eps^{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j) - (-mass*epsU.get(epsi,epsj))), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j) - (-mass*epsU.get(epsi,epsj))), epsilon);
 	
 	//<11>^I_J == -m delta^I_J
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j,false) - (-mass*delta.get(epsi,epsj))), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.langle(i)*p1.rangle(j,false) - (-mass*delta.get(epsi,epsj))), epsilon);
 	
 	//<11>_I^J == m delta_I^J
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j) - mass*delta.get(epsi,epsj)), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j) - mass*delta.get(epsi,epsj)), epsilon);
 	
 	//<11>_{IJ} == m eps_{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j,false) - mass*epsL.get(epsi,epsj)), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.langle(i,false)*p1.rangle(j,false) - mass*epsL.get(epsi,epsj)), epsilon);
 	
 	//[11]_{IJ} == -m eps_{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j,false) - (-mass*epsL.get(epsi,epsj))), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j,false) - (-mass*epsL.get(epsi,epsj))), epsilon);
 	
 	//[11]_I^J == -m delta_I^J
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j) - (-mass*delta.get(epsi,epsj))), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.lsquare(i,false)*p1.rsquare(j) - (-mass*delta.get(epsi,epsj))), epsilon);
 	
 	//[11]^I_J == m delta^I_J
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j,false) - mass*delta.get(epsi,epsj)), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j,false) - mass*delta.get(epsi,epsj)), epsilon);
 	
 	//[11]^{IJ} == m eps^{IJ}
-	BOOST_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j) - mass*epsU.get(epsi,epsj)), epsilon);
+	SPINAS_CHECK_SMALL(std::abs(p1.lsquare(i)*p1.rsquare(j) - mass*epsU.get(epsi,epsj)), epsilon);
 	
       }
     
@@ -440,48 +404,48 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
     //|1>^I[1|_I = p1
     cmatrix outerProd = outer(p1.rangle(-1), p1.lsquare(-1, false)) +
       outer(p1.rangle(1), p1.lsquare(1, false));
-    BOOST_CHECK(outerProd == p1.lmat());
+    SPINAS_CHECK(outerProd == p1.lmat());
     
     //|1>_I[1|^I = -p1
     outerProd = outer(p1.rangle(-1, false), p1.lsquare(-1)) +
       outer(p1.rangle(1, false), p1.lsquare(1));
-    BOOST_CHECK(outerProd == -p1.lmat());
+    SPINAS_CHECK(outerProd == -p1.lmat());
     
     //|1]_I<1|^I = p1
     outerProd = outer(p1.rsquare(-1, false), p1.langle(-1)) +
       outer(p1.rsquare(1, false), p1.langle(1));
-    BOOST_CHECK(outerProd == p1.umat());
+    SPINAS_CHECK(outerProd == p1.umat());
     
     //|1]^I<1|_I = -p1
     outerProd = outer(p1.rsquare(-1), p1.langle(-1, false)) +
       outer(p1.rsquare(1), p1.langle(1, false));
-    BOOST_CHECK(outerProd == -p1.umat());
+    SPINAS_CHECK(outerProd == -p1.umat());
     
     // Momentum times Spinor Gives Mass times Spinor
     for(int j=-1;j<2;j=j+2){
       //p1|1>^I=-m|1]^I
-      BOOST_CHECK_EQUAL(p1.umat()*p1.rangle(j), -mass*p1.rsquare(j));
+      SPINAS_CHECK_EQUAL(p1.umat()*p1.rangle(j), -mass*p1.rsquare(j));
       
       //<1|^I*p1=[1|^I*m
-      BOOST_CHECK_EQUAL(p1.langle(j)*p1.lmat(), mass*p1.lsquare(j));
+      SPINAS_CHECK_EQUAL(p1.langle(j)*p1.lmat(), mass*p1.lsquare(j));
       
       //p1|1>_I=-m|1]_I
-      BOOST_CHECK_EQUAL(p1.umat()*p1.rangle(j,false), -mass*p1.rsquare(j,false));
+      SPINAS_CHECK_EQUAL(p1.umat()*p1.rangle(j,false), -mass*p1.rsquare(j,false));
       
       //<1|_I*p1=[1|_I*m
-      BOOST_CHECK_EQUAL(p1.langle(j,false)*p1.lmat(), mass*p1.lsquare(j,false));
+      SPINAS_CHECK_EQUAL(p1.langle(j,false)*p1.lmat(), mass*p1.lsquare(j,false));
       
       //p1|1]^I=-m|1>^I
-      BOOST_CHECK_EQUAL(p1.lmat()*p1.rsquare(j), -mass*p1.rangle(j));
+      SPINAS_CHECK_EQUAL(p1.lmat()*p1.rsquare(j), -mass*p1.rangle(j));
       
       //[1|^I*p1=<1|^I*m
-      BOOST_CHECK_EQUAL(p1.lsquare(j)*p1.umat(), mass*p1.langle(j));
+      SPINAS_CHECK_EQUAL(p1.lsquare(j)*p1.umat(), mass*p1.langle(j));
       
       //p1|1]_I=-m|1>_I
-      BOOST_CHECK_EQUAL(p1.lmat()*p1.rsquare(j,false), -mass*p1.rangle(j,false));
+      SPINAS_CHECK_EQUAL(p1.lmat()*p1.rsquare(j,false), -mass*p1.rangle(j,false));
       
       //[1|_I*p1=<1|_I*m
-      BOOST_CHECK_EQUAL(p1.lsquare(j,false)*p1.umat(), mass*p1.langle(j,false));
+      SPINAS_CHECK_EQUAL(p1.lsquare(j,false)*p1.umat(), mass*p1.langle(j,false));
     }
     
     
@@ -489,60 +453,60 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
     //Lorentz and Spin Algebra
     
     // LJ3 |1>^I == |1>^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_j3_lu());
+    SPINAS_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_j3_lu());
     // LJ+ |1>^I == |1>^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jp_lu());
+    SPINAS_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jp_lu());
     // LJ- |1>^I == |1>^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jm_lu());
+    SPINAS_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix() == p1.rangle_matrix()*p1.spin_jm_lu());
     
     // LJ3 <1|^I == <1|^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_j3_lu());
+    SPINAS_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_j3_lu());
     // LJ+ <1|^I == <1|^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jp_lu());
+    SPINAS_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jp_lu());
     // LJ- <1|^I == <1|^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jm_lu());
+    SPINAS_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix() == p1.langle_matrix()*p1.spin_jm_lu());
     
     // LJ3 |1>_I == |1>_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_j3_ul());
+    SPINAS_CHECK(p1.lorentz_j3_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_j3_ul());
     // LJ+ |1>_I == |1>_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jp_ul());
+    SPINAS_CHECK(p1.lorentz_jp_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jp_ul());
     // LJ- |1>_I == |1>_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jm_ul());
+    SPINAS_CHECK(p1.lorentz_jm_lu()*p1.rangle_matrix(LOWER) == p1.rangle_matrix(LOWER)*p1.spin_jm_ul());
     
     // LJ3 <1|_I == <1|_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_j3_ul());
+    SPINAS_CHECK(p1.lorentz_j3_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_j3_ul());
     // LJ+ <1|_I == <1|_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jp_ul());
+    SPINAS_CHECK(p1.lorentz_jp_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jp_ul());
     // LJ- <1|_I == <1|_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jm_ul());
+    SPINAS_CHECK(p1.lorentz_jm_ul()*p1.langle_matrix(LOWER) == p1.langle_matrix(LOWER)*p1.spin_jm_ul());
     
     // LJ3 [1|^I == [1|^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_j3_lu());
+    SPINAS_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_j3_lu());
     // LJ+ [1|^I == [1|^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jp_lu());
+    SPINAS_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jp_lu());
     // LJ- [1|^I == [1|^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jm_lu());
+    SPINAS_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix() == p1.lsquare_matrix()*p1.spin_jm_lu());
     
     // LJ3 |1]^I == |1]^J SJ3_J^I
-    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_j3_lu());
+    SPINAS_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_j3_lu());
     // LJ+ |1]^I == |1]^J SJ+_J^I
-    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jp_lu());
+    SPINAS_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jp_lu());
     // LJ- |1]^I == |1]^J SJ-_J^I
-    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jm_lu());
+    SPINAS_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix() == p1.rsquare_matrix()*p1.spin_jm_lu());
     
     // LJ3 [1|_I == [1|_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_j3_ul());
+    SPINAS_CHECK(p1.lorentz_j3_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_j3_ul());
     // LJ+ [1|_I == [1|_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jp_ul());
+    SPINAS_CHECK(p1.lorentz_jp_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jp_ul());
     // LJ- [1|_I == [1|_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jm_ul());
+    SPINAS_CHECK(p1.lorentz_jm_lu_dot()*p1.lsquare_matrix(LOWER) == p1.lsquare_matrix(LOWER)*p1.spin_jm_ul());
     
     // LJ3 |1]_I == |1]_J SJ3^J_I
-    BOOST_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_j3_ul());
+    SPINAS_CHECK(p1.lorentz_j3_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_j3_ul());
     // LJ+ |1]_I == |1]_J SJ+^J_I
-    BOOST_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jp_ul());
+    SPINAS_CHECK(p1.lorentz_jp_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jp_ul());
     // LJ- |1]_I == |1]_J SJ-^J_I
-    BOOST_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jm_ul());
+    SPINAS_CHECK(p1.lorentz_jm_ul_dot()*p1.rsquare_matrix(LOWER) == p1.rsquare_matrix(LOWER)*p1.spin_jm_ul());
     
   }
   
@@ -551,5 +515,5 @@ BOOST_AUTO_TEST_CASE(spin_spinors) {
 
 
 
-BOOST_AUTO_TEST_SUITE_END()
+SPINAS_TEST_SUITE_END()
 

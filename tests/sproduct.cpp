@@ -2,9 +2,9 @@
 
 
 
-//File:  SPINAS/boost/sproduct.cpp
+//File:  SPINAS/tests/sproduct.cpp
 
-#include <boost/test/unit_test.hpp>
+#include "test_utils.h"
 #include <iostream>
 #include <sstream>
 #include <cmath>
@@ -26,12 +26,12 @@ void test_sproduct(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, p
 void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, const ldouble& m1, const ldouble& m3, const ldouble& factor);
 
 
-BOOST_AUTO_TEST_SUITE(sproduct_tests)
+SPINAS_TEST_SUITE(sproduct_tests)
 
 //[12]<21>=2p1.p2
-BOOST_AUTO_TEST_CASE(s12sa21a_tests) {
-  BOOST_TEST_MESSAGE("Testing sproduct:");
-  BOOST_TEST_MESSAGE("\t* [12]<21>=2p1.p2");
+SPINAS_TEST_CASE(s12sa21a_tests) {
+  SPINAS_TEST_MESSAGE("Testing sproduct:");
+  SPINAS_TEST_MESSAGE("\t* [12]<21>=2p1.p2");
   ldouble m1,m2;
   ldouble mom1[4], mom2[4];
   int ni;
@@ -56,8 +56,8 @@ BOOST_AUTO_TEST_CASE(s12sa21a_tests) {
 
 //[12][21]=-2m1m2
 //Not zero when m1=m2=0.  Don't test
-BOOST_AUTO_TEST_CASE(s12ss21s_tests) {
-  BOOST_TEST_MESSAGE("\t* [12][21]=-2m1m2 and <12><21>=-2m1m2");
+SPINAS_TEST_CASE(s12ss21s_tests) {
+  SPINAS_TEST_MESSAGE("\t* [12][21]=-2m1m2 and <12><21>=-2m1m2");
   ldouble m1,m2;
   ldouble mom1[4], mom2[4];
   int ni;
@@ -84,8 +84,8 @@ test_sproduct(&a12a, &s12s, ni, 2, &p1, &p2, &p2, &p2, &p2, expected, "<12>[12]*
 
 //-[12]<231] = 2m1p2.p3
 //If m1=0, this formula does not apply.  So, we must skip it.
-BOOST_AUTO_TEST_CASE(s12sa231s_tests) {
-  BOOST_TEST_MESSAGE("\t* -[12]<231] = 2m1p2.p3");
+SPINAS_TEST_CASE(s12sa231s_tests) {
+  SPINAS_TEST_MESSAGE("\t* -[12]<231] = 2m1p2.p3");
   ldouble m1,m2,m3;
   ldouble mom1[4], mom2[4], mom3[4];
   int ni;
@@ -111,8 +111,8 @@ test_sproduct(&s12s, &a132s, ni, 3, &p1, &p2, &p3, &p3, &p3, expected, "[12]<132
 
 //[12][2341] = -2m1m2p3.p4
 //If m1=0 or m2=0, this formula does not apply.  So, we must skip it.
-BOOST_AUTO_TEST_CASE(s12ss2341s_tests) {
-  BOOST_TEST_MESSAGE("\t* [12][2341] = -2m1m2p3.p4");
+SPINAS_TEST_CASE(s12ss2341s_tests) {
+  SPINAS_TEST_MESSAGE("\t* [12][2341] = -2m1m2p3.p4");
   ldouble m1,m2,m3,m4;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   int ni=2;
@@ -138,8 +138,8 @@ BOOST_AUTO_TEST_CASE(s12ss2341s_tests) {
 
 //[12]<2341> = 2p1.p2p3.p4-2p1.p3p2.p4+2p1.p4p2.p3
 //We are only checking the real part since we don't have an epsilon tensor to check the imaginary part.
-BOOST_AUTO_TEST_CASE(s12sa2341a_tests) {
-  BOOST_TEST_MESSAGE("\t* [12]<2341> = 2p1.p2p3.p4-2p1.p3p2.p4+2p1.p4p2.p3");
+SPINAS_TEST_CASE(s12sa2341a_tests) {
+  SPINAS_TEST_MESSAGE("\t* [12]<2341> = 2p1.p2p3.p4-2p1.p3p2.p4+2p1.p4p2.p3");
   ldouble m1,m2,m3,m4;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   int ni;
@@ -169,8 +169,8 @@ BOOST_AUTO_TEST_CASE(s12sa2341a_tests) {
 }
 
 //[142><132]* = -[142><231] = -2m1m2p3.p4
-BOOST_AUTO_TEST_CASE(s142aa132sC_tests) {
-  BOOST_TEST_MESSAGE("\t* [142><132]* = -[142><231] = -2m1m2p3.p4");
+SPINAS_TEST_CASE(s142aa132sC_tests) {
+  SPINAS_TEST_MESSAGE("\t* [142><132]* = -[142><231] = -2m1m2p3.p4");
   ldouble m1,m2,m3,m4;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   int ni=2;
@@ -195,8 +195,8 @@ BOOST_AUTO_TEST_CASE(s142aa132sC_tests) {
 }
 
 //[142>[132>* = -[142>[231> = 2p1.p4p2.p3-2p1.p2p3.p4+2p1.p3p2.p4
-BOOST_AUTO_TEST_CASE(s142as132aC_tests) {
-  BOOST_TEST_MESSAGE("\t* [142>[132>* = -[142>[231> = 2p1.p4p2.p3-2p1.p2p3.p4+2p1.p3p2.p4");
+SPINAS_TEST_CASE(s142as132aC_tests) {
+  SPINAS_TEST_MESSAGE("\t* [142>[132>* = -[142>[231> = 2p1.p4p2.p3-2p1.p2p3.p4+2p1.p3p2.p4");
   ldouble m1,m2,m3,m4;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   int ni;
@@ -226,8 +226,8 @@ BOOST_AUTO_TEST_CASE(s142as132aC_tests) {
 }
 
 //[142>[1352]* = [142><2531> = -2m2(p1.p4p3.p5-p1.p5p3.p4+p1.p3p4.p5)
-BOOST_AUTO_TEST_CASE(s142as1352sC_tests) {
-  BOOST_TEST_MESSAGE("\t* [142>[1352]* = [142><2531> = -2m2(p1.p4p3.p5-p1.p5p3.p4+p1.p3p4.p5)");
+SPINAS_TEST_CASE(s142as1352sC_tests) {
+  SPINAS_TEST_MESSAGE("\t* [142>[1352]* = [142><2531> = -2m2(p1.p4p3.p5-p1.p5p3.p4+p1.p3p4.p5)");
   ldouble m1,m2,m3,m4,m5;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4], mom5[4];
   int ni;
@@ -260,8 +260,8 @@ BOOST_AUTO_TEST_CASE(s142as1352sC_tests) {
 
 
 //[12_I]<2^I3>=[123>
-BOOST_AUTO_TEST_CASE(s123a_lu_tests) {
-  BOOST_TEST_MESSAGE("\t* [12_I]<2^I3>=[123>");
+SPINAS_TEST_CASE(s123a_lu_tests) {
+  SPINAS_TEST_MESSAGE("\t* [12_I]<2^I3>=[123>");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -285,8 +285,8 @@ BOOST_AUTO_TEST_CASE(s123a_lu_tests) {
 
 
 //[12^I]<2_I3>=-[123>
-BOOST_AUTO_TEST_CASE(s123a_ul_tests) {
-  BOOST_TEST_MESSAGE("\t* [12^I]<2_I3>=-[123>");
+SPINAS_TEST_CASE(s123a_ul_tests) {
+  SPINAS_TEST_MESSAGE("\t* [12^I]<2_I3>=-[123>");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -311,8 +311,8 @@ BOOST_AUTO_TEST_CASE(s123a_ul_tests) {
 
 
 //<12^I>[2_I3]=<123]
-BOOST_AUTO_TEST_CASE(a123s_ul_tests) {
-  BOOST_TEST_MESSAGE("\t* <12^I>[2_I3]=<123]");
+SPINAS_TEST_CASE(a123s_ul_tests) {
+  SPINAS_TEST_MESSAGE("\t* <12^I>[2_I3]=<123]");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -337,8 +337,8 @@ BOOST_AUTO_TEST_CASE(a123s_ul_tests) {
 
 
 //<12_I>[2^I3]=-<123]
-BOOST_AUTO_TEST_CASE(a123s_lu_tests) {
-  BOOST_TEST_MESSAGE("\t* <12_I>[2^I3]=-<123]");
+SPINAS_TEST_CASE(a123s_lu_tests) {
+  SPINAS_TEST_MESSAGE("\t* <12_I>[2^I3]=-<123]");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -362,8 +362,8 @@ BOOST_AUTO_TEST_CASE(a123s_lu_tests) {
 
 
 //[12_I][2^I3]=m2[13]
-BOOST_AUTO_TEST_CASE(m2s13s_lu_tests) {
-  BOOST_TEST_MESSAGE("\t* [12_I][2^I3]=m2[13]");
+SPINAS_TEST_CASE(m2s13s_lu_tests) {
+  SPINAS_TEST_MESSAGE("\t* [12_I][2^I3]=m2[13]");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -386,8 +386,8 @@ BOOST_AUTO_TEST_CASE(m2s13s_lu_tests) {
 }
 
 //[12^I][2_I3]=-m2[13]
-BOOST_AUTO_TEST_CASE(m2s13s_ul_tests) {
-  BOOST_TEST_MESSAGE("\t* [12^I][2_I3]=-m2[13]");
+SPINAS_TEST_CASE(m2s13s_ul_tests) {
+  SPINAS_TEST_MESSAGE("\t* [12^I][2_I3]=-m2[13]");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -410,8 +410,8 @@ BOOST_AUTO_TEST_CASE(m2s13s_ul_tests) {
 }
 
 //<12^I><2_I3>=m2<13>
-BOOST_AUTO_TEST_CASE(m2a13a_ul_tests) {
-  BOOST_TEST_MESSAGE("\t* <12^I><2_I3>=m2<13>");
+SPINAS_TEST_CASE(m2a13a_ul_tests) {
+  SPINAS_TEST_MESSAGE("\t* <12^I><2_I3>=m2<13>");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -434,8 +434,8 @@ BOOST_AUTO_TEST_CASE(m2a13a_ul_tests) {
 }
 
 //<12_I><2^I3>=-m2<13>
-BOOST_AUTO_TEST_CASE(m2a13a_lu_tests) {
-  BOOST_TEST_MESSAGE("\t* <12_I><2^I3>=-m2<13>");
+SPINAS_TEST_CASE(m2a13a_lu_tests) {
+  SPINAS_TEST_MESSAGE("\t* <12_I><2^I3>=-m2<13>");
   ldouble m1, m2, m3;
   ldouble mom1[4], mom2[4], mom3[4];
   for(int i=0;i<100;i++)
@@ -460,9 +460,9 @@ BOOST_AUTO_TEST_CASE(m2a13a_lu_tests) {
 
 
 //[1|p4|2>=m2[12]-m1<12>-[1|p3|2>
-BOOST_AUTO_TEST_CASE(s142a_m2s12s_m1a12a_s132a_tests) {
+SPINAS_TEST_CASE(s142a_m2s12s_m1a12a_s132a_tests) {
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 10000000000;//
-  BOOST_TEST_MESSAGE("\t* [1|p4|2>=m2[12]-m1<12>-[1|p3|2>");
+  SPINAS_TEST_MESSAGE("\t* [1|p4|2>=m2[12]-m1<12>-[1|p3|2>");
   ldouble m1, m2, m3, m4;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   for(int i=0;i<100;i++)
@@ -493,24 +493,24 @@ BOOST_AUTO_TEST_CASE(s142a_m2s12s_m1a12a_s132a_tests) {
     if(o==0||o==1)
       for(int ds1=-1;ds1<=1;ds1+=2)
 	for(int ds2=-1;ds2<=1;ds2+=2)
-	  BOOST_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)-m2*s12s.v(ds1,ds2)+m1*a12a.v(ds1,ds2)+s132a.v(ds1,ds2)),epsilon);
+	  SPINAS_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)-m2*s12s.v(ds1,ds2)+m1*a12a.v(ds1,ds2)+s132a.v(ds1,ds2)),epsilon);
     else if(o==2||o==3)
       for(int ds1=-1;ds1<=1;ds1+=2)
-	BOOST_CHECK_SMALL(std::abs(s142a.v(ds1)+m1*a12a.v(ds1)+s132a.v(ds1)),epsilon);
+	SPINAS_CHECK_SMALL(std::abs(s142a.v(ds1)+m1*a12a.v(ds1)+s132a.v(ds1)),epsilon);
     else if(o==4||o==5)
       for(int ds2=-1;ds2<=1;ds2+=2)
-	BOOST_CHECK_SMALL(std::abs(s142a.v(ds2)-m2*s12s.v(ds2)+s132a.v(ds2)),epsilon);
+	SPINAS_CHECK_SMALL(std::abs(s142a.v(ds2)-m2*s12s.v(ds2)+s132a.v(ds2)),epsilon);
     else if(o==6||o==7)
-      BOOST_CHECK_SMALL(std::abs(s142a.v()+s132a.v()),epsilon);
+      SPINAS_CHECK_SMALL(std::abs(s142a.v()+s132a.v()),epsilon);
   }
 }
 
 
 
 //[1|p4|2>+[2|p4|1>=-[1|p3|2>-[2|p3|1> (m1=m2)
-BOOST_AUTO_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
+SPINAS_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
   ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000000;//
-  BOOST_TEST_MESSAGE("\t* [1|p4|2>+[2|p4|1>=-[1|p3|2>-[2|p3|1> (m1=m2)");
+  SPINAS_TEST_MESSAGE("\t* [1|p4|2>+[2|p4|1>=-[1|p3|2>-[2|p3|1> (m1=m2)");
   ldouble m12, m3, m4;
   ldouble mom1[4], mom2[4], mom3[4], mom4[4];
   for(int i=0;i<100;i++)
@@ -547,9 +547,9 @@ BOOST_AUTO_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
     if(o<2)
       for(int ds1=-1;ds1<=1;ds1+=2)
 	for(int ds2=-1;ds2<=1;ds2+=2)
-	  BOOST_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)+s241a.v(ds2,ds1)+s132a.v(ds1,ds2)+s231a.v(ds2,ds1)),epsilon);
+	  SPINAS_CHECK_SMALL(std::abs(s142a.v(ds1,ds2)+s241a.v(ds2,ds1)+s132a.v(ds1,ds2)+s231a.v(ds2,ds1)),epsilon);
     else
-      BOOST_CHECK_SMALL(std::abs(s142a.v()+s241a.v()+s132a.v()+s231a.v()),epsilon);
+      SPINAS_CHECK_SMALL(std::abs(s142a.v()+s241a.v()+s132a.v()+s231a.v()),epsilon);
   }
 }
 
@@ -557,7 +557,7 @@ BOOST_AUTO_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
 
 
 
-BOOST_AUTO_TEST_SUITE_END()
+SPINAS_TEST_SUITE_END()
 
 
 void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, const ldouble& m1, const ldouble& m3, const ldouble& factor){
@@ -566,21 +566,21 @@ void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, cons
     cdouble spinorProd(0,0);
     for(int ds2=-1;ds2<=1;ds2+=2)
       spinorProd += sp1->v(ds2)*sp2->v(ds2);
-    BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v() ), epsilon);
+    SPINAS_CHECK_SMALL(std::abs( spinorProd - factor*product->v() ), epsilon);
   }
   else if(m1==0)
     for(int ds3=-1;ds3<=1;ds3+=2){
       cdouble spinorProd(0,0);
       for(int ds2=-1;ds2<=1;ds2+=2)
 	spinorProd += sp1->v(ds2)*sp2->v(ds2,ds3);	
-      BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds3) ), epsilon);
+      SPINAS_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds3) ), epsilon);
     }
   else if(m3==0)
     for(int ds1=-1;ds1<=1;ds1+=2){
       cdouble spinorProd(0,0);
       for(int ds2=-1;ds2<=1;ds2+=2)
 	spinorProd += sp1->v(ds1,ds2)*sp2->v(ds2);
-      BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1) ), epsilon);
+      SPINAS_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1) ), epsilon);
     }
   else
     for(int ds1=-1;ds1<=1;ds1+=2)
@@ -588,7 +588,7 @@ void test_sproduct_spinsum(sproduct* sp1, sproduct* sp2, sproduct* product, cons
 	cdouble spinorProd(0,0);
 	for(int ds2=-1;ds2<=1;ds2+=2)
 	  spinorProd += sp1->v(ds1,ds2)*sp2->v(ds2,ds3);	
-	BOOST_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1,ds3) ), epsilon);
+	SPINAS_CHECK_SMALL(std::abs( spinorProd - factor*product->v(ds1,ds3) ), epsilon);
       }
 }
 
@@ -625,8 +625,8 @@ void test_sproduct(sproduct* sp1, sproduct* sp2, const int& ni, const int& np, p
     else
       spinProd += std::real(sp1->v()*std::conj(sp2->v()));
     
-    //Do the Boost Check
-    BOOST_CHECK_SMALL(std::abs(spinProd-expected), epsilon);
+    // Check the spin sum before applying the next Lorentz transformation.
+    SPINAS_CHECK_SMALL(std::abs(spinProd-expected), epsilon);
     
     //Reset Momentum before Rotations and Boosts
     for(int k=0;k<4;k++){
