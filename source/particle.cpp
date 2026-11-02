@@ -33,6 +33,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace spinas {
   namespace {
+    // Keep signed coefficients outside std::polar's nonnegative radius.
+    cdouble phased_coefficient(const ldouble coefficient, const ldouble phase){
+      return coefficient*std::polar(ldouble(1),phase);
+    }
+
     bool on_shell_energy(const ldouble energy, const ldouble magnitude, const ldouble mass){
       const ldouble expected = std::hypot(magnitude,mass), absolute = std::abs(energy);
       const ldouble sum = absolute+expected;
@@ -563,8 +568,8 @@ namespace spinas {
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
-    return -half*cmatrix(std::cos(theta)*one,std::polar(std::sin(theta),-phi),
-		      std::polar(std::sin(theta),phi),-std::cos(theta)*one);
+    return -half*cmatrix(std::cos(theta)*one,phased_coefficient(std::sin(theta),-phi),
+		      phased_coefficient(std::sin(theta),phi),-std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_lu() const{
     constexpr ldouble half=0.5, one=1;
@@ -572,24 +577,24 @@ namespace spinas {
     if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
 
     return pre*cmatrix(
-		       std::sin(theta), -std::polar(-one+std::cos(theta),-phi) ,
-		       -std::polar(one+std::cos(theta),phi), -std::sin(theta));
+		       std::sin(theta), -phased_coefficient(-one+std::cos(theta),-phi) ,
+		       -phased_coefficient(one+std::cos(theta),phi), -std::sin(theta));
   }
   cmatrix particle::lorentz_jm_lu() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
     if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
     return pre*cmatrix(
-		       std::sin(theta), -std::polar(one+std::cos(theta),-phi) ,
-		       -std::polar(-one+std::cos(theta),phi), -std::sin(theta));
+		       std::sin(theta), -phased_coefficient(one+std::cos(theta),-phi) ,
+		       -phased_coefficient(-one+std::cos(theta),phi), -std::sin(theta));
   }
   //UL acts on <j| (from the left)
   cmatrix particle::lorentz_j3_ul() const{
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
-    return half*cmatrix(std::cos(theta)*one,std::polar(std::sin(theta),phi),
-			std::polar(std::sin(theta),-phi),-std::cos(theta)*one);
+    return half*cmatrix(std::cos(theta)*one,phased_coefficient(std::sin(theta),phi),
+			phased_coefficient(std::sin(theta),-phi),-std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_ul() const{
     constexpr ldouble half=0.5, one=1;
@@ -597,16 +602,16 @@ namespace spinas {
     if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
 
     return pre*cmatrix(
-		       -std::sin(theta), std::polar(one+std::cos(theta),phi) ,
-		       std::polar(-one+std::cos(theta),-phi), std::sin(theta));
+		       -std::sin(theta), phased_coefficient(one+std::cos(theta),phi) ,
+		       phased_coefficient(-one+std::cos(theta),-phi), std::sin(theta));
   }
   cmatrix particle::lorentz_jm_ul() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
     if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
     return pre*cmatrix(
-		       -std::sin(theta), std::polar(-one+std::cos(theta),phi) ,
-		       std::polar(one+std::cos(theta),-phi), std::sin(theta));
+		       -std::sin(theta), phased_coefficient(-one+std::cos(theta),phi) ,
+		       phased_coefficient(one+std::cos(theta),-phi), std::sin(theta));
   }
 
   
@@ -616,8 +621,8 @@ namespace spinas {
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
-    return half*cmatrix(std::cos(theta)*one,std::polar(std::sin(theta),phi),
-			std::polar(std::sin(theta),-phi),-std::cos(theta)*one);
+    return half*cmatrix(std::cos(theta)*one,phased_coefficient(std::sin(theta),phi),
+			phased_coefficient(std::sin(theta),-phi),-std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_lu_dot() const{
     constexpr ldouble half=0.5, one=1;
@@ -625,24 +630,24 @@ namespace spinas {
     if(m!=0) pre = half*(std::real(sqrtEpP)/std::real(sqrtEmP));
 
     return pre*cmatrix(
-		       -std::sin(theta), std::polar(one+std::cos(theta),phi) ,
-		       std::polar(-one+std::cos(theta),-phi), std::sin(theta));
+		       -std::sin(theta), phased_coefficient(one+std::cos(theta),phi) ,
+		       phased_coefficient(-one+std::cos(theta),-phi), std::sin(theta));
   }
   cmatrix particle::lorentz_jm_lu_dot() const{
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
     if(m!=0) pre=half*(std::real(sqrtEmP)/std::real(sqrtEpP));
     return pre*cmatrix(
-		       -std::sin(theta), std::polar(-one+std::cos(theta),phi) ,
-		       std::polar(one+std::cos(theta),-phi), std::sin(theta));
+		       -std::sin(theta), phased_coefficient(-one+std::cos(theta),phi) ,
+		       phased_coefficient(one+std::cos(theta),-phi), std::sin(theta));
   }
   //UL acts on |j] (from the right)
   cmatrix particle::lorentz_j3_ul_dot() const{
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
-    return half*cmatrix(-std::cos(theta)*one,-std::polar(std::sin(theta),-phi),
-			-std::polar(std::sin(theta),phi),std::cos(theta)*one);
+    return half*cmatrix(-std::cos(theta)*one,-phased_coefficient(std::sin(theta),-phi),
+			-phased_coefficient(std::sin(theta),phi),std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_ul_dot() const{
     constexpr ldouble half=0.5, one=1;
@@ -650,8 +655,8 @@ namespace spinas {
     if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
 
     return pre*cmatrix(
-		       std::sin(theta), -std::polar(-one+std::cos(theta),-phi) ,
-		       -std::polar(one+std::cos(theta),phi), -std::sin(theta));
+		       std::sin(theta), -phased_coefficient(-one+std::cos(theta),-phi) ,
+		       -phased_coefficient(one+std::cos(theta),phi), -std::sin(theta));
   }
   cmatrix particle::lorentz_jm_ul_dot() const{
     constexpr ldouble half=0.5, one=1;
@@ -659,8 +664,8 @@ namespace spinas {
     if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
     
     return pre*cmatrix(
-		       std::sin(theta), -std::polar(one+std::cos(theta),-phi) ,
-		       -std::polar(-one+std::cos(theta),phi), -std::sin(theta));
+		       std::sin(theta), -phased_coefficient(one+std::cos(theta),-phi) ,
+		       -phased_coefficient(-one+std::cos(theta),phi), -std::sin(theta));
   }
   
   

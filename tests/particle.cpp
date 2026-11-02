@@ -10,6 +10,7 @@
 #include <cmath>
 #include <complex>
 #include <limits>
+#include <vector>
 
 #include "types.h"
 //#include "aliases.h"
@@ -33,6 +34,143 @@ bool test_cdouble_equality(const cdouble& z1, const cdouble& z2) {
 
 
 SPINAS_TEST_SUITE(particle_tests)
+
+// Read every cached representation, so later updates must invalidate all of it.
+static std::vector<cdouble> cached_components(particle& p) {
+  std::vector<cdouble> values;
+  const auto vector = [&](const cvector& v) {
+    for(int i=0;i<2;++i) values.push_back(v.get(i));
+  };
+  const auto matrix = [&](const cmatrix& m) {
+    for(int i=0;i<2;++i)
+      for(int j=0;j<2;++j) values.push_back(m.get(i,j));
+  };
+  matrix(p.umat()); matrix(p.lmat());
+  if(p.mass()==0) {
+    vector(p.rangle()); vector(p.langle());
+    vector(p.rsquare()); vector(p.lsquare());
+  } else {
+    for(const bool upper : {false,true}) {
+      for(const int spin : {-1,1}) {
+        vector(p.rangle(spin,upper)); vector(p.langle(spin,upper));
+        vector(p.rsquare(spin,upper)); vector(p.lsquare(spin,upper));
+      }
+      matrix(p.rangle_matrix(upper)); matrix(p.langle_matrix(upper));
+      matrix(p.rsquare_matrix(upper)); matrix(p.lsquare_matrix(upper));
+    }
+  }
+  return values;
+}
+
+static void same_cached_components(particle& actual, particle& expected) {
+  const std::vector<cdouble> a = cached_components(actual);
+  const std::vector<cdouble> b = cached_components(expected);
+  SPINAS_CHECK_EQUAL(a.size(),b.size());
+  for(std::size_t i=0;i<std::min(a.size(),b.size());++i)
+    SPINAS_CHECK_EQUAL(a[i],b[i]);
+}
+
+SPINAS_TEST_CASE(cached_state_updates_and_independent_copies) {
+  const ldouble originalMomentum[4] = {std::sqrt(ldouble(18)),1,2,3};
+  particle reused(originalMomentum,2), original(originalMomentum,2);
+  same_cached_components(reused,original);
+  particle copied(reused), assigned;
+  assigned = reused;
+
+  // Exercise ordinary updates and both directions of the massless transition.
+  const ldouble masses[] = {2,5,0,0,3};
+  for(int step=0;step<5;++step) {
+    const ldouble mass = masses[step];
+    ldouble momentum[4] = {0,ldouble(0.75L)*(step+1),
+      ldouble(-0.5L)*(step+2),ldouble(0.25L)*(2*step+1)};
+    momentum[0] = std::sqrt(mass*mass + momentum[1]*momentum[1] +
+      momentum[2]*momentum[2] + momentum[3]*momentum[3]);
+    reused.set_mass(mass);
+    reused.set_momentum(momentum);
+    particle fresh(momentum,mass);
+    same_cached_components(reused,fresh);
+    same_cached_components(copied,original);
+    same_cached_components(assigned,original);
+  }
+
+  // Updating a copied particle must not alter either the source or another copy.
+  const ldouble copyMomentum[4] = {5,-2,4,-1};
+  copied.set_momentum(copyMomentum);
+  particle freshCopy(copyMomentum,2);
+  same_cached_components(copied,freshCopy);
+  same_cached_components(assigned,original);
+  const std::vector<cdouble> before = cached_components(reused);
+  assigned = copied;
+  same_cached_components(assigned,freshCopy);
+  const std::vector<cdouble> after = cached_components(reused);
+  SPINAS_CHECK_EQUAL(before.size(),after.size());
+  for(std::size_t i=0;i<before.size();++i)
+    SPINAS_CHECK_EQUAL(before[i],after[i]);
+}
+
+SPINAS_TEST_CASE(invalid_momenta_and_recovery_after_rejection) {
+  const ldouble nan = std::numeric_limits<ldouble>::quiet_NaN();
+  const ldouble infinity = std::numeric_limits<ldouble>::infinity();
+  const ldouble valid[4] = {std::sqrt(ldouble(18)),1,2,3};
+  for(const ldouble invalid : {nan,infinity})
+    for(int component=0;component<4;++component) {
+      ldouble bad[4] = {valid[0],valid[1],valid[2],valid[3]};
+      bad[component] = invalid;
+      SPINAS_CHECK_THROW(particle(bad,ldouble(2)),std::runtime_error);
+    }
+  particle reused(valid,2);
+  cached_components(reused);
+  const ldouble offShell[4] = {1,2,3,4};
+  SPINAS_CHECK_THROW(reused.set_momentum(offShell),std::runtime_error);
+  const ldouble next[4] = {5,-2,4,-1};
+  reused.set_momentum(next);
+  particle fresh(next,2);
+  same_cached_components(reused,fresh);
+}
+
+SPINAS_TEST_CASE(lorentz_ladder_generators_have_finite_signed_phases) {
+  const ldouble tolerance = 128*std::numeric_limits<ldouble>::epsilon();
+  const cmatrix shapes[] = {cmatrix(1,1,-1,-1),cmatrix(1,-1,1,-1),
+    cmatrix(-1,1,-1,1),cmatrix(-1,-1,1,1)};
+  for(const ldouble mass : {ldouble(0),ldouble(1)}) {
+    const ldouble energy = std::sqrt(mass*mass+1);
+    const ldouble alongX[4] = {energy,1,0,0};
+    particle p(alongX,mass);
+    const ldouble small = mass==0 ? 0 : (energy-1)/(2*mass);
+    const ldouble large = mass==0 ? 1 : (energy+1)/(2*mass);
+    // At theta=pi/2 and phi=0, the generator entries are real and explicit.
+    const cmatrix expected[] = {small*shapes[0],large*shapes[1],
+      small*shapes[2],large*shapes[3],large*shapes[2],small*shapes[3],
+      large*shapes[0],small*shapes[1]};
+    const cmatrix actual[] = {p.lorentz_jp_lu(),p.lorentz_jm_lu(),
+      p.lorentz_jp_ul(),p.lorentz_jm_ul(),p.lorentz_jp_lu_dot(),
+      p.lorentz_jm_lu_dot(),p.lorentz_jp_ul_dot(),p.lorentz_jm_ul_dot()};
+    for(int generator=0;generator<8;++generator)
+      for(int row=0;row<2;++row)
+        for(int column=0;column<2;++column)
+          SPINAS_CHECK_SMALL(std::abs(actual[generator].get(row,column)-
+            expected[generator].get(row,column)),tolerance);
+
+    // Both z axes and all azimuthal quadrants must also avoid invalid radii.
+    const ldouble directions[][3] = {{0,0,1},{0,0,-1},{1,0,0},
+      {-1,0,0},{0,1,0},{0,-1,0}};
+    for(const auto& direction : directions) {
+      const ldouble momentum[4] = {energy,direction[0],direction[1],direction[2]};
+      p.set_momentum(momentum);
+      const cmatrix matrices[] = {p.lorentz_j3_lu(),p.lorentz_j3_ul(),
+        p.lorentz_j3_lu_dot(),p.lorentz_j3_ul_dot(),p.lorentz_jp_lu(),
+        p.lorentz_jm_lu(),p.lorentz_jp_ul(),p.lorentz_jm_ul(),
+        p.lorentz_jp_lu_dot(),p.lorentz_jm_lu_dot(),
+        p.lorentz_jp_ul_dot(),p.lorentz_jm_ul_dot()};
+      for(const cmatrix& matrix : matrices)
+        for(int row=0;row<2;++row)
+          for(int column=0;column<2;++column) {
+            const cdouble value = matrix.get(row,column);
+            SPINAS_CHECK(std::isfinite(value.real()) && std::isfinite(value.imag()));
+          }
+    }
+  }
+}
 
 SPINAS_TEST_CASE(constructor_test) {
   SPINAS_TEST_MESSAGE("Testing particle: ");

@@ -186,8 +186,10 @@ namespace spinas {
   bool cmatrix::operator==(const cmatrix &m) const{
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
     for(int i=0;i<2;i++)
-      for(int j=0;j<2;j++)
-	if(std::abs(mat[i][j]-m.mat[i][j]) > epsilon) return false;
+      for(int j=0;j<2;j++){
+        const ldouble difference = std::abs(mat[i][j]-m.mat[i][j]);
+        if(!std::isfinite(difference) || difference > epsilon) return false;
+      }
     return true;
   }
   bool cmatrix::operator!=(const cmatrix &m) const{

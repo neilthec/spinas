@@ -111,8 +111,10 @@ namespace spinas {
   // ==
   bool cvector::operator==(const cvector &v2) const {
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 10000000;
-    for(int i=0;i<2;i++)
-      if(std::abs(vec[i]-v2.vec[i]) > epsilon) return false;
+    for(int i=0;i<2;i++){
+      const ldouble difference = std::abs(vec[i]-v2.vec[i]);
+      if(!std::isfinite(difference) || difference > epsilon) return false;
+    }
     return true;
   }
   // !=

@@ -64,4 +64,56 @@ SPINAS_TEST_CASE(boosting_an_already_fast_particle) {
   }
 }
 
+static ldouble minkowski_product(const ldouble a[4], const ldouble b[4]) {
+  return a[0]*b[0]-a[1]*b[1]-a[2]*b[2]-a[3]*b[3];
+}
+
+SPINAS_TEST_CASE(lorentz_invariants_and_inverse_transformations) {
+  const ldouble axis[3] = {ldouble(2)/7,ldouble(-3)/7,ldouble(6)/7};
+  const ldouble angle = ldouble(0.63L);
+  const ldouble velocity[3] = {ldouble(0.25L),ldouble(-0.3L),ldouble(0.15L)};
+  const ldouble inverse[3] = {-velocity[0],-velocity[1],-velocity[2]};
+  const ldouble tolerance = 4096*std::numeric_limits<ldouble>::epsilon();
+  for(int sample=0;sample<25;sample++){
+    ldouble originalA[4], originalB[4];
+    choose_random_momentum(originalA,-5,5);
+    choose_random_momentum(originalB,-5,5);
+    if(sample%2==0) originalB[0] = -originalB[0];
+    const ldouble aa = minkowski_product(originalA,originalA);
+    const ldouble bb = minkowski_product(originalB,originalB);
+    const ldouble ab = minkowski_product(originalA,originalB);
+    // Check rotations, boosts, and their noncommuting composition separately.
+    for(int transformation=0;transformation<3;transformation++){
+      ldouble a[4], b[4];
+      for(int component=0;component<4;component++){
+        a[component] = originalA[component];
+        b[component] = originalB[component];
+      }
+      if(transformation!=1){
+        rotate_momentum(a,axis,angle);
+        rotate_momentum(b,axis,angle);
+      }
+      if(transformation!=0){
+        boost_momentum(a,velocity);
+        boost_momentum(b,velocity);
+      }
+      SPINAS_CHECK_SMALL(std::abs(minkowski_product(a,a)-aa),tolerance*(1+std::abs(aa)));
+      SPINAS_CHECK_SMALL(std::abs(minkowski_product(b,b)-bb),tolerance*(1+std::abs(bb)));
+      SPINAS_CHECK_SMALL(std::abs(minkowski_product(a,b)-ab),tolerance*(1+std::abs(ab)));
+      if(transformation!=0){
+        boost_momentum(a,inverse);
+        boost_momentum(b,inverse);
+      }
+      if(transformation!=1){
+        rotate_momentum(a,axis,-angle);
+        rotate_momentum(b,axis,-angle);
+      }
+      for(int component=0;component<4;component++){
+        SPINAS_CHECK_SMALL(std::abs(a[component]-originalA[component]),tolerance*(1+std::abs(originalA[component])));
+        SPINAS_CHECK_SMALL(std::abs(b[component]-originalB[component]),tolerance*(1+std::abs(originalB[component])));
+      }
+    }
+  }
+}
+
 SPINAS_TEST_SUITE_END()

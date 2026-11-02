@@ -49,7 +49,15 @@ set_target_properties(spinas_static PROPERTIES OUTPUT_NAME spinas)
 #                      Core Tests
 ####################################################
 if(BUILD_TESTING)
-    file(GLOB TEST_SRCS tests/*.cpp)
+    set(TEST_SRCS
+        tests/test_utils.cpp
+        tests/cmatrix.cpp
+        tests/cvector.cpp
+        tests/particle.cpp
+        tests/process.cpp
+        tests/propagator.cpp
+        tests/sproduct.cpp
+        tests/utilities.cpp)
     add_executable(test_spinas ${TEST_SRCS})
     target_link_libraries(test_spinas spinas_static)
     add_test(NAME test_spinas COMMAND test_spinas)

@@ -30,6 +30,10 @@ After installation, you can run the provided tests:
 ./test_SM
 ```
 
+`test_spinas` checks the component algebra, spinor chains, cached updates,
+spin-1 state normalization and Lorentz transformations. `test_SM` runs the
+Standard Model process validations.
+
 To run both validation suites together and show details if a test fails:
 ```
 ctest --output-on-failure

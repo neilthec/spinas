@@ -9,6 +9,8 @@
 #include <sstream>
 #include <cmath>
 #include <complex>
+#include <algorithm>
+#include <stdexcept>
 
 #include "types.h"
 //#include "aliases.h"
@@ -556,6 +558,175 @@ SPINAS_TEST_CASE(s142a_s241a_s132a_s231a_tests) {
 
 
 
+
+// Direct component contractions check the complex value of each spin state,
+// without using sproduct or cmatrix multiplication as the reference.
+static void set_chain_particle(particle& value, ldouble mass,
+                               ldouble x, ldouble y, ldouble z) {
+  const ldouble momentum[4] = {std::sqrt(mass*mass+x*x+y*y+z*z),x,y,z};
+  value.set_mass(mass);
+  value.set_momentum(momentum);
+}
+
+static sproduct make_chain(bool angle, particle* left, particle** middle,
+                           int count, particle* right,
+                           bool leftUpper = true, bool rightUpper = true) {
+  switch(count) {
+  case 0: return sproduct(angle,left,leftUpper,right,rightUpper);
+  case 1: return sproduct(angle,left,leftUpper,middle[0],right,rightUpper);
+  case 2: return sproduct(angle,left,leftUpper,middle[0],middle[1],right,rightUpper);
+  case 3: return sproduct(angle,left,leftUpper,middle[0],middle[1],middle[2],right,rightUpper);
+  case 4: return sproduct(angle,left,leftUpper,middle[0],middle[1],middle[2],middle[3],right,rightUpper);
+  case 5: return sproduct(angle,left,leftUpper,middle[0],middle[1],middle[2],middle[3],middle[4],right,rightUpper);
+  case 6: return sproduct(angle,left,leftUpper,middle[0],middle[1],middle[2],middle[3],middle[4],middle[5],right,rightUpper);
+  default: throw std::invalid_argument("Unsupported chain length in test.");
+  }
+}
+
+static cdouble explicit_chain(bool angle, particle& left, particle** middle,
+                              int count, particle& right, int spinLeft,
+                              int spinRight, bool leftUpper, bool rightUpper) {
+  const cvector start = left.mass()!=0 ?
+    (angle ? left.langle(spinLeft,leftUpper) : left.lsquare(spinLeft,leftUpper)) :
+    (angle ? left.langle() : left.lsquare());
+  cdouble row[2] = {start.get(0),start.get(1)};
+  for(int insertion=0; insertion<count; ++insertion) {
+    const particle& value = *middle[insertion];
+    const ldouble energy=value.get_momentum(0), x=value.get_momentum(1),
+      y=value.get_momentum(2), z=value.get_momentum(3);
+    const ldouble sign = (angle != (insertion%2!=0)) ? 1 : -1;
+    const cdouble matrix[2][2] = {{energy+sign*z,cdouble(sign*x,-sign*y)},
+                                 {cdouble(sign*x,sign*y),energy-sign*z}};
+    cdouble next[2] = {0,0};
+    for(int column=0; column<2; ++column)
+      for(int index=0; index<2; ++index)
+        next[column] += row[index]*matrix[index][column];
+    row[0]=next[0]; row[1]=next[1];
+  }
+  const bool rightAngle = angle != (count%2!=0);
+  const cvector finish = right.mass()!=0 ?
+    (rightAngle ? right.rangle(spinRight,rightUpper) : right.rsquare(spinRight,rightUpper)) :
+    (rightAngle ? right.rangle() : right.rsquare());
+  return row[0]*finish.get(0)+row[1]*finish.get(1);
+}
+
+static cdouble chain_value(sproduct& value, particle& left, particle& right,
+                           int spinLeft, int spinRight) {
+  if(left.mass()!=0 && right.mass()!=0) return value.v(spinLeft,spinRight);
+  if(left.mass()!=0) return value.v(spinLeft);
+  if(right.mass()!=0) return value.v(spinRight);
+  return value.v();
+}
+
+static void check_chain(sproduct& value, bool angle, particle& left,
+                        particle** middle, int count, particle& right,
+                        bool leftUpper=true, bool rightUpper=true) {
+  for(int spinLeft=-1; spinLeft<=1; spinLeft+=2)
+    for(int spinRight=-1; spinRight<=1; spinRight+=2) {
+      const cdouble expected=explicit_chain(angle,left,middle,count,right,
+        spinLeft,spinRight,leftUpper,rightUpper);
+      const ldouble tolerance=4096*std::numeric_limits<ldouble>::epsilon()*
+        std::max(ldouble(1),std::abs(expected));
+      const cdouble actual=chain_value(value,left,right,spinLeft,spinRight);
+      SPINAS_CHECK_SMALL(std::abs(actual-expected),tolerance);
+      // Repeat after all computations are cached, rather than only testing a
+      // newly constructed product.
+      SPINAS_CHECK_EQUAL(chain_value(value,left,right,spinLeft,spinRight),actual);
+    }
+}
+
+SPINAS_TEST_CASE(all_chain_lengths_and_endpoint_indices) {
+  particle middleValues[6];
+  particle* middle[6];
+  for(int i=0; i<6; ++i) {
+    set_chain_particle(middleValues[i],ldouble(1)+ldouble(i)/5,
+      ldouble(0.2)+ldouble(i)/10,-ldouble(0.3),ldouble(0.4)-ldouble(i)/20);
+    middle[i]=&middleValues[i];
+  }
+  for(int massMask=0; massMask<4; ++massMask) {
+    particle left,right;
+    set_chain_particle(left,massMask&1 ? ldouble(1.3) : 0,0.3,-0.7,0.4);
+    set_chain_particle(right,massMask&2 ? ldouble(0.8) : 0,-0.6,0.2,0.5);
+    for(bool angle : {false,true})
+      for(bool leftUpper : {false,true})
+        for(bool rightUpper : {false,true}) {
+          if((!leftUpper && left.mass()==0) || (!rightUpper && right.mass()==0)) continue;
+          for(int count=0; count<=6; ++count) {
+            sproduct value=make_chain(angle,&left,middle,count,&right,leftUpper,rightUpper);
+            check_chain(value,angle,left,middle,count,right,leftUpper,rightUpper);
+          }
+        }
+  }
+}
+
+SPINAS_TEST_CASE(adjacent_equal_momenta_reduce_to_mass_squared) {
+  particle left,right,internal;
+  set_chain_particle(left,1.3,0.3,-0.7,0.4);
+  set_chain_particle(right,0.8,-0.6,0.2,0.5);
+  set_chain_particle(internal,2.5,0.4,-0.3,0.6);
+  particle* middle[6]={&internal,&internal,&internal,&internal,&internal,&internal};
+  for(bool angle : {false,true}) {
+    sproduct bracket=make_chain(angle,&left,middle,0,&right);
+    ldouble factor=1;
+    for(int count=2; count<=6; count+=2) {
+      factor *= internal.mass()*internal.mass();
+      sproduct value=make_chain(angle,&left,middle,count,&right);
+      for(int spinLeft : {-1,1}) for(int spinRight : {-1,1}) {
+        const cdouble expected=factor*bracket.v(spinLeft,spinRight);
+        SPINAS_CHECK_SMALL(std::abs(value.v(spinLeft,spinRight)-expected),
+          4096*std::numeric_limits<ldouble>::epsilon()*std::max(ldouble(1),std::abs(expected)));
+      }
+    }
+  }
+}
+
+SPINAS_TEST_CASE(update_rebuilds_cached_spins_momenta_and_mass_categories) {
+  particle left,right,internal[3];
+  set_chain_particle(left,1.3,0.3,-0.7,0.4);
+  set_chain_particle(right,0.8,-0.6,0.2,0.5);
+  particle* middle[3]={&internal[0],&internal[1],&internal[2]};
+  for(int i=0; i<3; ++i) set_chain_particle(internal[i],1+i,0.2,0.3+i/10.,-0.4);
+  sproduct angle=make_chain(ANGLE,&left,middle,3,&right);
+  sproduct square=make_chain(SQUARE,&left,middle,3,&right);
+  for(int stage=0; stage<7; ++stage) {
+    if(stage==1) set_chain_particle(left,1.3,-0.2,0.1,0.9);
+    if(stage==2) set_chain_particle(internal[1],0.7,-0.5,0.6,0.2);
+    if(stage==3) set_chain_particle(left,0,0.3,-0.7,0.4);
+    if(stage==4) set_chain_particle(right,0,-0.6,0.2,0.5);
+    if(stage==5) set_chain_particle(left,2,0.1,0.4,0.7);
+    if(stage==6) set_chain_particle(right,1.5,-0.3,0.7,0.2);
+    angle.update(); square.update();
+    check_chain(angle,ANGLE,left,middle,3,right);
+    check_chain(square,SQUARE,left,middle,3,right);
+  }
+}
+
+SPINAS_TEST_CASE(incompatible_spin_arity_and_massless_lower_indices_throw) {
+  particle massive1,massive2,massless1,massless2;
+  set_chain_particle(massive1,1,0.3,-0.7,0.4);
+  set_chain_particle(massive2,2,-0.6,0.2,0.5);
+  set_chain_particle(massless1,0,0.2,0.5,-0.3);
+  set_chain_particle(massless2,0,-0.4,0.1,0.6);
+  for(bool angle : {false,true}) {
+    sproduct both(angle,&massive1,&massive2), neither(angle,&massless1,&massless2);
+    sproduct left(angle,&massive1,&massless1), right(angle,&massless1,&massive1);
+    SPINAS_CHECK_THROW(both.v(),std::runtime_error);
+    SPINAS_CHECK_THROW(both.v(1),std::runtime_error);
+    SPINAS_CHECK_THROW(neither.v(1),std::runtime_error);
+    SPINAS_CHECK_THROW(neither.v(1,1),std::runtime_error);
+    SPINAS_CHECK_THROW(left.v(),std::runtime_error);
+    SPINAS_CHECK_THROW(left.v(1,1),std::runtime_error);
+    SPINAS_CHECK_THROW(right.v(),std::runtime_error);
+    SPINAS_CHECK_THROW(right.v(1,1),std::runtime_error);
+    SPINAS_CHECK_THROW(sproduct(angle,&massless1,LOWER,&massive1),std::runtime_error);
+    SPINAS_CHECK_THROW(sproduct(angle,&massive1,&massless1,LOWER),std::runtime_error);
+    sproduct lowered(angle,&massive1,LOWER,&massive2);
+    (void)lowered.v(1,-1);
+    set_chain_particle(massive1,0,0.3,-0.7,0.4);
+    SPINAS_CHECK_THROW(lowered.update(),std::runtime_error);
+    set_chain_particle(massive1,1,0.3,-0.7,0.4);
+  }
+}
 
 SPINAS_TEST_SUITE_END()
 
