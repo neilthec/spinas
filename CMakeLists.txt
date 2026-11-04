@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Project name
-project(SPINAS)
+project(SPINAS VERSION 1.0.3)
 include(CTest)
 include(GNUInstallDirs)
 
