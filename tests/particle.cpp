@@ -172,6 +172,56 @@ SPINAS_TEST_CASE(lorentz_ladder_generators_have_finite_signed_phases) {
   }
 }
 
+SPINAS_TEST_CASE(rest_constructors_initialize_spinors_and_generators) {
+  const ldouble zero[4] = {0,0,0,0};
+  particle defaultParticle, massless(ldouble(0)), explicitZero(zero,ldouble(0));
+  same_cached_components(defaultParticle,explicitZero);
+  same_cached_components(massless,explicitZero);
+  for(const ldouble mass : {ldouble(0.0005L),ldouble(2)}) {
+    const ldouble rest[4] = {mass,0,0,0};
+    particle constructed(mass), explicitRest(rest,mass);
+    same_cached_components(constructed,explicitRest);
+    SPINAS_CHECK(constructed.test_angles());
+    SPINAS_CHECK(constructed.lorentz_j3_lu()==explicitRest.lorentz_j3_lu());
+    SPINAS_CHECK(constructed.spin_jp_lu()==explicitRest.spin_jp_lu());
+  }
+}
+
+SPINAS_TEST_CASE(cartesian_spinor_phases_match_angular_conventions) {
+  const ldouble minusZero = -ldouble(0);
+  const ldouble tiny = std::numeric_limits<ldouble>::denorm_min();
+  const ldouble directions[][3] = {
+    {3,4,12},{-3,4,-12},{-3,-4,12},{3,-4,-12},
+    {ldouble(1e-10L),ldouble(-1e-12L),-1},
+    {0,0,1},{0,0,-1},{minusZero,0,-1},{minusZero,minusZero,-1},
+    {tiny,tiny,-1},{-tiny,tiny,-1},{tiny,-tiny,-1}};
+  const ldouble tolerance = 64*std::numeric_limits<ldouble>::epsilon();
+  for(const ldouble mass : {ldouble(0),ldouble(0.0005L),ldouble(2)}) {
+    particle reused(mass);
+    for(const auto& direction : directions) {
+      const ldouble pT = std::hypot(direction[0],direction[1]);
+      const ldouble magnitude = std::hypot(pT,direction[2]);
+      const ldouble energy = std::hypot(mass,magnitude);
+      const ldouble momentum[4] = {energy,direction[0],direction[1],direction[2]};
+      reused.set_momentum(momentum);
+      const ldouble largeHalf = std::sqrt((1+std::abs(direction[2])/magnitude)/2);
+      const ldouble cosineHalf = direction[2]>=0 ? largeHalf : (pT/magnitude)/(2*largeHalf);
+      const ldouble sineHalf = direction[2]>=0 ? (pT/magnitude)/(2*largeHalf) : largeHalf;
+      const cdouble expectedPhase = std::polar(sineHalf,std::atan2(direction[1],direction[0]));
+      const ldouble root = std::sqrt(energy)*std::sqrt(1+magnitude/energy);
+      const cvector right = mass==0 ? reused.rangle() : reused.rangle(-1);
+      SPINAS_CHECK_SMALL(std::abs(right.get(0)/root-cdouble(cosineHalf,0)),tolerance);
+      SPINAS_CHECK_SMALL(std::abs(right.get(1)/root-expectedPhase),tolerance);
+      // Exercise the cached angular path after the Cartesian spinors, then
+      // compare copies and updates so lazy angles cannot remain stale.
+      SPINAS_CHECK(reused.test_angles());
+      particle copied(reused), explicitPoint(momentum,mass);
+      SPINAS_CHECK(copied.lorentz_j3_lu()==explicitPoint.lorentz_j3_lu());
+      same_cached_components(copied,explicitPoint);
+    }
+  }
+}
+
 SPINAS_TEST_CASE(constructor_test) {
   SPINAS_TEST_MESSAGE("Testing particle: ");
   SPINAS_TEST_MESSAGE("\t* Constructor");

@@ -701,6 +701,94 @@ SPINAS_TEST_CASE(update_rebuilds_cached_spins_momenta_and_mass_categories) {
   }
 }
 
+static momentum_chain make_shared_chain(bool angle, particle** middle, int count) {
+  switch(count) {
+  case 1: return momentum_chain(angle,{middle[0]});
+  case 2: return momentum_chain(angle,{middle[0],middle[1]});
+  case 3: return momentum_chain(angle,{middle[0],middle[1],middle[2]});
+  case 4: return momentum_chain(angle,{middle[0],middle[1],middle[2],middle[3]});
+  case 5: return momentum_chain(angle,{middle[0],middle[1],middle[2],middle[3],middle[4]});
+  case 6: return momentum_chain(angle,{middle[0],middle[1],middle[2],middle[3],middle[4],middle[5]});
+  default: throw std::invalid_argument("Unsupported shared chain length in test.");
+  }
+}
+
+SPINAS_TEST_CASE(shared_middle_matrices_match_direct_chains_after_updates) {
+  particle left,right,otherLeft,otherRight,internal[6];
+  particle* middle[6];
+  set_chain_particle(left,1.3,0.3,-0.7,0.4);
+  set_chain_particle(right,0.8,-0.6,0.2,0.5);
+  set_chain_particle(otherLeft,0,0.1,0.5,-0.8);
+  set_chain_particle(otherRight,1.1,-0.2,0.4,0.3);
+  for(int i=0;i<6;++i) {
+    set_chain_particle(internal[i],1+i,0.2,0.3+i/10.,-0.4);
+    middle[i]=&internal[i];
+  }
+  for(bool angle : {false,true})
+    for(int count=1;count<=6;++count) {
+      momentum_chain shared=make_shared_chain(angle,middle,count);
+      sproduct first=make_chain(angle,&left,middle,count,&right);
+      sproduct second=make_chain(angle,&otherLeft,middle,count,&otherRight);
+      for(int stage=0;stage<3;++stage) {
+        if(stage==1) set_chain_particle(internal[count-1],0.7,-0.4,0.6,0.2);
+        if(stage==2) set_chain_particle(otherRight,0,0.4,-0.3,0.2);
+        shared.update();
+        first.update(shared); second.update(shared);
+        check_chain(first,angle,left,middle,count,right);
+        check_chain(second,angle,otherLeft,middle,count,otherRight);
+        sproduct lowered=make_chain(angle,&left,middle,count,&right,false,false);
+        lowered.update(shared);
+        check_chain(lowered,angle,left,middle,count,right,false,false);
+        // Reusing the same matrix must still invalidate endpoint spin caches.
+        set_chain_particle(left,1.3,-0.2,0.1,0.9);
+        first.update(shared);
+        check_chain(first,angle,left,middle,count,right);
+        momentum_chain copied(shared);
+        for(int i=0;i<2;++i)
+          for(int j=0;j<2;++j)
+            SPINAS_CHECK_EQUAL(copied.matrix().get(i,j),shared.matrix().get(i,j));
+      }
+    }
+}
+
+SPINAS_TEST_CASE(shared_middle_matrix_contract_and_independent_owners) {
+  particle a,b,c,d;
+  set_chain_particle(a,1,0.2,0.3,0.4);
+  set_chain_particle(b,2,-0.5,0.6,0.1);
+  set_chain_particle(c,3,0.4,-0.2,0.7);
+  set_chain_particle(d,4,-0.1,0.8,-0.3);
+  momentum_chain empty;
+  SPINAS_CHECK_THROW(empty.update(),std::logic_error);
+  SPINAS_CHECK_THROW(empty.matrix(),std::logic_error);
+  SPINAS_CHECK_THROW(momentum_chain(ANGLE,{}),std::invalid_argument);
+  SPINAS_CHECK_THROW(momentum_chain(ANGLE,{&a,nullptr}),std::invalid_argument);
+  SPINAS_CHECK_THROW(momentum_chain(ANGLE,{&a,&b,&c,&d,&a,&b,&c}),std::invalid_argument);
+  sproduct unbound;
+  SPINAS_CHECK_THROW(unbound.update(),std::logic_error);
+  momentum_chain angle(ANGLE,{&a,&b}), square(SQUARE,{&a,&b}),
+    reverse(ANGLE,{&b,&a}), shorter(ANGLE,{&a}), other(ANGLE,{&c,&d});
+  sproduct product(ANGLE,&c,&a,&b,&d);
+  SPINAS_CHECK_THROW(product.update(angle),std::logic_error);
+  angle.update();square.update();reverse.update();shorter.update();other.update();
+  product.update(angle);
+  SPINAS_CHECK_THROW(product.update(square),std::invalid_argument);
+  SPINAS_CHECK_THROW(product.update(reverse),std::invalid_argument);
+  SPINAS_CHECK_THROW(product.update(shorter),std::invalid_argument);
+  SPINAS_CHECK_THROW(product.update(other),std::invalid_argument);
+  const cmatrix saved=angle.matrix();
+  set_chain_particle(c,3,-0.3,0.5,0.2);
+  other.update();
+  for(int i=0;i<2;++i)
+    for(int j=0;j<2;++j)
+      SPINAS_CHECK_EQUAL(angle.matrix().get(i,j),saved.get(i,j));
+  // Particle objects at rest are usable before an explicit momentum update.
+  particle restA(ldouble(1)),restB(ldouble(2));
+  momentum_chain restChain(ANGLE,{&restA,&restB});
+  restChain.update();
+  SPINAS_CHECK_SMALL(std::abs(restChain.matrix().get(0,0)-cdouble(2,0)),ldouble(0));
+  SPINAS_CHECK_SMALL(std::abs(restChain.matrix().get(1,1)-cdouble(2,0)),ldouble(0));
+}
+
 SPINAS_TEST_CASE(incompatible_spin_arity_and_massless_lower_indices_throw) {
   particle massive1,massive2,massless1,massless2;
   set_chain_particle(massive1,1,0.3,-0.7,0.4);

@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <stdexcept>
 
 #include "utilities.h"
 #include "cmatrix.h"
@@ -31,6 +32,35 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace spinas {
+  momentum_chain::momentum_chain(const bool& angle,
+      std::initializer_list<particle*> momenta): leftAngle(angle) {
+    if(momenta.size()==0 || momenta.size()>6)
+      throw std::invalid_argument("A shared momentum chain requires one to six inserted momenta.");
+    for(particle* momentum : momenta){
+      if(momentum==nullptr)
+        throw std::invalid_argument("A shared momentum chain cannot contain a null particle.");
+      particles[length++] = momentum;
+    }
+  }
+
+  void momentum_chain::update(){
+    ready = false;
+    if(length==0)
+      throw std::logic_error("Bind inserted particles before updating a momentum chain.");
+    product = leftAngle ? particles[0]->lmat() : particles[0]->umat();
+    for(int i=1;i<length;++i){
+      if(leftAngle == (i%2==0)) product *= particles[i]->lmat();
+      else product *= particles[i]->umat();
+    }
+    ready = true;
+  }
+
+  const cmatrix& momentum_chain::matrix() const {
+    if(!ready)
+      throw std::logic_error("Update the shared momentum chain before using its matrix.");
+    return product;
+  }
+
   //Constructors
   sproduct::sproduct(){}
 
@@ -248,7 +278,9 @@ namespace spinas {
 
 
   //If masses or momenta change, this function must be run.
-  void sproduct::update(){
+  void sproduct::update_endpoints(){
+    if(pL==nullptr || pR==nullptr)
+      throw std::logic_error("Bind endpoint particles before updating a spinor product.");
     isLeftMassive = false;
     isRightMassive = false;
     if(pL->mass()!=0) isLeftMassive = true;
@@ -262,6 +294,10 @@ namespace spinas {
     for(int i=0;i<2;i++)
       for(int j=0;j<2;j++)
 	isCalculated[i][j] = false;
+  }
+
+  void sproduct::update(){
+    update_endpoints();
     //Calculate pMat as the product of the momenta in the middle.
     if(N>0){
       if(isLeftAngle){
@@ -281,6 +317,17 @@ namespace spinas {
     }
   }
 
+
+  void sproduct::update(const momentum_chain& chain){
+    if(N!=chain.length || isLeftAngle!=chain.leftAngle)
+      throw std::invalid_argument("Shared momentum chain length or angle/square orientation does not match this spinor product.");
+    for(int i=0;i<N;++i)
+      if(p[i]!=chain.particles[i])
+        throw std::invalid_argument("Shared momentum chain particle order does not match this spinor product.");
+    const cmatrix& middle = chain.matrix();
+    update_endpoints();
+    pMat = middle;
+  }
 
   //Products
   //Both massless

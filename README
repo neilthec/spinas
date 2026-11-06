@@ -50,6 +50,42 @@ The shared testing utility is kept in `tests/test_utils.h` and
 nonzero exit status, including in optimized builds. To build only the libraries,
 configure with `cmake -DBUILD_TESTING=OFF ..`.
 
+### Sharing momentum insertions between spinor products
+
+The usual `sproduct::update()` interface remains available. If several brackets
+contain the same inserted momentum sequence, a process can instead own one
+`momentum_chain` and reuse its matrix:
+
+```cpp
+// The external particle objects must already exist.
+spinas::momentum_chain middle(ANGLE, {&p1, &p2});
+spinas::sproduct a3124a(ANGLE, &p3, &p1, &p2, &p4);
+spinas::sproduct a5126a(ANGLE, &p5, &p1, &p2, &p6);
+
+// After assigning particle momenta, and after every subsequent mass/momentum update:
+middle.update();
+a3124a.update(middle);
+a5126a.update(middle);
+```
+
+The helper alternates lower and upper momentum matrices in the same order as
+an ordinary bracket. The shared update checks the exact particle sequence,
+length and angle/square orientation, and rejects a helper that has not been
+updated. Its cached matrix is owned by that helper; no global cache is used.
+Keep the particle objects alive and at stable addresses, as for ordinary
+`sproduct` objects. Separate processes or worker threads should own separate
+particles and helpers. A copied process must rebind these pointers to its own
+particle members, just as it already does for its ordinary spinor products.
+
+Ordinary particle setup obtains spinor phases directly from Cartesian momentum
+components, including stable subnormal directions and signed z-axis choices.
+Spherical angles are evaluated lazily when angular generators or diagnostics
+request them. Rest-state particle constructors initialize their spinor and
+momentum-matrix caches immediately.
+
+After updating these class definitions, rebuild SPINAS and any application that
+links it. The installed headers and library must describe the same class layout.
+
 ### Installation
 
 If you would like to install the libraries, you can run:

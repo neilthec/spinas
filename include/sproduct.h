@@ -21,17 +21,39 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 
+#define SPINAS_HAS_MOMENTUM_CHAIN 1
+
 #include "types.h"
+#include <initializer_list>
 
 
 namespace spinas {
-  
+
+  // One explicitly updated middle-momentum product, shared by brackets with
+  // different endpoints. The pointed-to particles must outlive this object.
+  // There is no global cache; each process or worker owns its own chains.
+  class momentum_chain {
+    friend class sproduct;
+  private:
+    particle* particles[6] = {};
+    int length = 0;
+    bool leftAngle = false;
+    bool ready = false;
+    cmatrix product;
+  public:
+    momentum_chain() = default;
+    momentum_chain(const bool& angle, std::initializer_list<particle*> momenta);
+    // Call after any inserted particle momentum or mass changes.
+    void update();
+    const cmatrix& matrix() const;
+  };
+
   class sproduct{
   private:
-    particle *pL, *pR;//Particles in the left and right spinors.
-    particle *p[6];//Particles in the middle.
+    particle *pL = nullptr, *pR = nullptr;//Particles in the left and right spinors.
+    particle *p[6] = {};//Particles in the middle.
     cmatrix pMat;//Product of all momenta in between the spinors
-    int N;//Number of particles/momenta in product
+    int N = 0;//Number of particles/momenta in product
 
     //Whether the ends are massive
     bool isLeftMassive = false, isRightMassive = false;
@@ -45,6 +67,7 @@ namespace spinas {
     //Whether the spinor product is calculated
     bool isCalculated[2][2] = {{false,false},{false,false}};
     cdouble product[2][2];
+    void update_endpoints();
     
 
   public:
@@ -95,7 +118,9 @@ namespace spinas {
     //Update
     //Must be run after masses or momenta of particles is updated.
     void update();
-    
+    // Use a ready shared chain with the exact same inserted particles and
+    // angle/square orientation. Endpoint spin caches are invalidated normally.
+    void update(const momentum_chain& chain);
 
     //products
     cdouble v();

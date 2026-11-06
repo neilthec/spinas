@@ -73,11 +73,10 @@ namespace spinas {
   }
 
   //Constructors
-  particle::particle()
-  {}
+  particle::particle(): particle(ldouble(0)) {}
 
   particle::particle(const ldouble& mass):
-    m(mass), p{m,0,0,0}{}
+    m(mass), p{m,0,0,0}{ update(); }
 
   particle::particle(const ldouble momentum[4], const ldouble& mass):
     m(mass),p{momentum[0],momentum[1],momentum[2],momentum[3]}
@@ -113,9 +112,7 @@ namespace spinas {
     if(!on_shell_energy(p[0],pmag,m)){
       throw std::runtime_error("Momentum and mass don't match:  p^2 = " + std::to_string(p[0]*p[0]-pmag*pmag) + " != " + std::to_string(m*m));
     }
-    theta = atan2(pxymag,p[3]);
-    phi = atan2(p[2],p[1]);
-    //if(phi<0) phi+=2.*PI;
+    anglesCalculated = false;
     // Rationalize the small half-angle component too, including exact zeros
     // on both axes. cos(pi/2) otherwise leaves a boosted spurious component.
     ldouble cosineHalf = 1, sineHalf = 0;
@@ -126,7 +123,23 @@ namespace spinas {
       sineHalf = p[3]>=0 ? smallHalf : largeHalf;
     }
     c = cdouble(cosineHalf,0.);
-    s = std::polar(sineHalf,phi);
+    // The azimuthal unit phase is (px+i py)/pT. Avoid atan2 followed by
+    // trigonometric reconstruction in the ordinary spinor-evaluation path.
+    // On a z axis, preserve atan2's signed-zero choice of azimuthal phase.
+    if(pxymag>=std::numeric_limits<ldouble>::min()){
+      s = cdouble(sineHalf*(p[1]/pxymag),sineHalf*(p[2]/pxymag));
+    }
+    else if(pxymag!=0){
+      // A subnormal pT can have large relative rounding. Normalize scaled
+      // Cartesian components so an almost axial spinor keeps a unit phase.
+      const ldouble scale = std::max(std::abs(p[1]),std::abs(p[2]));
+      const ldouble x = p[1]/scale, y = p[2]/scale;
+      const ldouble norm = std::hypot(x,y);
+      s = cdouble(sineHalf*(x/norm),sineHalf*(y/norm));
+    }
+    else{
+      s = cdouble(std::copysign(sineHalf,p[1]),std::copysign(ldouble(0),p[2]));
+    }
     sc = std::conj(s);
     // Scale the large root so E+|p| need not itself be representable.
     sqrtEpP = cdouble(p[0]>0 ? std::sqrt(p[0])*std::sqrt(1+pmag/p[0]) :
@@ -162,8 +175,18 @@ namespace spinas {
     rsquareLowerP1Calculated = false, rsquareLowerM1Calculated = false;
   }
 
+  // Only diagnostic and angular-momentum-generator calls need these angles.
+  void particle::ensure_angles() const {
+    if(!anglesCalculated){
+      theta = std::atan2(pxymag,p[3]);
+      phi = std::atan2(p[2],p[1]);
+      anglesCalculated = true;
+    }
+  }
+
   //Test angles
   bool particle::test_angles() const {
+    ensure_angles();
     constexpr ldouble epsilon = std::numeric_limits<ldouble>::epsilon() * 1000000;
     ldouble p0 = std::real(sqrtEpP*std::conj(sqrtEpP)+sqrtEmP*std::conj(sqrtEmP))/2;
     ldouble p1 = pmag*std::sin(theta)*std::cos(phi);
@@ -565,6 +588,7 @@ namespace spinas {
   // Use the cached stable spinor ratios in their boost prefactors as well.
   //LU acts on |j> (from the left)
   cmatrix particle::lorentz_j3_lu() const{
+    ensure_angles();
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
@@ -572,6 +596,7 @@ namespace spinas {
 		      phased_coefficient(std::sin(theta),phi),-std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_lu() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
     if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
@@ -581,6 +606,7 @@ namespace spinas {
 		       -phased_coefficient(one+std::cos(theta),phi), -std::sin(theta));
   }
   cmatrix particle::lorentz_jm_lu() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
     if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
@@ -590,6 +616,7 @@ namespace spinas {
   }
   //UL acts on <j| (from the left)
   cmatrix particle::lorentz_j3_ul() const{
+    ensure_angles();
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
@@ -597,6 +624,7 @@ namespace spinas {
 			phased_coefficient(std::sin(theta),-phi),-std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_ul() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
     if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
@@ -606,6 +634,7 @@ namespace spinas {
 		       phased_coefficient(-one+std::cos(theta),-phi), std::sin(theta));
   }
   cmatrix particle::lorentz_jm_ul() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
     if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
@@ -618,6 +647,7 @@ namespace spinas {
   //Generators of Lorentz Rotations with a dot (acting on right chiral square brackets)
   //LU acts on [j| (from the left)
   cmatrix particle::lorentz_j3_lu_dot() const{
+    ensure_angles();
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
@@ -625,6 +655,7 @@ namespace spinas {
 			phased_coefficient(std::sin(theta),-phi),-std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_lu_dot() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
     if(m!=0) pre = half*(std::real(sqrtEpP)/std::real(sqrtEmP));
@@ -634,6 +665,7 @@ namespace spinas {
 		       phased_coefficient(-one+std::cos(theta),-phi), std::sin(theta));
   }
   cmatrix particle::lorentz_jm_lu_dot() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
     if(m!=0) pre=half*(std::real(sqrtEmP)/std::real(sqrtEpP));
@@ -643,6 +675,7 @@ namespace spinas {
   }
   //UL acts on |j] (from the right)
   cmatrix particle::lorentz_j3_ul_dot() const{
+    ensure_angles();
     constexpr ldouble half=0.5;
     constexpr cdouble one=cdouble(1,0);
     
@@ -650,6 +683,7 @@ namespace spinas {
 			-phased_coefficient(std::sin(theta),phi),std::cos(theta)*one);
   }
   cmatrix particle::lorentz_jp_ul_dot() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=1;
     if(m!=0) pre=half*(std::real(sqrtEpP)/std::real(sqrtEmP));
@@ -659,6 +693,7 @@ namespace spinas {
 		       -phased_coefficient(one+std::cos(theta),phi), -std::sin(theta));
   }
   cmatrix particle::lorentz_jm_ul_dot() const{
+    ensure_angles();
     constexpr ldouble half=0.5, one=1;
     ldouble pre=0;
     if(m!=0) pre = half*(std::real(sqrtEmP)/std::real(sqrtEpP));
@@ -678,12 +713,14 @@ namespace spinas {
 		       zero,one);
   }
   cmatrix particle::spin_jp_lu() const{
+    ensure_angles();
     constexpr cdouble zero=cdouble(0,0);
     constexpr ldouble one=1;
     return cmatrix(zero,zero,
 		   -std::polar(one,phi),zero);
   }
   cmatrix particle::spin_jm_lu() const{
+    ensure_angles();
     constexpr cdouble zero=cdouble(0,0);
     constexpr ldouble one=1;
     return cmatrix(zero,-std::polar(one,-phi),
@@ -699,12 +736,14 @@ namespace spinas {
 		       zero,-one);
   }
   cmatrix particle::spin_jp_ul() const{
+    ensure_angles();
     constexpr cdouble zero=cdouble(0,0);
     constexpr ldouble one=1;
     return cmatrix(zero,std::polar(one,phi),
 		   zero,zero);
   }
   cmatrix particle::spin_jm_ul() const{
+    ensure_angles();
     constexpr cdouble zero=cdouble(0,0);
     constexpr ldouble one=1;
     return cmatrix(zero,zero,

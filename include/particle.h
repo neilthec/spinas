@@ -30,7 +30,9 @@ namespace spinas {
     ldouble m;//Mass
     ldouble p[4];//Momentum
     ldouble pmag, pxymag;//Magnitude of momentum
-    ldouble theta, phi;//Spherical angles
+    mutable ldouble theta = 0, phi = 0;//Spherical angles, evaluated only by generators/tests
+    mutable bool anglesCalculated = false;
+    void ensure_angles() const;
     cdouble c, s, sc;//cos(theta/2), sin(theta/2)*exp(i*phi), s*
     cdouble sqrtEpP, sqrtEmP; //sqrt(E+p), sqrt(E-p)
     ldouble longitudinal_component(const bool& plus) const;
