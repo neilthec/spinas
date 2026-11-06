@@ -112,7 +112,7 @@ namespace spinas {
     if(!on_shell_energy(p[0],pmag,m)){
       throw std::runtime_error("Momentum and mass don't match:  p^2 = " + std::to_string(p[0]*p[0]-pmag*pmag) + " != " + std::to_string(m*m));
     }
-    anglesCalculated = false;
+    theta = -1;
     // Rationalize the small half-angle component too, including exact zeros
     // on both axes. cos(pi/2) otherwise leaves a boosted spurious component.
     ldouble cosineHalf = 1, sineHalf = 0;
@@ -177,10 +177,9 @@ namespace spinas {
 
   // Only diagnostic and angular-momentum-generator calls need these angles.
   void particle::ensure_angles() const {
-    if(!anglesCalculated){
+    if(theta<0){
       theta = std::atan2(pxymag,p[3]);
       phi = std::atan2(p[2],p[1]);
-      anglesCalculated = true;
     }
   }
 
